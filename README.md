@@ -9,6 +9,11 @@
 
 # Philharmonica Agent Development Kit (ADK)
 
+> **This project is being renamed.** 0.2.3 is the last release published as
+> `philharmonica-adk`; later releases ship under the new name. The
+> [repository](https://github.com/augments-labs/philharmonica-adk-python)
+> will announce it and keep working at this address.
+
 A provider-agnostic Python framework to orchestrate complex
 systems of agents that perform real-world actions, across 100+ LLMs via litellm.
 
