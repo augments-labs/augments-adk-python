@@ -257,6 +257,385 @@ wheels = [
 ]
 
 [[package]]
+name = "augments-adk"
+version = "0.3.0"
+source = { editable = "." }
+dependencies = [
+    { name = "aiosqlite" },
+    { name = "click" },
+    { name = "griffe" },
+    { name = "httpx" },
+    { name = "litellm" },
+    { name = "pydantic" },
+    { name = "typing-extensions" },
+]
+
+[package.optional-dependencies]
+a2a = [
+    { name = "a2a-sdk", extra = ["http-server"] },
+]
+a2a-postgres = [
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+all = [
+    { name = "a2a-sdk", extra = ["http-server"] },
+    { name = "anthropic" },
+    { name = "beautifulsoup4" },
+    { name = "boto3" },
+    { name = "chromadb" },
+    { name = "google-genai" },
+    { name = "graphviz" },
+    { name = "httpx2" },
+    { name = "lingua-language-detector" },
+    { name = "mcp" },
+    { name = "numpy" },
+    { name = "openai" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp" },
+    { name = "opentelemetry-sdk" },
+    { name = "pgvector" },
+    { name = "pinecone" },
+    { name = "psycopg", extra = ["binary", "pool"] },
+    { name = "pygithub" },
+    { name = "pymupdf" },
+    { name = "python-docx" },
+    { name = "pytube" },
+    { name = "qdrant-client" },
+    { name = "redis" },
+    { name = "requests" },
+    { name = "rich" },
+    { name = "sse-starlette" },
+    { name = "starlette" },
+    { name = "temporalio" },
+    { name = "uvicorn" },
+    { name = "websockets" },
+    { name = "youtube-transcript-api" },
+]
+anthropic = [
+    { name = "anthropic" },
+]
+audit-postgres = [
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+audit-s3 = [
+    { name = "boto3" },
+]
+checkpointer-postgres = [
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+checkpointer-redis = [
+    { name = "redis" },
+]
+checkpointer-s3 = [
+    { name = "boto3" },
+]
+cost-ledger-postgres = [
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+cost-ledger-redis = [
+    { name = "redis" },
+]
+dev = [
+    { name = "a2a-sdk", extra = ["http-server"] },
+    { name = "anthropic" },
+    { name = "bandit" },
+    { name = "beautifulsoup4" },
+    { name = "boto3" },
+    { name = "build" },
+    { name = "chromadb" },
+    { name = "commitizen" },
+    { name = "coverage" },
+    { name = "fakeredis", extra = ["lua"] },
+    { name = "google-genai" },
+    { name = "graphviz" },
+    { name = "httpx2" },
+    { name = "inline-snapshot" },
+    { name = "lingua-language-detector" },
+    { name = "mcp" },
+    { name = "moto" },
+    { name = "mypy" },
+    { name = "numpy" },
+    { name = "openai" },
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp" },
+    { name = "opentelemetry-sdk" },
+    { name = "parameterized" },
+    { name = "pgvector" },
+    { name = "pinecone" },
+    { name = "pip-audit" },
+    { name = "pre-commit" },
+    { name = "psycopg", extra = ["binary", "pool"] },
+    { name = "pygithub" },
+    { name = "pymupdf" },
+    { name = "pyright" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
+    { name = "pytest-postgresql" },
+    { name = "pytest-rerunfailures" },
+    { name = "pytest-timeout" },
+    { name = "pytest-xdist" },
+    { name = "python-docx" },
+    { name = "python-dotenv" },
+    { name = "pytube" },
+    { name = "qdrant-client" },
+    { name = "redis" },
+    { name = "requests" },
+    { name = "rich" },
+    { name = "ruff" },
+    { name = "sse-starlette" },
+    { name = "starlette" },
+    { name = "temporalio" },
+    { name = "types-pyyaml" },
+    { name = "uvicorn" },
+    { name = "websockets" },
+    { name = "youtube-transcript-api" },
+]
+gemini = [
+    { name = "google-genai" },
+]
+guardrails = [
+    { name = "lingua-language-detector" },
+]
+guardrails-lingua = [
+    { name = "lingua-language-detector" },
+]
+mcp = [
+    { name = "httpx2" },
+    { name = "mcp" },
+]
+memory-chroma = [
+    { name = "chromadb" },
+]
+memory-pgvector = [
+    { name = "pgvector" },
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+memory-pinecone = [
+    { name = "pinecone" },
+]
+memory-qdrant = [
+    { name = "qdrant-client" },
+]
+mermaid = [
+    { name = "mermaid-py" },
+]
+openai = [
+    { name = "openai" },
+]
+otel = [
+    { name = "opentelemetry-api" },
+    { name = "opentelemetry-exporter-otlp" },
+    { name = "opentelemetry-sdk" },
+]
+rag = [
+    { name = "beautifulsoup4" },
+    { name = "pygithub" },
+    { name = "pymupdf" },
+    { name = "python-docx" },
+    { name = "pytube" },
+    { name = "requests" },
+    { name = "youtube-transcript-api" },
+]
+rag-docx = [
+    { name = "python-docx" },
+]
+rag-github = [
+    { name = "pygithub" },
+]
+rag-pdf = [
+    { name = "pymupdf" },
+]
+rag-web = [
+    { name = "beautifulsoup4" },
+    { name = "requests" },
+]
+rag-youtube = [
+    { name = "pytube" },
+    { name = "youtube-transcript-api" },
+]
+restate = [
+    { name = "restate-sdk" },
+]
+sandbox-blaxel = [
+    { name = "httpx" },
+]
+sandbox-cloudflare = [
+    { name = "httpx" },
+]
+sandbox-daytona = [
+    { name = "httpx" },
+]
+sandbox-docker = [
+    { name = "docker" },
+]
+sandbox-e2b = [
+    { name = "httpx" },
+]
+sandbox-gcs = [
+    { name = "google-cloud-storage" },
+]
+sandbox-k8s = [
+    { name = "kubernetes" },
+]
+sandbox-modal = [
+    { name = "httpx" },
+]
+sandbox-remote-vm = [
+    { name = "httpx" },
+]
+sandbox-runloop = [
+    { name = "httpx" },
+]
+sandbox-s3 = [
+    { name = "boto3" },
+]
+sandbox-vercel = [
+    { name = "httpx" },
+]
+serve = [
+    { name = "a2a-sdk", extra = ["http-server"] },
+    { name = "sse-starlette" },
+    { name = "starlette" },
+    { name = "uvicorn" },
+]
+server = [
+    { name = "sse-starlette" },
+    { name = "starlette" },
+]
+session-postgres = [
+    { name = "psycopg", extra = ["binary", "pool"] },
+]
+temporal = [
+    { name = "temporalio" },
+]
+test = [
+    { name = "coverage" },
+    { name = "fakeredis", extra = ["lua"] },
+    { name = "inline-snapshot" },
+    { name = "moto" },
+    { name = "parameterized" },
+    { name = "pytest" },
+    { name = "pytest-asyncio" },
+    { name = "pytest-cov" },
+    { name = "pytest-mock" },
+    { name = "pytest-postgresql" },
+    { name = "pytest-rerunfailures" },
+    { name = "pytest-timeout" },
+    { name = "pytest-xdist" },
+]
+verbose = [
+    { name = "rich" },
+]
+viz = [
+    { name = "graphviz" },
+]
+voice = [
+    { name = "numpy" },
+    { name = "openai" },
+    { name = "websockets" },
+]
+yaml = [
+    { name = "pyyaml" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "a2a-sdk", extras = ["http-server"], marker = "extra == 'a2a'", specifier = ">=1.0.0" },
+    { name = "aiosqlite", specifier = ">=0.21.0" },
+    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.75.0,<1" },
+    { name = "augments-adk", extras = ["all", "test"], marker = "extra == 'dev'" },
+    { name = "augments-adk", extras = ["anthropic", "openai", "voice", "gemini", "mcp", "otel", "viz", "verbose", "server", "serve", "checkpointer-postgres", "cost-ledger-postgres", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "a2a-postgres", "session-postgres", "temporal", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "rag", "guardrails"], marker = "extra == 'all'" },
+    { name = "augments-adk", extras = ["guardrails-lingua"], marker = "extra == 'guardrails'" },
+    { name = "augments-adk", extras = ["openai"], marker = "extra == 'voice'" },
+    { name = "augments-adk", extras = ["rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube"], marker = "extra == 'rag'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-blaxel'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-cloudflare'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-daytona'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-e2b'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-modal'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-runloop'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-vercel'" },
+    { name = "augments-adk", extras = ["server", "a2a"], marker = "extra == 'serve'" },
+    { name = "bandit", extras = ["toml"], marker = "extra == 'dev'", specifier = ">=1.7" },
+    { name = "beautifulsoup4", marker = "extra == 'rag-web'", specifier = ">=4.12" },
+    { name = "boto3", marker = "extra == 'audit-s3'", specifier = ">=1.34.0" },
+    { name = "boto3", marker = "extra == 'checkpointer-s3'", specifier = ">=1.34.0" },
+    { name = "boto3", marker = "extra == 'sandbox-s3'", specifier = ">=1.34.0" },
+    { name = "build", marker = "extra == 'dev'", specifier = ">=1.2.0" },
+    { name = "chromadb", marker = "extra == 'memory-chroma'", specifier = ">=0.5" },
+    { name = "click", specifier = ">=8.1.7,<9" },
+    { name = "commitizen", marker = "extra == 'dev'", specifier = ">=4.4.0" },
+    { name = "coverage", extras = ["toml"], marker = "extra == 'test'", specifier = ">=7.6.0" },
+    { name = "docker", marker = "extra == 'sandbox-docker'", specifier = ">=7.0.0" },
+    { name = "fakeredis", extras = ["lua"], marker = "extra == 'test'", specifier = ">=2.21" },
+    { name = "google-cloud-storage", marker = "extra == 'sandbox-gcs'", specifier = ">=2.16.0" },
+    { name = "google-genai", marker = "extra == 'gemini'", specifier = ">=1.0.0" },
+    { name = "graphviz", marker = "extra == 'viz'", specifier = ">=0.20.2" },
+    { name = "griffe", specifier = ">=1.15.0" },
+    { name = "httpx", specifier = ">=0.27.0" },
+    { name = "httpx", marker = "extra == 'sandbox-remote-vm'", specifier = ">=0.27.0" },
+    { name = "httpx2", marker = "extra == 'mcp'", specifier = ">=2.5.0" },
+    { name = "inline-snapshot", marker = "extra == 'test'", specifier = ">=0.20.7" },
+    { name = "kubernetes", marker = "extra == 'sandbox-k8s'", specifier = ">=30.0.0" },
+    { name = "lingua-language-detector", marker = "extra == 'guardrails-lingua'", specifier = ">=2.0.0" },
+    { name = "litellm", specifier = ">=1.80.9,<2" },
+    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=2.0.0,<3" },
+    { name = "mermaid-py", marker = "extra == 'mermaid'", specifier = ">=0.5.0" },
+    { name = "moto", marker = "extra == 'test'", specifier = ">=5.0" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.15.0" },
+    { name = "numpy", marker = "extra == 'voice'", specifier = ">=1.26" },
+    { name = "openai", marker = "extra == 'openai'", specifier = ">=2.0.0,<3" },
+    { name = "opentelemetry-api", marker = "extra == 'otel'", specifier = ">=1.39.1" },
+    { name = "opentelemetry-exporter-otlp", marker = "extra == 'otel'", specifier = ">=1.39.1" },
+    { name = "opentelemetry-sdk", marker = "extra == 'otel'", specifier = ">=1.39.1" },
+    { name = "parameterized", marker = "extra == 'test'", specifier = ">=0.9.0" },
+    { name = "pgvector", marker = "extra == 'memory-pgvector'", specifier = ">=0.3" },
+    { name = "pinecone", marker = "extra == 'memory-pinecone'", specifier = ">=8.0" },
+    { name = "pip-audit", marker = "extra == 'dev'", specifier = ">=2.7" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.5.0" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'a2a-postgres'", specifier = ">=3.2" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'audit-postgres'", specifier = ">=3.2" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'checkpointer-postgres'", specifier = ">=3.2" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'cost-ledger-postgres'", specifier = ">=3.2" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'memory-pgvector'", specifier = ">=3.2" },
+    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'session-postgres'", specifier = ">=3.2" },
+    { name = "pydantic", specifier = ">=2.12.5,<3" },
+    { name = "pygithub", marker = "extra == 'rag-github'", specifier = ">=2.1" },
+    { name = "pymupdf", marker = "extra == 'rag-pdf'", specifier = ">=1.24" },
+    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.408" },
+    { name = "pytest", marker = "extra == 'test'", specifier = ">=9.0.0,<10" },
+    { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.0.0" },
+    { name = "pytest-cov", marker = "extra == 'test'", specifier = ">=7.0.0" },
+    { name = "pytest-mock", marker = "extra == 'test'", specifier = ">=3.14.0" },
+    { name = "pytest-postgresql", marker = "extra == 'test'", specifier = ">=6.0" },
+    { name = "pytest-rerunfailures", marker = "extra == 'test'", specifier = ">=14.0" },
+    { name = "pytest-timeout", marker = "extra == 'test'", specifier = ">=2.4.0" },
+    { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.6.0" },
+    { name = "python-docx", marker = "extra == 'rag-docx'", specifier = ">=1.1" },
+    { name = "python-dotenv", marker = "extra == 'dev'", specifier = ">=1.2.2" },
+    { name = "pytube", marker = "extra == 'rag-youtube'", specifier = ">=15.0" },
+    { name = "pyyaml", marker = "extra == 'yaml'", specifier = ">=6.0" },
+    { name = "qdrant-client", marker = "extra == 'memory-qdrant'", specifier = ">=1.12" },
+    { name = "redis", marker = "extra == 'checkpointer-redis'", specifier = ">=5.0" },
+    { name = "redis", marker = "extra == 'cost-ledger-redis'", specifier = ">=5.0" },
+    { name = "requests", marker = "extra == 'rag-web'", specifier = ">=2.31" },
+    { name = "restate-sdk", marker = "extra == 'restate'", specifier = ">=0.18.0" },
+    { name = "rich", marker = "extra == 'verbose'", specifier = ">=14.2.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.16.8" },
+    { name = "sse-starlette", marker = "extra == 'server'", specifier = ">=2.0" },
+    { name = "starlette", marker = "extra == 'server'", specifier = ">=0.37" },
+    { name = "temporalio", marker = "extra == 'temporal'", specifier = ">=1.24.0" },
+    { name = "types-pyyaml", marker = "extra == 'dev'", specifier = ">=6.0" },
+    { name = "typing-extensions", specifier = ">=4.15.0,<5" },
+    { name = "uvicorn", marker = "extra == 'serve'", specifier = ">=0.30" },
+    { name = "websockets", marker = "extra == 'voice'", specifier = ">=13.0" },
+    { name = "youtube-transcript-api", marker = "extra == 'rag-youtube'", specifier = ">=1.0" },
+]
+provides-extras = ["anthropic", "openai", "voice", "gemini", "mcp", "a2a", "server", "serve", "otel", "viz", "mermaid", "verbose", "yaml", "guardrails-lingua", "guardrails", "rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube", "rag", "sandbox", "sandbox-docker", "sandbox-k8s", "sandbox-remote-vm", "sandbox-e2b", "sandbox-vercel", "sandbox-modal", "sandbox-daytona", "sandbox-cloudflare", "sandbox-blaxel", "sandbox-runloop", "sandbox-s3", "sandbox-gcs", "checkpointer-postgres", "cost-ledger-postgres", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "audit-s3", "audit-postgres", "a2a-postgres", "session-postgres", "temporal", "restate", "all", "test", "dev"]
+
+[[package]]
 name = "bandit"
 version = "1.9.4"
 source = { registry = "https://pypi.org/simple" }
@@ -2306,385 +2685,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/a7/ec/6eb80aebc728200f9
 wheels = [
     { url = "https://files.pythonhosted.org/packages/5c/e4/a5573f2c579ca9ad133293bfb624148ba0893674ca4a6eeec85ced9a6a09/pgvector-0.5.0-py3-none-any.whl", hash = "sha256:fedc9800894e6da2be51358d7b7c574bf34f247ca741a5a09513622135f5964f", size = 30958, upload-time = "2026-07-06T18:27:26.797Z" },
 ]
-
-[[package]]
-name = "augments-adk"
-version = "0.2.3"
-source = { editable = "." }
-dependencies = [
-    { name = "aiosqlite" },
-    { name = "click" },
-    { name = "griffe" },
-    { name = "httpx" },
-    { name = "litellm" },
-    { name = "pydantic" },
-    { name = "typing-extensions" },
-]
-
-[package.optional-dependencies]
-a2a = [
-    { name = "a2a-sdk", extra = ["http-server"] },
-]
-a2a-postgres = [
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-all = [
-    { name = "a2a-sdk", extra = ["http-server"] },
-    { name = "anthropic" },
-    { name = "beautifulsoup4" },
-    { name = "boto3" },
-    { name = "chromadb" },
-    { name = "google-genai" },
-    { name = "graphviz" },
-    { name = "httpx2" },
-    { name = "lingua-language-detector" },
-    { name = "mcp" },
-    { name = "numpy" },
-    { name = "openai" },
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-exporter-otlp" },
-    { name = "opentelemetry-sdk" },
-    { name = "pgvector" },
-    { name = "pinecone" },
-    { name = "psycopg", extra = ["binary", "pool"] },
-    { name = "pygithub" },
-    { name = "pymupdf" },
-    { name = "python-docx" },
-    { name = "pytube" },
-    { name = "qdrant-client" },
-    { name = "redis" },
-    { name = "requests" },
-    { name = "rich" },
-    { name = "sse-starlette" },
-    { name = "starlette" },
-    { name = "temporalio" },
-    { name = "uvicorn" },
-    { name = "websockets" },
-    { name = "youtube-transcript-api" },
-]
-anthropic = [
-    { name = "anthropic" },
-]
-audit-postgres = [
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-audit-s3 = [
-    { name = "boto3" },
-]
-checkpointer-postgres = [
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-checkpointer-redis = [
-    { name = "redis" },
-]
-checkpointer-s3 = [
-    { name = "boto3" },
-]
-cost-ledger-postgres = [
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-cost-ledger-redis = [
-    { name = "redis" },
-]
-dev = [
-    { name = "a2a-sdk", extra = ["http-server"] },
-    { name = "anthropic" },
-    { name = "bandit" },
-    { name = "beautifulsoup4" },
-    { name = "boto3" },
-    { name = "build" },
-    { name = "chromadb" },
-    { name = "commitizen" },
-    { name = "coverage" },
-    { name = "fakeredis", extra = ["lua"] },
-    { name = "google-genai" },
-    { name = "graphviz" },
-    { name = "httpx2" },
-    { name = "inline-snapshot" },
-    { name = "lingua-language-detector" },
-    { name = "mcp" },
-    { name = "moto" },
-    { name = "mypy" },
-    { name = "numpy" },
-    { name = "openai" },
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-exporter-otlp" },
-    { name = "opentelemetry-sdk" },
-    { name = "parameterized" },
-    { name = "pgvector" },
-    { name = "pinecone" },
-    { name = "pip-audit" },
-    { name = "pre-commit" },
-    { name = "psycopg", extra = ["binary", "pool"] },
-    { name = "pygithub" },
-    { name = "pymupdf" },
-    { name = "pyright" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-cov" },
-    { name = "pytest-mock" },
-    { name = "pytest-postgresql" },
-    { name = "pytest-rerunfailures" },
-    { name = "pytest-timeout" },
-    { name = "pytest-xdist" },
-    { name = "python-docx" },
-    { name = "python-dotenv" },
-    { name = "pytube" },
-    { name = "qdrant-client" },
-    { name = "redis" },
-    { name = "requests" },
-    { name = "rich" },
-    { name = "ruff" },
-    { name = "sse-starlette" },
-    { name = "starlette" },
-    { name = "temporalio" },
-    { name = "types-pyyaml" },
-    { name = "uvicorn" },
-    { name = "websockets" },
-    { name = "youtube-transcript-api" },
-]
-gemini = [
-    { name = "google-genai" },
-]
-guardrails = [
-    { name = "lingua-language-detector" },
-]
-guardrails-lingua = [
-    { name = "lingua-language-detector" },
-]
-mcp = [
-    { name = "httpx2" },
-    { name = "mcp" },
-]
-memory-chroma = [
-    { name = "chromadb" },
-]
-memory-pgvector = [
-    { name = "pgvector" },
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-memory-pinecone = [
-    { name = "pinecone" },
-]
-memory-qdrant = [
-    { name = "qdrant-client" },
-]
-mermaid = [
-    { name = "mermaid-py" },
-]
-openai = [
-    { name = "openai" },
-]
-otel = [
-    { name = "opentelemetry-api" },
-    { name = "opentelemetry-exporter-otlp" },
-    { name = "opentelemetry-sdk" },
-]
-rag = [
-    { name = "beautifulsoup4" },
-    { name = "pygithub" },
-    { name = "pymupdf" },
-    { name = "python-docx" },
-    { name = "pytube" },
-    { name = "requests" },
-    { name = "youtube-transcript-api" },
-]
-rag-docx = [
-    { name = "python-docx" },
-]
-rag-github = [
-    { name = "pygithub" },
-]
-rag-pdf = [
-    { name = "pymupdf" },
-]
-rag-web = [
-    { name = "beautifulsoup4" },
-    { name = "requests" },
-]
-rag-youtube = [
-    { name = "pytube" },
-    { name = "youtube-transcript-api" },
-]
-restate = [
-    { name = "restate-sdk" },
-]
-sandbox-blaxel = [
-    { name = "httpx" },
-]
-sandbox-cloudflare = [
-    { name = "httpx" },
-]
-sandbox-daytona = [
-    { name = "httpx" },
-]
-sandbox-docker = [
-    { name = "docker" },
-]
-sandbox-e2b = [
-    { name = "httpx" },
-]
-sandbox-gcs = [
-    { name = "google-cloud-storage" },
-]
-sandbox-k8s = [
-    { name = "kubernetes" },
-]
-sandbox-modal = [
-    { name = "httpx" },
-]
-sandbox-remote-vm = [
-    { name = "httpx" },
-]
-sandbox-runloop = [
-    { name = "httpx" },
-]
-sandbox-s3 = [
-    { name = "boto3" },
-]
-sandbox-vercel = [
-    { name = "httpx" },
-]
-serve = [
-    { name = "a2a-sdk", extra = ["http-server"] },
-    { name = "sse-starlette" },
-    { name = "starlette" },
-    { name = "uvicorn" },
-]
-server = [
-    { name = "sse-starlette" },
-    { name = "starlette" },
-]
-session-postgres = [
-    { name = "psycopg", extra = ["binary", "pool"] },
-]
-temporal = [
-    { name = "temporalio" },
-]
-test = [
-    { name = "coverage" },
-    { name = "fakeredis", extra = ["lua"] },
-    { name = "inline-snapshot" },
-    { name = "moto" },
-    { name = "parameterized" },
-    { name = "pytest" },
-    { name = "pytest-asyncio" },
-    { name = "pytest-cov" },
-    { name = "pytest-mock" },
-    { name = "pytest-postgresql" },
-    { name = "pytest-rerunfailures" },
-    { name = "pytest-timeout" },
-    { name = "pytest-xdist" },
-]
-verbose = [
-    { name = "rich" },
-]
-viz = [
-    { name = "graphviz" },
-]
-voice = [
-    { name = "numpy" },
-    { name = "openai" },
-    { name = "websockets" },
-]
-yaml = [
-    { name = "pyyaml" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "a2a-sdk", extras = ["http-server"], marker = "extra == 'a2a'", specifier = ">=1.0.0" },
-    { name = "aiosqlite", specifier = ">=0.21.0" },
-    { name = "anthropic", marker = "extra == 'anthropic'", specifier = ">=0.75.0,<1" },
-    { name = "bandit", extras = ["toml"], marker = "extra == 'dev'", specifier = ">=1.7" },
-    { name = "beautifulsoup4", marker = "extra == 'rag-web'", specifier = ">=4.12" },
-    { name = "boto3", marker = "extra == 'audit-s3'", specifier = ">=1.34.0" },
-    { name = "boto3", marker = "extra == 'checkpointer-s3'", specifier = ">=1.34.0" },
-    { name = "boto3", marker = "extra == 'sandbox-s3'", specifier = ">=1.34.0" },
-    { name = "build", marker = "extra == 'dev'", specifier = ">=1.2.0" },
-    { name = "chromadb", marker = "extra == 'memory-chroma'", specifier = ">=0.5" },
-    { name = "click", specifier = ">=8.1.7,<9" },
-    { name = "commitizen", marker = "extra == 'dev'", specifier = ">=4.4.0" },
-    { name = "coverage", extras = ["toml"], marker = "extra == 'test'", specifier = ">=7.6.0" },
-    { name = "docker", marker = "extra == 'sandbox-docker'", specifier = ">=7.0.0" },
-    { name = "fakeredis", extras = ["lua"], marker = "extra == 'test'", specifier = ">=2.21" },
-    { name = "google-cloud-storage", marker = "extra == 'sandbox-gcs'", specifier = ">=2.16.0" },
-    { name = "google-genai", marker = "extra == 'gemini'", specifier = ">=1.0.0" },
-    { name = "graphviz", marker = "extra == 'viz'", specifier = ">=0.20.2" },
-    { name = "griffe", specifier = ">=1.15.0" },
-    { name = "httpx", specifier = ">=0.27.0" },
-    { name = "httpx", marker = "extra == 'sandbox-remote-vm'", specifier = ">=0.27.0" },
-    { name = "httpx2", marker = "extra == 'mcp'", specifier = ">=2.5.0" },
-    { name = "inline-snapshot", marker = "extra == 'test'", specifier = ">=0.20.7" },
-    { name = "kubernetes", marker = "extra == 'sandbox-k8s'", specifier = ">=30.0.0" },
-    { name = "lingua-language-detector", marker = "extra == 'guardrails-lingua'", specifier = ">=2.0.0" },
-    { name = "litellm", specifier = ">=1.80.9,<2" },
-    { name = "mcp", marker = "extra == 'mcp'", specifier = ">=2.0.0,<3" },
-    { name = "mermaid-py", marker = "extra == 'mermaid'", specifier = ">=0.5.0" },
-    { name = "moto", marker = "extra == 'test'", specifier = ">=5.0" },
-    { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.15.0" },
-    { name = "numpy", marker = "extra == 'voice'", specifier = ">=1.26" },
-    { name = "openai", marker = "extra == 'openai'", specifier = ">=2.0.0,<3" },
-    { name = "opentelemetry-api", marker = "extra == 'otel'", specifier = ">=1.39.1" },
-    { name = "opentelemetry-exporter-otlp", marker = "extra == 'otel'", specifier = ">=1.39.1" },
-    { name = "opentelemetry-sdk", marker = "extra == 'otel'", specifier = ">=1.39.1" },
-    { name = "parameterized", marker = "extra == 'test'", specifier = ">=0.9.0" },
-    { name = "pgvector", marker = "extra == 'memory-pgvector'", specifier = ">=0.3" },
-    { name = "augments-adk", extras = ["all", "test"], marker = "extra == 'dev'" },
-    { name = "augments-adk", extras = ["anthropic", "openai", "voice", "gemini", "mcp", "otel", "viz", "verbose", "server", "serve", "checkpointer-postgres", "cost-ledger-postgres", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "a2a-postgres", "session-postgres", "temporal", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "rag", "guardrails"], marker = "extra == 'all'" },
-    { name = "augments-adk", extras = ["guardrails-lingua"], marker = "extra == 'guardrails'" },
-    { name = "augments-adk", extras = ["openai"], marker = "extra == 'voice'" },
-    { name = "augments-adk", extras = ["rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube"], marker = "extra == 'rag'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-blaxel'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-cloudflare'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-daytona'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-e2b'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-modal'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-runloop'" },
-    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-vercel'" },
-    { name = "augments-adk", extras = ["server", "a2a"], marker = "extra == 'serve'" },
-    { name = "pinecone", marker = "extra == 'memory-pinecone'", specifier = ">=8.0" },
-    { name = "pip-audit", marker = "extra == 'dev'", specifier = ">=2.7" },
-    { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.5.0" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'a2a-postgres'", specifier = ">=3.2" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'audit-postgres'", specifier = ">=3.2" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'checkpointer-postgres'", specifier = ">=3.2" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'cost-ledger-postgres'", specifier = ">=3.2" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'memory-pgvector'", specifier = ">=3.2" },
-    { name = "psycopg", extras = ["binary", "pool"], marker = "extra == 'session-postgres'", specifier = ">=3.2" },
-    { name = "pydantic", specifier = ">=2.12.5,<3" },
-    { name = "pygithub", marker = "extra == 'rag-github'", specifier = ">=2.1" },
-    { name = "pymupdf", marker = "extra == 'rag-pdf'", specifier = ">=1.24" },
-    { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.408" },
-    { name = "pytest", marker = "extra == 'test'", specifier = ">=9.0.0,<10" },
-    { name = "pytest-asyncio", marker = "extra == 'test'", specifier = ">=1.0.0" },
-    { name = "pytest-cov", marker = "extra == 'test'", specifier = ">=7.0.0" },
-    { name = "pytest-mock", marker = "extra == 'test'", specifier = ">=3.14.0" },
-    { name = "pytest-postgresql", marker = "extra == 'test'", specifier = ">=6.0" },
-    { name = "pytest-rerunfailures", marker = "extra == 'test'", specifier = ">=14.0" },
-    { name = "pytest-timeout", marker = "extra == 'test'", specifier = ">=2.4.0" },
-    { name = "pytest-xdist", marker = "extra == 'test'", specifier = ">=3.6.0" },
-    { name = "python-docx", marker = "extra == 'rag-docx'", specifier = ">=1.1" },
-    { name = "python-dotenv", marker = "extra == 'dev'", specifier = ">=1.2.2" },
-    { name = "pytube", marker = "extra == 'rag-youtube'", specifier = ">=15.0" },
-    { name = "pyyaml", marker = "extra == 'yaml'", specifier = ">=6.0" },
-    { name = "qdrant-client", marker = "extra == 'memory-qdrant'", specifier = ">=1.12" },
-    { name = "redis", marker = "extra == 'checkpointer-redis'", specifier = ">=5.0" },
-    { name = "redis", marker = "extra == 'cost-ledger-redis'", specifier = ">=5.0" },
-    { name = "requests", marker = "extra == 'rag-web'", specifier = ">=2.31" },
-    { name = "restate-sdk", marker = "extra == 'restate'", specifier = ">=0.18.0" },
-    { name = "rich", marker = "extra == 'verbose'", specifier = ">=14.2.0" },
-    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.16.8" },
-    { name = "sse-starlette", marker = "extra == 'server'", specifier = ">=2.0" },
-    { name = "starlette", marker = "extra == 'server'", specifier = ">=0.37" },
-    { name = "temporalio", marker = "extra == 'temporal'", specifier = ">=1.24.0" },
-    { name = "types-pyyaml", marker = "extra == 'dev'", specifier = ">=6.0" },
-    { name = "typing-extensions", specifier = ">=4.15.0,<5" },
-    { name = "uvicorn", marker = "extra == 'serve'", specifier = ">=0.30" },
-    { name = "websockets", marker = "extra == 'voice'", specifier = ">=13.0" },
-    { name = "youtube-transcript-api", marker = "extra == 'rag-youtube'", specifier = ">=1.0" },
-]
-provides-extras = ["anthropic", "openai", "voice", "gemini", "mcp", "a2a", "server", "serve", "otel", "viz", "mermaid", "verbose", "yaml", "guardrails-lingua", "guardrails", "rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube", "rag", "sandbox", "sandbox-docker", "sandbox-k8s", "sandbox-remote-vm", "sandbox-e2b", "sandbox-vercel", "sandbox-modal", "sandbox-daytona", "sandbox-cloudflare", "sandbox-blaxel", "sandbox-runloop", "sandbox-s3", "sandbox-gcs", "checkpointer-postgres", "cost-ledger-postgres", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "audit-s3", "audit-postgres", "a2a-postgres", "session-postgres", "temporal", "restate", "all", "test", "dev"]
 
 [[package]]
 name = "pinecone"
