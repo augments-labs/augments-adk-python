@@ -9,36 +9,36 @@ name below is bound to `None` so callers can detect availability without
 
 ## Servers and transports
 
-- `philharmonica.adk.mcp.MCPServerWithClientSession`
-- `philharmonica.adk.mcp.MCPServerStdio`
-- `philharmonica.adk.mcp.MCPServerStdioParams`
-- `philharmonica.adk.mcp.MCPServerStreamableHttp`
-- `philharmonica.adk.mcp.MCPServerStreamableHttpParams`
-- `philharmonica.adk.mcp.MCPServerSse`
-- `philharmonica.adk.mcp.MCPServerSseParams`
+- `augments.adk.mcp.MCPServerWithClientSession`
+- `augments.adk.mcp.MCPServerStdio`
+- `augments.adk.mcp.MCPServerStdioParams`
+- `augments.adk.mcp.MCPServerStreamableHttp`
+- `augments.adk.mcp.MCPServerStreamableHttpParams`
+- `augments.adk.mcp.MCPServerSse`
+- `augments.adk.mcp.MCPServerSseParams`
 
 ## Lifecycle
 
-- `philharmonica.adk.mcp.MCPServerManager`
+- `augments.adk.mcp.MCPServerManager`
 
 ## Filters
 
-- `philharmonica.adk.mcp.ToolFilter`
-- `philharmonica.adk.mcp.ToolFilterContext`
+- `augments.adk.mcp.ToolFilter`
+- `augments.adk.mcp.ToolFilterContext`
 
 ## Auth and elicitation
 
-- `philharmonica.adk.mcp.HeaderProvider`
-- `philharmonica.adk.mcp.ElicitationHandler`
+- `augments.adk.mcp.HeaderProvider`
+- `augments.adk.mcp.ElicitationHandler`
 
 ## Exceptions
 
-- `philharmonica.adk.mcp.MCPError`
-- `philharmonica.adk.mcp.MCPConnectionError`
-- `philharmonica.adk.mcp.MCPToolCallError`
-- `philharmonica.adk.mcp.MCPToolNotFoundError`
-- `philharmonica.adk.mcp.MCPSchemaConversionError`
+- `augments.adk.mcp.MCPError`
+- `augments.adk.mcp.MCPConnectionError`
+- `augments.adk.mcp.MCPToolCallError`
+- `augments.adk.mcp.MCPToolNotFoundError`
+- `augments.adk.mcp.MCPSchemaConversionError`
 
 The agent-facing adapter `MCPToolset` is a `Toolset` subclass and lives
-under `philharmonica.adk.tools.toolsets.mcp_toolset`. Usage lives in the
+under `augments.adk.tools.toolsets.mcp_toolset`. Usage lives in the
 [MCP guide](../../mcp/mcp.md).

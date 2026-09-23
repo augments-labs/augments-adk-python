@@ -27,13 +27,13 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     SqliteFlowWorkerBackend,
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 logger = logging.getLogger(__name__)
 

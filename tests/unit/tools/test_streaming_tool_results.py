@@ -31,29 +31,29 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.stream import (
+from augments.adk.agents.middleware import Middleware
+from augments.adk.run.context import RunContext
+from augments.adk.run.stream import (
     CancelMode,
     RunItemStreamEvent,
     RunItemType,
     RunResultStreaming,
 )
-from philharmonica.adk.run.tools_executor import (
+from augments.adk.run.tools_executor import (
     _TOOL_STREAM_SINK,
     drain_streaming_tool_value,
     execute_tool_calls,
     execute_tool_calls_streamed,
     maybe_wrap_with_agent_middleware,
 )
-from philharmonica.adk.tools import (
+from augments.adk.tools import (
     FunctionTool,
     ToolMiddlewareNext,
     function_tool,
 )
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
-from philharmonica.adk.types.tools import ToolStreamEvent
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.types.tools import ToolStreamEvent
 
 # ── ToolStreamEvent shape ─────────────────────────────────────────────
 
@@ -170,7 +170,7 @@ async def test_drain_warns_when_no_sink(caplog: pytest.LogCaptureFixture) -> Non
         yield ToolStreamEvent(type="part_delta", delta="x")
         yield ToolStreamEvent(type="done", response="final")
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.tools_executor"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.run.tools_executor"):
         final = await drain_streaming_tool_value(gen(), "tool_y")
 
     assert final == "final"
@@ -277,8 +277,8 @@ def _make_tool_ctx(tool: FunctionTool, raw: str) -> ToolContext:
 def _make_executor_fixtures(
     tools: list[FunctionTool],
 ) -> tuple[Any, RunContext[Any], Any, Any, RunResultStreaming, list[LLMResponseFunctionToolCall]]:
-    from philharmonica.adk.hooks.hooks import RunHooks
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.hooks.hooks import RunHooks
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
     agent = SimpleNamespace(
         name="streaming-test-agent",
@@ -344,7 +344,7 @@ async def test_non_streaming_path_drains_silently_with_warning(caplog: pytest.Lo
     # then logs a warning per call.
     assert _TOOL_STREAM_SINK.get() is None
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.tools_executor"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.run.tools_executor"):
         results, deferred = await execute_tool_calls(
             agent=agent,
             tool_calls=tool_calls,

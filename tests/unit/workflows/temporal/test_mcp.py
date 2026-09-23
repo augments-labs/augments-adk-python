@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.mcp``.
+"""Tests for ``augments.adk.workflows.temporal.mcp``.
 
 Covers:
 - ``TemporalMCPToolSet`` stores ``name`` and ``connection_params`` correctly.
@@ -13,7 +13,7 @@ import pytest
 
 temporalio = pytest.importorskip("temporalio")
 
-from philharmonica.adk.workflows.temporal.mcp import TemporalMCPToolSet
+from augments.adk.workflows.temporal.mcp import TemporalMCPToolSet
 
 
 class TestTemporalMCPToolSetStoresConfig:

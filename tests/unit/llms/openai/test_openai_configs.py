@@ -16,8 +16,8 @@ from openai.types.chat import ChatCompletionAudioParam, ChatCompletionPrediction
 from openai.types.chat.completion_create_params import WebSearchOptions
 from openai.types.shared_params import Reasoning
 
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.openai import OpenAIChatCompletionsConfig, OpenAIResponsesConfig
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.openai import OpenAIChatCompletionsConfig, OpenAIResponsesConfig
 
 
 class TestOpenAIResponsesConfigDefaults:

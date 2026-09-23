@@ -17,11 +17,11 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import HookEventKind, HookLifecycleEvent, RunItemType
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import HookEventKind, HookLifecycleEvent, RunItemType
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
@@ -56,7 +56,7 @@ def _final_text_response() -> LLMResponse:
 
 def _make_agent_with_tool() -> Agent:
     """Agent with one simple tool so the loop has something to execute."""
-    from philharmonica.adk.tools.function_tool import FunctionTool
+    from augments.adk.tools.function_tool import FunctionTool
 
     async def _echo_invoker(_ctx: Any, _raw_args: str) -> str:
         return "echoed"
@@ -102,23 +102,23 @@ async def _patched_arun_with_tool(
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -180,7 +180,7 @@ class TestHookLifecycleEventsStreaming:
     @pytest.mark.asyncio
     async def test_run_item_events_still_present_when_enabled(self) -> None:
         """Enabling hook events does not suppress RunItemStreamEvent objects."""
-        from philharmonica.adk.run.stream import RunItemStreamEvent
+        from augments.adk.run.stream import RunItemStreamEvent
 
         agent = _make_agent_with_tool()
         config = RunConfig(include_hook_events=True)
@@ -211,23 +211,23 @@ class TestHookLifecycleEventsNonStreaming:
 
         with (
             patch(
-                "philharmonica.adk.run.loop.call_llm",
+                "augments.adk.run.loop.call_llm",
                 new=AsyncMock(side_effect=fake_call_llm),
             ),
             patch(
-                "philharmonica.adk.run.loop.call_llm_streamed",
+                "augments.adk.run.loop.call_llm_streamed",
                 new=AsyncMock(side_effect=fake_call_llm),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):

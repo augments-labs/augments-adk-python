@@ -4,7 +4,7 @@ Runs a sandboxed agent inside a Docker container so the model can
 ``ls`` / ``cat`` / ``python`` against the container filesystem.
 
 Prerequisites:
-- ``pip install 'philharmonica-adk[sandbox-docker]'``
+- ``pip install 'augments-adk[sandbox-docker]'``
 - A reachable Docker daemon (``docker info`` should succeed).
 - ``ANTHROPIC_API_KEY`` (or your provider's key) in the environment.
 """
@@ -21,17 +21,17 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.docker import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.docker import (
     DockerSandboxClient,
     DockerSandboxClientOptions,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

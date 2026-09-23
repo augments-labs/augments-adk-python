@@ -1,4 +1,4 @@
-"""Tests for the built-in guardrail hub (philharmonica.adk.guardrails).
+"""Tests for the built-in guardrail hub (augments.adk.guardrails).
 
 Covers:
 - RAISE default trips on a match (PII + injection).
@@ -15,14 +15,14 @@ import sys
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrails,
     AgentGuardrailSeverity,
     AgentInputGuardrailData,
     AgentOutputGuardrailData,
 )
-from philharmonica.adk.guardrails import (
+from augments.adk.guardrails import (
     DEFAULT_INJECTION_PATTERNS,
     DEFAULT_PII_MASK,
     DEFAULT_PII_PATTERNS,
@@ -34,8 +34,8 @@ from philharmonica.adk.guardrails import (
     pii_guardrail,
     wrong_language_guardrail,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.guardrails import GuardrailAction, GuardrailSpan
+from augments.adk.run.context import RunContext
+from augments.adk.types.guardrails import GuardrailAction, GuardrailSpan
 
 # ── Helpers ──────────────────────────────────────────────────
 
@@ -390,7 +390,7 @@ class TestDetectWrongLanguage:
     def test_lazy_import_error_message(self, monkeypatch: pytest.MonkeyPatch) -> None:
         # Force the lazy `import lingua` to fail even though it is installed; the
         # detector is cached, so clear it first so the import is re-attempted.
-        from philharmonica.adk.guardrails.language import _get_detector
+        from augments.adk.guardrails.language import _get_detector
 
         _get_detector.cache_clear()
         monkeypatch.setitem(sys.modules, "lingua", None)

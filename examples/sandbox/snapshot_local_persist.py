@@ -28,8 +28,8 @@ import tarfile
 import tempfile
 from pathlib import Path
 
-from philharmonica.adk.sandbox.snapshot.local_store import LocalSnapshotStore
-from philharmonica.adk.types.sandbox.snapshot import SnapshotRef
+from augments.adk.sandbox.snapshot.local_store import LocalSnapshotStore
+from augments.adk.types.sandbox.snapshot import SnapshotRef
 
 logger = logging.getLogger(__name__)
 

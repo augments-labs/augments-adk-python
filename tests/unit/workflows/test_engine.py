@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.engine``.
+"""Tests for ``augments.adk.workflows.engine``.
 
 Covers:
 - Default field values for ``ModelActivityConfig``.
@@ -14,7 +14,7 @@ import dataclasses
 
 import pytest
 
-from philharmonica.adk.workflows.engine import (
+from augments.adk.workflows.engine import (
     DurableEngine,
     ModelActivityConfig,
     ToolActivityConfig,
@@ -125,7 +125,7 @@ class TestTemporalDurableEngine:
     def test_temporal_durable_engine_is_durable_engine(self) -> None:
         """TemporalDurableEngine is a runtime-checkable DurableEngine."""
         pytest.importorskip("temporalio")
-        from philharmonica.adk.workflows.temporal.engine import TemporalDurableEngine
+        from augments.adk.workflows.temporal.engine import TemporalDurableEngine
 
         engine = TemporalDurableEngine()
         assert isinstance(engine, DurableEngine)
@@ -135,9 +135,9 @@ class TestTemporalDurableEngine:
         pytest.importorskip("temporalio")
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.workflows.temporal.engine import TemporalDurableEngine
-        from philharmonica.adk.workflows.temporal.llm import TemporalLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.workflows.temporal.engine import TemporalDurableEngine
+        from augments.adk.workflows.temporal.llm import TemporalLLM
 
         mock_llm = MagicMock(spec=LLM)
         engine = TemporalDurableEngine()
@@ -152,7 +152,7 @@ class TestTemporalDurableEngine:
         from unittest.mock import MagicMock
 
         pytest.importorskip("temporalio")
-        from philharmonica.adk.workflows.temporal.engine import TemporalDurableEngine
+        from augments.adk.workflows.temporal.engine import TemporalDurableEngine
 
         engine = TemporalDurableEngine()
 
@@ -180,8 +180,8 @@ class TestTemporalDurableEngine:
         rejects at runtime.
         """
         pytest.importorskip("temporalio")
-        from philharmonica.adk.tools.function_tool import function_tool
-        from philharmonica.adk.workflows.temporal.engine import TemporalDurableEngine
+        from augments.adk.tools.function_tool import function_tool
+        from augments.adk.workflows.temporal.engine import TemporalDurableEngine
 
         async def lookup(city: str) -> str:
             return f"weather in {city}"
@@ -209,7 +209,7 @@ class TestRestateDurableEngine:
         original = sys.modules.get("restate")
         sys.modules["restate"] = fake_restate
         try:
-            import philharmonica.adk.workflows.restate.engine as restate_engine_mod
+            import augments.adk.workflows.restate.engine as restate_engine_mod
 
             importlib.reload(restate_engine_mod)
             engine = restate_engine_mod.RestateDurableEngine()
@@ -230,14 +230,14 @@ class TestRestateDurableEngine:
         import types
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
+        from augments.adk.llms.llm import LLM
 
         fake_restate = types.ModuleType("restate")
         original = sys.modules.get("restate")
         sys.modules["restate"] = fake_restate
         try:
-            import philharmonica.adk.workflows.restate.engine as restate_engine_mod
-            import philharmonica.adk.workflows.restate.llm as restate_llm_mod
+            import augments.adk.workflows.restate.engine as restate_engine_mod
+            import augments.adk.workflows.restate.llm as restate_llm_mod
 
             importlib.reload(restate_llm_mod)
             importlib.reload(restate_engine_mod)

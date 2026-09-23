@@ -12,9 +12,9 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.prompts.system_prompt import SystemPrompt
-from philharmonica.adk.types.config import AgentConfig
-from philharmonica.adk.types.tools.tool_use_behavior import StopAtTools
+from augments.adk.prompts.system_prompt import SystemPrompt
+from augments.adk.types.config import AgentConfig
+from augments.adk.types.tools.tool_use_behavior import StopAtTools
 
 
 class TestAgentConfigValidation:

@@ -6,10 +6,10 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.llms import Embedder, Embedding
-from philharmonica.adk.memory import MemoryMetadata, MemorySource
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.memory.vector_memory import VectorMemory
+from augments.adk.llms import Embedder, Embedding
+from augments.adk.memory import MemoryMetadata, MemorySource
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.memory.vector_memory import VectorMemory
 
 
 class _BagEmbedder(Embedder):
@@ -52,7 +52,7 @@ async def test_get_delete_clear() -> None:
 
 async def test_add_from_session_pipeline_reused() -> None:
     """The inherited add_from_session pipeline works over VectorMemory."""
-    from philharmonica.adk.memory.extractor import ExtractionResult, MemoryExtractor
+    from augments.adk.memory.extractor import ExtractionResult, MemoryExtractor
 
     class _FakeExtractor(MemoryExtractor):
         @override
@@ -82,7 +82,7 @@ def test_add_from_session_annotation_is_typed() -> None:
     """add_from_session messages param must not be list[Any]."""
     import inspect
 
-    from philharmonica.adk.memory.memory import Memory
+    from augments.adk.memory.memory import Memory
 
     hints = {}
     for name, param in inspect.signature(Memory.add_from_session).parameters.items():
@@ -109,7 +109,7 @@ async def test_add_embedder_error_logs_and_reraises(caplog) -> None:
 
     mem = VectorMemory(store=InMemoryVectorStore(), embedder=_ErrorEmbedder())
     with (
-        caplog.at_level(logging.ERROR, logger="philharmonica.adk.memory.vector_memory"),
+        caplog.at_level(logging.ERROR, logger="augments.adk.memory.vector_memory"),
         pytest.raises(RuntimeError, match="embedder exploded on add"),
     ):
         await mem.add("test", namespace="u1")

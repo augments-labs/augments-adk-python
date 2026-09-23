@@ -13,7 +13,7 @@ import asyncio
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowApprovalDecision,
     FlowApprovalPolicy,
@@ -23,7 +23,7 @@ from philharmonica.adk.flows import (
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 
 class _CartState(BaseModel):
@@ -171,7 +171,7 @@ class TestCheckpointApproveReject:
             async def on_error(self) -> None:
                 self.state.notes.append("error_handled")
 
-        from philharmonica.adk.flows import FlowConfig
+        from augments.adk.flows import FlowConfig
 
         flow = CartFlow(_CartState)
         result = await Runner.arun_flow(
@@ -252,7 +252,7 @@ class TestRetryAndTimeout:
                 self.state.amount = 99
 
         # The decorator stores max_retries; we set it via decorator kwarg.
-        from philharmonica.adk.flows.flow_wrappers import FlowStep
+        from augments.adk.flows.flow_wrappers import FlowStep
 
         # Patch the descriptor's max_retries to ensure retry path.
         step = CartFlow.__dict__["flaky"]
@@ -272,7 +272,7 @@ class TestRetryAndTimeout:
             async def slow(self) -> None:
                 await asyncio.sleep(0.5)
 
-        from philharmonica.adk.flows.flow_wrappers import FlowStep
+        from augments.adk.flows.flow_wrappers import FlowStep
 
         step = SlowFlow.__dict__["slow"]
         assert isinstance(step, FlowStep)

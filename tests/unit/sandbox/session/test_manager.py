@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.manager`` (Instrumentation)."""
+"""Tests for ``augments.adk.sandbox.session.manager`` (Instrumentation)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import uuid
 
 import pytest
 
-from philharmonica.adk.sandbox.session import (
+from augments.adk.sandbox.session import (
     CallbackSink,
     ChainedSink,
     EventPayloadPolicy,
@@ -232,7 +232,7 @@ class TestNeverDowngradeContract:
 
         instr = Instrumentation(sinks=[CallbackSink(buggy, mode="best_effort", on_error="ignore")])
         await instr.emit(_start())
-        with caplog.at_level("ERROR", logger="philharmonica.adk.sandbox.session.manager"):
+        with caplog.at_level("ERROR", logger="augments.adk.sandbox.session.manager"):
             await instr.flush()
         assert any("NOT" in rec.getMessage() and "on_error policy" in rec.getMessage() for rec in caplog.records)
 
@@ -274,7 +274,7 @@ class TestErrorChainingAndBreadcrumbs:
             raise RuntimeError("dropped silently-but-traceably")
 
         instr = Instrumentation(sinks=[CallbackSink(boom, mode="sync", on_error="ignore")])
-        with caplog.at_level("DEBUG", logger="philharmonica.adk.sandbox.session.manager"):
+        with caplog.at_level("DEBUG", logger="augments.adk.sandbox.session.manager"):
             await instr.emit(_start())
         assert any("dropped (on_error=ignore" in rec.getMessage() for rec in caplog.records)
 
@@ -283,7 +283,7 @@ class TestErrorChainingAndBreadcrumbs:
             raise RuntimeError("logged failure")
 
         instr = Instrumentation(sinks=[CallbackSink(boom, mode="sync", on_error="log")])
-        with caplog.at_level("ERROR", logger="philharmonica.adk.sandbox.session.manager"):
+        with caplog.at_level("ERROR", logger="augments.adk.sandbox.session.manager"):
             await instr.emit(_start())
         record = next(r for r in caplog.records if "event sink failed" in r.getMessage())
         assert "session=" in record.getMessage()

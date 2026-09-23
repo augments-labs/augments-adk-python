@@ -10,9 +10,9 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.sandbox.capabilities.memory import MemoryLayoutConfig
-from philharmonica.adk.sandbox.memory import SandboxMemoryManager
-from philharmonica.adk.sandbox.memory.rollouts import build_rollout_payload, dump_rollout_json
+from augments.adk.sandbox.capabilities.memory import MemoryLayoutConfig
+from augments.adk.sandbox.memory import SandboxMemoryManager
+from augments.adk.sandbox.memory.rollouts import build_rollout_payload, dump_rollout_json
 
 
 class _FakeSession:
@@ -227,7 +227,7 @@ class TestEnsureMetadata:
     }
 
     def _call(self, raw_memory: str) -> str:
-        from philharmonica.adk.sandbox.memory.manager import _ensure_metadata
+        from augments.adk.sandbox.memory.manager import _ensure_metadata
 
         return _ensure_metadata(raw_memory, **self._KWARGS)  # type: ignore[arg-type]
 

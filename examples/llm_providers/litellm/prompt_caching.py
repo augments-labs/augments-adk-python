@@ -30,10 +30,10 @@ from typing import cast
 
 from litellm.types.integrations.anthropic_cache_control_hook import CacheControlInjectionPoint
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLMConfig
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms.litellm.litellm_model import LiteLLMConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

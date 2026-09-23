@@ -32,15 +32,15 @@ from __future__ import annotations
 
 from typing import Any
 
-from philharmonica.adk.tools import (
+from augments.adk.tools import (
     FunctionTool,
     ToolMiddleware,
     function_tool,
     wrap_tool_with_middleware,
 )
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.tools.tool_middleware import ToolMiddlewareNext
-from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.tools.tool_middleware import ToolMiddlewareNext
+from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
 
 # ---------------------------------------------------------------------------
 # Helpers

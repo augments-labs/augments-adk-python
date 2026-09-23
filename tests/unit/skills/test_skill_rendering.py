@@ -12,10 +12,10 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.skills import Skill
-from philharmonica.adk.skills.skill_rendering import check_skill_enabled, render_skill_instructions
-from philharmonica.adk.utils.typedef import MaybeAwaitable
+from augments.adk.run.context import RunContext
+from augments.adk.skills import Skill
+from augments.adk.skills.skill_rendering import check_skill_enabled, render_skill_instructions
+from augments.adk.utils.typedef import MaybeAwaitable
 
 
 def _skill(

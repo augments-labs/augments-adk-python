@@ -10,11 +10,11 @@ from __future__ import annotations
 import asyncio
 import dataclasses
 
-from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.graph_loop import run_graph_loop
+from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
+from augments.adk.graphs.graph import Graph
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.graph_loop import run_graph_loop
 
 
 async def test_node_timeout_fails_run() -> None:

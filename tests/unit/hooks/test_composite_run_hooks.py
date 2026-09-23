@@ -20,7 +20,7 @@ import logging
 
 import pytest
 
-from philharmonica.adk.hooks.hooks import (
+from augments.adk.hooks.hooks import (
     CompositeRunHooks,
     RunHooks,
     compose_run_hooks,
@@ -123,7 +123,7 @@ async def test_fanout_logs_every_member_error_not_just_first(caplog) -> None:
     composite = CompositeRunHooks([_RaiseA(), _RaiseB()])
 
     with (
-        caplog.at_level(logging.ERROR, logger="philharmonica.adk.hooks.hooks"),
+        caplog.at_level(logging.ERROR, logger="augments.adk.hooks.hooks"),
         pytest.raises(RuntimeError, match="error-from-A"),
     ):
         await composite.on_agent_start(None, None)  # type: ignore[arg-type]

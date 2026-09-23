@@ -15,9 +15,9 @@ import os
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.llms.openai import OpenAIResponsesLLM
-from philharmonica.adk.run.runner import Runner
+from augments.adk.agents.agent import Agent
+from augments.adk.llms.openai import OpenAIResponsesLLM
+from augments.adk.run.runner import Runner
 
 # Test truthiness, not `is None`. A workflow that forwards a secret with
 # `OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}` defines the variable even

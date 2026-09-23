@@ -14,14 +14,14 @@ from __future__ import annotations
 
 from typing import Any, override
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import GraphHooks
-from philharmonica.adk.graphs.interrupt import Interrupt, request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import GraphHooks
+from augments.adk.graphs.interrupt import Interrupt, request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
 
 
 class _Recorder(GraphHooks[Any]):

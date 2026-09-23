@@ -1,6 +1,6 @@
 # Tests
 
-pytest-only test suite for Philharmonica ADK. See
+pytest-only test suite for Augments ADK. See
 `.claude/rules/testing.md` for the framework rule and
 per-pattern guidance (agents, guardrails, tools, runner, LLM mocking).
 
@@ -38,7 +38,7 @@ pytest -x                                     # Stop on first failure
 pytest -m "not slow"                          # Skip slow tests
 pytest -m integration                         # Only integration tests
 pytest -n auto                                # Parallel (pytest-xdist)
-pytest --cov=philharmonica.adk --cov-report=html     # With coverage
+pytest --cov=augments.adk --cov-report=html     # With coverage
 ```
 
 ## Configuration
@@ -63,7 +63,7 @@ here.
 ```bash
 export OPENAI_API_KEY="test-key"
 export ANTHROPIC_API_KEY="test-key"
-export PHILHARMONICA_TEST_MODE="true"
+export AUGMENTS_TEST_MODE="true"
 ```
 
 ## Coverage

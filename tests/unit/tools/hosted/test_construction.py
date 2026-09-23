@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.tools.hosted import (
+from augments.adk.tools.hosted import (
     CodeExecutionTool,
     FileSearchTool,
     ImageGenerationTool,
@@ -120,14 +120,14 @@ class TestHostedMCPToolConstruction:
     """Finding 7: HostedMCPTool must enforce XOR on server_url / connector_id."""
 
     def test_server_url_only_is_valid(self) -> None:
-        from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
+        from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
 
         tool = HostedMCPTool(server_label="my_server", server_url="https://mcp.example.com")
         assert tool.server_url == "https://mcp.example.com"
         assert tool.connector_id is None
 
     def test_connector_id_only_is_valid(self) -> None:
-        from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
+        from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
 
         tool = HostedMCPTool(server_label="gmail", connector_id="connector_gmail")
         assert tool.connector_id == "connector_gmail"
@@ -136,7 +136,7 @@ class TestHostedMCPToolConstruction:
     def test_neither_raises(self) -> None:
         import pytest
 
-        from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
+        from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
 
         with pytest.raises(ValueError, match="got neither"):
             HostedMCPTool(server_label="bad")
@@ -144,7 +144,7 @@ class TestHostedMCPToolConstruction:
     def test_both_raises(self) -> None:
         import pytest
 
-        from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
+        from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
 
         with pytest.raises(ValueError, match="both were set"):
             HostedMCPTool(

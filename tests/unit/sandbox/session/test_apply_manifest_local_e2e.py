@@ -12,12 +12,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+from augments.adk.sandbox.clients.local.subprocess_client import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.types.sandbox.entries import Dir, File
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.entries import Dir, File
+from augments.adk.types.sandbox.manifest import Manifest
 
 
 class TestLocalApplyManifestE2E:

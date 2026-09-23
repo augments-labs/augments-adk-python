@@ -18,16 +18,16 @@ import asyncio
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.config import SharedContextConfig
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.shared_context import prepare_turn_input
-from philharmonica.adk.swarms.shared_context_strategy import SharedContextStrategy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.swarms.yield_signal import SwarmHandoff
-from philharmonica.adk.types.items.items import UserItem
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.config import SharedContextConfig
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.shared_context import prepare_turn_input
+from augments.adk.swarms.shared_context_strategy import SharedContextStrategy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.yield_signal import SwarmHandoff
+from augments.adk.types.items.items import UserItem
 
 
 def _user_item(content: str, agent_name: str = "a") -> UserItem:
@@ -93,11 +93,11 @@ class TestSummarizedBudgetGate:
         compact_mock = AsyncMock()
         with (
             patch(
-                "philharmonica.adk.context.token_counter.TokenCounter.count_messages",
+                "augments.adk.context.token_counter.TokenCounter.count_messages",
                 return_value=10,  # 10 <= budget=1000 -> gate must skip
             ),
             patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new=compact_mock,
             ),
         ):
@@ -124,11 +124,11 @@ class TestSummarizedBudgetGate:
         compact_mock = AsyncMock(side_effect=RuntimeError("boom"))  # forces fallback path
         with (
             patch(
-                "philharmonica.adk.context.token_counter.TokenCounter.count_messages",
+                "augments.adk.context.token_counter.TokenCounter.count_messages",
                 return_value=999,  # 999 > budget=10 -> gate must NOT skip
             ),
             patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new=compact_mock,
             ),
         ):

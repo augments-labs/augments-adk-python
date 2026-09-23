@@ -11,17 +11,17 @@ from typing import Any
 import click
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.cli.loading import (
+from augments.adk.agents.agent import Agent
+from augments.adk.cli.loading import (
     detect_config_kind,
     load_env_file,
     primary_executable,
     reconcile_positionals,
     resolve_target,
 )
-from philharmonica.adk.config.topology import AgentTopology, load_topology
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.swarms import Swarm
+from augments.adk.config.topology import AgentTopology, load_topology
+from augments.adk.graphs import Graph
+from augments.adk.swarms import Swarm
 
 AGENT_NODE: dict[str, Any] = {"name": "author", "system_prompt": "Write."}
 REVIEWER_NODE: dict[str, Any] = {"name": "reviewer", "system_prompt": "Review."}
@@ -79,7 +79,7 @@ def test_agent_ref_resolves_from_cwd(tmp_path: Path, monkeypatch: pytest.MonkeyP
     (tmp_path / "cli_loading_fixture_agents.py").write_text(
         textwrap.dedent(
             """
-            from philharmonica.adk.agents.agent import Agent
+            from augments.adk.agents.agent import Agent
 
             support = Agent(name="support", system_prompt="Help politely.")
             not_runnable = "just a string"
@@ -119,7 +119,7 @@ def test_config_path_reads_file_exactly_once(tmp_path: Path, monkeypatch: pytest
     A second disk read would both waste IO and open a window where the file
     changes between the kind decision and the load.
     """
-    from philharmonica.adk.config import loader as loader_module, topology as topology_module
+    from augments.adk.config import loader as loader_module, topology as topology_module
 
     cfg = _write_topology(tmp_path, {"entry": "author"})
     calls: list[Path] = []

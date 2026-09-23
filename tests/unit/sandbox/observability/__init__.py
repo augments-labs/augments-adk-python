@@ -1,1 +1,1 @@
-"""Unit tests for ``philharmonica.adk.sandbox.observability``."""
+"""Unit tests for ``augments.adk.sandbox.observability``."""

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-from philharmonica.adk.tracing.spans import NoOpSpan, swarm_span, swarm_turn_span
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.tracing.spans import NoOpSpan, swarm_span, swarm_turn_span
+from augments.adk.types.tracing.span_data import (
     CustomSpanData,
     SwarmSpanData,
     SwarmTurnSpanData,
@@ -87,7 +87,7 @@ class TestSwarmSpanFactory:
                 captured.append(data)
                 return NoOpSpan(data)
 
-        with patch("philharmonica.adk.tracing.spans.get_tracer", return_value=_FakeTracer()):
+        with patch("augments.adk.tracing.spans.get_tracer", return_value=_FakeTracer()):
             swarm_span(swarm_id="abc-123", entry="approver")
 
         assert len(captured) == 1
@@ -115,7 +115,7 @@ class TestSwarmTurnSpanFactory:
                 captured.append(data)
                 return NoOpSpan(data)
 
-        with patch("philharmonica.adk.tracing.spans.get_tracer", return_value=_FakeTracer()):
+        with patch("augments.adk.tracing.spans.get_tracer", return_value=_FakeTracer()):
             swarm_turn_span(swarm_id="abc-123", index=3, member="approver")
 
         assert len(captured) == 1

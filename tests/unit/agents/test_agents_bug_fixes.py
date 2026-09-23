@@ -18,15 +18,15 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrailResults,
     AgentOutputGuardrail,
     AgentOutputGuardrailData,
 )
-from philharmonica.adk.exceptions import UserError
-from philharmonica.adk.prompts import SystemPrompt
+from augments.adk.exceptions import UserError
+from augments.adk.prompts import SystemPrompt
 
 # ── Helpers ───────────────────────────────────────────────────────────
 
@@ -92,7 +92,7 @@ class TestAsToolExtractorStrContract:
 
         with (
             patch(
-                "philharmonica.adk.run.Runner.arun",
+                "augments.adk.run.Runner.arun",
                 new_callable=AsyncMock,
                 return_value=_mock_result(),
             ),
@@ -108,7 +108,7 @@ class TestAsToolExtractorStrContract:
 
         with (
             patch(
-                "philharmonica.adk.run.Runner.arun",
+                "augments.adk.run.Runner.arun",
                 new_callable=AsyncMock,
                 return_value=_mock_result(),
             ),
@@ -123,7 +123,7 @@ class TestAsToolExtractorStrContract:
         tool = agent.as_tool(extractor=lambda _result: "extracted!")
 
         with patch(
-            "philharmonica.adk.run.Runner.arun",
+            "augments.adk.run.Runner.arun",
             new_callable=AsyncMock,
             return_value=_mock_result(),
         ):
@@ -142,7 +142,7 @@ class TestAsToolExtractorStrContract:
         tool = agent.as_tool(extractor=async_extractor)
 
         with patch(
-            "philharmonica.adk.run.Runner.arun",
+            "augments.adk.run.Runner.arun",
             new_callable=AsyncMock,
             return_value=_mock_result(),
         ):
@@ -162,7 +162,7 @@ class TestAsToolExtractorStrContract:
 
         with (
             patch(
-                "philharmonica.adk.run.Runner.arun",
+                "augments.adk.run.Runner.arun",
                 new_callable=AsyncMock,
                 return_value=_mock_result(),
             ),
@@ -231,23 +231,23 @@ class TestAgentOutputGuardrailMaxRetriesValidation:
 
 
 class TestAgentGuardrailResultsExported:
-    """AgentGuardrailResults must be importable from philharmonica.adk.agents."""
+    """AgentGuardrailResults must be importable from augments.adk.agents."""
 
     def test_importable_from_agents(self) -> None:
-        """from philharmonica.adk.agents import AgentGuardrailResults must work."""
-        import philharmonica.adk.agents as agents_mod
+        """from augments.adk.agents import AgentGuardrailResults must work."""
+        import augments.adk.agents as agents_mod
 
         assert agents_mod.AgentGuardrailResults is AgentGuardrailResults
 
     def test_in_all(self) -> None:
         """AgentGuardrailResults must appear in agents.__all__."""
-        import philharmonica.adk.agents as agents_mod
+        import augments.adk.agents as agents_mod
 
         assert "AgentGuardrailResults" in agents_mod.__all__
 
     def test_can_instantiate(self) -> None:
         """AgentGuardrailResults imported from agents can be instantiated."""
-        import philharmonica.adk.agents as agents_mod
+        import augments.adk.agents as agents_mod
 
         results = agents_mod.AgentGuardrailResults()
         assert results.input == ()
@@ -262,13 +262,13 @@ class TestDeadTypeVarRemoved:
 
     def test_module_level_tcontext_co_not_present(self) -> None:
         """TContext_co should not exist as a module-level attribute."""
-        import philharmonica.adk.agents.agent_guardrails as mod
+        import augments.adk.agents.agent_guardrails as mod
 
         assert not hasattr(mod, "TContext_co"), "TContext_co TypeVar was dead code and should have been removed"
 
     def test_typing_extensions_typevar_not_imported(self) -> None:
         """typing_extensions.TypeVar import was only for dead TContext_co — removed."""
-        with open("src/philharmonica/adk/agents/agent_guardrails.py") as f:
+        with open("src/augments/adk/agents/agent_guardrails.py") as f:
             tree = ast.parse(f.read())
 
         for node in ast.walk(tree):
@@ -285,7 +285,7 @@ class TestAgentToolOutputExtractorPEP604:
 
     def test_union_not_used_in_source(self) -> None:
         """Union[] from typing should not appear in agent_as_tool_types.py."""
-        with open("src/philharmonica/adk/types/agents/agent_as_tool_types.py") as f:
+        with open("src/augments/adk/types/agents/agent_as_tool_types.py") as f:
             tree = ast.parse(f.read())
 
         for node in ast.walk(tree):
@@ -295,6 +295,6 @@ class TestAgentToolOutputExtractorPEP604:
 
     def test_extractor_type_alias_still_importable(self) -> None:
         """AgentToolOutputExtractor must still be importable after the change."""
-        from philharmonica.adk.types.agents.agent_as_tool_types import AgentToolOutputExtractor
+        from augments.adk.types.agents.agent_as_tool_types import AgentToolOutputExtractor
 
         assert AgentToolOutputExtractor is not None

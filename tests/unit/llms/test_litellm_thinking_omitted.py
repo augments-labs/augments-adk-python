@@ -19,10 +19,10 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from philharmonica.adk.llms.litellm.litellm_converter import ChatCompletionConverter
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+from augments.adk.llms.litellm.litellm_converter import ChatCompletionConverter
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
 _MODEL = "claude-3-5-sonnet-20241022"
 

@@ -14,7 +14,7 @@ Runnable examples for the Agent-to-Agent (A2A) protocol integration.
 Install the optional extra first:
 
 ```bash
-pip install 'philharmonica-adk[a2a]'
+pip install 'augments-adk[a2a]'
 ```
 
 Each script is self-contained and runs with `python examples/a2a/<file>.py`.

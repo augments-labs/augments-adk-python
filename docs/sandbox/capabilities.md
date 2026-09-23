@@ -38,5 +38,5 @@ explicitly.
    copyable state (asyncio.Lock / Event / Semaphore — fresh instances
    per clone).
 
-See `src/philharmonica/adk/sandbox/capabilities/` for full implementations
+See `src/augments/adk/sandbox/capabilities/` for full implementations
 and `examples/sandbox/memory_capability.py` for a runnable scenario.

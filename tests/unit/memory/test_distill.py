@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from typing import override
 
-from philharmonica.adk.llms import Embedder, Embedding
-from philharmonica.adk.memory import MemoryEntry, MemoryKind, MemoryMetadata, MemorySource
-from philharmonica.adk.memory.distill import distill_to_semantic
-from philharmonica.adk.memory.extractor import ExtractionResult, MemoryExtractor
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.memory.vector_memory import VectorMemory
+from augments.adk.llms import Embedder, Embedding
+from augments.adk.memory import MemoryEntry, MemoryKind, MemoryMetadata, MemorySource
+from augments.adk.memory.distill import distill_to_semantic
+from augments.adk.memory.extractor import ExtractionResult, MemoryExtractor
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.memory.vector_memory import VectorMemory
 
 
 class _HashEmbedder(Embedder):

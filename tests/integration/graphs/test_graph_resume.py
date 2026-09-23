@@ -3,13 +3,13 @@ checkpoint runs to its correct terminal output."""
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.config import GraphConfig
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.join import JoinSemantics
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.graph_loop import run_graph_loop
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.config import GraphConfig
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.join import JoinSemantics
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.graph_loop import run_graph_loop
 
 
 def _linear_graph() -> Graph:
@@ -133,7 +133,7 @@ async def test_resume_does_not_reexecute_completed_node() -> None:
 
 
 async def test_arun_graph_from_checkpoint_resumes() -> None:
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     cp = InMemoryCheckpointer()
     capped = _linear_graph_capped(1)
@@ -148,7 +148,7 @@ async def test_arun_graph_from_checkpoint_resumes() -> None:
 async def test_arun_graph_from_checkpoint_missing_thread_raises() -> None:
     import pytest
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     cp = InMemoryCheckpointer()
     g = _linear_graph()
@@ -186,7 +186,7 @@ async def test_cumulative_supersteps_survive_resume() -> None:
 
 
 def test_run_graph_from_checkpoint_resumes_sync() -> None:
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     cp = InMemoryCheckpointer()
     capped = _linear_graph_capped(1)
@@ -199,8 +199,8 @@ def test_run_graph_from_checkpoint_resumes_sync() -> None:
 
 
 async def test_sqlite_checkpointer_end_to_end_resume(tmp_path) -> None:
-    from philharmonica.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
+    from augments.adk.run.runner import Runner
 
     db = str(tmp_path / "run.db")
     cp = SQLiteCheckpointer(db)
@@ -332,7 +332,7 @@ async def test_resume_completes_cyclic_graph() -> None:
 
 
 async def test_builder_resume_from_round_trips() -> None:
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     cp = InMemoryCheckpointer()
     capped = (

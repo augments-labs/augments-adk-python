@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.usage``."""
+"""Tests for ``augments.adk.types.sandbox.usage``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.usage import SandboxSingleExecUsage, SandboxUsage
+from augments.adk.types.sandbox.usage import SandboxSingleExecUsage, SandboxUsage
 
 
 class TestSandboxUsageDefaults:

@@ -14,15 +14,15 @@ one ADK process delegate work to a completely separate process?*
 > handoffs are cheaper and simpler.
 
 The A2A support is an **optional extra**. Install it before using any
-symbol from `philharmonica.adk.a2a`:
+symbol from `augments.adk.a2a`:
 
 ```bash
-pip install 'philharmonica-adk[a2a]'
+pip install 'augments-adk[a2a]'
 ```
 
 This pulls in `a2a-sdk[http-server]` (Starlette + sse-starlette for the
 server path) and `httpx` for the client path. When the extra is absent,
-every public symbol in `philharmonica.adk.a2a` is `None`; downstream code can
+every public symbol in `augments.adk.a2a` is `None`; downstream code can
 branch on `A2AAgent is None` to degrade gracefully.
 
 ---
@@ -62,8 +62,8 @@ and `build_starlette_app` to materialise the ASGI app.
 ```python
 import uvicorn
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.agents import Agent
 
 local_agent = Agent(
     name="research_helper",
@@ -148,7 +148,7 @@ optional timeout, and interceptors. Execution flows through `A2ARunner`.
 ```python
 import asyncio
 import logging
-from philharmonica.adk.a2a import A2AAgent, A2ARunner
+from augments.adk.a2a import A2AAgent, A2ARunner
 
 logger = logging.getLogger(__name__)
 
@@ -179,7 +179,7 @@ loop.
 agent's LLM can invoke it mid-turn alongside its other tools:
 
 ```python
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 
 remote = A2AAgent(name="Researcher", url="https://research.example.com")
 local = Agent(
@@ -342,7 +342,7 @@ dispatches via `A2ARunner.arun`. The ADK's `A2AContinuationToken` carries
 
 ## Error handling
 
-All A2A failures surface as typed exceptions under `philharmonica.adk.a2a`:
+All A2A failures surface as typed exceptions under `augments.adk.a2a`:
 
 | Exception | Cause |
 | --- | --- |
@@ -351,7 +351,7 @@ All A2A failures surface as typed exceptions under `philharmonica.adk.a2a`:
 | `A2ATaskError` | Remote task ended in `failed` or `rejected` state |
 | `A2ATaskCancelledError` | Remote task was cancelled (subclass of `A2ATaskError`) |
 
-All extend `A2AError`, which extends the root `PhilharmonicaError`.
+All extend `A2AError`, which extends the root `AugmentsError`.
 
 > [!WARNING]
 > `A2ATaskError.remote_message` is **untrusted input** sourced from the peer
@@ -360,7 +360,7 @@ All extend `A2AError`, which extends the root `PhilharmonicaError`.
 > that might re-interpret it.
 
 ```python
-from philharmonica.adk.a2a import A2ATaskError, A2ATransportError
+from augments.adk.a2a import A2ATaskError, A2ATransportError
 
 try:
     result = await A2ARunner.arun(remote, "...")
@@ -382,15 +382,15 @@ except A2ATaskError as exc:
 
 A2A calls participate automatically in OpenTelemetry tracing via the
 existing `function_span` infrastructure. Client-side spans are named
-`a2a.<task_id>` and carry an `philharmonica.a2a.remote_url` attribute;
-server-side spans carry `philharmonica.a2a.agent_name`. These two attributes let
+`a2a.<task_id>` and carry an `augments.a2a.remote_url` attribute;
+server-side spans carry `augments.a2a.agent_name`. These two attributes let
 you correlate the client and server sides of a network boundary in your
 trace UI.
 
 The same secret-redaction that runs on tool I/O runs on `a2a_data` span
 attributes — embedded credentials are masked before leaving the process.
 
-Enable OTel: `pip install 'philharmonica-adk[otel]'`. See [🔭 Tracing](tracing.md) for the
+Enable OTel: `pip install 'augments-adk[otel]'`. See [🔭 Tracing](tracing.md) for the
 full tracing guide.
 
 ---

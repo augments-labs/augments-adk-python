@@ -6,13 +6,13 @@ import base64
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     ExecTimeoutError,
     ExecTransportError,
     SandboxConfigurationError,
     SandboxRuntimeError,
 )
-from philharmonica.adk.sandbox.clients.hosted.remote_vm.remote_vm_client import (
+from augments.adk.sandbox.clients.hosted.remote_vm.remote_vm_client import (
     build_httpx_client,
     map_http_error_to_sandbox_error,
     parse_exec_result,

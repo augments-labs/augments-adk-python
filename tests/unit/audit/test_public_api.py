@@ -2,7 +2,7 @@ from __future__ import annotations
 
 
 def test_public_exports() -> None:
-    from philharmonica.adk.audit import (
+    from augments.adk.audit import (
         AuditEvent,
         AuditSink,
         InMemoryAuditSink,

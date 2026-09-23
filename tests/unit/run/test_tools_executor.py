@@ -21,14 +21,14 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import Any
 
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.stream import RunResultStreaming
-from philharmonica.adk.run.tools_executor import execute_tool_calls, execute_tool_calls_streamed
-from philharmonica.adk.tools.function_tool import FunctionTool, function_tool
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.agents.middleware import Middleware
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.stream import RunResultStreaming
+from augments.adk.run.tools_executor import execute_tool_calls, execute_tool_calls_streamed
+from augments.adk.tools.function_tool import FunctionTool, function_tool
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 # ── Helpers ──────────────────────────────────────────────────────────
 

@@ -27,8 +27,8 @@ import asyncio
 import json
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.tools.function_tool import FunctionTool
 
 logger = logging.getLogger(__name__)
 

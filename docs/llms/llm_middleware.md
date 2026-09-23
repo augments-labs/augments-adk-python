@@ -36,8 +36,8 @@ by not calling `next`.
 ## Quickstart
 
 ```python
-from philharmonica.adk.agents import Agent, Middleware
-from philharmonica.adk.llms.llm_middleware import LLMLoggingMiddleware
+from augments.adk.agents import Agent, Middleware
+from augments.adk.llms.llm_middleware import LLMLoggingMiddleware
 
 agent = Agent(
     name="Researcher",
@@ -57,7 +57,7 @@ the end of every LLM call. Composition is **outer-to-inner**.
 import logging
 import time
 
-from philharmonica.adk.types.responses.llm_response import LLMResponse
+from augments.adk.types.responses.llm_response import LLMResponse
 
 
 class TimeLLMCall:
@@ -131,7 +131,7 @@ class ResponseCache:
 
 ```python
 # 2. Deterministic replay — raise the typed termination.
-from philharmonica.adk.llms.llm_middleware import LLMMiddlewareTermination
+from augments.adk.llms.llm_middleware import LLMMiddlewareTermination
 
 class ReplayMiddleware:
     def __init__(self, replay_log): self.log = replay_log
@@ -184,9 +184,9 @@ Two Protocols (rather than a polymorphic union) keep the type
 checker friendly across both paths.
 
 ```python
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.llms.llm_middleware import LLMLoggingMiddleware
-from philharmonica.adk.llms.llm_stream_middleware import (
+from augments.adk.agents.middleware import Middleware
+from augments.adk.llms.llm_middleware import LLMLoggingMiddleware
+from augments.adk.llms.llm_stream_middleware import (
     LLMStreamLoggingMiddleware,
     make_logging_middlewares,
 )
@@ -214,7 +214,7 @@ verdict-vs-plumbing split holds regardless of streaming mode.
 ## See also
 
 - `examples/llms/llm_middleware/` — runnable examples.
-- `src/philharmonica/adk/llms/llm_middleware.py` — Protocol definition,
+- `src/augments/adk/llms/llm_middleware.py` — Protocol definition,
   shipped middleware, and the chain composition helpers.
 - `docs/tools/middleware.md` — `ToolMiddleware` (sibling layer);
   contains the canonical forbidden-vs-allowed table.

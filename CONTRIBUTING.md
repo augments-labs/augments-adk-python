@@ -9,14 +9,14 @@ to land a change.
 
 ```bash
 # Clone
-git clone https://github.com/augments-labs/philharmonica-adk-python.git
-cd philharmonica-adk-python
+git clone https://github.com/augments-labs/augments-adk-python.git
+cd augments-adk-python
 
 # Build .venv from the committed lockfile
 uv sync --extra dev
 
 # Verify
-uv run python -c "from philharmonica.adk import Agent, Runner; print('OK')"
+uv run python -c "from augments.adk import Agent, Runner; print('OK')"
 ```
 
 The `dev` extra brings the full set of tools — tests, lint, typecheck.
@@ -28,7 +28,7 @@ Conda works too, if you prefer it:
 
 ```bash
 conda env create -f environment.yaml   # also runs pip install -e '.[dev]'
-conda activate philharmonica-adk-python
+conda activate augments-adk-python
 ```
 
 Every command below is written with the `uv run` prefix; drop it when you
@@ -84,7 +84,7 @@ one-line justification comment.
   for core APIs. Avoid `_NON_LITELLM_FIELDS`-style hidden allow-lists.
 - **Three-layer types.** Layer 1 (`LLMInputContentItem`) and Layer 3
   (`RunItem`) are developer-facing. Layer 2 wire `TypedDict`s live
-  inside `src/philharmonica/adk/llms/<provider>/` and never escape.
+  inside `src/augments/adk/llms/<provider>/` and never escape.
 - **No `print()`** — always `logging`. The codebase uses
   `logger = logging.getLogger(__name__)` per module.
 - **No `if x:` truthiness** on non-booleans. Use explicit `len(x) > 0`
@@ -101,7 +101,7 @@ uv run pytest
 Run with coverage:
 
 ```bash
-uv run pytest --cov=src/philharmonica --cov-report=html --cov-report=term-missing
+uv run pytest --cov=src/augments --cov-report=html --cov-report=term-missing
 ```
 
 The HTML report lands at `.coverage/html/index.html`.
@@ -115,7 +115,7 @@ start; raising the project baseline is gradual.
 
 ## Documentation
 
-Documentation is plain Markdown under [`docs/`](https://github.com/augments-labs/philharmonica-adk-python/tree/main/docs).
+Documentation is plain Markdown under [`docs/`](https://github.com/augments-labs/augments-adk-python/tree/main/docs).
 There is no build step and no generated site in this repository — the
 pages are the source, and [augmentslabs.com](https://augmentslabs.com)
 renders them.
@@ -134,7 +134,7 @@ and keep the code samples runnable against the current API.
 
 ## Licensing & contributions
 
-Philharmonica ADK is open source under the [MIT License](https://github.com/augments-labs/philharmonica-adk-python/blob/main/LICENSE).
+Augments ADK is open source under the [MIT License](https://github.com/augments-labs/augments-adk-python/blob/main/LICENSE).
 
 By contributing, you agree that your contributions are licensed under the
 same MIT License that covers the project (inbound = outbound). You keep the
@@ -157,5 +157,5 @@ need in this codebase's terms.
 
 ## Acknowledgements
 
-See the [Acknowledgements section](https://github.com/augments-labs/philharmonica-adk-python/blob/main/README.md#acknowledgements) in the
+See the [Acknowledgements section](https://github.com/augments-labs/augments-adk-python/blob/main/README.md#acknowledgements) in the
 README for prior art and ongoing influences.

@@ -24,14 +24,14 @@ import asyncio
 
 from a2a.types import Message, Part, Role, TaskState
 
-from philharmonica.adk.a2a.executor import A2AExecutor
-from philharmonica.adk.a2a.task_store import InMemoryTaskStore
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import (
+from augments.adk.a2a.executor import A2AExecutor
+from augments.adk.a2a.task_store import InMemoryTaskStore
+from augments.adk.agents import Agent
+from augments.adk.exceptions import (
     AgentInputGuardrailTripwireTriggered,
     MaxTurnsExceeded,
 )
-from philharmonica.adk.types.run import RunResult
+from augments.adk.types.run import RunResult
 
 # ---------------------------------------------------------------------------
 # Helpers (mirrors test_executor.py helpers)
@@ -100,7 +100,7 @@ class TestCustomStoreReceivesSaves:
         ctx = _make_request_context(task_id="t-happy")
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(return_value=_make_run_result("done")),
         ):
             await executor.execute(ctx, queue)
@@ -116,7 +116,7 @@ class TestCustomStoreReceivesSaves:
         ctx = _make_request_context(task_id="t-fail")
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(side_effect=MaxTurnsExceeded("too many")),
         ):
             await executor.execute(ctx, queue)
@@ -132,7 +132,7 @@ class TestCustomStoreReceivesSaves:
         queue = _make_event_queue()
         with (
             patch(
-                "philharmonica.adk.a2a.executor.Runner.arun",
+                "augments.adk.a2a.executor.Runner.arun",
                 AsyncMock(side_effect=asyncio.CancelledError()),
             ),
             pytest.raises(asyncio.CancelledError),
@@ -149,7 +149,7 @@ class TestCustomStoreReceivesSaves:
         ctx = _make_request_context(task_id="t-reject")
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(
                 side_effect=AgentInputGuardrailTripwireTriggered(
                     guardrail_result=MagicMock(),
@@ -172,7 +172,7 @@ class TestCustomStoreReceivesSaves:
         ctx.context_id = "c1"
         ctx.message = Message(role=Role.ROLE_USER, parts=[])  # no text parts
         queue = _make_event_queue()
-        with patch("philharmonica.adk.a2a.executor.Runner.arun", AsyncMock()) as mock_arun:
+        with patch("augments.adk.a2a.executor.Runner.arun", AsyncMock()) as mock_arun:
             await executor.execute(ctx, queue)
         mock_arun.assert_not_awaited()
         result = await store.get("t-empty")
@@ -195,7 +195,7 @@ class TestStoreErrorsAreSwallowed:
         ctx = _make_request_context(task_id="t-store-err")
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(return_value=_make_run_result("ok")),
         ):
             # Must not raise even though the store is broken.

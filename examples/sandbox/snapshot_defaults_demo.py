@@ -30,7 +30,7 @@ import tempfile
 import time
 from pathlib import Path
 
-from philharmonica.adk.sandbox.snapshot_defaults import (
+from augments.adk.sandbox.snapshot_defaults import (
     cleanup_stale_default_local_snapshots,
     default_local_snapshot_base_dir,
     resolve_default_local_snapshot_spec,

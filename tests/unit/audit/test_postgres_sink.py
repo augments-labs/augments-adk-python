@@ -9,9 +9,9 @@ import pytest
 
 pytest.importorskip("psycopg_pool")
 
-from philharmonica.adk.audit.event import AuditEvent
-from philharmonica.adk.audit.sink import AuditSink
-from philharmonica.adk.audit.sinks.postgres import PostgresAuditSink
+from augments.adk.audit.event import AuditEvent
+from augments.adk.audit.sink import AuditSink
+from augments.adk.audit.sinks.postgres import PostgresAuditSink
 
 
 def test_postgres_is_an_audit_sink() -> None:
@@ -68,7 +68,7 @@ async def test_close_is_idempotent_when_pool_is_none() -> None:
 
 
 def test_schema_targets_append_only_table() -> None:
-    from philharmonica.adk.audit.sinks import postgres
+    from augments.adk.audit.sinks import postgres
 
     assert "audit_events" in postgres._CREATE_TABLE
     assert "INSERT INTO audit_events" in postgres._INSERT
@@ -104,7 +104,7 @@ async def test_insert_failure_logs_table_before_reraising(caplog) -> None:
     )
     with (
         patch.object(sink, "_get_pool", AsyncMock(return_value=_FailingPool())),
-        caplog.at_level(logging.ERROR, logger="philharmonica.adk.audit.sinks.postgres"),
+        caplog.at_level(logging.ERROR, logger="augments.adk.audit.sinks.postgres"),
         pytest.raises(RuntimeError, match="pg down"),
     ):
         await sink.record(event)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.session.materialization.paths import (
+from augments.adk.sandbox.session.materialization.paths import (
     normalize_workspace_key,
     paths_overlap,
 )

@@ -10,10 +10,10 @@ import boto3
 import pytest
 from moto import mock_aws
 
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.s3 import S3Checkpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.s3 import S3Checkpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
 
 # ---------------------------------------------------------------------------
 # Helpers

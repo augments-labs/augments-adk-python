@@ -8,8 +8,8 @@ from typing import Literal, Union
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
-from philharmonica.adk.schemas.utils import (
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.schemas.utils import (
     SchemaEnforcement,
     _convert_const_to_enum,
     _strip_schema_metadata,
@@ -341,7 +341,7 @@ class TestCompactStripsDiscriminatorDescriptions:
 
     def test_compact_strips_description_from_enum_of_one(self) -> None:
         """_strip_schema_metadata must strip description from single-element enum."""
-        from philharmonica.adk.schemas.utils import _strip_schema_metadata
+        from augments.adk.schemas.utils import _strip_schema_metadata
 
         schema: dict = {
             "properties": {
@@ -362,7 +362,7 @@ class TestCompactStripsDiscriminatorDescriptions:
 
     def test_compact_preserves_description_on_multi_value_enum(self) -> None:
         """Descriptions on enum properties with multiple values are kept."""
-        from philharmonica.adk.schemas.utils import _strip_schema_metadata
+        from augments.adk.schemas.utils import _strip_schema_metadata
 
         schema: dict = {
             "properties": {

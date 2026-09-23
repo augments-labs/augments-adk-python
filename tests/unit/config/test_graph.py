@@ -9,10 +9,10 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.config import build_topology
-from philharmonica.adk.exceptions import ConfigParseError, ConfigResolutionError
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.types.config import TopologyConfig
+from augments.adk.config import build_topology
+from augments.adk.exceptions import ConfigParseError, ConfigResolutionError
+from augments.adk.graphs import Graph
+from augments.adk.types.config import TopologyConfig
 
 _PREDICATE_REF = "tests.unit.config.sample_symbols:always_true"
 _NON_CALLABLE_REF = "tests.unit.config.sample_symbols:NOT_A_TOOL"

@@ -25,18 +25,18 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.exceptions import TenantBudgetExceeded
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.llms.cost import CostEstimate
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.llm_calls import call_llm_with_routing
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.budgets import TenantBudget
+from augments.adk.exceptions import TenantBudgetExceeded
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.llms.cost import CostEstimate
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.run.config import RunConfig
+from augments.adk.run.llm_calls import call_llm_with_routing
+from augments.adk.run.runner import Runner
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Shared fake LLM helpers
@@ -93,7 +93,7 @@ class _FakeLLM(LLM):
 
 
 class _RaisingFakeLLM(LLM):
-    """Raises RuntimeError on acomplete (retryable — not an PhilharmonicaError)."""
+    """Raises RuntimeError on acomplete (retryable — not an AugmentsError)."""
 
     @override
     async def acomplete(  # type: ignore[override]
@@ -195,15 +195,15 @@ class _StaticRouter(LLMRouter):
 def _patch_runner_guardrails() -> tuple[Any, Any, Any]:
     return (
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     )
@@ -236,9 +236,9 @@ async def test_router_falls_back_to_pricier_on_failure() -> None:
 
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
-        patch("philharmonica.adk.run.llm_calls.build_tools", new=AsyncMock(return_value=None)),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=pricey_ok),
-        patch("philharmonica.adk.run.loop.resolve_model_name", return_value="pricey-ok"),
+        patch("augments.adk.run.llm_calls.build_tools", new=AsyncMock(return_value=None)),
+        patch("augments.adk.run.loop.resolve_llm", return_value=pricey_ok),
+        patch("augments.adk.run.loop.resolve_model_name", return_value="pricey-ok"),
         grd1,
         grd2,
         grd3,
@@ -263,10 +263,10 @@ async def test_no_router_unchanged() -> None:
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=lambda *a, **kw: _text_response("baseline output")),
         ),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,
@@ -287,7 +287,7 @@ async def test_routed_call_per_candidate_budget_gate() -> None:
     """Per-candidate budget gate raises ``TenantBudgetExceeded`` and does NOT escalate.
 
     Exercises the gate via ``call_llm_with_routing`` directly.
-    ``TenantBudgetExceeded`` is an ``PhilharmonicaError`` subclass → ``_is_routing_retryable``
+    ``TenantBudgetExceeded`` is an ``AugmentsError`` subclass → ``_is_routing_retryable``
     returns False → the exception propagates immediately, never reaching the
     second candidate.
     """
@@ -315,18 +315,18 @@ async def test_routed_call_per_candidate_budget_gate() -> None:
 
     # Build a real RunContext with the tenant_id threaded in so the budget
     # gate sees it; use the same make() helper the runner uses.
-    from philharmonica.adk.run.context import RunContext
+    from augments.adk.run.context import RunContext
 
     ctx: RunContext[None] = RunContext.make(None)
     ctx.tenant_id = "t-budget-gate"
 
     with (
         patch(
-            "philharmonica.adk.run.llm_calls.build_tools",
+            "augments.adk.run.llm_calls.build_tools",
             new=AsyncMock(return_value=None),
         ),
         patch(
-            "philharmonica.adk.run.llm_calls.call_llm",
+            "augments.adk.run.llm_calls.call_llm",
             new=AsyncMock(side_effect=_track_good_call),
         ),
         pytest.raises(TenantBudgetExceeded) as exc_info,

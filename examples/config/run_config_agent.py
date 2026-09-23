@@ -31,9 +31,9 @@ import logging
 import sys
 from pathlib import Path
 
-from philharmonica.adk.config import load_agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.config import load_agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 # Make the sibling ``weather`` module importable for the typed-output cast
 # below (the loader does the same internally while resolving the config).

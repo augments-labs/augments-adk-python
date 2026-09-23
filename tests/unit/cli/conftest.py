@@ -20,13 +20,13 @@ STUB_MODULE_SOURCE = textwrap.dedent(
 
     from collections.abc import AsyncIterator
 
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.llms.llm import LLM
-    from philharmonica.adk.llms.llm_config import LLMConfig
-    from philharmonica.adk.schemas import AgentOutputSchemaBase
-    from philharmonica.adk.tools import Tool
-    from philharmonica.adk.types.input import LLMInputContentItem
-    from philharmonica.adk.types.responses.llm_response import (
+    from augments.adk.agents.agent import Agent
+    from augments.adk.llms.llm import LLM
+    from augments.adk.llms.llm_config import LLMConfig
+    from augments.adk.schemas import AgentOutputSchemaBase
+    from augments.adk.tools import Tool
+    from augments.adk.types.input import LLMInputContentItem
+    from augments.adk.types.responses.llm_response import (
         LLMResponse,
         LLMResponseText,
         LLMStreamEvent,
@@ -97,7 +97,7 @@ STUB_MODULE_SOURCE = textwrap.dedent(
     reviewer = Agent(name="reviewer", system_prompt="Review tersely.", llm=ScriptedLLM("looks good"))
     delta_support = Agent(name="delta_support", system_prompt="Help politely.", llm=DeltaScriptedLLM("streamed reply"))
 
-    from philharmonica.adk.swarms import MaxTurnsTermination, RoundRobinPolicy, Swarm
+    from augments.adk.swarms import MaxTurnsTermination, RoundRobinPolicy, Swarm
 
     team = Swarm(
         members=(support, reviewer),
@@ -106,7 +106,7 @@ STUB_MODULE_SOURCE = textwrap.dedent(
         termination=MaxTurnsTermination(limit=2),
     )
 
-    from philharmonica.adk.graphs import Graph
+    from augments.adk.graphs import Graph
 
     flow = Graph.new("stub_flow").node("support", support).entry("support").terminal("support").compile()
     '''

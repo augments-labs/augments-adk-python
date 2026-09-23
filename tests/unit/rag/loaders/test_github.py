@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.rag.loaders.github``.
+"""Tests for ``augments.adk.rag.loaders.github``.
 
 PyGithub is stubbed via ``sys.modules`` so the lazy ``from github import ...``
 inside the worker thread resolves to in-test fakes; no network is touched.
@@ -13,7 +13,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from philharmonica.adk.rag.loaders.github import GithubLoader
+from augments.adk.rag.loaders.github import GithubLoader
 
 
 class _GithubException(Exception):

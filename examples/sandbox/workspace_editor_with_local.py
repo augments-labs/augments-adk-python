@@ -25,18 +25,18 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk.sandbox.apply_patch import WorkspaceEditor
-from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
-from philharmonica.adk.sandbox.editor import ApplyPatchOperation
-from philharmonica.adk.types.sandbox.entries import File
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.sandbox.apply_patch import WorkspaceEditor
+from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+from augments.adk.sandbox.editor import ApplyPatchOperation
+from augments.adk.types.sandbox.entries import File
+from augments.adk.types.sandbox.manifest import Manifest
 
 logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
     manifest = Manifest(
-        root="/tmp/philharmonica-workspace-demo",
+        root="/tmp/augments-workspace-demo",
         entries={
             "src/app.py": File(content=b"alpha\nbeta\ngamma\n"),
         },

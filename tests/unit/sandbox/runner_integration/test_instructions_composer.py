@@ -10,16 +10,16 @@ from __future__ import annotations
 
 from typing import Literal, override
 
-from philharmonica.adk.run.loop import _maybe_compose_sandbox_prompt
-from philharmonica.adk.sandbox.capabilities.base import SandboxCapability
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.runner_integration.instructions_composer import (
+from augments.adk.run.loop import _maybe_compose_sandbox_prompt
+from augments.adk.sandbox.capabilities.base import SandboxCapability
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.runner_integration.instructions_composer import (
     DEFAULT_SANDBOX_PROMPT,
     SANDBOX_PLACEHOLDER_SYSTEM_PROMPT,
     compose_sandbox_prompt,
 )
-from philharmonica.adk.types.sandbox.entries import File
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.entries import File
+from augments.adk.types.sandbox.manifest import Manifest
 
 
 class _InstrCapability(SandboxCapability):
@@ -177,13 +177,13 @@ class TestMaybeComposeSandboxPrompt:
         assert "  /f.txt" in out
 
     async def test_with_handle_placeholder_resolves_to_default(self) -> None:
-        # philharmonica contract pin: SandboxAgent has NO base_instructions
+        # augments contract pin: SandboxAgent has NO base_instructions
         # (it uses system_prompt). The placeholder sentinel arriving
         # via the wrapper resolves to DEFAULT_SANDBOX_PROMPT — the
         # wrapper deliberately does NOT plumb base_instructions (a
         # vestigial OpenAI-port param on compose_sandbox_prompt).
         # Override by setting an explicit system_prompt, never
-        # base_instructions. This pins the real philharmonica behavior so a
+        # base_instructions. This pins the real augments behavior so a
         # future "plumb base_instructions" regression fails loud.
         handle = _FakeHandle(capabilities=[], manifest=None)
         # Escape-hatch rationale (suppression on the next line): same

@@ -13,11 +13,11 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.config import load_agent
-from philharmonica.adk.exceptions import ConfigParseError
-from philharmonica.adk.llms.anthropic.anthropic_model import AnthropicLLM
-from philharmonica.adk.tools import FunctionTool
+from augments.adk.agents.agent import Agent
+from augments.adk.config import load_agent
+from augments.adk.exceptions import ConfigParseError
+from augments.adk.llms.anthropic.anthropic_model import AnthropicLLM
+from augments.adk.tools import FunctionTool
 
 
 def _write(tmp_path: Path, payload: object) -> Path:
@@ -114,7 +114,7 @@ def test_resolves_ref_relative_to_config_dir(tmp_path: Path) -> None:
     import sys
 
     (tmp_path / "weather_tool.py").write_text(
-        "from philharmonica.adk.tools import function_tool\n\n\n"
+        "from augments.adk.tools import function_tool\n\n\n"
         "@function_tool\n"
         "def get_weather(city: str) -> str:\n"
         '    return f"sunny in {city}"\n',
@@ -142,7 +142,7 @@ def test_importable_dir_appends_not_prepends(tmp_path: Path) -> None:
     """
     import sys
 
-    from philharmonica.adk.config.resolver import importable_dir
+    from augments.adk.config.resolver import importable_dir
 
     entry = str(tmp_path.resolve())
     sentinel = "/__import_front_sentinel__"
@@ -160,10 +160,10 @@ def test_sys_path_restored_after_build_error(tmp_path: Path) -> None:
     """A build failure still removes the config directory from ``sys.path``."""
     import sys
 
-    from philharmonica.adk.exceptions import ConfigResolutionError
+    from augments.adk.exceptions import ConfigResolutionError
 
     (tmp_path / "errmod.py").write_text(
-        "from philharmonica.adk.tools import function_tool\n\n\n@function_tool\ndef good() -> str:\n    return 'ok'\n",
+        "from augments.adk.tools import function_tool\n\n\n@function_tool\ndef good() -> str:\n    return 'ok'\n",
         encoding="utf-8",
     )
     # 'errmod.missing' resolves to a module that lacks the attribute → build error.
@@ -181,7 +181,7 @@ def test_importable_dir_leaves_preexisting_entry(tmp_path: Path) -> None:
     import sys
 
     (tmp_path / "keepmod.py").write_text(
-        "from philharmonica.adk.tools import function_tool\n\n\n@function_tool\ndef keep() -> str:\n    return 'ok'\n",
+        "from augments.adk.tools import function_tool\n\n\n@function_tool\ndef keep() -> str:\n    return 'ok'\n",
         encoding="utf-8",
     )
     entry = str(tmp_path.resolve())

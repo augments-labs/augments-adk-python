@@ -7,12 +7,12 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxCommandRejected
-from philharmonica.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
-from philharmonica.adk.sandbox.observability.observability import SandboxObservability
-from philharmonica.adk.sandbox.tools.run_command_tool import make_run_command_tool
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
-from philharmonica.adk.types.sandbox.usage import SandboxUsage
+from augments.adk.exceptions.exceptions import SandboxCommandRejected
+from augments.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
+from augments.adk.sandbox.observability.observability import SandboxObservability
+from augments.adk.sandbox.tools.run_command_tool import make_run_command_tool
+from augments.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.types.sandbox.usage import SandboxUsage
 
 
 def _session(exit_code: int = 0, duration_ms: int = 1000) -> AsyncMock:

@@ -30,9 +30,9 @@ represents a runaway workflow, not a recoverable per-agent budget issue.
 ## Usage
 
 ```python
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
 
 
 async def salvage(agent, turns: int) -> str:
@@ -68,5 +68,5 @@ per-agent cap.
 ## See also
 
 - `examples/agent_patterns/on_max_turns.py` — runnable example
-- `src/philharmonica/adk/run/config.py` — `OnMaxTurnsHandler` type alias + field
+- `src/augments/adk/run/config.py` — `OnMaxTurnsHandler` type alias + field
 - `tests/unit/run/test_on_max_turns.py` — non-streaming + streaming coverage

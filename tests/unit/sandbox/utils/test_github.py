@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.github``."""
+"""Tests for ``augments.adk.sandbox.utils.github``."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.sandbox.utils.github import _run_git, clone_repo, ensure_git_available
+from augments.adk.sandbox.utils.github import _run_git, clone_repo, ensure_git_available
 
 
 def _completed(returncode: int, *, stderr: str = "") -> subprocess.CompletedProcess[str]:
@@ -17,12 +17,12 @@ def _completed(returncode: int, *, stderr: str = "") -> subprocess.CompletedProc
 
 class TestEnsureGitAvailable:
     def test_passes_when_git_present(self) -> None:
-        with patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"):
+        with patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"):
             ensure_git_available()  # no raise
 
     def test_raises_when_git_absent(self) -> None:
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value=None),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value=None),
             pytest.raises(RuntimeError, match="git is required"),
         ):
             ensure_git_available()
@@ -32,9 +32,9 @@ class TestCloneRepo:
     def test_shallow_clone_path(self, tmp_path: Path) -> None:
         dest = tmp_path / "repo"
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 return_value=_completed(0),
             ) as run,
         ):
@@ -50,10 +50,10 @@ class TestCloneRepo:
         dest = tmp_path / "repo"
         rtmpath = MagicMock()
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
-            patch("philharmonica.adk.sandbox.utils.github.shutil.rmtree", rtmpath),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.rmtree", rtmpath),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 side_effect=[
                     _completed(128, stderr="fatal: branch not a ref"),  # shallow fail
                     _completed(0),  # full clone OK
@@ -71,10 +71,10 @@ class TestCloneRepo:
     def test_raises_when_full_clone_fails(self, tmp_path: Path) -> None:
         dest = tmp_path / "repo"
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
-            patch("philharmonica.adk.sandbox.utils.github.shutil.rmtree"),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.rmtree"),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 side_effect=[
                     _completed(128, stderr="shallow no"),
                     _completed(128, stderr="full no either"),
@@ -90,10 +90,10 @@ class TestCloneRepo:
     def test_raises_when_checkout_fails(self, tmp_path: Path) -> None:
         dest = tmp_path / "repo"
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
-            patch("philharmonica.adk.sandbox.utils.github.shutil.rmtree"),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.rmtree"),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 side_effect=[
                     _completed(128, stderr="shallow no"),
                     _completed(0),
@@ -106,7 +106,7 @@ class TestCloneRepo:
 
     def test_propagates_git_missing(self, tmp_path: Path) -> None:
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value=None),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value=None),
             pytest.raises(RuntimeError, match="git is required"),
         ):
             clone_repo(repo="o/r", ref="main", dest=tmp_path / "x")
@@ -122,7 +122,7 @@ class TestRunGitNonInteractive:
             captured.update(kwargs)
             return _completed(0)
 
-        with patch("philharmonica.adk.sandbox.utils.github.subprocess.run", side_effect=fake_run):
+        with patch("augments.adk.sandbox.utils.github.subprocess.run", side_effect=fake_run):
             _run_git(["git", "--version"], timeout=12.0)
 
         # A missing/private HTTPS clone hangs on a credential prompt unless
@@ -142,8 +142,8 @@ class TestRunGitNonInteractive:
             return _completed(0)
 
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
-            patch("philharmonica.adk.sandbox.utils.github.subprocess.run", side_effect=fake_run),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.subprocess.run", side_effect=fake_run),
         ):
             clone_repo(repo="o/r", ref="main", dest=tmp_path / "repo")
 
@@ -157,9 +157,9 @@ class TestCloneRepoTimeout:
 
     def test_shallow_clone_timeout_becomes_runtimeerror(self, tmp_path: Path) -> None:
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 side_effect=subprocess.TimeoutExpired(cmd="git clone", timeout=300.0),
             ),
             pytest.raises(RuntimeError, match="shallow clone timed out"),
@@ -168,10 +168,10 @@ class TestCloneRepoTimeout:
 
     def test_checkout_timeout_becomes_runtimeerror(self, tmp_path: Path) -> None:
         with (
-            patch("philharmonica.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
-            patch("philharmonica.adk.sandbox.utils.github.shutil.rmtree"),
+            patch("augments.adk.sandbox.utils.github.shutil.which", return_value="/usr/bin/git"),
+            patch("augments.adk.sandbox.utils.github.shutil.rmtree"),
             patch(
-                "philharmonica.adk.sandbox.utils.github._run_git",
+                "augments.adk.sandbox.utils.github._run_git",
                 side_effect=[
                     _completed(128, stderr="shallow no"),  # shallow fail -> fallback
                     _completed(0),  # full clone OK

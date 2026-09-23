@@ -5,14 +5,14 @@ from __future__ import annotations
 import contextlib
 from typing import Any
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.audit.event import hash_payload
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.audit.event import hash_payload
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_guardrails import (
     ToolGuardrailFunctionOutput,
     ToolGuardrails,
     ToolInputGuardrailData,
@@ -20,8 +20,8 @@ from philharmonica.adk.tools.tool_guardrails import (
     tool_input_guardrail,
     tool_output_guardrail,
 )
-from philharmonica.adk.types.guardrails import GuardrailAction
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.types.guardrails import GuardrailAction
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 
 async def _echo(_ctx: Any, _raw_args: Any) -> str:

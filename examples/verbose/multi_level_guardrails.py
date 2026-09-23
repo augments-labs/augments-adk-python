@@ -30,9 +30,9 @@ import asyncio
 import logging
 import re
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.tools.function_tool import function_tool
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.tools.function_tool import function_tool
+from augments.adk.tools.tool_guardrails import (
     ToolGuardrailFunctionOutput,
     ToolGuardrails,
     ToolInputGuardrailData,

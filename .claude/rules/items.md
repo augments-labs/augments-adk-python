@@ -1,7 +1,7 @@
 ---
 paths:
-  - "src/philharmonica/adk/types/items/**/*.py"
-  - "src/philharmonica/adk/items/**/*.py"
+  - "src/augments/adk/types/items/**/*.py"
+  - "src/augments/adk/items/**/*.py"
 ---
 
 # Items Layer — CRITICAL

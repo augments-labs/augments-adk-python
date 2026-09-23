@@ -21,15 +21,15 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.tasks import (
+from augments.adk.agents.agent import Agent
+from augments.adk.tasks import (
     Task,
     TaskOutput,
     TaskPipeline,
     TaskPipelineState,
 )
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _text_response(text: str) -> LLMResponse:
@@ -165,20 +165,20 @@ class TestResumeEndToEnd:
                     return _text_response(f"answered-{msg.get('content')}")
             return _text_response("unknown")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):
@@ -210,7 +210,7 @@ class TestResumeEndToEnd:
             resume_index=5,
         )
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with pytest.raises(ValueError, match="exceeds the reconstructed pipeline length"):
             await Runner.arun_task_pipeline_from_state(pipeline, state)

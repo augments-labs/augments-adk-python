@@ -15,9 +15,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.temporal.llm import TemporalLLM
+from augments.adk.llms.llm import LLM
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.temporal.llm import TemporalLLM
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -335,8 +335,8 @@ class TestTemporalLLMIsLLMSubclass:
 class TestDictToLLMResponse:
     def test_converts_text_part(self) -> None:
         """``_dict_to_llm_response`` reconstructs a ``LLMResponseText`` part."""
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
-        from philharmonica.adk.workflows.temporal.llm import _dict_to_llm_response
+        from augments.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.workflows.temporal.llm import _dict_to_llm_response
 
         data = {
             "response_id": "r1",
@@ -357,8 +357,8 @@ class TestDictToLLMResponse:
 
     def test_converts_function_call_part(self) -> None:
         """``_dict_to_llm_response`` reconstructs a ``LLMResponseFunctionToolCall`` part."""
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
-        from philharmonica.adk.workflows.temporal.llm import _dict_to_llm_response
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.workflows.temporal.llm import _dict_to_llm_response
 
         data = {
             "response_id": "r2",
@@ -393,7 +393,7 @@ class TestDictToLLMResponse:
         truncated response forever. Raising ValueError causes the activity to fail and
         retry (or fail fast for non-retryable errors), which is safer.
         """
-        from philharmonica.adk.workflows.temporal.llm import _dict_to_llm_response
+        from augments.adk.workflows.temporal.llm import _dict_to_llm_response
 
         data = {
             "response_id": "r3",
@@ -416,9 +416,9 @@ class TestDictToLLMResponse:
         """
         import dataclasses
 
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
-        from philharmonica.adk.types.tokens.tokens import InputTokensDetails
-        from philharmonica.adk.workflows.temporal.llm import _dict_to_llm_response
+        from augments.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.tokens import InputTokensDetails
+        from augments.adk.workflows.temporal.llm import _dict_to_llm_response
 
         usage = LLMUsage(
             requests=1,
@@ -453,11 +453,11 @@ class TestDictToLLMResponse:
         Regression: asdict flattened each annotation to a dict; storing the dict
         made a later ``to_param()`` (which calls asdict on each annotation) raise.
         """
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.types.responses.llm_response import (
             LLMResponseAnnotation,
             LLMResponseText,
         )
-        from philharmonica.adk.workflows.temporal.llm import _dict_to_llm_response
+        from augments.adk.workflows.temporal.llm import _dict_to_llm_response
 
         data = {
             "response_id": "r",
@@ -551,7 +551,7 @@ class TestTemporalLLMDelegatesCost:
 
     def test_cost_delegates_to_wrapped(self) -> None:
         """``cost`` returns the wrapped provider's price for the call."""
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         wrapped = MagicMock(spec=LLM)
         wrapped.model = "gpt-4o"
@@ -577,7 +577,7 @@ class TestTemporalLLMDelegatesCost:
 
     def test_cost_none_from_wrapped_is_passed_through(self) -> None:
         """A wrapped LLM with no price table yields ``None`` (never raises)."""
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         wrapped = MagicMock(spec=LLM)
         wrapped.model = "gpt-4o"

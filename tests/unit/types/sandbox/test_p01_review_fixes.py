@@ -10,14 +10,14 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.types.sandbox.entries import BaseEntry, Dir, File, GitRepo
-from philharmonica.adk.types.sandbox.manifest import Environment
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.entries import BaseEntry, Dir, File, GitRepo
+from augments.adk.types.sandbox.manifest import Environment
+from augments.adk.types.sandbox.mounts import (
     InContainerMountStrategy,
     RcloneMountPattern,
     S3Mount,
 )
-from philharmonica.adk.types.sandbox.permissions import FileMode, Permissions
+from augments.adk.types.sandbox.permissions import FileMode, Permissions
 
 
 class TestBaseEntryFailLoudSubclassRegistration:

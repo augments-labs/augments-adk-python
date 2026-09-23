@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.tar_utils``."""
+"""Tests for ``augments.adk.sandbox.utils.tar_utils``."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.sandbox.utils.tar_utils import (
+from augments.adk.sandbox.utils.tar_utils import (
     UnsafeTarMemberError,
     safe_extract_tarfile,
     safe_tar_member_rel_path,

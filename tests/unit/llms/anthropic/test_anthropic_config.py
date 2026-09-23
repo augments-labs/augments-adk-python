@@ -16,7 +16,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 from anthropic.types import Message, TextBlock, Usage
 
-from philharmonica.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
+from augments.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
 
 
 def _make_message(text: str = "ok") -> Message:

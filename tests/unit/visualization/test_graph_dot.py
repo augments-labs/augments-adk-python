@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.visualization import graph_to_dot
+from augments.adk.graphs.graph import Graph
+from augments.adk.visualization import graph_to_dot
 
 
 def _noop() -> str:

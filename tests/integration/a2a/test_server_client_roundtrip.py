@@ -24,10 +24,10 @@ pytest.importorskip("a2a.types")
 import uvicorn
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 
-from philharmonica.adk.a2a import A2AAgent, A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.a2a import A2AAgent, A2AServer, build_starlette_app
+from augments.adk.agents import Agent
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
 
 pytestmark = pytest.mark.skipif(
     os.environ.get("A2A_INTEGRATION_TEST") != "1",

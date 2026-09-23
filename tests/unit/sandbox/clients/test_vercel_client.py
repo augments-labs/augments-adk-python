@@ -13,8 +13,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxStartFailed
-from philharmonica.adk.sandbox.clients.hosted.vercel import (
+from augments.adk.exceptions.exceptions import SandboxStartFailed
+from augments.adk.sandbox.clients.hosted.vercel import (
     VercelSandboxClient,
     VercelSandboxClientOptions,
 )

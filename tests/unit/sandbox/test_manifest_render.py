@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.manifest_render``."""
+"""Tests for ``augments.adk.sandbox.manifest_render``."""
 
 from __future__ import annotations
 
@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.sandbox.manifest_render import (
+from augments.adk.sandbox.manifest_render import (
     MAX_MANIFEST_DESCRIPTION_CHARS,
     coerce_rel_path,
     render_manifest_description,
 )
-from philharmonica.adk.types.sandbox.entries import Dir, File
-from philharmonica.adk.types.sandbox.permissions import Permissions
+from augments.adk.types.sandbox.entries import Dir, File
+from augments.adk.types.sandbox.permissions import Permissions
 
 
 def _coerce(value: str | Path) -> Path:
@@ -111,7 +111,7 @@ class TestArgValidation:
 
 class TestTruncation:
     def test_truncates_when_exceeding_limit(self) -> None:
-        from philharmonica.adk.types.sandbox.entries import BaseEntry
+        from augments.adk.types.sandbox.entries import BaseEntry
 
         children: dict[str, BaseEntry] = {f"f{i}.py": File(content=b"x", description=f"file {i}") for i in range(200)}
         nested = Dir(permissions=Permissions(directory=True), children=children)

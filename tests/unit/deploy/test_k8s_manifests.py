@@ -7,8 +7,8 @@ import pytest
 pytest.importorskip("yaml")
 import yaml
 
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.k8s_manifests import (
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.k8s_manifests import (
     render_deployment,
     render_k8s_manifests,
     render_secret_example,

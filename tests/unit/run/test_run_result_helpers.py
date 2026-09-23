@@ -9,17 +9,17 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.items.items import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.types.items.items import (
     MessageOutputItem,
     ToolCallItem,
 )
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.types.responses.llm_response import (
     LLMResponseFunctionToolCall,
     LLMResponseText,
 )
-from philharmonica.adk.types.run import RunResult
+from augments.adk.types.run import RunResult
 
 # ── Helpers ──────────────────────────────────────────────────────────
 

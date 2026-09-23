@@ -52,5 +52,5 @@ enforced limit; respect backend default."
 `runAsUser=1000`, `allowPrivilegeEscalation=False`,
 `capabilities.drop=["ALL"]`, `seccompProfile.type="RuntimeDefault"`.
 
-See `src/philharmonica/adk/sandbox/guardrails/command_guardrail.py` and
-`src/philharmonica/adk/sandbox/policy/` for the implementations.
+See `src/augments/adk/sandbox/guardrails/command_guardrail.py` and
+`src/augments/adk/sandbox/policy/` for the implementations.

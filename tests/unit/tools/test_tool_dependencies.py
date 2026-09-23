@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import patch
 
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.function_tool import FunctionTool
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 
@@ -23,19 +23,19 @@ class TestRequiresEnv:
         assert tool.validate_dependencies() == []
 
     def test_var_set_passes(self) -> None:
-        tool = _make_tool(requires_env=("PHILHARMONICA_DEPS_TEST",))
-        with patch.dict("os.environ", {"PHILHARMONICA_DEPS_TEST": "value"}, clear=False):
+        tool = _make_tool(requires_env=("AUGMENTS_DEPS_TEST",))
+        with patch.dict("os.environ", {"AUGMENTS_DEPS_TEST": "value"}, clear=False):
             assert tool.validate_dependencies() == []
 
     def test_var_unset_fails(self) -> None:
-        tool = _make_tool(requires_env=("PHILHARMONICA_DEPS_TEST_UNSET",))
+        tool = _make_tool(requires_env=("AUGMENTS_DEPS_TEST_UNSET",))
         with patch.dict("os.environ", {}, clear=True):
-            assert tool.validate_dependencies() == ["env:PHILHARMONICA_DEPS_TEST_UNSET"]
+            assert tool.validate_dependencies() == ["env:AUGMENTS_DEPS_TEST_UNSET"]
 
     def test_var_empty_string_fails(self) -> None:
-        tool = _make_tool(requires_env=("PHILHARMONICA_DEPS_TEST_EMPTY",))
-        with patch.dict("os.environ", {"PHILHARMONICA_DEPS_TEST_EMPTY": ""}, clear=False):
-            assert tool.validate_dependencies() == ["env:PHILHARMONICA_DEPS_TEST_EMPTY"]
+        tool = _make_tool(requires_env=("AUGMENTS_DEPS_TEST_EMPTY",))
+        with patch.dict("os.environ", {"AUGMENTS_DEPS_TEST_EMPTY": ""}, clear=False):
+            assert tool.validate_dependencies() == ["env:AUGMENTS_DEPS_TEST_EMPTY"]
 
     def test_multiple_vars_all_missing(self) -> None:
         tool = _make_tool(requires_env=("VAR_A", "VAR_B"))
@@ -69,8 +69,8 @@ class TestRequiresPackages:
         assert tool.validate_dependencies() == ["package:pydantic<2"]
 
     def test_missing_package(self) -> None:
-        tool = _make_tool(requires_packages=("philharmonica-deps-test-no-such-package-67890",))
-        assert tool.validate_dependencies() == ["package:philharmonica-deps-test-no-such-package-67890"]
+        tool = _make_tool(requires_packages=("augments-deps-test-no-such-package-67890",))
+        assert tool.validate_dependencies() == ["package:augments-deps-test-no-such-package-67890"]
 
     def test_invalid_spec_treated_as_missing(self) -> None:
         tool = _make_tool(requires_packages=("not a valid spec ?!",))
@@ -87,7 +87,7 @@ class TestRequiresPackages:
     def test_name_canonicalisation_underscore_to_hyphen(self) -> None:
         # Distributions are stored under their PEP 503-normalised name
         # (lowercase, hyphens). A spec written with underscores must
-        # still match. ``philharmonica-adk`` is this project itself; check via
+        # still match. ``augments-adk`` is this project itself; check via
         # a known stdlib-installed dist that has neither hyphens nor
         # underscores in its canonical form by using a project dep.
         # ``aiosqlite`` is a hard dep — guaranteed installed.
@@ -102,18 +102,18 @@ class TestCombined:
     def test_env_and_package_both_missing(self) -> None:
         tool = _make_tool(
             requires_env=("UNSET_VAR_X",),
-            requires_packages=("philharmonica-deps-no-such-pkg-99999",),
+            requires_packages=("augments-deps-no-such-pkg-99999",),
         )
         with patch.dict("os.environ", {}, clear=True):
             missing = tool.validate_dependencies()
         assert "env:UNSET_VAR_X" in missing
-        assert "package:philharmonica-deps-no-such-pkg-99999" in missing
+        assert "package:augments-deps-no-such-pkg-99999" in missing
         assert len(missing) == 2
 
     def test_all_present(self) -> None:
         tool = _make_tool(
-            requires_env=("PHILHARMONICA_PRESENT_VAR",),
+            requires_env=("AUGMENTS_PRESENT_VAR",),
             requires_packages=("pydantic",),
         )
-        with patch.dict("os.environ", {"PHILHARMONICA_PRESENT_VAR": "x"}, clear=False):
+        with patch.dict("os.environ", {"AUGMENTS_PRESENT_VAR": "x"}, clear=False):
             assert tool.validate_dependencies() == []

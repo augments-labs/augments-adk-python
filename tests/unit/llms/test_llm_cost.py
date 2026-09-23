@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _usage(inp: int, out: int) -> LLMUsage:

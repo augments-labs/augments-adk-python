@@ -41,13 +41,13 @@ connection. PostgreSQL 13+ is required (`gen_random_uuid()` built-in).
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-postgres]'
+pip install 'augments-adk[checkpointer-postgres]'
 ```
 
 **Construct:**
 
 ```python
-from philharmonica.adk.graphs.checkpointers.postgres import PostgresCheckpointer
+from augments.adk.graphs.checkpointers.postgres import PostgresCheckpointer
 
 # conninfo is a libpq connection string.
 checkpointer = PostgresCheckpointer("host=db port=5432 dbname=runs user=app")
@@ -76,14 +76,14 @@ mid-run eviction causing a spurious `CheckpointConflictError`.
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-redis]'
+pip install 'augments-adk[checkpointer-redis]'
 ```
 
 **Construct — pre-configured client:**
 
 ```python
 from redis.asyncio import Redis
-from philharmonica.adk.graphs.checkpointers.redis import RedisCheckpointer
+from augments.adk.graphs.checkpointers.redis import RedisCheckpointer
 
 client = Redis.from_url("redis://cache:6379/0")
 checkpointer = RedisCheckpointer(client=client)
@@ -115,13 +115,13 @@ The boto3 client is synchronous; all S3 calls are wrapped in
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-s3]'
+pip install 'augments-adk[checkpointer-s3]'
 ```
 
 **Construct:**
 
 ```python
-from philharmonica.adk.graphs.checkpointers.s3 import S3Checkpointer
+from augments.adk.graphs.checkpointers.s3 import S3Checkpointer
 
 checkpointer = S3Checkpointer(
     bucket="my-graph-checkpoints",
@@ -151,7 +151,7 @@ on process restart.
 **Construct (Redis hot, S3 cold):**
 
 ```python
-from philharmonica.adk.graphs.checkpointers.tiered import TieredCheckpointer
+from augments.adk.graphs.checkpointers.tiered import TieredCheckpointer
 
 checkpointer = TieredCheckpointer(
     hot=redis_checkpointer,
@@ -185,7 +185,7 @@ The protocol:
 **Reload-and-retry pattern:**
 
 ```python
-from philharmonica.adk.exceptions import CheckpointConflictError
+from augments.adk.exceptions import CheckpointConflictError
 
 MAX_RETRIES = 3
 
@@ -216,8 +216,8 @@ checkpoint/resume contract, the `Runner.arun_graph_from_checkpoint` API,
 and the selective re-fire semantics.
 
 ```python
-from philharmonica.adk.graphs.checkpointers.postgres import PostgresCheckpointer
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.checkpointers.postgres import PostgresCheckpointer
+from augments.adk.run.runner import Runner
 
 checkpointer = PostgresCheckpointer("host=db dbname=runs user=app")
 

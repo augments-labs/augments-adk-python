@@ -52,9 +52,9 @@ retries):
 | **LangChain** | `AgentMiddleware` subclasses such as `PIIMiddleware(strategy="block")` and `HumanInTheLoopMiddleware` — middleware *is* the safety surface | The same `AgentMiddleware` umbrella — one polymorphic class with hooks (`before_model`, `wrap_tool_call`, …) dispatched per subclass |
 | **Microsoft Agent Framework** | Per-function validators (separate from middleware) | `FunctionMiddleware` / `AgentMiddleware` / `ChatMiddleware` — three separate Protocols, one per scope |
 | **Pydantic-AI** | Per-tool input/output validators | `WrapperToolset.call_tool` overrides at the toolset boundary |
-| **Philharmonica ADK** (this framework) | `AgentInputGuardrail` / `AgentOutputGuardrail` (agent-level) + `ToolInputGuardrail` / `ToolOutputGuardrail` (per-tool), all returning typed verdicts (`allow` / `reject_content` / `raise_exception`) | `ToolMiddleware` Protocol — function-scope only today; `Middleware.agents` and `Middleware.llms` slots reserved for future Protocols, each with its own typed context |
+| **Augments ADK** (this framework) | `AgentInputGuardrail` / `AgentOutputGuardrail` (agent-level) + `ToolInputGuardrail` / `ToolOutputGuardrail` (per-tool), all returning typed verdicts (`allow` / `reject_content` / `raise_exception`) | `ToolMiddleware` Protocol — function-scope only today; `Middleware.agents` and `Middleware.llms` slots reserved for future Protocols, each with its own typed context |
 
-Three notes that explain the Philharmonica ADK position:
+Three notes that explain the Augments ADK position:
 
 1. **Why the umbrella shape is rejected.** LangChain's
    `PIIMiddleware(strategy="block")` collapses verdict and plumbing
@@ -62,7 +62,7 @@ Three notes that explain the Philharmonica ADK position:
    implicit in the middleware's behaviour rather than an explicit
    typed return — a reader cannot tell from the signature whether a
    middleware halts execution, redacts content, or merely observes.
-   The Philharmonica ADK keeps `Guardrail` as the typed-verdict surface and
+   The Augments ADK keeps `Guardrail` as the typed-verdict surface and
    `ToolMiddleware` as plumbing only; both are loadable by the same
    review tooling, but they do not share a registration list.
 2. **Why the three-Protocol split is preferred.** Microsoft's
@@ -81,8 +81,8 @@ Three notes that explain the Philharmonica ADK position:
 ## Quickstart
 
 ```python
-from philharmonica.adk import Agent, Middleware
-from philharmonica.adk.tools import ToolLoggingMiddleware, ToolMetricsMiddleware
+from augments.adk import Agent, Middleware
+from augments.adk.tools import ToolLoggingMiddleware, ToolMetricsMiddleware
 
 
 class MyMetrics:
@@ -119,7 +119,7 @@ middleware in the listed order (logging outer, metrics inner).
 
 ```python
 import time
-from philharmonica.adk.tools import ToolMiddleware
+from augments.adk.tools import ToolMiddleware
 
 
 class TimingMiddleware:
@@ -169,7 +169,7 @@ A middleware that does not call `next` short-circuits the chain.
 Useful for circuit-breaker / cache patterns:
 
 ```python
-from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
+from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
 
 
 class CacheMiddleware:
@@ -194,7 +194,7 @@ layers, raise `ToolMiddlewareTermination` with the desired result —
 the executor unwinds directly without invoking outer middleware:
 
 ```python
-from philharmonica.adk.tools import ToolMiddlewareTermination
+from augments.adk.tools import ToolMiddlewareTermination
 
 
 class CircuitBreaker:
@@ -216,8 +216,8 @@ Wrap a toolset with `WrapperToolset` to apply middleware only to
 that toolset's tools:
 
 ```python
-from philharmonica.adk import Middleware
-from philharmonica.adk.tools import WrapperToolset, FunctionToolset
+from augments.adk import Middleware
+from augments.adk.tools import WrapperToolset, FunctionToolset
 
 db_tools = FunctionToolset(tools=[query, insert]).prefixed("db")
 db_with_audit = WrapperToolset(
@@ -355,7 +355,7 @@ non-streaming runs:
 - `docs/llms/llm_middleware.md` — `LLMMiddleware` contract.
 - `examples/tools/middleware/` — runnable examples (including a
   three-layer demo).
-- `src/philharmonica/adk/tools/tool_middleware.py` — Protocol definition,
+- `src/augments/adk/tools/tool_middleware.py` — Protocol definition,
   shipped middleware, and the chain composition helpers.
 - `docs/tools/toolsets.md` — toolset composition (where
   `WrapperToolset.middleware` lives).

@@ -19,7 +19,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.a2a.exceptions import A2ATaskInterruptedError
+from augments.adk.a2a.exceptions import A2ATaskInterruptedError
 
 # Skip module if extra missing.
 pytest.importorskip("a2a.client")
@@ -39,7 +39,7 @@ from a2a.types import (
     TaskStatusUpdateEvent,
 )
 
-from philharmonica.adk.a2a import (
+from augments.adk.a2a import (
     A2AClient,
     A2AContinuationToken,
     A2AProtocolError,
@@ -548,7 +548,7 @@ class TestConsumeUntilTerminalFreshness:
         sdk.send_message = MagicMock(return_value=_async_iter([terminal_only]))
 
         with (
-            caplog.at_level("WARNING", logger="philharmonica.adk.a2a.a2a_client"),
+            caplog.at_level("WARNING", logger="augments.adk.a2a.a2a_client"),
             pytest.raises(A2ATaskError) as excinfo,
         ):
             await client.send_message("hi")
@@ -640,7 +640,7 @@ class TestPrematureStreamClose:
         client, sdk = patched_client
         sdk.send_message = MagicMock(return_value=_async_iter([_working_status_response()]))
         with (
-            caplog.at_level("WARNING", logger="philharmonica.adk.a2a.a2a_client"),
+            caplog.at_level("WARNING", logger="augments.adk.a2a.a2a_client"),
             pytest.raises(A2AProtocolError, match="before reaching a terminal state"),
         ):
             await client.send_message("anything")

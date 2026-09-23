@@ -11,7 +11,7 @@ import dataclasses
 
 import pytest
 
-from philharmonica.adk.tools.hosted import (
+from augments.adk.tools.hosted import (
     Computer,
     ComputerTool,
     HostedTool,
@@ -176,7 +176,7 @@ class TestComputerToolOpenAIResponsesConversion:
         # Responses converter had no branch, so it raised
         # UnsupportedHostedToolError on every use. It must now emit a
         # ``computer_use_preview`` wire tool honouring geometry + environment.
-        from philharmonica.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
+        from augments.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
 
         tool = ComputerTool(
             computer=StubComputer(),

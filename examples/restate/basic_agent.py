@@ -10,7 +10,7 @@ Demonstrates:
       Context does not — which is why this is a Workflow, not a service.
 
 Prerequisites:
-    pip install "philharmonica-adk[restate]"
+    pip install "augments-adk[restate]"
     # Start the Restate server:
     # docker run --rm -p 8080:8080 -p 9070:9070 docker.restate.dev/restatedev/restate
 
@@ -42,16 +42,16 @@ logger = logging.getLogger(__name__)
 try:
     import restate  # type: ignore[import-not-found]  # optional dep — install the [restate] extra
 except ImportError as _exc:
-    raise SystemExit("restate not installed. Run: pip install 'philharmonica-adk[restate]'") from _exc
+    raise SystemExit("restate not installed. Run: pip install 'augments-adk[restate]'") from _exc
 
 # ---------------------------------------------------------------------------
 # Step 1 — define the agent (Agent = config, not execution)
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.restate import PhilharmonicaRestateService, RestateLLM
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.restate import AugmentsRestateService, RestateLLM
 
 _inner_llm = LiteLLM(model="gpt-4o-mini")
 
@@ -77,9 +77,9 @@ _agent = Agent(
 # Step 3 — define the Restate workflow (one @main + shared @handler handlers)
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
-_helpers = PhilharmonicaRestateService()
+_helpers = AugmentsRestateService()
 
 # A Restate Workflow: its main handler receives a WorkflowContext (which,
 # unlike a plain service Context, exposes durable promises via ctx.promise),

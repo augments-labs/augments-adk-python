@@ -14,11 +14,11 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.context.context_config import CacheStrategy
-from philharmonica.adk.run.cost import apply_result_limits, minify_json
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
+from augments.adk.context.context_config import CacheStrategy
+from augments.adk.run.cost import apply_result_limits, minify_json
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
 
 # ── FunctionTool.max_result_tokens validation ────────────────────────
 
@@ -131,7 +131,7 @@ class TestApplyResultLimits:
         result = "x" * 10000
         assert apply_result_limits(result, tool, "gpt-4o-mini") == result
 
-    @patch("philharmonica.adk.context.token_counter.TokenCounter.count_text", return_value=100)
+    @patch("augments.adk.context.token_counter.TokenCounter.count_text", return_value=100)
     def test_within_budget_passes_through(self, _mock_count: MagicMock) -> None:
         """Result within budget passes through unchanged."""
 
@@ -144,7 +144,7 @@ class TestApplyResultLimits:
         result = "short result"
         assert apply_result_limits(result, tool, "gpt-4o-mini") == result
 
-    @patch("philharmonica.adk.context.token_counter.TokenCounter.count_text", return_value=1000)
+    @patch("augments.adk.context.token_counter.TokenCounter.count_text", return_value=1000)
     def test_over_budget_truncated(self, _mock_count: MagicMock) -> None:
         """Result exceeding budget is truncated with suffix."""
 
@@ -163,7 +163,7 @@ class TestApplyResultLimits:
         assert "200" in truncated  # max_result_tokens
 
     @patch(
-        "philharmonica.adk.context.token_counter.TokenCounter.count_text",
+        "augments.adk.context.token_counter.TokenCounter.count_text",
         side_effect=lambda text, model: max(1, len(text) // 4),
     )
     def test_truncation_respects_token_budget(self, _mock_count: MagicMock) -> None:
@@ -192,7 +192,7 @@ class TestApplyResultLimits:
         assert "[Result truncated:" in truncated
 
     @patch(
-        "philharmonica.adk.context.token_counter.TokenCounter.count_text",
+        "augments.adk.context.token_counter.TokenCounter.count_text",
         side_effect=lambda text, model: max(1, len(text)),
     )
     def test_truncation_cjk_one_token_per_char(self, _mock_count: MagicMock) -> None:
@@ -377,7 +377,7 @@ class TestExecutionAwareToolContext:
 
     def test_with_execution_state(self) -> None:
         """Can construct with execution state snapshots."""
-        from philharmonica.adk.llms.llm_usage import LLMUsage
+        from augments.adk.llms.llm_usage import LLMUsage
 
         usage = LLMUsage(input_tokens=100, output_tokens=50, total_tokens=150)
         ctx = ExecutionAwareToolContext(
@@ -461,8 +461,8 @@ class TestHandoffBudget:
         ``__post_init__`` to ``TokenBudget(max_tokens=<int>,
         drop_policy="preserve_system")``). Default 20_000.
         """
-        from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-        from philharmonica.adk.tools.token_budget import TokenBudget
+        from augments.adk.handoffs.handoff_config import HandoffConfig
+        from augments.adk.tools.token_budget import TokenBudget
 
         config = HandoffConfig()
         assert isinstance(config.budget, TokenBudget)
@@ -472,8 +472,8 @@ class TestHandoffBudget:
     def test_can_set_budget(self) -> None:
         """Budget can be set to a token count (bare int coerced) or
         an explicit TokenBudget with custom drop_policy."""
-        from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-        from philharmonica.adk.tools.token_budget import TokenBudget
+        from augments.adk.handoffs.handoff_config import HandoffConfig
+        from augments.adk.tools.token_budget import TokenBudget
 
         config = HandoffConfig(budget=5_000)
         assert isinstance(config.budget, TokenBudget)
@@ -488,9 +488,9 @@ class TestHandoffBudget:
 
     def test_handoff_inherits_config_budget(self) -> None:
         """Handoff.config.budget propagates correctly."""
-        from philharmonica.adk.handoffs.handoff import Handoff
-        from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-        from philharmonica.adk.tools.token_budget import TokenBudget
+        from augments.adk.handoffs.handoff import Handoff
+        from augments.adk.handoffs.handoff_config import HandoffConfig
+        from augments.adk.tools.token_budget import TokenBudget
 
         agent = MagicMock()
         agent.name = "test_agent"
@@ -500,7 +500,7 @@ class TestHandoffBudget:
 
     def test_is_frozen(self) -> None:
         """HandoffConfig is a frozen dataclass — budget cannot be mutated."""
-        from philharmonica.adk.handoffs.handoff_config import HandoffConfig
+        from augments.adk.handoffs.handoff_config import HandoffConfig
 
         config = HandoffConfig(budget=5_000)
         with pytest.raises(AttributeError):
@@ -517,7 +517,7 @@ class TestFunctionSchemaDetection:
 
     def test_detects_execution_aware_context(self) -> None:
         """Function with ExecutionAwareToolContext param sets execution_aware=True."""
-        from philharmonica.adk.schemas.function_schema import function_schema
+        from augments.adk.schemas.function_schema import function_schema
 
         def my_tool(_ctx: ExecutionAwareToolContext, query: str) -> str:
             return query
@@ -528,7 +528,7 @@ class TestFunctionSchemaDetection:
 
     def test_plain_tool_context_not_execution_aware(self) -> None:
         """Function with plain ToolContext param sets execution_aware=False."""
-        from philharmonica.adk.schemas.function_schema import function_schema
+        from augments.adk.schemas.function_schema import function_schema
 
         def my_tool(_ctx: ToolContext, query: str) -> str:
             return query
@@ -539,7 +539,7 @@ class TestFunctionSchemaDetection:
 
     def test_no_context_not_execution_aware(self) -> None:
         """Function with no context param sets both to False."""
-        from philharmonica.adk.schemas.function_schema import function_schema
+        from augments.adk.schemas.function_schema import function_schema
 
         def my_tool(query: str) -> str:
             return query

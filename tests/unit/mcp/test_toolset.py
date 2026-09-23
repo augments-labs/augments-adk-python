@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.tools.toolsets.mcp_toolset.MCPToolset``.
+"""Tests for ``augments.adk.tools.toolsets.mcp_toolset.MCPToolset``.
 
 Covers:
 - Lazy connect on first ``get_tools`` when ``auto_connect=True``.
@@ -23,9 +23,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.exceptions import MCPConnectionError
-from philharmonica.adk.mcp.filters import ToolFilterContext
-from philharmonica.adk.tools.toolsets.mcp_toolset import MCPToolset
+from augments.adk.mcp.exceptions import MCPConnectionError
+from augments.adk.mcp.filters import ToolFilterContext
+from augments.adk.tools.toolsets.mcp_toolset import MCPToolset
 
 
 def _fake_mcp_tool(name: str) -> Any:
@@ -120,7 +120,7 @@ async def test_get_tools_after_adispose_returns_empty_dict(
     await toolset.get_tools(None)
     await toolset.adispose()
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tools.toolsets.mcp_toolset"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.tools.toolsets.mcp_toolset"):
         result = await toolset.get_tools(None)
 
     assert result == {}
@@ -135,7 +135,7 @@ async def test_adispose_swallows_cleanup_exception(
     toolset = MCPToolset(server=server, auto_connect=True)
     await toolset.get_tools(None)
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tools.toolsets.mcp_toolset"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.tools.toolsets.mcp_toolset"):
         await toolset.adispose()  # MUST NOT raise
 
     assert any("cleanup failed" in rec.message for rec in caplog.records)
@@ -185,7 +185,7 @@ async def test_filter_exception_excludes_tool_fail_closed(
 
     toolset = MCPToolset(server=server, auto_connect=True, tool_filter=buggy_filter)
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tools.toolsets.mcp_toolset"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.tools.toolsets.mcp_toolset"):
         result = await toolset.get_tools(None)
 
     assert result == {}  # All excluded

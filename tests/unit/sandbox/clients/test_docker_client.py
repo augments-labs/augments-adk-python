@@ -9,11 +9,11 @@ helpers, never ``_materialize_docker_mounts``).
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.clients.docker.docker_client import (
+from augments.adk.sandbox.clients.docker.docker_client import (
     DockerSandboxClientOptions,
     _build_run_kwargs,
 )
-from philharmonica.adk.types.sandbox.resource_limits import SandboxResourceLimits
+from augments.adk.types.sandbox.resource_limits import SandboxResourceLimits
 
 
 class TestCpuKwargMutualExclusion:

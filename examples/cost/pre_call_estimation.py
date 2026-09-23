@@ -29,8 +29,8 @@ except ImportError:
 
 import logging
 
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.types.input import LLMInputContentItem, LLMInputEasyMessage
+from augments.adk.llms import LiteLLM
+from augments.adk.types.input import LLMInputContentItem, LLMInputEasyMessage
 
 logger = logging.getLogger(__name__)
 

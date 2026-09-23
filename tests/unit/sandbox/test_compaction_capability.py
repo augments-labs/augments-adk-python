@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.capabilities.compaction import (
+from augments.adk.sandbox.capabilities.compaction import (
     CompactionCapability,
     CompactionModelInfo,
     DynamicCompactionPolicy,

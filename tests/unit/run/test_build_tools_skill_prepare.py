@@ -15,9 +15,9 @@ schema.
 from types import SimpleNamespace
 from typing import Any
 
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.skills.skill import Skill
-from philharmonica.adk.tools.function_tool import function_tool
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.skills.skill import Skill
+from augments.adk.tools.function_tool import function_tool
 
 
 def _make_agent(skills: list[Skill]) -> Any:

@@ -1,7 +1,7 @@
 """Tests for LLMConfig, focusing on num_retries and fallbacks fields."""
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLMConfig
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.litellm.litellm_model import LiteLLMConfig
+from augments.adk.llms.llm_config import LLMConfig
 
 
 class TestLLMConfigRetryFields:

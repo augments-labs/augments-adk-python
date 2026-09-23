@@ -1,8 +1,8 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.deep_merge``."""
+"""Tests for ``augments.adk.sandbox.utils.deep_merge``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.utils.deep_merge import deep_merge
+from augments.adk.sandbox.utils.deep_merge import deep_merge
 
 
 def test_overrides_win_on_leaf_collision() -> None:

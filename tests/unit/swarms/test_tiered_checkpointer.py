@@ -13,14 +13,14 @@ from typing import Any, cast
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.checkpointers.tiered import TieredSwarmCheckpointer
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState, SwarmStateDict
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.checkpointers.tiered import TieredSwarmCheckpointer
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState, SwarmStateDict
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -249,8 +249,8 @@ def test_negative_archive_after_rejected() -> None:
 async def test_archive_sees_hook_driven_saves() -> None:
     """register() routes hook-saves through the composite, so _saved_at is
     populated and archive() can migrate them."""
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.swarms.hooks import HookRegistry
+    from augments.adk.run.context import RunContext
+    from augments.adk.swarms.hooks import HookRegistry
 
     swarm = _make_swarm()
     hot = InMemorySwarmCheckpointer()
@@ -287,7 +287,7 @@ async def test_delete_partial_failure_raises_and_does_not_log_success(
     must NOT fire and the error must propagate to the caller."""
     import logging
 
-    from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+    from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
     class _FailOnDelete(InMemorySwarmCheckpointer):
         """Always raises on delete regardless of whether the key exists."""
@@ -305,7 +305,7 @@ async def test_delete_partial_failure_raises_and_does_not_log_success(
 
     with (
         pytest.raises(OSError, match="storage unavailable"),
-        caplog.at_level(logging.DEBUG, logger="philharmonica.adk.swarms.checkpointers.tiered"),
+        caplog.at_level(logging.DEBUG, logger="augments.adk.swarms.checkpointers.tiered"),
     ):
         await tiered.delete("t1")
 

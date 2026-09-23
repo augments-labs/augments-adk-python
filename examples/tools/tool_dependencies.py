@@ -29,9 +29,9 @@ except ImportError:
 import logging
 import os
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import ToolDependencyError
-from philharmonica.adk.tools import function_tool
+from augments.adk.agents import Agent
+from augments.adk.exceptions import ToolDependencyError
+from augments.adk.tools import function_tool
 
 logger = logging.getLogger(__name__)
 

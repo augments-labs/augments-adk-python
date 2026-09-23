@@ -9,10 +9,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.llms.openai.openai_chatcompletions_converter import (
+from augments.adk.llms.openai.openai_chatcompletions_converter import (
     OpenAIChatCompletionsConverter,
 )
-from philharmonica.adk.tools.hosted import (
+from augments.adk.tools.hosted import (
     CodeExecutionTool,
     FileSearchTool,
     ImageGenerationTool,

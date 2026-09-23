@@ -7,7 +7,7 @@ Demonstrates:
 - RunConfig with tracing_enabled=True and metrics_enabled=True
 
 Prerequisites:
-    pip install "philharmonica-adk[otel]"
+    pip install "augments-adk[otel]"
     # Optional: start a local Phoenix collector
     #   pip install arize-phoenix
     #   python -m phoenix.server.main
@@ -28,16 +28,16 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 try:
-    from philharmonica.adk.tracing import MetricsTracer, setup_metrics, setup_otel
+    from augments.adk.tracing import MetricsTracer, setup_metrics, setup_otel
 except ImportError as _exc:
-    raise SystemExit("opentelemetry not installed. Run: pip install 'philharmonica-adk[otel]'") from _exc
+    raise SystemExit("opentelemetry not installed. Run: pip install 'augments-adk[otel]'") from _exc
 
 # ---------------------------------------------------------------------------
 # Step 2 — define the agent (Agent = config, not execution)
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
 
 _llm = LiteLLM(model="gpt-4o-mini")
 _agent = Agent(
@@ -50,7 +50,7 @@ _agent = Agent(
 # Step 3 — compose an OTel span tracer + a MetricsTracer in a MultiTracer
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.tracing import MultiTracer, TracingConvention, set_tracer
+from augments.adk.tracing import MultiTracer, TracingConvention, set_tracer
 
 # setup_otel wires a TracerProvider + BatchSpanProcessor. The
 # TracingConvention.OPENINFERENCE selection emits OpenInference span-kind and
@@ -61,7 +61,7 @@ from philharmonica.adk.tracing import MultiTracer, TracingConvention, set_tracer
 # it to your Phoenix OTLP endpoint (e.g. "http://localhost:4317") or any
 # other OTLP-compatible collector.
 _otel_tracer = setup_otel(
-    service_name="philharmonica-classifier",
+    service_name="augments-classifier",
     convention=TracingConvention.OPENINFERENCE,
     console=True,  # also print finished spans to stdout for local inspection
 )
@@ -69,7 +69,7 @@ _otel_tracer = setup_otel(
 # setup_metrics wires a MeterProvider + PeriodicExportingMetricReader.
 # Metrics are independent of span export: tracing_enabled gates spans,
 # metrics_enabled gates metric instruments. Both can be active simultaneously.
-_metrics_tracer: MetricsTracer = setup_metrics(service_name="philharmonica-classifier")
+_metrics_tracer: MetricsTracer = setup_metrics(service_name="augments-classifier")
 
 # MultiTracer fans every span factory call out to both inner tracers.
 # The OTelTracer ships spans to the configured collector; the MetricsTracer
@@ -82,9 +82,9 @@ logger.info("Tracer configured: OTel(OpenInference) + Metrics in MultiTracer")
 # Step 4 — run the agent with tracing and metrics enabled
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 
 async def _run() -> None:

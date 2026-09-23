@@ -1,9 +1,9 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.workflow``.
+"""Tests for ``augments.adk.workflows.temporal.workflow``.
 
 Covers:
 - ``HumanReply`` frozen dataclass fields and defaults.
 - ``ToolApprovalDecision`` frozen dataclass fields and defaults.
-- ``PhilharmonicaWorkflow`` exposes the expected signal, query, and update methods.
+- ``AugmentsWorkflow`` exposes the expected signal, query, and update methods.
 - ``consume_replies`` drains and clears the pending-replies queue.
 - ``consume_approval`` pops a stored decision and returns ``None`` on miss.
 """
@@ -14,9 +14,9 @@ import pytest
 
 temporalio = pytest.importorskip("temporalio")
 
-from philharmonica.adk.workflows.temporal.workflow import (
+from augments.adk.workflows.temporal.workflow import (
+    AugmentsWorkflow,
     HumanReply,
-    PhilharmonicaWorkflow,
     ToolApprovalDecision,
 )
 
@@ -79,29 +79,29 @@ class TestToolApprovalDecisionDataclass:
             decision.approved = False  # type: ignore[misc]
 
 
-class TestPhilharmonicaWorkflowHasSignalMethods:
-    def test_philharmonica_workflow_has_signal_methods(self) -> None:
-        """``PhilharmonicaWorkflow`` exposes the expected signal, query, and update methods."""
-        assert callable(PhilharmonicaWorkflow.send_human_reply)
-        assert callable(PhilharmonicaWorkflow.get_state)
-        assert callable(PhilharmonicaWorkflow.approve_tool_call)
+class TestAugmentsWorkflowHasSignalMethods:
+    def test_augments_workflow_has_signal_methods(self) -> None:
+        """``AugmentsWorkflow`` exposes the expected signal, query, and update methods."""
+        assert callable(AugmentsWorkflow.send_human_reply)
+        assert callable(AugmentsWorkflow.get_state)
+        assert callable(AugmentsWorkflow.approve_tool_call)
 
-    def test_philharmonica_workflow_has_run_method(self) -> None:
-        """``PhilharmonicaWorkflow`` has an async ``run`` method."""
+    def test_augments_workflow_has_run_method(self) -> None:
+        """``AugmentsWorkflow`` has an async ``run`` method."""
         import inspect
 
-        assert callable(PhilharmonicaWorkflow.run)
-        assert inspect.iscoroutinefunction(PhilharmonicaWorkflow.run)
+        assert callable(AugmentsWorkflow.run)
+        assert inspect.iscoroutinefunction(AugmentsWorkflow.run)
 
-    def test_philharmonica_workflow_default_agents_empty(self) -> None:
-        """``PhilharmonicaWorkflow.__philharmonica_agents__`` defaults to an empty sequence."""
-        assert len(PhilharmonicaWorkflow.__philharmonica_agents__) == 0
+    def test_augments_workflow_default_agents_empty(self) -> None:
+        """``AugmentsWorkflow.__augments_agents__`` defaults to an empty sequence."""
+        assert len(AugmentsWorkflow.__augments_agents__) == 0
 
 
 class TestConsumeRepliesClears:
     def test_consume_replies_clears(self) -> None:
         """``consume_replies`` returns queued replies and empties the queue."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
         wf._pending_replies.append(HumanReply(node_id="n1", value="yes"))
         wf._pending_replies.append(HumanReply(node_id="n2", value="no"))
 
@@ -114,7 +114,7 @@ class TestConsumeRepliesClears:
 
     def test_consume_replies_empty_returns_empty_list(self) -> None:
         """``consume_replies`` returns an empty list when no replies are queued."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
 
         result = wf.consume_replies()
 
@@ -136,7 +136,7 @@ class TestGetStateCancellationReason:
 
     def test_get_state_contains_cancellation_reason_key(self) -> None:
         """``get_state()`` always contains ``"cancellation_reason"``."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
 
         state = wf.get_state()
 
@@ -144,7 +144,7 @@ class TestGetStateCancellationReason:
 
     def test_get_state_cancellation_reason_none_outside_workflow(self) -> None:
         """Outside a workflow runtime ``"cancellation_reason"`` is ``None``."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
 
         state = wf.get_state()
 
@@ -152,7 +152,7 @@ class TestGetStateCancellationReason:
 
     def test_get_state_preserves_existing_keys(self) -> None:
         """``get_state()`` returns user-set state alongside ``"cancellation_reason"``."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
         wf.update_state({"step": "embedding", "progress": 42})
 
         state = wf.get_state()
@@ -172,7 +172,7 @@ class TestGetStateCancellationReason:
 
         import temporalio.workflow as _tw
 
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
         wf.update_state({"phase": "running"})
 
         with (
@@ -190,7 +190,7 @@ class TestGetStateCancellationReason:
 
         import temporalio.workflow as _tw
 
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
 
         with (
             patch.object(_tw, "in_workflow", return_value=True),
@@ -204,7 +204,7 @@ class TestGetStateCancellationReason:
 class TestConsumeApprovalPops:
     def test_consume_approval_pops(self) -> None:
         """``consume_approval`` returns the stored decision and removes it."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
         decision = ToolApprovalDecision(call_id="call-1", approved=True)
         wf._approval_decisions["call-1"] = decision
 
@@ -215,7 +215,7 @@ class TestConsumeApprovalPops:
 
     def test_consume_approval_returns_none_on_miss(self) -> None:
         """``consume_approval`` returns ``None`` when the call_id is not present."""
-        wf = PhilharmonicaWorkflow()
+        wf = AugmentsWorkflow()
 
         result = wf.consume_approval("nonexistent-call")
 

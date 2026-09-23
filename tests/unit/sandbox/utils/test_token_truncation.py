@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.token_truncation``."""
+"""Tests for ``augments.adk.sandbox.utils.token_truncation``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.utils.token_truncation import (
+from augments.adk.sandbox.utils.token_truncation import (
     APPROX_BYTES_PER_TOKEN,
     TruncationPolicy,
     approx_bytes_for_tokens,

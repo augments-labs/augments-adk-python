@@ -12,8 +12,8 @@ import json
 
 import pytest
 
-from philharmonica.adk.config.resolver import resolve_dotted_spec
-from philharmonica.adk.exceptions import ConfigResolutionError
+from augments.adk.config.resolver import resolve_dotted_spec
+from augments.adk.exceptions import ConfigResolutionError
 
 
 class TestResolveDottedSpec:
@@ -32,7 +32,7 @@ class TestResolveDottedSpec:
 
     def test_unknown_module_raises_resolution_error(self) -> None:
         with pytest.raises(ConfigResolutionError):
-            resolve_dotted_spec("philharmonica_no_such_module_xyz:thing")
+            resolve_dotted_spec("augments_no_such_module_xyz:thing")
 
     def test_unknown_attribute_raises_resolution_error(self) -> None:
         with pytest.raises(ConfigResolutionError):
@@ -62,5 +62,5 @@ class TestResolveDottedSpec:
         # The error must quote the offending spec so the misconfigured
         # config file is easy to locate.
         with pytest.raises(ConfigResolutionError) as exc_info:
-            resolve_dotted_spec("philharmonica_no_such_module_xyz:thing")
-        assert "philharmonica_no_such_module_xyz:thing" in str(exc_info.value)
+            resolve_dotted_spec("augments_no_such_module_xyz:thing")
+        assert "augments_no_such_module_xyz:thing" in str(exc_info.value)

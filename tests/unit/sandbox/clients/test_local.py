@@ -12,16 +12,16 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     ExecTimeoutError,
     SandboxNetworkPolicyViolation,
     WorkspaceReadNotFoundError,
 )
-from philharmonica.adk.sandbox.clients.local import (
+from augments.adk.sandbox.clients.local import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.types.sandbox.network import NetworkPolicy
+from augments.adk.types.sandbox.network import NetworkPolicy
 
 
 @pytest.fixture
@@ -106,10 +106,10 @@ class TestRunCommand:
     @pytest.mark.asyncio
     async def test_default_env_propagates(self) -> None:
         c = LocalSubprocessSandboxClient(warn_banner=False)
-        opts = LocalSandboxClientOptions(default_env={"PHILHARMONICA_TEST": "yes"})
+        opts = LocalSandboxClientOptions(default_env={"AUGMENTS_TEST": "yes"})
         session = await c.create(options=opts)
         async with session:
-            result = await session.run("echo $PHILHARMONICA_TEST", shell=True)
+            result = await session.run("echo $AUGMENTS_TEST", shell=True)
             assert b"yes" in result.stdout
 
 
@@ -174,7 +174,7 @@ class TestWorkspacePersistence:
 class TestSessionStateRoundTrip:
     @pytest.mark.asyncio
     async def test_serialize_deserialize(self, client: LocalSubprocessSandboxClient) -> None:
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         state = SandboxSessionState(backend_id="unix_local")
         payload = client.serialize_session_state(state)
@@ -183,7 +183,7 @@ class TestSessionStateRoundTrip:
 
     @pytest.mark.asyncio
     async def test_resume_rejects_wrong_backend(self, client: LocalSubprocessSandboxClient) -> None:
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         state = SandboxSessionState(backend_id="docker")
         with pytest.raises(ValueError, match="cannot resume"):
@@ -303,7 +303,7 @@ class TestArchiveResourceLimits:
 
     async def test_extract_rejects_archive_over_member_limit(self, tmp_path: Path) -> None:
         """A tar-bomb-shaped archive is rejected before any file lands."""
-        from philharmonica.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
+        from augments.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         session = await client.create(
@@ -318,7 +318,7 @@ class TestArchiveResourceLimits:
             assert not (tmp_path / "f0.txt").exists(), "no member may be extracted from a rejected archive"
 
     async def test_hydrate_rejects_archive_over_member_limit(self, tmp_path: Path) -> None:
-        from philharmonica.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
+        from augments.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         session = await client.create(
@@ -332,7 +332,7 @@ class TestArchiveResourceLimits:
                 await session.hydrate_workspace(self._oversize_tar(member_count=6))
 
     async def test_extract_within_limits_succeeds(self, tmp_path: Path) -> None:
-        from philharmonica.adk.sandbox.session import SandboxArchiveLimits
+        from augments.adk.sandbox.session import SandboxArchiveLimits
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         session = await client.create(
@@ -370,7 +370,7 @@ class TestPersistHydrateSymlinkRoundTrip:
 
     async def test_extract_still_rejects_symlink_members(self, tmp_path: Path) -> None:
         """extract() (untrusted archives) must keep rejecting symlink members."""
-        from philharmonica.adk.sandbox.session import UnsafeTarMemberError
+        from augments.adk.sandbox.session import UnsafeTarMemberError
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         session = await client.create(options=LocalSandboxClientOptions(working_directory=str(tmp_path)))
@@ -416,7 +416,7 @@ class TestHydrateValidatesBeforeWipe:
             assert (tmp_path / "keep.txt").read_bytes() == b"precious"
 
     async def test_oversize_archive_leaves_workspace_intact(self, tmp_path: Path) -> None:
-        from philharmonica.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
+        from augments.adk.sandbox.session import ArchiveResourceLimitError, SandboxArchiveLimits
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         session = await client.create(

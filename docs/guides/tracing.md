@@ -1,6 +1,6 @@
 # 🔭 Tracing
 
-The Philharmonica ADK ships a provider-agnostic observability layer built on
+The Augments ADK ships a provider-agnostic observability layer built on
 [OpenTelemetry](https://opentelemetry.io/) (OTel) with
 [OpenInference](https://github.com/Arize-ai/openinference) semantic
 conventions. Every LLM call, tool execution, handoff, guardrail evaluation,
@@ -84,14 +84,14 @@ following attribute keys (read natively by Phoenix / Arize without an adapter):
 | LLM | `input.value` / `output.value` | prompt messages / response messages |
 | Tool | `tool.name` | `FunctionSpanData.name` |
 | Tool | `input.value` / `output.value` | `FunctionSpanData.input` / `output` (redacted by default) |
-| Agent | `philharmonica.agent.name` | `AgentSpanData.name` |
-| Agent | `philharmonica.tenant.id` | `AgentSpanData.tenant_id` |
-| Handoff | `philharmonica.handoff.from` / `philharmonica.handoff.to` | `HandoffSpanData.from_agent` / `to_agent` |
-| Guardrail | `philharmonica.guardrail.triggered` | `GuardrailSpanData.triggered` |
+| Agent | `augments.agent.name` | `AgentSpanData.name` |
+| Agent | `augments.tenant.id` | `AgentSpanData.tenant_id` |
+| Handoff | `augments.handoff.from` / `augments.handoff.to` | `HandoffSpanData.from_agent` / `to_agent` |
+| Guardrail | `augments.guardrail.triggered` | `GuardrailSpanData.triggered` |
 
 Under `TracingConvention.DEFAULT` (GenAI semconv), generation spans use
 `gen_ai.system`, `gen_ai.request.model`, `gen_ai.usage.input_tokens`, and
-`gen_ai.usage.output_tokens`. Framework-specific fields use the `philharmonica.*`
+`gen_ai.usage.output_tokens`. Framework-specific fields use the `augments.*`
 prefix in both conventions.
 
 The `openinference.span.kind` values by factory are: `AGENT` (agent, handoff),
@@ -109,7 +109,7 @@ sandbox-typed spans).
 OpenTelemetry is an optional dependency. Install it with the `otel` extra:
 
 ```bash
-pip install 'philharmonica-adk[otel]'
+pip install 'augments-adk[otel]'
 ```
 
 The core ADK has zero runtime dependency on `opentelemetry`. Importing
@@ -124,8 +124,8 @@ Wire the tracer at application startup before running any agents:
 
 ```python
 import os
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 tracer = setup_otel(
     service_name="my-agent-service",
@@ -146,7 +146,7 @@ Tracing is gated on `RunConfig.tracing_enabled` (default `False`). Enable it
 per run:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.run.config import RunConfig
 
 config = RunConfig(tracing_enabled=True)
 result = await runner.arun(agent, "Hello", run_config=config)
@@ -177,8 +177,8 @@ Phoenix ingests OTLP and reads OpenInference attributes natively.
 
 ```python
 import os
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
 
 set_tracer(setup_phoenix(
     endpoint=os.environ.get("PHOENIX_COLLECTOR_ENDPOINT"),  # None → env default
@@ -192,8 +192,8 @@ Docs: <https://docs.arize.com/phoenix/tracing/how-to-tracing/setup-tracing>
 
 ```python
 import os
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_logfire
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_logfire
 
 set_tracer(setup_logfire(
     token=os.environ["LOGFIRE_TOKEN"],
@@ -210,8 +210,8 @@ Docs: <https://logfire.pydantic.dev/docs/how-to-guides/alternative-clients/>
 
 ```python
 import os
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_langsmith
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_langsmith
 
 set_tracer(setup_langsmith(
     api_key=os.environ["LANGSMITH_API_KEY"],
@@ -228,8 +228,8 @@ For any OTLP-compatible collector (Jaeger, Honeycomb, Datadog, Grafana Tempo):
 
 ```python
 import os
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 set_tracer(setup_otel(
     endpoint=os.environ["OTEL_EXPORTER_OTLP_ENDPOINT"],
@@ -253,9 +253,9 @@ the gate flag is `RunConfig.metrics_enabled` (default `False`).
 provider:
 
 ```python
-from philharmonica.adk.tracing import MultiTracer, set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
-from philharmonica.adk.tracing.metrics import setup_metrics
+from augments.adk.tracing import MultiTracer, set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing.metrics import setup_metrics
 
 otel = setup_phoenix(service_name="my-agent")
 metrics = setup_metrics(service_name="my-agent")
@@ -272,14 +272,14 @@ observes the final token counts.
 
 | Instrument | Type | Unit | Trigger |
 |---|---|---|---|
-| `philharmonica.agent.turn.duration_ms` | Histogram | `ms` | `AgentSpanData` at finish |
-| `philharmonica.llm.tokens.prompt` | Histogram | `{token}` | `GenerationSpanData.usage` |
-| `philharmonica.llm.tokens.completion` | Histogram | `{token}` | `GenerationSpanData.usage` |
-| `philharmonica.llm.requests` | Counter | `1` | `GenerationSpanData` at finish; label `status=success\|error` |
-| `philharmonica.llm.cost.usd` | Histogram | `{usd}` | `GenerationSpanData.cost_usd` when present |
-| `philharmonica.agent.tool.calls` | Counter | `1` | `FunctionSpanData` at finish; label `status=success\|error` |
-| `philharmonica.graph.node.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="graph_node"` |
-| `philharmonica.swarm.turn.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="swarm_turn"` |
+| `augments.agent.turn.duration_ms` | Histogram | `ms` | `AgentSpanData` at finish |
+| `augments.llm.tokens.prompt` | Histogram | `{token}` | `GenerationSpanData.usage` |
+| `augments.llm.tokens.completion` | Histogram | `{token}` | `GenerationSpanData.usage` |
+| `augments.llm.requests` | Counter | `1` | `GenerationSpanData` at finish; label `status=success\|error` |
+| `augments.llm.cost.usd` | Histogram | `{usd}` | `GenerationSpanData.cost_usd` when present |
+| `augments.agent.tool.calls` | Counter | `1` | `FunctionSpanData` at finish; label `status=success\|error` |
+| `augments.graph.node.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="graph_node"` |
+| `augments.swarm.turn.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="swarm_turn"` |
 
 When `RunConfig.tenant_id` is set, a `tenant` dimension is added to all LLM
 instruments, enabling per-tenant cost and usage reporting.
@@ -315,7 +315,7 @@ To opt in to raw, unredacted tool I/O (trusted internal environments only),
 pass `record_tool_io_full=True` to `OTelTracer` or `setup_otel`:
 
 ```python
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing.otel import setup_otel
 
 # WARNING: emits raw tool inputs and outputs, including PII and credentials.
 tracer = setup_otel(
@@ -346,8 +346,8 @@ and arbitrary structured fields attached via `extra`. Structured handlers
 
 ```python
 import logging
-from philharmonica.adk.tracing import log_event
-from philharmonica.adk.tracing.logging import (
+from augments.adk.tracing import log_event
+from augments.adk.tracing.logging import (
     EVENT_AGENT_TURN_START,
     EVENT_AGENT_TURN_END,
     EVENT_LLM_REQUEST,
@@ -407,7 +407,7 @@ directly. Use it to instrument business logic that sits outside the
 framework's built-in span kinds:
 
 ```python
-from philharmonica.adk.tracing.spans import custom_span
+from augments.adk.tracing.spans import custom_span
 
 async def rank_candidates(results: list[dict]) -> list[dict]:
     with custom_span("rank_candidates", data={"n": len(results)}) as span:
@@ -451,10 +451,10 @@ so both spans and OTel instruments land in the same backend:
 
 ```python
 import os
-from philharmonica.adk.tracing import MultiTracer, set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
-from philharmonica.adk.tracing.metrics import setup_metrics
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.tracing import MultiTracer, set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing.metrics import setup_metrics
+from augments.adk.run.config import RunConfig
 
 phoenix = setup_phoenix(
     endpoint=os.environ["PHOENIX_ENDPOINT"],
@@ -480,8 +480,8 @@ docker run -p 6006:6006 -p 4317:4317 arizephoenix/phoenix
 ```
 
 ```python
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
 
 set_tracer(setup_phoenix(
     endpoint="http://localhost:4317",
@@ -493,8 +493,8 @@ Add `console=True` to `setup_otel` (or call `setup_otel` directly) to also
 print spans to stdout during development:
 
 ```python
-from philharmonica.adk.tracing.otel import setup_otel
-from philharmonica.adk.types.tracing.convention import TracingConvention
+from augments.adk.tracing.otel import setup_otel
+from augments.adk.types.tracing.convention import TracingConvention
 
 tracer = setup_otel(
     endpoint="http://localhost:4317",
@@ -507,10 +507,10 @@ tracer = setup_otel(
 ### A/B comparison of agent versions via spans
 
 Tag spans with metadata that identifies the variant, then filter by
-`philharmonica.metadata.*` attributes in your observability backend:
+`augments.metadata.*` attributes in your observability backend:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.run.config import RunConfig
 
 config_a = RunConfig(
     tracing_enabled=True,
@@ -526,7 +526,7 @@ config_b = RunConfig(
 
 Both variants share a `tenant_id` so their token-count and latency metrics
 land on the same `tenant` dimension. The `variant` field in
-`philharmonica.metadata.variant` lets you split traces by agent version in the
+`augments.metadata.variant` lets you split traces by agent version in the
 observability backend.
 
 > [!NOTE]

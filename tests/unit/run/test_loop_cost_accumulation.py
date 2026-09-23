@@ -15,9 +15,9 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.llms.llm import LLM
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 class _FixedCostLLM(LLM):
@@ -57,9 +57,9 @@ def _make_agent() -> Any:
     """Minimal agent-like object for loop testing (mirrors test_reset_tool_choice.py)."""
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-    from philharmonica.adk.agents.middleware import Middleware
-    from philharmonica.adk.skills.activation import SkillActivation
+    from augments.adk.agents.agent_guardrails import AgentGuardrails
+    from augments.adk.agents.middleware import Middleware
+    from augments.adk.skills.activation import SkillActivation
 
     return SimpleNamespace(
         name="cost-test-agent",
@@ -81,10 +81,10 @@ def _make_agent() -> Any:
 @pytest.mark.asyncio
 async def test_loop_accumulates_cost_onto_run_context() -> None:
     """A single-turn response with fixed cost → ``context.cost_usd`` equals that cost."""
-    from philharmonica.adk.hooks.hooks import RunHooks
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.run.loop import run_agent_loop
+    from augments.adk.hooks.hooks import RunHooks
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.context import RunContext
+    from augments.adk.run.loop import run_agent_loop
 
     agent = _make_agent()
     fake_llm = _FixedCostLLM(cost_per_call=0.01)
@@ -95,8 +95,8 @@ async def test_loop_accumulates_cost_onto_run_context() -> None:
     ctx = RunContext(context=None)
 
     with (
-        patch("philharmonica.adk.run.loop.call_llm", side_effect=fake_call_llm),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", side_effect=fake_call_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
     ):
         result = await run_agent_loop(
             agent=agent,
@@ -115,10 +115,10 @@ async def test_loop_accumulates_cost_onto_run_context() -> None:
 @pytest.mark.asyncio
 async def test_loop_cost_none_does_not_accumulate() -> None:
     """When ``LLM.cost()`` returns ``None``, ``cost_usd`` stays ``0.0``."""
-    from philharmonica.adk.hooks.hooks import RunHooks
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.run.loop import run_agent_loop
+    from augments.adk.hooks.hooks import RunHooks
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.context import RunContext
+    from augments.adk.run.loop import run_agent_loop
 
     agent = _make_agent()
     null_cost_llm = _FixedCostLLM(cost_per_call=None)
@@ -129,8 +129,8 @@ async def test_loop_cost_none_does_not_accumulate() -> None:
     ctx = RunContext(context=None)
 
     with (
-        patch("philharmonica.adk.run.loop.call_llm", side_effect=fake_call_llm),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=null_cost_llm),
+        patch("augments.adk.run.loop.call_llm", side_effect=fake_call_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=null_cost_llm),
     ):
         result = await run_agent_loop(
             agent=agent,
@@ -151,12 +151,12 @@ async def test_loop_accumulates_cost_across_turns() -> None:
     """Two turns each with cost 0.01 → total cost 0.02."""
     from unittest.mock import AsyncMock
 
-    from philharmonica.adk.hooks.hooks import RunHooks
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.run.loop import run_agent_loop
-    from philharmonica.adk.tools.function_tool import FunctionTool
-    from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+    from augments.adk.hooks.hooks import RunHooks
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.context import RunContext
+    from augments.adk.run.loop import run_agent_loop
+    from augments.adk.tools.function_tool import FunctionTool
+    from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
     tool = FunctionTool(
         name="echo",
@@ -167,9 +167,9 @@ async def test_loop_accumulates_cost_across_turns() -> None:
 
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-    from philharmonica.adk.agents.middleware import Middleware
-    from philharmonica.adk.skills.activation import SkillActivation
+    from augments.adk.agents.agent_guardrails import AgentGuardrails
+    from augments.adk.agents.middleware import Middleware
+    from augments.adk.skills.activation import SkillActivation
 
     agent = SimpleNamespace(
         name="multi-turn-cost-agent",
@@ -216,8 +216,8 @@ async def test_loop_accumulates_cost_across_turns() -> None:
     ctx = RunContext(context=None)
 
     with (
-        patch("philharmonica.adk.run.loop.call_llm", side_effect=fake_call_llm),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", side_effect=fake_call_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
     ):
         result = await run_agent_loop(
             agent=agent,  # type: ignore[arg-type]  # SimpleNamespace duck-types Agent in loop tests
@@ -244,8 +244,8 @@ async def test_streaming_loop_accumulates_cost_onto_run_context() -> None:
     """
     from unittest.mock import AsyncMock, patch
 
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
 
     agent = Agent(
         name="streaming-cost-test-agent",
@@ -258,20 +258,20 @@ async def test_streaming_loop_accumulates_cost_onto_run_context() -> None:
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -316,10 +316,10 @@ async def test_non_streaming_loop_uses_response_model_for_cost_on_fallback() -> 
     updated ``llm_model_name`` from ``response.model`` after ``call_llm`` returned,
     causing cost to be computed against the wrong model's price table.
     """
-    from philharmonica.adk.hooks.hooks import RunHooks
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.run.loop import run_agent_loop
+    from augments.adk.hooks.hooks import RunHooks
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.context import RunContext
+    from augments.adk.run.loop import run_agent_loop
 
     agent = _make_agent()
     capturing_llm = _ModelCapturingLLM()
@@ -339,10 +339,10 @@ async def test_non_streaming_loop_uses_response_model_for_cost_on_fallback() -> 
     ctx = RunContext(context=None)
 
     with (
-        patch("philharmonica.adk.run.loop.call_llm", side_effect=fake_call_llm),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=capturing_llm),
+        patch("augments.adk.run.loop.call_llm", side_effect=fake_call_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=capturing_llm),
         patch(
-            "philharmonica.adk.run.loop.resolve_model_name",
+            "augments.adk.run.loop.resolve_model_name",
             return_value=configured_model,
         ),
     ):
@@ -376,8 +376,8 @@ async def test_streaming_loop_uses_response_model_for_cost_on_fallback() -> None
     """
     from unittest.mock import AsyncMock
 
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
 
     agent = Agent(
         name="streaming-fallback-cost-test-agent",
@@ -398,24 +398,24 @@ async def test_streaming_loop_uses_response_model_for_cost_on_fallback() -> None
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=capturing_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=capturing_llm),
         patch(
-            "philharmonica.adk.run.loop.resolve_model_name",
+            "augments.adk.run.loop.resolve_model_name",
             return_value=configured_model,
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):

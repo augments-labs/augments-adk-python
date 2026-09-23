@@ -10,8 +10,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.tasks import Task, TaskPipeline, TaskPipelineDefinitionError
+from augments.adk.agents.agent import Agent
+from augments.adk.tasks import Task, TaskPipeline, TaskPipelineDefinitionError
 
 
 def _agent() -> Agent:

@@ -7,15 +7,15 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import WorkspaceReadNotFoundError
-from philharmonica.adk.sandbox.capabilities.memory import (
+from augments.adk.exceptions.exceptions import WorkspaceReadNotFoundError
+from augments.adk.sandbox.capabilities.memory import (
     MemoryCapability,
     MemoryLayoutConfig,
     MemoryReadConfig,
     resolve_conversation_id,
 )
-from philharmonica.adk.types.sandbox.entries import Dir
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.entries import Dir
+from augments.adk.types.sandbox.manifest import Manifest
 
 
 class TestMemoryLayoutConfigValidation:
@@ -56,8 +56,8 @@ class TestResolveConversationId:
 
     def test_falls_back_to_generated(self) -> None:
         cid = resolve_conversation_id()
-        assert cid.startswith("philharmonica-mem-")
-        assert len(cid) > len("philharmonica-mem-")
+        assert cid.startswith("augments-mem-")
+        assert len(cid) > len("augments-mem-")
 
 
 class TestProcessManifest:

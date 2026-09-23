@@ -9,9 +9,9 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, flow_listen, flow_start
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.visualization import (
+from augments.adk.flows import Flow, flow_listen, flow_start
+from augments.adk.graphs.graph import Graph
+from augments.adk.visualization import (
     flow_to_dot,
     flow_to_mermaid,
     graph_to_dot,
@@ -86,7 +86,7 @@ class TestFlowStartPositionalGuard:
     def test_string_positional_arg_raises_typed_error(self) -> None:
         # @flow_start("oops") would land "oops" in the `fn` positional.
         # The runtime guard should give an actionable error.
-        from philharmonica.adk.flows.decorators import flow_start
+        from augments.adk.flows.decorators import flow_start
 
         with pytest.raises(TypeError, match="positional argument"):
             flow_start("oops")  # type: ignore[arg-type]

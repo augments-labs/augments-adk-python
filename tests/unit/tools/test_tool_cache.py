@@ -7,12 +7,12 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.tools.function_tool import FunctionTool, ToolCachePolicy
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.agents import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools import Tool
+from augments.adk.tools.function_tool import FunctionTool, ToolCachePolicy
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -36,13 +36,13 @@ def _make_ctx(context: Any = None) -> RunContext[Any]:
 
 
 def _make_hooks():
-    from philharmonica.adk.hooks.hooks import RunHooks
+    from augments.adk.hooks.hooks import RunHooks
 
     return RunHooks()
 
 
 def _make_config():
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
     return DEFAULT_RUN_CONFIG
 

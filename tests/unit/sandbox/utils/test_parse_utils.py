@@ -1,8 +1,8 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.parse_utils``."""
+"""Tests for ``augments.adk.sandbox.utils.parse_utils``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.utils.parse_utils import EntryKind, parse_ls_la
+from augments.adk.sandbox.utils.parse_utils import EntryKind, parse_ls_la
 
 _SAMPLE = """total 20
 drwxr-xr-x  2 root root 4096 Jan  1 00:00 sub

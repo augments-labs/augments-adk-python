@@ -2,11 +2,11 @@
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import _apply_skill_governance, build_tools
-from philharmonica.adk.skills import Skill, SkillGovernance
-from philharmonica.adk.tools import FunctionTool
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import _apply_skill_governance, build_tools
+from augments.adk.skills import Skill, SkillGovernance
+from augments.adk.tools import FunctionTool
 
 
 @pytest.fixture

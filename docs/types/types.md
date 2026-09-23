@@ -7,13 +7,13 @@
 **Input types** (TypedDict, sent TO the LLM):
 
 ```python
-from philharmonica.adk.types.input import LLMInputContentItem, LLMInputText, LLMInputMessage
+from augments.adk.types.input import LLMInputContentItem, LLMInputText, LLMInputMessage
 ```
 
 **Output types** (BaseModel, received FROM the LLM):
 
 ```python
-from philharmonica.adk.types.output import (
+from augments.adk.types.output import (
     LLMOutputContentItem, LLMOutputMessage, LLMOutputFunctionToolCall,
     FunctionToolCallResult,
 )
@@ -22,7 +22,7 @@ from philharmonica.adk.types.output import (
 ### Layer 2: Chat Completions Wire Types
 
 ```python
-from philharmonica.adk.types.chat import (
+from augments.adk.types.chat import (
     ChatCompletionMessageParam,
     ChatCompletionToolCall,
     ChatCompletionToolChoiceOptionParam,
@@ -32,13 +32,13 @@ from philharmonica.adk.types.chat import (
 ### Layer 3: Items
 
 ```python
-from philharmonica.adk.types.items import MessageOutputItem, ToolCallItem, RunItem, ItemHelpers
+from augments.adk.types.items import MessageOutputItem, ToolCallItem, RunItem, ItemHelpers
 ```
 
 ### Tool Types
 
 ```python
-from philharmonica.adk.types.tools.tool_types import (
+from augments.adk.types.tools.tool_types import (
     FunctionToolDefinition, BuiltinToolDefinition, ToolDefinition,
 )
 ```
@@ -46,7 +46,7 @@ from philharmonica.adk.types.tools.tool_types import (
 ### Response Types
 
 ```python
-from philharmonica.adk.types.responses import LLMResponse, LLMStreamEvent
+from augments.adk.types.responses import LLMResponse, LLMStreamEvent
 
 response.content       # str | None
 response.tool_calls    # list[ChatCompletionToolCall]
@@ -58,7 +58,7 @@ response.refusal       # str | None
 ### Token Types
 
 ```python
-from philharmonica.adk.types.tokens import InputTokensDetails, OutputTokensDetails
+from augments.adk.types.tokens import InputTokensDetails, OutputTokensDetails
 
 details = InputTokensDetails(
     cached_tokens=1000,
@@ -69,7 +69,7 @@ details = InputTokensDetails(
 ### Prompt Caching Types
 
 ```python
-from philharmonica.adk.types.caching import (
+from augments.adk.types.caching import (
     AnthropicPromptCaching, GeminiPromptCaching, OpenAIPromptCaching,
     CacheInjectionPoint, PromptCaching,
 )
@@ -80,11 +80,11 @@ from philharmonica.adk.types.caching import (
 **Reasoning:**
 
 ```python
-from philharmonica.adk.types.common import Reasoning, ThinkingBlock, RedactedThinkingBlock
+from augments.adk.types.common import Reasoning, ThinkingBlock, RedactedThinkingBlock
 ```
 
 ### Tool Configuration Types
 
 ```python
-from philharmonica.adk.types.tools import ToolChoice, ToolExecutionMode
+from augments.adk.types.tools import ToolChoice, ToolExecutionMode
 ```

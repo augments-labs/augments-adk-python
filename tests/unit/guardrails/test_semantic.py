@@ -17,17 +17,17 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrails, AgentInputGuardrailData
-from philharmonica.adk.guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import AgentGuardrails, AgentInputGuardrailData
+from augments.adk.guardrails import (
     DEFAULT_INJECTION_EXEMPLARS,
     SemanticMatch,
     SemanticScanner,
     semantic_scan_guardrail,
 )
-from philharmonica.adk.llms.embedder import Embedder, Embedding
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.guardrails import GuardrailAction
+from augments.adk.llms.embedder import Embedder, Embedding
+from augments.adk.run.context import RunContext
+from augments.adk.types.guardrails import GuardrailAction
 
 # ── Helpers ──────────────────────────────────────────────────
 

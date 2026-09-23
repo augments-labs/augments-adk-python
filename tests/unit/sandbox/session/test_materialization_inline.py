@@ -5,11 +5,11 @@ from __future__ import annotations
 from types import SimpleNamespace
 from typing import Any
 
-from philharmonica.adk.sandbox.session.materialization.inline import (
+from augments.adk.sandbox.session.materialization.inline import (
     materialize_dir,
     materialize_file,
 )
-from philharmonica.adk.types.sandbox.entries import Dir, File
+from augments.adk.types.sandbox.entries import Dir, File
 
 
 def _recording_session() -> Any:

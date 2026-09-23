@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.tracing``.
+"""Tests for ``augments.adk.workflows.temporal.tracing``.
 
 Covers:
 - ``should_emit_span`` suppresses emission during Temporal workflow replay.
@@ -24,7 +24,7 @@ pytest.importorskip("temporalio")
 import temporalio as _temporalio_pkg
 import temporalio.workflow  # side-effect import: loads submodule so patch.object finds it as a package attribute
 
-from philharmonica.adk.workflows.temporal.tracing import (
+from augments.adk.workflows.temporal.tracing import (
     deterministic_timestamp,
     deterministic_uuid,
     should_emit_span,
@@ -88,7 +88,7 @@ class TestDeterministicTimestamp:
 
         with (
             patch.object(_temporalio_pkg, "workflow", mock_wf),
-            patch("philharmonica.adk.workflows.temporal.tracing.time") as mock_time,
+            patch("augments.adk.workflows.temporal.tracing.time") as mock_time,
         ):
             mock_time.time.return_value = 1_700_000_000.0
             result = deterministic_timestamp()
@@ -146,7 +146,7 @@ class TestDeterministicUuid:
 
         with (
             patch.object(_temporalio_pkg, "workflow", mock_wf),
-            patch("philharmonica.adk.workflows.temporal.tracing.uuid") as mock_uuid_mod,
+            patch("augments.adk.workflows.temporal.tracing.uuid") as mock_uuid_mod,
         ):
             mock_uuid_mod.uuid4.return_value = "system-uuid-value"
             result = deterministic_uuid()

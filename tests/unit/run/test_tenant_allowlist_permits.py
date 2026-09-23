@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.governance import tenant_allowlist_permits
+from augments.adk.run.config import RunConfig
+from augments.adk.run.governance import tenant_allowlist_permits
 
 
 def test_feature_off_permits_everything() -> None:

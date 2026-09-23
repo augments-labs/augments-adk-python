@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.memory.rollout_extraction``."""
+"""Tests for ``augments.adk.sandbox.memory.rollout_extraction``."""
 
 from __future__ import annotations
 
@@ -6,11 +6,11 @@ import json
 
 import pytest
 
-from philharmonica.adk.sandbox.memory.interface import (
+from augments.adk.sandbox.memory.interface import (
     RolloutExtractionArtifacts,
     RolloutTerminalMetadata,
 )
-from philharmonica.adk.sandbox.memory.rollout_extraction import (
+from augments.adk.sandbox.memory.rollout_extraction import (
     ROLLOUT_CONTENT_BYTE_CAP,
     run_rollout_extraction,
 )

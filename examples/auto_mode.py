@@ -1,6 +1,6 @@
 """Auto-mode helpers for running examples unattended.
 
-When ``PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto`` is set in the environment,
+When ``AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto`` is set in the environment,
 these helpers return deterministic, pre-canned answers instead of blocking
 on ``input()`` — so an example can run end-to-end in a batch runner (see
 ``examples/run_examples.py``) or CI with no human at the terminal. In a
@@ -19,13 +19,13 @@ import os
 
 logger = logging.getLogger(__name__)
 
-AUTO_MODE_ENV = "PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE"
+AUTO_MODE_ENV = "AUGMENTS_EXAMPLES_INTERACTIVE_MODE"
 
 
 def is_auto_mode() -> bool:
     """Return ``True`` when examples should bypass interactive prompts.
 
-    Reads ``PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE``; auto mode is active when its
+    Reads ``AUGMENTS_EXAMPLES_INTERACTIVE_MODE``; auto mode is active when its
     value is ``"auto"`` (case-insensitive).
 
     Returns:

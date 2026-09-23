@@ -26,12 +26,12 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tasks import Task
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.graph import Graph
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tasks import Task
 
 
 class TestOutputSchemaValidation:
@@ -81,7 +81,7 @@ class TestGraphTargetDispatch:
 
         task = Task(description="hello", agent=g, name="graph-task")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         output = await Runner.arun_task(task)
 
@@ -98,7 +98,7 @@ class TestGraphTargetDispatch:
 
         task = Task(description="hello", agent=g, name="graph-failing")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         output = await Runner.arun_task(task)
 

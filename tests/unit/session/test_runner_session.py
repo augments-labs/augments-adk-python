@@ -2,8 +2,8 @@
 
 import pytest
 
-from philharmonica.adk.session import SessionSettings, SQLiteMultiSessions
-from philharmonica.adk.session.session_event import SessionEvent, create_session_event
+from augments.adk.session import SessionSettings, SQLiteMultiSessions
+from augments.adk.session.session_event import SessionEvent, create_session_event
 
 
 def _user_event(content: str) -> SessionEvent:

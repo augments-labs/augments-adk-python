@@ -10,10 +10,10 @@ import json
 
 import pytest
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Helpers

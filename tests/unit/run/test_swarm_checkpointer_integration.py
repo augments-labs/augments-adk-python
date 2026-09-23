@@ -18,17 +18,17 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.hooks import SwarmHooks
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import Interrupt, InterruptException
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.hooks import SwarmHooks
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(*, hooks: SwarmHooks[Any] | None = None, max_turns: int = 1) -> Swarm[Any]:
@@ -62,7 +62,7 @@ class TestArunSwarmAutoSave:
         cp = InMemorySwarmCheckpointer(thread_id="t1")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
         ):
             await Runner.arun_swarm(sw, "hello", checkpointer=cp)
@@ -101,7 +101,7 @@ class TestArunSwarmFromCheckpointContinuesSaving:
 
         # Seed: run 1 turn, checkpoint saved at turn=1.
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
         ):
             await Runner.arun_swarm(sw_seed, "seed", checkpointer=cp)
@@ -114,7 +114,7 @@ class TestArunSwarmFromCheckpointContinuesSaving:
         # Resume: loaded state has total_turns=1; with MaxTurnsTermination(2) one
         # more turn runs, saving a checkpoint at turn=2.
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
         ):
             await Runner.arun_swarm_from_checkpoint(
@@ -143,7 +143,7 @@ class TestArunSwarmSaveFailurePropagates:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
             ),
             pytest.raises(RuntimeError, match="backend unavailable"),
@@ -180,7 +180,7 @@ class TestArunSwarmInterruptPathSaveFailurePropagates:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_raise_interrupt),
             ),
             pytest.raises(RuntimeError, match="interrupt-path backend unavailable"),
@@ -209,7 +209,7 @@ class TestObserverStillBestEffort:
         sw = _make_swarm(hooks=_RaisingObserver())
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
         ):
             result = await Runner.arun_swarm(sw, "hello")
@@ -226,7 +226,7 @@ class TestSwarmRunnerWithCheckpointer:
         cp = InMemorySwarmCheckpointer(thread_id="b1")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=lambda **kwargs: _stub_result(kwargs["context"], kwargs["agent"])),
         ):
             await Runner.configure().swarm(sw).checkpointer(cp).arun("hello")

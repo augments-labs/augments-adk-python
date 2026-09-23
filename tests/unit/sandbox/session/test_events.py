@@ -1,11 +1,11 @@
-"""Tests for ``philharmonica.adk.sandbox.session.events``."""
+"""Tests for ``augments.adk.sandbox.session.events``."""
 
 from __future__ import annotations
 
 import json
 import uuid
 
-from philharmonica.adk.sandbox.session import (
+from augments.adk.sandbox.session import (
     ErrorCode,
     EventPayloadPolicy,
     OpName,
@@ -96,7 +96,7 @@ def test_stdout_bytes_excluded_from_serialization() -> None:
 
 def test_payload_policy_drives_decoded_stdout_via_safe_decode_helper() -> None:
     """Event builders use ``safe_decode_with_max_chars`` to honor the policy ceiling."""
-    from philharmonica.adk.sandbox.session import safe_decode_with_max_chars
+    from augments.adk.sandbox.session import safe_decode_with_max_chars
 
     raw = b"alpha\nbeta\ngamma\n" * 500
     policy = EventPayloadPolicy()

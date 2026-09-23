@@ -11,10 +11,10 @@ from anthropic.types import (
     ToolUnionParam,
 )
 
-from philharmonica.adk.llms.anthropic.anthropic_cache_applicator import apply_cache_control
-from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-from philharmonica.adk.llms.anthropic.anthropic_converter import AnthropicConverter
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.anthropic.anthropic_cache_applicator import apply_cache_control
+from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+from augments.adk.llms.anthropic.anthropic_converter import AnthropicConverter
+from augments.adk.llms.llm_config import LLMConfig
 
 
 def _user(content: str | list[TextBlockParam]) -> MessageParam:

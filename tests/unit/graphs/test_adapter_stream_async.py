@@ -15,12 +15,12 @@ from collections.abc import Iterator
 from contextlib import ExitStack, contextmanager
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import AgentExecutable, to_executable
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import AgentExecutable, to_executable
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -44,31 +44,31 @@ def _text_response(text: str) -> LLMResponse:
 def _patched_llm(text: str) -> Iterator[None]:
     """Patch both the non-streaming and streaming LLM call sites.
 
-    Non-streaming path: ``call_llm`` in ``philharmonica.adk.run.loop``.
-    Streaming path: ``call_llm_streamed`` in ``philharmonica.adk.run.loop``.
+    Non-streaming path: ``call_llm`` in ``augments.adk.run.loop``.
+    Streaming path: ``call_llm_streamed`` in ``augments.adk.run.loop``.
     Both guardrail patches suppress the network calls in each respective
     runner path.
     """
     with ExitStack() as stack:
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.loop.call_llm",
+                "augments.adk.run.loop.call_llm",
                 new=AsyncMock(side_effect=lambda *args, **kwargs: _text_response(text)),
             )
         )
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.loop.call_llm_streamed",
+                "augments.adk.run.loop.call_llm_streamed",
                 new=AsyncMock(side_effect=lambda *args, **kwargs: _text_response(text)),
             )
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[]))
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[]))
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[]))
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[]))
         )
-        stack.enter_context(patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])))
+        stack.enter_context(patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])))
         yield
 
 
@@ -172,10 +172,10 @@ async def test_agent_stream_async_max_turns_override() -> None:
 
 async def test_swarm_keeps_default_terminal_only_stream_async() -> None:
     """``SwarmExecutable`` keeps the default stream_async (one terminal event only)."""
-    from philharmonica.adk.graphs.adapters import SwarmExecutable
-    from philharmonica.adk.swarms.policy import RoundRobinPolicy
-    from philharmonica.adk.swarms.swarm import Swarm
-    from philharmonica.adk.swarms.termination import MaxTurnsTermination
+    from augments.adk.graphs.adapters import SwarmExecutable
+    from augments.adk.swarms.policy import RoundRobinPolicy
+    from augments.adk.swarms.swarm import Swarm
+    from augments.adk.swarms.termination import MaxTurnsTermination
 
     member = Agent(name="swarmmember", system_prompt="hello")
     swarm = Swarm(

@@ -16,7 +16,7 @@ from pathlib import Path
 import pytest
 from pydantic import TypeAdapter
 
-from philharmonica.adk.types.multimodal import File, Image
+from augments.adk.types.multimodal import File, Image
 
 
 class TestFileConstruction:
@@ -248,7 +248,7 @@ class TestFunctionToolIntegration:
     """
 
     async def test_function_tool_schema_is_uri_string(self) -> None:
-        from philharmonica.adk.tools import function_tool
+        from augments.adk.tools import function_tool
 
         @function_tool(name="ocr", description="Extract text from an image.")
         def ocr(image: Image) -> str:
@@ -260,8 +260,8 @@ class TestFunctionToolIntegration:
         assert image_param["format"] == "uri"
 
     async def test_function_tool_reconstructs_image_from_string(self) -> None:
-        from philharmonica.adk.tools import function_tool
-        from philharmonica.adk.tools.tool_context import ToolContext
+        from augments.adk.tools import function_tool
+        from augments.adk.tools.tool_context import ToolContext
 
         captured: list[Image] = []
 
@@ -296,7 +296,7 @@ class TestDataUrlPatternIsLinear:
 
     @pytest.mark.parametrize("semicolons", [40, 64])
     def test_comma_less_data_url_fails_fast(self, semicolons: int) -> None:
-        from philharmonica.adk.types.multimodal.file import _DATA_URL_RE
+        from augments.adk.types.multimodal.file import _DATA_URL_RE
 
         hostile = "data:a/b" + ";" * semicolons
         start = time.perf_counter()
@@ -324,7 +324,7 @@ class TestDataUrlPatternIsLinear:
     def test_capture_groups_unchanged(self, url: str, mime: str | None, params: str, body: str) -> None:
         """The linear pattern must accept the same URLs and capture the same
         groups as the ambiguous one it replaces."""
-        from philharmonica.adk.types.multimodal.file import _DATA_URL_RE
+        from augments.adk.types.multimodal.file import _DATA_URL_RE
 
         match = _DATA_URL_RE.match(url)
         assert match is not None

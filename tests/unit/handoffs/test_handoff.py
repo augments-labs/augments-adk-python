@@ -15,7 +15,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.handoffs.handoff import HANDOFF_TOOL_PREFIX, Handoff
+from augments.adk.handoffs.handoff import HANDOFF_TOOL_PREFIX, Handoff
 
 # Provider-side tool-name validation pattern (OpenAI / Anthropic).
 _VALID_TOOL_NAME = re.compile(r"^[a-zA-Z0-9_-]+$")

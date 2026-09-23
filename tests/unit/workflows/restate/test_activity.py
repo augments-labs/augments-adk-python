@@ -18,10 +18,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.types.responses.llm_response import LLMResponse
-from philharmonica.adk.workflows.restate.activity import invoke_model_handler
-from philharmonica.adk.workflows.temporal.activity import register_model
+from augments.adk.llms.llm import LLM
+from augments.adk.types.responses.llm_response import LLMResponse
+from augments.adk.workflows.restate.activity import invoke_model_handler
+from augments.adk.workflows.temporal.activity import register_model
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -110,7 +110,7 @@ class TestInvokeModelHandlerToolsAndSchema:
         ctx = MagicMock()
 
         with patch(
-            "philharmonica.adk.workflows.temporal.serialization.tool_from_json_dict",
+            "augments.adk.workflows.temporal.serialization.tool_from_json_dict",
             return_value=fake_tool,
         ) as mock_deserialize:
             await invoke_model_handler(
@@ -140,7 +140,7 @@ class TestInvokeModelHandlerToolsAndSchema:
         ctx = MagicMock()
 
         with patch(
-            "philharmonica.adk.workflows.temporal.serialization.output_schema_from_json_dict",
+            "augments.adk.workflows.temporal.serialization.output_schema_from_json_dict",
             return_value=fake_schema,
         ) as mock_deserialize:
             await invoke_model_handler(

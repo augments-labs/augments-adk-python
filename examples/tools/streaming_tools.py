@@ -28,10 +28,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools.function_tool import function_tool
-from philharmonica.adk.tools.tool_context import ExecutionAwareToolContext
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk.agents import Agent
+from augments.adk.tools.function_tool import function_tool
+from augments.adk.tools.tool_context import ExecutionAwareToolContext
+from augments.adk.tools.tool_guardrails import (
     ToolGuardrailFunctionOutput,
     ToolGuardrails,
     ToolInputGuardrailData,

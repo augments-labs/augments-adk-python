@@ -7,8 +7,8 @@ import pytest
 pytest.importorskip("starlette")
 pytest.importorskip("sse_starlette")
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.serving import build_app
+from augments.adk.agents.agent import Agent
+from augments.adk.serving import build_app
 
 
 def _route_paths(app: object) -> set[str | None]:
@@ -35,7 +35,7 @@ def test_a2a_surface_mounts_discovery_route(scripted_agent: Agent[None]) -> None
     pytest.importorskip("a2a.types")
     from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 
-    from philharmonica.adk.a2a import A2AServer
+    from augments.adk.a2a import A2AServer
 
     card = AgentCard(
         name="support",

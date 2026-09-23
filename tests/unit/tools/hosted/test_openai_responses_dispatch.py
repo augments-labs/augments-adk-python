@@ -6,8 +6,8 @@ from typing import Any, cast
 
 import pytest
 
-from philharmonica.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
-from philharmonica.adk.tools.hosted import (
+from augments.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
+from augments.adk.tools.hosted import (
     CodeExecutionTool,
     FileSearchTool,
     ImageGenerationTool,

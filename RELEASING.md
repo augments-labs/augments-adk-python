@@ -1,6 +1,6 @@
 # Releasing
 
-How the Philharmonica ADK is versioned and how a release is cut. This is
+How the Augments ADK is versioned and how a release is cut. This is
 maintainer guidance, written for humans and AI agents alike — for landing a
 change, see [`CONTRIBUTING.md`](CONTRIBUTING.md). Contributors never touch
 versions.
@@ -11,7 +11,7 @@ versions.
 
 ## What a release is
 
-The ADK ships as a **public** package on PyPI (`philharmonica-adk`). A
+The ADK ships as a **public** package on PyPI (`augments-adk`). A
 release is a git tag `vX.Y.Z` on `main` plus a GitHub Release whose notes
 come from `CHANGELOG.md`. The release workflow builds the wheel and sdist,
 verifies them (twine check, clean-venv install, import + CLI smoke), and
@@ -26,12 +26,12 @@ once uploaded to PyPI can never be reused. Merging is the point of no return.
 
 PyPI matches an OIDC token against a publisher registered on the project, and
 that registration names **one workflow file**. The publisher for
-`philharmonica-adk` must therefore be:
+`augments-adk` must therefore be:
 
 | Field | Value |
 | --- | --- |
 | Owner | `augments-labs` |
-| Repository | `philharmonica-adk-python` |
+| Repository | `augments-adk-python` |
 | Workflow name | `release-publish.yml` |
 | Environment | `pypi` |
 
@@ -52,10 +52,10 @@ covers.
 A release makes its SemVer promise about all of:
 
 - **The importable API** — every name exported from a package `__all__` under
-  `philharmonica.adk` and documented in `docs/`: `Agent`, `Runner`, the `LLM` ABC,
+  `augments.adk` and documented in `docs/`: `Agent`, `Runner`, the `LLM` ABC,
   tools, guardrails, handoffs, swarms / graphs / flows, and their public
   attributes and signatures.
-- **The CLI** — the `philharmonica` commands, their arguments, and documented output.
+- **The CLI** — the `augments` commands, their arguments, and documented output.
 - **Declarative config** — the JSON / YAML agent and topology schema accepted
   by `load_agent` / `load_topology`.
 - **Persisted formats** — anything the ADK writes and later reads back: session
@@ -161,7 +161,7 @@ highest tier reached by any change in it decides.
 
 Nobody bumps in a contribution PR. The version is decided once per release,
 by the maintainer, on the release branch. A PR that edits the
-`version` in `pyproject.toml` / `src/philharmonica/adk/__init__.py`, or adds a
+`version` in `pyproject.toml` / `src/augments/adk/__init__.py`, or adds a
 dated `CHANGELOG.md` heading, will be asked to drop it — two parallel PRs
 cannot both own the next number.
 
@@ -172,7 +172,7 @@ Contributors *do* add `CHANGELOG.md` entries under `[Unreleased]`.
 The maintainer cuts the release branch;
 [Commitizen](https://commitizen-tools.github.io/commitizen/) performs the
 atomic version bump, keeping `pyproject.toml:version` and
-`src/philharmonica/adk/__init__.py:__version__` in lockstep, and two GitHub
+`src/augments/adk/__init__.py:__version__` in lockstep, and two GitHub
 Actions workflows take over once the release PR merges.
 
 There is a third place the version appears: `uv.lock` records the workspace

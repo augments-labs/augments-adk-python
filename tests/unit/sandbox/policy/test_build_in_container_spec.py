@@ -13,12 +13,12 @@ from typing import Literal
 
 import pytest
 
-from philharmonica.adk.exceptions import (
+from augments.adk.exceptions import (
     SandboxConfigurationError,
     UnsupportedMountPatternError,
 )
-from philharmonica.adk.sandbox.policy.mounts import build_in_container_mount_spec
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.sandbox.policy.mounts import build_in_container_mount_spec
+from augments.adk.types.sandbox.mounts import (
     AzureBlobMount,
     BoxMount,
     FuseMountPattern,

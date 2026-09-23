@@ -12,9 +12,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import SandboxConfigurationError
-from philharmonica.adk.sandbox.policy.mounts import build_docker_volume_mount_spec
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.exceptions import SandboxConfigurationError
+from augments.adk.sandbox.policy.mounts import build_docker_volume_mount_spec
+from augments.adk.types.sandbox.mounts import (
     DockerVolumeMountStrategy,
     GCSMount,
     InContainerMountStrategy,

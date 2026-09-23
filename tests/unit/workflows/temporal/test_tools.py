@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.tools``.
+"""Tests for ``augments.adk.workflows.temporal.tools``.
 
 Covers:
 - ``activity_tool`` preserves the wrapped function's name as the tool name.
@@ -16,10 +16,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.tools.function_tool import FunctionTool, ToolInvokeFunction, function_tool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.workflows.engine import ToolActivityConfig
-from philharmonica.adk.workflows.temporal.tools import TemporalToolWrapper, activity_tool, to_durable_tool
+from augments.adk.tools.function_tool import FunctionTool, ToolInvokeFunction, function_tool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.workflows.engine import ToolActivityConfig
+from augments.adk.workflows.temporal.tools import TemporalToolWrapper, activity_tool, to_durable_tool
 
 
 async def _sample_activity(value: str) -> str:

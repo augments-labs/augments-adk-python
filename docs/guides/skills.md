@@ -15,7 +15,7 @@ Skills implement the composition-over-inheritance principle: building a
 
 ## Anatomy of a skill
 
-`Skill` is a plain dataclass under `src/philharmonica/adk/skills/skill.py`.
+`Skill` is a plain dataclass under `src/augments/adk/skills/skill.py`.
 Every field is shown below alongside its purpose.
 
 | Field | Type | Purpose |
@@ -43,11 +43,11 @@ Two companion types carry optional detail:
 ## Minimal example
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.run import Runner
-from philharmonica.adk.skills import Skill, SkillGovernance
-from philharmonica.adk.tools import function_tool
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
+from augments.adk.run import Runner
+from augments.adk.skills import Skill, SkillGovernance
+from augments.adk.tools import function_tool
 
 
 @function_tool(name="fetch_article", description="Fetch the text of a web article by URL.")
@@ -123,7 +123,7 @@ For the full treatment see the Concepts page: [Concepts](../concepts/index.md).
 
 ## Skill activation strategies
 
-The `SkillActivation` enum (exported from `philharmonica.adk.skills`) controls
+The `SkillActivation` enum (exported from `augments.adk.skills`) controls
 *when* skill instructions enter the system prompt.
 
 **`LAZY`** (default on `Agent.skill_activation`)
@@ -134,7 +134,7 @@ the LLM can discover them without any extra overhead. Turns that never call
 a skill's tools pay nothing for that skill's instruction text.
 
 ```python
-from philharmonica.adk.skills import SkillActivation
+from augments.adk.skills import SkillActivation
 
 agent = Agent(
     name="Assistant",
@@ -210,7 +210,7 @@ token budget in the developer's hands.
 `SkillGovernance` sets *defaults* for every tool bundled in the skill:
 
 ```python
-from philharmonica.adk.skills import Skill, SkillGovernance
+from augments.adk.skills import Skill, SkillGovernance
 
 billing_skill = Skill(
     name="billing",
@@ -230,7 +230,7 @@ floor, never a ceiling.
 Skill-level guardrails run *before* each tool's own guardrails:
 
 ```python
-from philharmonica.adk.tools.tool_guardrails import ToolGuardrails, tool_input_guardrail, ToolInputGuardrailData, ToolGuardrailFunctionOutput
+from augments.adk.tools.tool_guardrails import ToolGuardrails, tool_input_guardrail, ToolInputGuardrailData, ToolGuardrailFunctionOutput
 
 
 @tool_input_guardrail(name="billing_pii_check")
@@ -307,7 +307,7 @@ import them wherever agents are built:
 
 ```python
 # myapp/skills/__init__.py
-from philharmonica.adk.skills import Skill, SkillGovernance, SkillMetadata
+from augments.adk.skills import Skill, SkillGovernance, SkillMetadata
 from myapp.tools.research import fetch_article, summarise
 from myapp.tools.billing import lookup_invoice, charge_card
 
@@ -330,7 +330,7 @@ billing_skill = Skill(
 
 ```python
 # myapp/agents/support.py
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 from myapp.skills import billing_skill, research_skill
 
 support_agent = Agent(
@@ -342,7 +342,7 @@ support_agent = Agent(
 
 ```python
 # myapp/agents/billing_only.py
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 from myapp.skills import billing_skill
 
 billing_agent = Agent(
@@ -355,7 +355,7 @@ billing_agent = Agent(
 Use `SkillSet` to keep related skills together and query them at build time:
 
 ```python
-from philharmonica.adk.skills import SkillSet
+from augments.adk.skills import SkillSet
 
 finance_skills = SkillSet(name="finance", skills=[billing_skill, tax_skill, fx_skill])
 
@@ -375,8 +375,8 @@ LLM itself decide which skill to load. `SkillDiscoveryToolset` generates
 `FunctionTool`s that the LLM calls to introspect the skill catalogue:
 
 ```python
-from philharmonica.adk.skills import Skill, SkillDiscoveryToolset
-from philharmonica.adk.skills import RECOMMENDED_SKILL_INSTRUCTIONS, prompt_with_skill_instructions
+from augments.adk.skills import Skill, SkillDiscoveryToolset
+from augments.adk.skills import RECOMMENDED_SKILL_INSTRUCTIONS, prompt_with_skill_instructions
 
 skills = [research_skill, billing_skill, safety_skill]
 discovery = SkillDiscoveryToolset(skills=skills)

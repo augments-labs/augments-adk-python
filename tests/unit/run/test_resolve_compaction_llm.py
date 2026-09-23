@@ -4,15 +4,15 @@ from __future__ import annotations
 
 from collections.abc import AsyncIterator
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.llm_calls import resolve_compaction_llm, resolve_llm
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents import Agent
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.run.llm_calls import resolve_compaction_llm, resolve_llm
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import Tool
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
     LLMStreamEvent,

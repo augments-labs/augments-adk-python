@@ -20,8 +20,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SkillsConfigError
-from philharmonica.adk.sandbox.capabilities.skills import (
+from augments.adk.exceptions.exceptions import SkillsConfigError
+from augments.adk.sandbox.capabilities.skills import (
     GitRepoLazySkillSource,
     LocalDirLazySkillSource,
     SkillsCapability,
@@ -129,7 +129,7 @@ class TestGitCloneFailureDegradesGracefully:
     @pytest.mark.asyncio
     async def test_instructions_survive_clone_failure(self) -> None:
         """System-prompt construction must not crash when the clone fails."""
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.manifest import Manifest
 
         source = GitRepoLazySkillSource(repo="owner/name")
 

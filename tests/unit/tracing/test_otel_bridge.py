@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.tracing.otel``.
+"""Tests for ``augments.adk.tracing.otel``.
 
 Exercises the OpenTelemetry bridge against OTel's own
 ``InMemorySpanExporter``
@@ -19,12 +19,12 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.exceptions import TracingDependencyError
-from philharmonica.adk.tracing import (
+from augments.adk.exceptions import TracingDependencyError
+from augments.adk.tracing import (
     custom_span,
     set_tracer,
 )
-from philharmonica.adk.types.tracing import (
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -44,7 +44,7 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
     InMemorySpanExporter,
 )
 
-from philharmonica.adk.tracing.otel import OTelTracer
+from augments.adk.tracing.otel import OTelTracer
 
 
 @pytest.fixture
@@ -81,8 +81,8 @@ def test_finish_ends_span_even_when_flatten_raises() -> None:
     span in the exporter's buffer. ``end()`` now runs in a ``finally``, so
     the span is always closed even when attribute flushing fails.
     """
-    from philharmonica.adk.tracing.otel.otel_span import OTelSpan
-    from philharmonica.adk.types.tracing.span_data import CustomSpanData
+    from augments.adk.tracing.otel.otel_span import OTelSpan
+    from augments.adk.types.tracing.span_data import CustomSpanData
 
     exporter = InMemorySpanExporter()
     provider = TracerProvider()
@@ -123,11 +123,11 @@ def test_agent_span_emits_otel_span_with_attributes(
 
     otel_span = _finished_span_by_name(exporter, "agent.planner")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["philharmonica.agent.name"] == "planner"
-    assert list(attrs["philharmonica.agent.handoffs"]) == ["writer", "researcher"]
-    assert list(attrs["philharmonica.agent.tools"]) == ["search"]
-    assert attrs["philharmonica.agent.output_type"] == "PlanResult"
-    assert attrs["philharmonica.metadata.tenant"] == "acme"
+    assert attrs["augments.agent.name"] == "planner"
+    assert list(attrs["augments.agent.handoffs"]) == ["writer", "researcher"]
+    assert list(attrs["augments.agent.tools"]) == ["search"]
+    assert attrs["augments.agent.output_type"] == "PlanResult"
+    assert attrs["augments.metadata.tenant"] == "acme"
 
 
 def test_generation_span_uses_genai_semconv(
@@ -147,7 +147,7 @@ def test_generation_span_uses_genai_semconv(
 
     otel_span = _finished_span_by_name(exporter, "llm.generation")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["gen_ai.system"] == "philharmonica"
+    assert attrs["gen_ai.system"] == "augments"
     assert attrs["gen_ai.request.model"] == "claude-opus-4-7"
     assert attrs["gen_ai.usage.input_tokens"] == 123
     assert attrs["gen_ai.usage.output_tokens"] == 45
@@ -178,8 +178,8 @@ def test_function_span_becomes_mcp_prefix_when_mcp_data_present(
 
     mcp_span = _finished_span_by_name(exporter, "mcp.fetch_url")
     attrs = dict(mcp_span.attributes or {})
-    assert attrs["philharmonica.mcp.server_name"] == "browser"
-    assert attrs["philharmonica.mcp.tool_name"] == "fetch_url"
+    assert attrs["augments.mcp.server_name"] == "browser"
+    assert attrs["augments.mcp.tool_name"] == "fetch_url"
 
 
 def test_handoff_span_records_from_and_to(exporter_and_tracer: Any) -> None:
@@ -190,8 +190,8 @@ def test_handoff_span_records_from_and_to(exporter_and_tracer: Any) -> None:
 
     otel_span = _finished_span_by_name(exporter, "agent.handoff")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["philharmonica.handoff.from"] == "triage"
-    assert attrs["philharmonica.handoff.to"] == "billing"
+    assert attrs["augments.handoff.from"] == "triage"
+    assert attrs["augments.handoff.to"] == "billing"
 
 
 def test_guardrail_span_flags_trigger(exporter_and_tracer: Any) -> None:
@@ -202,8 +202,8 @@ def test_guardrail_span_flags_trigger(exporter_and_tracer: Any) -> None:
 
     otel_span = _finished_span_by_name(exporter, "guardrail.pii_check")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["philharmonica.guardrail.name"] == "pii_check"
-    assert attrs["philharmonica.guardrail.triggered"] is True
+    assert attrs["augments.guardrail.name"] == "pii_check"
+    assert attrs["augments.guardrail.triggered"] is True
 
 
 def test_response_span_records_response_id(exporter_and_tracer: Any) -> None:
@@ -214,7 +214,7 @@ def test_response_span_records_response_id(exporter_and_tracer: Any) -> None:
 
     otel_span = _finished_span_by_name(exporter, "llm.response")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["gen_ai.system"] == "philharmonica"
+    assert attrs["gen_ai.system"] == "augments"
     assert attrs["gen_ai.response.id"] == "resp_xyz"
 
 
@@ -228,9 +228,9 @@ def test_custom_span_uses_caller_name_and_data(
 
     otel_span = _finished_span_by_name(exporter, "rank_results")
     attrs = dict(otel_span.attributes or {})
-    assert attrs["philharmonica.span.name"] == "rank_results"
-    assert attrs["philharmonica.custom.n"] == 10
-    assert attrs["philharmonica.custom.strategy"] == "bm25"
+    assert attrs["augments.span.name"] == "rank_results"
+    assert attrs["augments.custom.n"] == 10
+    assert attrs["augments.custom.strategy"] == "bm25"
 
 
 def test_nested_spans_form_parent_chain(exporter_and_tracer: Any) -> None:
@@ -303,4 +303,4 @@ def test_construction_fails_with_helpful_error_when_otel_missing(
 
     message = str(exc_info.value)
     assert "opentelemetry" in message
-    assert "philharmonica-adk[otel]" in message
+    assert "augments-adk[otel]" in message

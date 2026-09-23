@@ -6,9 +6,9 @@ worker can resolve model lookups without a real provider.
 
 Covered:
     - TemporalLLM.install() wraps the agent LLM correctly
-    - A subclass of PhilharmonicaWorkflow running Runner.arun() inside @workflow.run
+    - A subclass of AugmentsWorkflow running Runner.arun() inside @workflow.run
       produces the expected output
-    - The worker picks up the registered model from PhilharmonicaTemporalPlugin
+    - The worker picks up the registered model from AugmentsTemporalPlugin
 """
 
 from __future__ import annotations
@@ -24,17 +24,17 @@ from temporalio import workflow
 from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.workflows.temporal import (
+from augments.adk.agents.agent import Agent
+from augments.adk.llms.llm import LLM
+from augments.adk.run.runner import Runner
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.workflows.temporal import (
+    AugmentsTemporalPlugin,
+    AugmentsWorkflow,
     ModelActivityConfig,
-    PhilharmonicaTemporalPlugin,
-    PhilharmonicaWorkflow,
     TemporalLLM,
 )
-from philharmonica.adk.workflows.temporal.activity import invoke_model_activity, register_model
+from augments.adk.workflows.temporal.activity import invoke_model_activity, register_model
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -56,7 +56,7 @@ def _fixed_response(text: str) -> LLMResponse:
 
 
 def _make_workflow_class(agent: Agent) -> type:
-    """Return a concrete PhilharmonicaWorkflow subclass capturing *agent* at definition time.
+    """Return a concrete AugmentsWorkflow subclass capturing *agent* at definition time.
 
     Temporal requires workflows to be defined at module level for sandbox
     compatibility, but for test isolation we create a fresh class per test
@@ -64,7 +64,7 @@ def _make_workflow_class(agent: Agent) -> type:
     """
 
     @workflow.defn
-    class _EchoAgentWorkflow(PhilharmonicaWorkflow):
+    class _EchoAgentWorkflow(AugmentsWorkflow):
         """Minimal workflow: call Runner.arun(agent, prompt) and return output."""
 
         @override
@@ -95,13 +95,13 @@ async def test_basic_agent_workflow_produces_expected_output() -> None:
     5. client.execute_workflow() drives the workflow and we assert on the output.
 
     Why skipped: Temporal's workflow sandbox performs deep import restrictions that
-    make patching philharmonica.adk internals inside the workflow body unreliable without
+    make patching augments.adk internals inside the workflow body unreliable without
     a carefully pre-configured passthrough module list.  The test scaffolding is
     correct; enabling it requires listing every patched module in
-    PhilharmonicaTemporalPlugin.extra_passthrough_modules or registering the mock LLM
+    AugmentsTemporalPlugin.extra_passthrough_modules or registering the mock LLM
     directly via plugin.register_model() before building worker kwargs.
     """
-    from philharmonica.adk.llms import LiteLLM
+    from augments.adk.llms import LiteLLM
 
     inner_llm = LiteLLM(model="gpt-4o-mini")
     agent = Agent(name="test-agent", system_prompt="Be concise.")
@@ -125,7 +125,7 @@ async def test_basic_agent_workflow_produces_expected_output() -> None:
 
     echo_workflow = _make_workflow_class(agent)
 
-    plugin = PhilharmonicaTemporalPlugin()
+    plugin = AugmentsTemporalPlugin()
 
     async with (
         await WorkflowEnvironment.start_time_skipping() as env,
@@ -154,7 +154,7 @@ async def test_temporal_llm_install_wraps_agent_llm() -> None:
     This test does NOT require a Temporal server — it only validates the
     install() class method's wrapping behaviour.
     """
-    from philharmonica.adk.llms import LiteLLM
+    from augments.adk.llms import LiteLLM
 
     inner = LiteLLM(model="gpt-4o-mini")
     agent = Agent(name="wrap-test", system_prompt="test")
@@ -169,7 +169,7 @@ async def test_temporal_llm_install_wraps_agent_llm() -> None:
 @pytest.mark.integration
 async def test_temporal_llm_install_idempotent() -> None:
     """Calling TemporalLLM.install() twice does not double-wrap the LLM."""
-    from philharmonica.adk.llms import LiteLLM
+    from augments.adk.llms import LiteLLM
 
     inner = LiteLLM(model="gpt-4o-mini")
     agent = Agent(name="idempotent-test", system_prompt="test")
@@ -211,11 +211,11 @@ async def test_temporal_llm_calls_wrapped_llm_outside_workflow() -> None:
 
 @pytest.mark.integration
 async def test_plugin_register_model_adds_to_activity_registry() -> None:
-    """PhilharmonicaTemporalPlugin.register_model() populates the activity-level registry."""
-    from philharmonica.adk.llms import LiteLLM
-    from philharmonica.adk.workflows.temporal.activity import get_model
+    """AugmentsTemporalPlugin.register_model() populates the activity-level registry."""
+    from augments.adk.llms import LiteLLM
+    from augments.adk.workflows.temporal.activity import get_model
 
-    plugin = PhilharmonicaTemporalPlugin()
+    plugin = AugmentsTemporalPlugin()
     llm = LiteLLM(model="gpt-4o-mini")
 
     plugin.register_model("registry-test-key", llm)

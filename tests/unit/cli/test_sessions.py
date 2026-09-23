@@ -1,4 +1,4 @@
-"""Tests for the ``philharmonica sessions`` group."""
+"""Tests for the ``augments sessions`` group."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 APP = "support"
 
@@ -20,8 +20,8 @@ def seeded_db(tmp_path: Path) -> Path:
     db = tmp_path / "sessions.sqlite"
 
     async def seed() -> None:
-        from philharmonica.adk.session.session_event import SessionEvent
-        from philharmonica.adk.session.sqlite_multi_sessions import SQLiteMultiSessions
+        from augments.adk.session.session_event import SessionEvent
+        from augments.adk.session.sqlite_multi_sessions import SQLiteMultiSessions
 
         manager = SQLiteMultiSessions(path=db, app_name=APP)
         first = await manager.create("conv-1", user_id="default")

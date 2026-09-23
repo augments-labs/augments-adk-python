@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.capabilities.base.SandboxCapability``."""
+"""Tests for ``augments.adk.sandbox.capabilities.base.SandboxCapability``."""
 
 from __future__ import annotations
 
@@ -9,9 +9,9 @@ from typing import Any, Literal
 import pytest
 from pydantic import Field
 
-from philharmonica.adk.sandbox.capabilities.base import SandboxCapability
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.permissions import User
+from augments.adk.sandbox.capabilities.base import SandboxCapability
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.permissions import User
 
 
 class _TestCapability(SandboxCapability):

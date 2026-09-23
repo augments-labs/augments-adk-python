@@ -17,7 +17,7 @@ slot opens (`"wait"`) or returns a clear error to the LLM (`"error"`).
 ## Quick example
 
 ```python
-from philharmonica.adk.tools import ToolRateLimit, function_tool
+from augments.adk.tools import ToolRateLimit, function_tool
 
 
 @function_tool(

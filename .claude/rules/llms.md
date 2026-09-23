@@ -1,6 +1,6 @@
 ---
 paths:
-  - "src/philharmonica/adk/llms/**/*.py"
+  - "src/augments/adk/llms/**/*.py"
 ---
 
 # LLM Layer — CRITICAL

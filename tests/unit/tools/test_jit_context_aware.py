@@ -3,8 +3,8 @@
 import asyncio
 from unittest.mock import MagicMock
 
-from philharmonica.adk.context.directives import DirectiveStore
-from philharmonica.adk.tools.builtin.jit_context_aware_tool import (
+from augments.adk.context.directives import DirectiveStore
+from augments.adk.tools.builtin.jit_context_aware_tool import (
     ContextStatsContextAwareTool,
     InMemoryNoteStore,
     JITContextAwareTool,
@@ -15,7 +15,7 @@ from philharmonica.adk.tools.builtin.jit_context_aware_tool import (
     _extract_text_from_item,
     _item_type_to_role,
 )
-from philharmonica.adk.tools.tool_context import (
+from augments.adk.tools.tool_context import (
     ExecutionAwareToolContext,
     HistoryAwareToolContext,
     ToolContext,
@@ -281,7 +281,7 @@ class TestJITContextAwareToolExpansion:
         assert save.history_aware is False
 
     def test_subclasses_builtin_tool(self) -> None:
-        from philharmonica.adk.tools.builtin.builtin_tool import BuiltinTool
+        from augments.adk.tools.builtin.builtin_tool import BuiltinTool
 
         tools = _make_jit_tools()
         assert isinstance(tools[0], BuiltinTool)
@@ -517,7 +517,7 @@ class TestManageContextHandler:
     """Tests for manage_context handler."""
 
     def test_compact_directive(self) -> None:
-        from philharmonica.adk.context.directives import CompactDirective
+        from augments.adk.context.directives import CompactDirective
 
         tools = _make_jit_tools()
         manage = next(t for t in tools if t.name == "manage_context")
@@ -542,7 +542,7 @@ class TestManageContextHandler:
         assert directive.preserve == 5
 
     def test_drop_directive(self) -> None:
-        from philharmonica.adk.context.directives import DropDirective
+        from augments.adk.context.directives import DropDirective
 
         tools = _make_jit_tools()
         manage = next(t for t in tools if t.name == "manage_context")
@@ -584,7 +584,7 @@ class TestManageContextHandler:
         assert manage.directives.count == 0
 
     def test_directives_shared_across_tools(self) -> None:
-        from philharmonica.adk.context.directives import DirectiveStore
+        from augments.adk.context.directives import DirectiveStore
 
         tools = _make_jit_tools()
         manage = next(t for t in tools if t.name == "manage_context")
@@ -603,7 +603,7 @@ class TestFunctionToolHistoryAwareFlag:
     """Tests for the history_aware flag on FunctionTool."""
 
     def test_history_aware_implies_execution_aware(self) -> None:
-        from philharmonica.adk.tools.function_tool import FunctionTool
+        from augments.adk.tools.function_tool import FunctionTool
 
         tool = FunctionTool(
             name="test",
@@ -615,7 +615,7 @@ class TestFunctionToolHistoryAwareFlag:
         assert tool.execution_aware is True
 
     def test_default_false(self) -> None:
-        from philharmonica.adk.tools.function_tool import FunctionTool
+        from augments.adk.tools.function_tool import FunctionTool
 
         tool = FunctionTool(
             name="test",
@@ -635,7 +635,7 @@ class TestEvictTiebreaker:
 
     def test_evict_removes_oldest_among_equal_importance(self) -> None:
         """When several notes tie at the lowest importance, the oldest is evicted."""
-        from philharmonica.adk.tools.builtin.jit_context_aware_tool import NoteEntry
+        from augments.adk.tools.builtin.jit_context_aware_tool import NoteEntry
 
         store = InMemoryNoteStore(capacity=3)
         # Three notes, all importance=1, with explicit ascending created_at so
@@ -654,7 +654,7 @@ class TestEvictTiebreaker:
 
     def test_evict_prefers_lowest_importance_then_oldest(self) -> None:
         """Importance dominates; created_at only breaks ties within a tier."""
-        from philharmonica.adk.tools.builtin.jit_context_aware_tool import NoteEntry
+        from augments.adk.tools.builtin.jit_context_aware_tool import NoteEntry
 
         store = InMemoryNoteStore(capacity=3)
         # A newer-but-lower-importance note must be evicted before an older
@@ -674,8 +674,8 @@ class TestDetectJitDirectivesOrdering:
 
     def test_manage_context_not_first_still_detected(self) -> None:
         """manage_context placed after another JIT tool must not be a silent no-op."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.loop import _detect_jit_directives
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.loop import _detect_jit_directives
 
         shared_store = InMemoryNoteStore()
         save = SaveNoteContextAwareTool(store=shared_store)
@@ -707,8 +707,8 @@ class TestDetectJitDirectivesOrdering:
 
     def test_falls_back_to_first_jit_when_no_manage_tool(self) -> None:
         """Agents without a ManageContextAwareTool still resolve a JIT store."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.loop import _detect_jit_directives
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.loop import _detect_jit_directives
 
         store = InMemoryNoteStore()
         save = SaveNoteContextAwareTool(store=store)
@@ -719,8 +719,8 @@ class TestDetectJitDirectivesOrdering:
         assert detected is save.directives
 
     def test_no_jit_tools_returns_none(self) -> None:
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.loop import _detect_jit_directives
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.loop import _detect_jit_directives
 
         agent = Agent(name="bare-agent", system_prompt="do nothing", tools=[])
         assert _detect_jit_directives(agent) is None
@@ -879,7 +879,7 @@ class TestManageContextPreserveClamp:
         result = asyncio.run(manage.on_invoke(ctx, '{"action":"compact","preserve":5}'))
         assert "Scheduled" in result
         # preserve must be clamped to msg_count - 1 = 1
-        from philharmonica.adk.context.directives import CompactDirective
+        from augments.adk.context.directives import CompactDirective
 
         directive = manage.directives.consume()[0]
         assert isinstance(directive, CompactDirective)

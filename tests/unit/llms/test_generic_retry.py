@@ -12,8 +12,8 @@ from typing import Optional
 
 import pytest
 
-from philharmonica.adk.llms.retry import call_with_retry
-from philharmonica.adk.types.llms import LLMRetryErrorKind, LLMRetryPolicy
+from augments.adk.llms.retry import call_with_retry
+from augments.adk.types.llms import LLMRetryErrorKind, LLMRetryPolicy
 
 
 def _timeout_classifier(exc: BaseException) -> Optional[LLMRetryErrorKind]:
@@ -103,7 +103,7 @@ class TestGenericCallWithRetry:
 
         # Explicitly include timeout so the retry is attempted.
         policy = LLMRetryPolicy(max_retries=2, initial_delay=0.001, jitter=False, retry_on=frozenset(["timeout"]))
-        with caplog.at_level("WARNING", logger="philharmonica.adk.llms.retry"):
+        with caplog.at_level("WARNING", logger="augments.adk.llms.retry"):
             await call_with_retry(op, policy, _timeout_classifier, model="gpt-5.1")
         assert any("gpt-5.1" in record.getMessage() for record in caplog.records)
 

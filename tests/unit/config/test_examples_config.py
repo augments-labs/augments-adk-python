@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from philharmonica.adk.config import load_topology
-from philharmonica.adk.handoffs import Handoff
+from augments.adk.config import load_topology
+from augments.adk.handoffs import Handoff
 
 _EXAMPLES = Path(__file__).resolve().parents[3] / "examples" / "config"
 

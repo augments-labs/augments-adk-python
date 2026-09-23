@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.llms.gemini.gemini_converter import GeminiConverter
-from philharmonica.adk.tools.hosted import (
+from augments.adk.llms.gemini.gemini_converter import GeminiConverter
+from augments.adk.tools.hosted import (
     CodeExecutionTool,
     FileSearchTool,
     ImageGenerationTool,
@@ -71,7 +71,7 @@ class TestGeminiUnsupported:
 
 class TestGeminiCombinedTools:
     def test_function_and_hosted_in_same_request(self) -> None:
-        from philharmonica.adk.tools import function_tool
+        from augments.adk.tools import function_tool
 
         @function_tool
         def lookup(x: int) -> int:

@@ -44,7 +44,7 @@ At least one of `max_chars` or `max_tokens` must be provided.
 ## Basic usage
 
 ```python
-from philharmonica.adk.tools import function_tool, trim_tool_output
+from augments.adk.tools import function_tool, trim_tool_output
 
 
 @function_tool
@@ -107,7 +107,7 @@ assert trimmed.on_invoke is not my_tool.on_invoke
 
 ## See also
 
-- `src/philharmonica/adk/tools/tool_output_trimmer.py` — implementation
+- `src/augments/adk/tools/tool_output_trimmer.py` — implementation
 - `tests/unit/tools/test_tool_output_trimmer.py` — behavior tests
-- `src/philharmonica/adk/tools/function_tool.py` — `FunctionTool.max_result_tokens`
+- `src/augments/adk/tools/function_tool.py` — `FunctionTool.max_result_tokens`
   (the alternative, declared at decoration time)

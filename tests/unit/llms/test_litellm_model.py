@@ -20,11 +20,11 @@ from types import SimpleNamespace
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.llm_usage import LLMUsage
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.tools import ToolExecutionMode
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_usage import LLMUsage
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.tools import ToolExecutionMode
 
 
 def _model_response() -> SimpleNamespace:

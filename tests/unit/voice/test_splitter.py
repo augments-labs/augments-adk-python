@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.voice.splitter import sentence_splitter
+from augments.adk.voice.splitter import sentence_splitter
 
 
 def test_releases_completed_sentence_once_long_enough():

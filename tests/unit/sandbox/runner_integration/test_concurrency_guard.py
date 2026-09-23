@@ -6,8 +6,8 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxConcurrencyError
-from philharmonica.adk.sandbox.runner_integration.concurrency_guard import (
+from augments.adk.exceptions.exceptions import SandboxConcurrencyError
+from augments.adk.sandbox.runner_integration.concurrency_guard import (
     SandboxConcurrencyGuard,
 )
 

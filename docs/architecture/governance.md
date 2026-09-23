@@ -17,7 +17,7 @@ flowchart LR
   router -->|tenant C| qc[(queue-c)] --> wc[worker pool C]
 ```
 
-Implementation lives at `src/philharmonica/adk/workflows/temporal/routing.py`.
+Implementation lives at `src/augments/adk/workflows/temporal/routing.py`.
 
 ## Tool permissions
 
@@ -28,32 +28,32 @@ reason). The gate runs at every tool-execution call site, including
 the Temporal-activity path. A denial does not silently drop — it
 surfaces as a refused-tool item the model can react to.
 
-The permission types live under `src/philharmonica/adk/types/permissions/`.
+The permission types live under `src/augments/adk/types/permissions/`.
 
 ## Audit substrate
 
 `AuditEvent`s are emitted at every governance boundary (handoff, tool
 call, HITL resolution, tenant boundary cross). Sinks (all under
-`src/philharmonica/adk/audit/`):
+`src/augments/adk/audit/`):
 
 | Sink                   | Module                                      | Use for                          |
 | ---------------------- | ------------------------------------------- | -------------------------------- |
-| `InMemoryAuditSink`    | `src/philharmonica/adk/audit/sink.py`              | Tests, single-process dev.       |
-| `JsonlFileAuditSink`   | `src/philharmonica/adk/audit/sink.py`              | Local dev, single-machine.       |
-| `S3AuditSink`          | `src/philharmonica/adk/audit/sinks/s3.py`          | Cheap long-term retention.       |
-| `PostgresAuditSink`    | `src/philharmonica/adk/audit/sinks/postgres.py`    | Queryable audit log.             |
+| `InMemoryAuditSink`    | `src/augments/adk/audit/sink.py`              | Tests, single-process dev.       |
+| `JsonlFileAuditSink`   | `src/augments/adk/audit/sink.py`              | Local dev, single-machine.       |
+| `S3AuditSink`          | `src/augments/adk/audit/sinks/s3.py`          | Cheap long-term retention.       |
+| `PostgresAuditSink`    | `src/augments/adk/audit/sinks/postgres.py`    | Queryable audit log.             |
 
 ## Cost ledger
 
 Per-run cost accounting. Each LLM call appends a `CostEntry` to the
 ledger (`CostLedger` is a Protocol — implementations live in
-`src/philharmonica/adk/budgets/`). The `LLMRouter` ABC consults the ledger
+`src/augments/adk/budgets/`). The `LLMRouter` ABC consults the ledger
 when picking a model; shipped implementations:
 
-- `CheapestFirstRouter` (`src/philharmonica/adk/llms/routing/cheapest_first.py`)
-- `LatencyFirstRouter` (`src/philharmonica/adk/llms/routing/latency_first.py`)
+- `CheapestFirstRouter` (`src/augments/adk/llms/routing/cheapest_first.py`)
+- `LatencyFirstRouter` (`src/augments/adk/llms/routing/latency_first.py`)
 
-Custom routers subclass `LLMRouter` (`src/philharmonica/adk/llms/routing/router.py`).
+Custom routers subclass `LLMRouter` (`src/augments/adk/llms/routing/router.py`).
 
 ## Tracing (OpenTelemetry)
 

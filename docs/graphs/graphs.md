@@ -6,7 +6,7 @@ under BSP (Bulk Synchronous Parallel) supersteps.
 
 ## Why Graph Exists
 
-Philharmonica already ships two multi-agent primitives:
+Augments already ships two multi-agent primitives:
 
 - `Handoff` — one-shot linear delegation (Agent A → Agent B, run ends).
 - `Swarm` — iterative collaboration with cycles (A ↔ B ↔ C until an explicit
@@ -41,7 +41,7 @@ from the result type.
 runs targets with partial inputs), a broken-parallel bug in older versions, and
 no `graph_path` tag on nested events so inner-graph activity is opaque.
 
-**Philharmonica Graph** adds what neither ships:
+**Augments Graph** adds what neither ships:
 
 1. Single routing mechanism — `edge(from, to, when=predicate)` with an optional
    pure predicate. No dual routing.
@@ -54,8 +54,8 @@ no `graph_path` tag on nested events so inner-graph activity is opaque.
 
 ```python
 import asyncio
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs import Graph
+from augments.adk.run.runner import Runner
 
 # Two callable nodes, one edge, one run.
 async def summarize(text: str) -> str:
@@ -112,7 +112,7 @@ graph.node("legal", legal_subgraph)
 graph.node("reformat", lambda text: text.strip())
 
 # With explicit fan-in strategy
-from philharmonica.adk.graphs import Merge, JoinSemantics
+from augments.adk.graphs import Merge, JoinSemantics
 
 graph.node("synthesizer", synthesizer_agent, merge=Merge.concat_text)
 graph.node("first-wins", voting_agent, join=JoinSemantics.OR)
@@ -166,7 +166,7 @@ terminal id. Terminal nodes must have no outgoing edges.
 Attach a `GraphConfig` (budgets and knobs). Overrides the default `GraphConfig()`.
 
 ```python
-from philharmonica.adk.graphs import GraphConfig
+from augments.adk.graphs import GraphConfig
 
 graph.with_config(GraphConfig(
     max_supersteps=20,
@@ -206,7 +206,7 @@ Every routing decision is exactly one `edge()` call with an optional `when=`
 predicate. The predicate receives the upstream `NodeResult` and returns a boolean.
 
 ```python
-from philharmonica.adk.orchestration.executable import NodeResult
+from augments.adk.orchestration.executable import NodeResult
 
 def route_approved(result: NodeResult) -> bool:
     # Output is whatever the upstream node returned
@@ -246,7 +246,7 @@ have arrived. The safer choice — prevents running with partial inputs.
 Use for "first-to-respond wins" patterns.
 
 ```python
-from philharmonica.adk.graphs import JoinSemantics
+from augments.adk.graphs import JoinSemantics
 
 # OR-join: fires when either fast_path or slow_path arrives first
 graph.node("responder", respond_agent, join=JoinSemantics.OR)
@@ -271,7 +271,7 @@ by source node id before calling the merge function, regardless of task completi
 order.
 
 ```python
-from philharmonica.adk.graphs import Merge
+from augments.adk.graphs import Merge
 
 # Fan-in from two parallel researchers: label + join their outputs
 graph.node("synthesizer", synthesizer_agent, merge=Merge.concat_text)
@@ -303,7 +303,7 @@ Async. Returns `GraphRunResult`.
 
 ```python
 import asyncio
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 result = asyncio.run(Runner.arun_graph(pipeline, "Draft a legal brief on X."))
 ```
@@ -382,8 +382,8 @@ Subclass `GraphHooks` and override the lifecycle methods you care about:
 
 ```python
 import logging
-from philharmonica.adk.graphs import GraphHooks
-from philharmonica.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs import GraphHooks
+from augments.adk.graphs.result import GraphRunStatus
 
 logger = logging.getLogger(__name__)
 
@@ -425,7 +425,7 @@ Checkpointers implement this protocol. User-defined providers can use it to
 attach a combination of observers without subclassing `GraphHooks` directly:
 
 ```python
-from philharmonica.adk.graphs import HookProvider, HookRegistry
+from augments.adk.graphs import HookProvider, HookRegistry
 
 class MetricsSink(HookProvider):
     def register(self, registry: HookRegistry) -> None:
@@ -456,7 +456,7 @@ Every event carries `graph_path: tuple[str, ...]` — a stack of graph ids from
 the outermost to the innermost graph. Nesting depth is `len(event["graph_path"])`.
 
 ```python
-from philharmonica.adk.graphs import NodeEndEvent, GRAPH_END
+from augments.adk.graphs import NodeEndEvent, GRAPH_END
 
 # Dict access (wire-safe, works after json.dumps/loads)
 if ev["type"] == GRAPH_END:
@@ -484,7 +484,7 @@ each node fires and after the graph ends, using the hook-provider pattern —
 the graph loop itself contains no persistence code.
 
 ```python
-from philharmonica.adk.graphs import InMemoryCheckpointer
+from augments.adk.graphs import InMemoryCheckpointer
 
 checkpointer = InMemoryCheckpointer()
 
@@ -513,7 +513,7 @@ from where a previous run left off. The loop skips initialisation and resumes
 from `state.superstep + 1`.
 
 ```python
-from philharmonica.adk.run.graph_loop import run_graph_loop
+from augments.adk.run.graph_loop import run_graph_loop
 
 state = await checkpointer.load("my-run-001", pipeline)
 if state is not None:
@@ -542,7 +542,7 @@ if state is not None:
 Implement the `Checkpointer` protocol against your own store:
 
 ```python
-from philharmonica.adk.graphs import Checkpointer, GraphCheckpoint, HookRegistry
+from augments.adk.graphs import Checkpointer, GraphCheckpoint, HookRegistry
 
 class RedisCheckpointer(Checkpointer):
 
@@ -595,7 +595,7 @@ depended on the failed node's output do not fire (their `JoinBarrier` never
 becomes ready), but unaffected parallel branches complete normally.
 
 ```python
-from philharmonica.adk.graphs import GraphConfig
+from augments.adk.graphs import GraphConfig
 
 pipeline = (
     Graph.new("tolerant")

@@ -1,6 +1,6 @@
 import json
 
-from philharmonica.adk.tracing.openinference.conventions import (
+from augments.adk.tracing.openinference.conventions import (
     agent_attrs,
     custom_attrs_by_type,
     function_attrs,
@@ -9,7 +9,7 @@ from philharmonica.adk.tracing.openinference.conventions import (
     handoff_attrs,
     response_attrs,
 )
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.types.tracing.span_data import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -31,7 +31,7 @@ def test_generation_maps_llm_kind_and_token_counts():
     )
     attrs = generation_attrs(data)
     assert attrs["openinference.span.kind"] == "LLM"
-    assert attrs["llm.system"] == "philharmonica"
+    assert attrs["llm.system"] == "augments"
     assert attrs["llm.model_name"] == "claude-3"
     assert attrs["llm.token_count.prompt"] == 11
     assert attrs["llm.token_count.completion"] == 7
@@ -76,10 +76,10 @@ def test_response_attrs_maps_llm_kind():
 def test_handoff_attrs_maps_agent_kind_and_agent_names():
     attrs = handoff_attrs(HandoffSpanData(from_agent="a", to_agent="b"))
     assert attrs["openinference.span.kind"] == "AGENT"
-    assert "philharmonica.handoff.from" in attrs
-    assert attrs["philharmonica.handoff.from"] == "a"
-    assert "philharmonica.handoff.to" in attrs
-    assert attrs["philharmonica.handoff.to"] == "b"
+    assert "augments.handoff.from" in attrs
+    assert attrs["augments.handoff.from"] == "a"
+    assert "augments.handoff.to" in attrs
+    assert attrs["augments.handoff.to"] == "b"
 
 
 def test_custom_attrs_by_type_dispatch_branches():

@@ -33,5 +33,5 @@ each page.
 
 ## Foundations
 
-- **[Exceptions](exceptions.md)** — The framework exception hierarchy rooted at `PhilharmonicaError`.
+- **[Exceptions](exceptions.md)** — The framework exception hierarchy rooted at `AugmentsError`.
 - **[Types](types.md)** — Provider-agnostic wire and history types.

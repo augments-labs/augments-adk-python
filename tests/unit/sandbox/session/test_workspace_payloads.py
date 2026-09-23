@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.workspace_payloads``."""
+"""Tests for ``augments.adk.sandbox.session.workspace_payloads``."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import WorkspaceWriteTypeError
-from philharmonica.adk.sandbox.session.workspace_payloads import coerce_write_payload
+from augments.adk.exceptions.exceptions import WorkspaceWriteTypeError
+from augments.adk.sandbox.session.workspace_payloads import coerce_write_payload
 
 
 def test_coerce_normal_bytes_stream() -> None:

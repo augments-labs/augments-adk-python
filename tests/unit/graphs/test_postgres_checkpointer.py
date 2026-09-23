@@ -10,11 +10,11 @@ from __future__ import annotations
 import pytest
 from pytest_postgresql.factories import postgresql, postgresql_proc
 
-from philharmonica.adk.exceptions import CheckpointConflictError
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.postgres import PostgresCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.exceptions import CheckpointConflictError
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.postgres import PostgresCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
 
 pytestmark = pytest.mark.postgres
 

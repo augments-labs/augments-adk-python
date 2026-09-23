@@ -15,19 +15,19 @@ Covers four confirmed defects in the resume paths:
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.resumption import resume_from_state, resume_from_state_streamed
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.items import ItemHelpers
+from augments.adk.run.config import RunConfig
+from augments.adk.run.resumption import resume_from_state, resume_from_state_streamed
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.items import ItemHelpers
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
 
 def _make_agent(tools, name="test_agent"):
-    from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-    from philharmonica.adk.agents.middleware import Middleware
-    from philharmonica.adk.skills.activation import SkillActivation
+    from augments.adk.agents.agent_guardrails import AgentGuardrails
+    from augments.adk.agents.middleware import Middleware
+    from augments.adk.skills.activation import SkillActivation
 
     return SimpleNamespace(
         name=name,
@@ -62,7 +62,7 @@ def _make_deferred_tool(tool_name="admin_delete", call_id="tc_1"):
 
 def _make_state(approved_tools, context=None):
     """Create a minimal RunState with approved tools."""
-    from philharmonica.adk.run.state import RunState
+    from augments.adk.run.state import RunState
 
     raw_messages = [
         {"role": "user", "content": "test"},
@@ -98,8 +98,8 @@ def _make_state(approved_tools, context=None):
 
 
 def _stub_loop_result(agent):
-    from philharmonica.adk.run.context import RunContext
-    from philharmonica.adk.types.run import RunResult
+    from augments.adk.run.context import RunContext
+    from augments.adk.types.run import RunResult
 
     return RunResult(
         final_output="done",
@@ -132,7 +132,7 @@ class TestTenantIdPreservedOnResume:
             fail_on_tool_error=False,
         )
 
-        with patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop:
+        with patch("augments.adk.run.loop.run_agent_loop") as mock_loop:
             mock_loop.return_value = _stub_loop_result(agent)
             _ = await resume_from_state(agent=agent, state=state, config=config)
 
@@ -160,7 +160,7 @@ class TestTenantIdPreservedOnResume:
             fail_on_tool_error=False,
         )
 
-        with patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop:
+        with patch("augments.adk.run.loop.run_agent_loop") as mock_loop:
             mock_loop.return_value = _stub_loop_result(agent)
             _ = await resume_from_state(agent=agent, state=state, config=config)
 
@@ -193,7 +193,7 @@ class TestTenantIdPreservedOnResume:
 class TestNestedResumeUsesEffectiveContext:
     async def test_sync_nested_resume_passes_caller_context(self) -> None:
         """resume_nested_agent_tool must receive the caller-supplied context."""
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCallMetadata
+        from augments.adk.tools.deferred_tool import DeferredToolCallMetadata
 
         nested = DeferredToolCall(
             tool_call_id="tc_nested",
@@ -208,8 +208,8 @@ class TestNestedResumeUsesEffectiveContext:
         config = RunConfig(fail_on_tool_error=False)
 
         with (
-            patch("philharmonica.adk.run.resumption.resume_nested_agent_tool") as mock_nested,
-            patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop,
+            patch("augments.adk.run.resumption.resume_nested_agent_tool") as mock_nested,
+            patch("augments.adk.run.loop.run_agent_loop") as mock_loop,
         ):
             mock_nested.return_value = "sub-result"
             mock_loop.return_value = _stub_loop_result(agent)
@@ -225,9 +225,9 @@ class TestNestedResumePassesUnwrappedHooks:
     async def test_sync_nested_resume_passes_pre_verbose_hooks(self) -> None:
         """Nested resume must get the user (pre-verbose) hooks, not the
         already-VerboseHooks-wrapped chain, so the inner resume wraps once."""
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCallMetadata
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import VerboseHooks
+        from augments.adk.tools.deferred_tool import DeferredToolCallMetadata
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import VerboseHooks
 
         nested = DeferredToolCall(
             tool_call_id="tc_nested",
@@ -241,8 +241,8 @@ class TestNestedResumePassesUnwrappedHooks:
         config = RunConfig(verbose=VerboseConfig(enabled=True), fail_on_tool_error=False)
 
         with (
-            patch("philharmonica.adk.run.resumption.resume_nested_agent_tool") as mock_nested,
-            patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop,
+            patch("augments.adk.run.resumption.resume_nested_agent_tool") as mock_nested,
+            patch("augments.adk.run.loop.run_agent_loop") as mock_loop,
         ):
             mock_nested.return_value = "sub-result"
             mock_loop.return_value = _stub_loop_result(agent)
@@ -262,8 +262,8 @@ class TestStreamedResumeKeepsItemsOnReDeferral:
     async def test_pre_deferral_items_survive_nested_redeferral(self) -> None:
         """A first approved tool's output item must remain on
         ``result.new_items`` even when a later nested agent-tool re-defers."""
-        from philharmonica.adk.exceptions import AgentToolDeferral
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCallMetadata
+        from augments.adk.exceptions import AgentToolDeferral
+        from augments.adk.tools.deferred_tool import DeferredToolCallMetadata
 
         first_tool = FunctionTool(
             name="safe_tool",
@@ -292,7 +292,7 @@ class TestStreamedResumeKeepsItemsOnReDeferral:
                 state=_make_state([_make_deferred_tool("inner", "tc_inner")]),
             )
 
-        with patch("philharmonica.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer):
+        with patch("augments.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer):
             result = resume_from_state_streamed(agent=agent, state=state, config=config)
             async for _event in result.stream_events():
                 pass
@@ -311,7 +311,7 @@ def _new_item_call_ids(new_items) -> list[str]:
 
 
 async def _redefer_deferral(**_kwargs):
-    from philharmonica.adk.exceptions import AgentToolDeferral
+    from augments.adk.exceptions import AgentToolDeferral
 
     raise AgentToolDeferral(
         agent_name="sub",
@@ -321,7 +321,7 @@ async def _redefer_deferral(**_kwargs):
 
 
 def _make_nested_call(call_id: str = "tc_nested_orig") -> DeferredToolCall:
-    from philharmonica.adk.tools.deferred_tool import DeferredToolCallMetadata
+    from augments.adk.tools.deferred_tool import DeferredToolCallMetadata
 
     return DeferredToolCall(
         tool_call_id=call_id,
@@ -350,7 +350,7 @@ class TestSyncResumeSingleRunContext:
         state = _make_state([_make_deferred_tool("admin_delete", "tc_1")])
         config = RunConfig(fail_on_tool_error=False)
 
-        with patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop:
+        with patch("augments.adk.run.loop.run_agent_loop") as mock_loop:
             mock_loop.return_value = _stub_loop_result(agent)
             _ = await resume_from_state(agent=agent, state=state, config=config)
 
@@ -371,8 +371,8 @@ class TestSyncNestedReDeferral:
         config = RunConfig(fail_on_tool_error=False)
 
         with (
-            patch("philharmonica.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral),
-            patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop,
+            patch("augments.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral),
+            patch("augments.adk.run.loop.run_agent_loop") as mock_loop,
         ):
             result = await resume_from_state(agent=agent, state=state, config=config)
 
@@ -400,8 +400,8 @@ class TestSyncNestedReDeferral:
         config = RunConfig(fail_on_tool_error=False)
 
         with (
-            patch("philharmonica.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral),
-            patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop,
+            patch("augments.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral),
+            patch("augments.adk.run.loop.run_agent_loop") as mock_loop,
         ):
             result = await resume_from_state(agent=agent, state=state, config=config)
 
@@ -431,7 +431,7 @@ class TestStreamedNestedReDeferralFirst:
         state = _make_state([nested_first, safe_second])
         config = RunConfig(fail_on_tool_error=False)
 
-        with patch("philharmonica.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral):
+        with patch("augments.adk.run.resumption.resume_nested_agent_tool", side_effect=_redefer_deferral):
             result = resume_from_state_streamed(agent=agent, state=state, config=config)
             async for _event in result.stream_events():
                 pass

@@ -9,9 +9,9 @@ import pytest
 pytest.importorskip("yaml")
 import yaml
 
-from philharmonica.adk.deploy.commands import RecordingRunner
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.targets.cloudrun import CloudRunTarget
+from augments.adk.deploy.commands import RecordingRunner
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.targets.cloudrun import CloudRunTarget
 
 
 def _ctx(env_keys: tuple[str, ...] = ()) -> DeployContext:

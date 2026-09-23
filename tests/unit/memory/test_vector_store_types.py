@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.memory import MemoryMetadata, MemorySource
-from philharmonica.adk.memory.vector_store import VectorQueryResult, VectorRecord, VectorStore
+from augments.adk.memory import MemoryMetadata, MemorySource
+from augments.adk.memory.vector_store import VectorQueryResult, VectorRecord, VectorStore
 
 
 def test_vector_record_constructs() -> None:

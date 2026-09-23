@@ -49,17 +49,17 @@ from typing import Literal, Union
 
 from pydantic import Field
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import (
+from augments.adk.agents import Agent
+from augments.adk.handoffs import (
     Handoff,
     HandoffConfig,
     HandoffRoute,
 )
-from philharmonica.adk.handoffs.handoff_strategy import HandoffStrategy
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.intents import Intent, Respond
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.handoffs.handoff_strategy import HandoffStrategy
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools import function_tool
+from augments.adk.types.intents import Intent, Respond
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

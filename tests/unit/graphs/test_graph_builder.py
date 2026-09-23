@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.graph import Graph
+from augments.adk.graphs.graph import Graph
 
 # ---------------------------------------------------------------------------
 # Helpers

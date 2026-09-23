@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from philharmonica.adk.deploy.aws_ecr import build_and_push_to_ecr, ecr_login, ecr_registry
-from philharmonica.adk.deploy.commands import CommandResult, RecordingRunner
-from philharmonica.adk.deploy.context import DeployContext
+from augments.adk.deploy.aws_ecr import build_and_push_to_ecr, ecr_login, ecr_registry
+from augments.adk.deploy.commands import CommandResult, RecordingRunner
+from augments.adk.deploy.context import DeployContext
 
 
 def _ctx() -> DeployContext:

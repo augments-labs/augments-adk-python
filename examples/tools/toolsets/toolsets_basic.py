@@ -31,10 +31,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.tools import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.tools import (
     CombinedToolset,
     FunctionToolset,
     function_tool,

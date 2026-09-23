@@ -9,7 +9,7 @@ from datetime import datetime
 
 import pytest
 
-from philharmonica.adk.tools.deferred_tool import (
+from augments.adk.tools.deferred_tool import (
     DeferredToolCall,
     DeferredToolCallMetadata,
     ExternalToolCallResult,

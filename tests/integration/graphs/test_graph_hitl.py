@@ -4,13 +4,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import GraphResume, Interrupt, request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import GraphResume, Interrupt, request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.runner import Runner
 
 # ---- Helpers ---------------------------------------------------------
 

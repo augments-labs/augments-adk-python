@@ -8,8 +8,8 @@ from typing import Any, Literal, Union
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
-from philharmonica.adk.schemas.utils import (
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.schemas.utils import (
     _EMPTY_SCHEMA,
     _ensure_strict_schema,
     ensure_strict_schema,
@@ -61,7 +61,7 @@ class TestGetTypeHintsBroadExcept:
 
     def test_name_error_forward_ref_still_yields_empty_hints(self) -> None:
         """A forward-ref NameError results in empty type_hints (no crash)."""
-        from philharmonica.adk.schemas.function_schema import function_schema
+        from augments.adk.schemas.function_schema import function_schema
 
         # A function with a bad forward-reference annotation — eval fails
         # with NameError.  function_schema should still succeed (graceful
@@ -77,14 +77,14 @@ class TestGetTypeHintsBroadExcept:
         """AttributeError from get_type_hints must NOT be silently swallowed."""
         from unittest.mock import patch
 
-        from philharmonica.adk.schemas.function_schema import function_schema as fn_schema
+        from augments.adk.schemas.function_schema import function_schema as fn_schema
 
         def simple_fn(x: int) -> str:
             return str(x)
 
         # Patch get_type_hints at the module namespace where function_schema uses it
         with (
-            patch("philharmonica.adk.schemas.function_schema.get_type_hints", side_effect=AttributeError("broken")),
+            patch("augments.adk.schemas.function_schema.get_type_hints", side_effect=AttributeError("broken")),
             pytest.raises(AttributeError, match="broken"),
         ):
             fn_schema(simple_fn)
@@ -112,7 +112,7 @@ class TestAdditionalPropertiesTruthyCheck:
 
     def test_additional_properties_true_still_raises(self) -> None:
         """additionalProperties: True must still raise UserError."""
-        from philharmonica.adk.exceptions import UserError
+        from augments.adk.exceptions import UserError
 
         schema: dict[str, Any] = {
             "type": "object",
@@ -349,7 +349,7 @@ class TestFunctionToolSchemaPep604:
         """FunctionToolSchema should be type[BaseModel] | dict[str, Any]."""
         import types
 
-        from philharmonica.adk.schemas.function_schema import FunctionToolSchema
+        from augments.adk.schemas.function_schema import FunctionToolSchema
 
         # In Python 3.10+ a PEP-604 union has type UnionType, not typing.Union.
         # We just verify it's a valid type alias that accepts both arms.

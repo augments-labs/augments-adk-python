@@ -2,7 +2,7 @@
 
 Demonstrates the simplest opt-in path:
 
-1. ``pip install 'philharmonica-adk[otel]'``
+1. ``pip install 'augments-adk[otel]'``
 2. ``setup_otel(console=True)`` — prints every finished span to
    stdout via OTel's ``ConsoleSpanExporter``.
 3. ``set_tracer(tracer)`` — installs the bridge.
@@ -30,12 +30,12 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import setup_otel
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

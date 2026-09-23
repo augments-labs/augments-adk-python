@@ -2,8 +2,8 @@
 
 import pytest
 
-from philharmonica.adk.memory.in_memory import TemporaryMemory
-from philharmonica.adk.memory.memory_types import (
+from augments.adk.memory.in_memory import TemporaryMemory
+from augments.adk.memory.memory_types import (
     MemoryMetadata,
     MemorySearchFilter,
     MemorySource,
@@ -166,7 +166,7 @@ class TestAddFromSession:
     async def test_add_from_session(self, memory):
         class FakeExtractor:
             async def extract(self, _messages, *, namespace):
-                from philharmonica.adk.memory.extractor import ExtractionResult
+                from augments.adk.memory.extractor import ExtractionResult
 
                 return [
                     ExtractionResult(content="User likes Python", importance=4, categories=("preference",)),
@@ -191,8 +191,8 @@ class TestAddFromSession:
 class TestAddEvents:
     @pytest.mark.asyncio
     async def test_add_events(self, memory):
-        from philharmonica.adk.memory.extractor import ExtractionResult
-        from philharmonica.adk.session.session_event import create_session_event
+        from augments.adk.memory.extractor import ExtractionResult
+        from augments.adk.session.session_event import create_session_event
 
         class FakeExtractor:
             async def extract(self, _messages, *, namespace):
@@ -217,8 +217,8 @@ class TestAddEvents:
 class TestAddSession:
     @pytest.mark.asyncio
     async def test_add_session(self, memory):
-        from philharmonica.adk.memory.extractor import ExtractionResult
-        from philharmonica.adk.session import SQLiteMultiSessions
+        from augments.adk.memory.extractor import ExtractionResult
+        from augments.adk.session import SQLiteMultiSessions
 
         class FakeExtractor:
             async def extract(self, _messages, *, namespace):
@@ -227,7 +227,7 @@ class TestAddSession:
         store = SQLiteMultiSessions()
         session = await store.create("test-session")
 
-        from philharmonica.adk.session.session_event import create_session_event
+        from augments.adk.session.session_event import create_session_event
 
         await session.add(
             [

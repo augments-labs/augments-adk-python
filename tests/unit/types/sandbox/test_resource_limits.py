@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.resource_limits``."""
+"""Tests for ``augments.adk.types.sandbox.resource_limits``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.resource_limits import SandboxResourceLimits
+from augments.adk.types.sandbox.resource_limits import SandboxResourceLimits
 
 
 class TestSandboxResourceLimitsDefaults:

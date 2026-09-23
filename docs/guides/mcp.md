@@ -17,9 +17,9 @@ so other hosts can consume them.
 >
 > MCP support is an optional extra.
 >
->     pip install 'philharmonica-adk[mcp]'
+>     pip install 'augments-adk[mcp]'
 >
-> Without the extra, every `philharmonica.adk.mcp.*` name is bound to `None`;
+> Without the extra, every `augments.adk.mcp.*` name is bound to `None`;
 > compare against `None` to detect availability at runtime.
 
 ---
@@ -53,10 +53,10 @@ automatically:
 ```python
 import asyncio
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.toolsets import MCPToolset
+from augments.adk.agents.agent import Agent
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.run.runner import Runner
+from augments.adk.tools.toolsets import MCPToolset
 
 
 async def main() -> None:
@@ -127,7 +127,7 @@ The ADK ships four transports. Pick by deployment topology:
 scripts, compiled binaries).
 
 ```python
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
 
 server = MCPServerStdio(
     name="everything",
@@ -150,7 +150,7 @@ POST + SSE. This is the modern production transport: stateless
 horizontal scaling, standard auth headers, load-balancer friendly.
 
 ```python
-from philharmonica.adk.mcp import MCPServerStreamableHttp, MCPServerStreamableHttpParams
+from augments.adk.mcp import MCPServerStreamableHttp, MCPServerStreamableHttpParams
 
 server = MCPServerStreamableHttp(
     name="github",
@@ -190,7 +190,7 @@ for new deployments.
 The ADK can expose its own tools as an MCP server so other hosts
 (other ADK processes, Claude Desktop, any MCP client) can call them.
 
-`src/philharmonica/adk/mcp/mcp_server.py` exposes the `MCPServer` abstract
+`src/augments/adk/mcp/mcp_server.py` exposes the `MCPServer` abstract
 base class. Implement `connect`, `cleanup`, `list_tools`, `call_tool`,
 `list_prompts`, `get_prompt`, and `capabilities` to create a custom
 server. The ADK's `MCPServerWithClientSession` shared base supplies a
@@ -209,7 +209,7 @@ carries the current provider into each request hook; concurrent runs
 see isolated providers.
 
 ```python
-from philharmonica.adk.mcp import HeaderProvider
+from augments.adk.mcp import HeaderProvider
 
 def my_provider() -> dict[str, str]:
     return {"Authorization": f"Bearer {vault.get_token()}"}
@@ -226,8 +226,8 @@ call requires human sign-off before it executes, the framework emits
 an `MCPApprovalRequestItem` and suspends. The application inspects the
 request, decides, and resumes with an `MCPApprovalResponseItem`.
 
-Both items are defined in `src/philharmonica/adk/types/items/items.py` and
-exported from `philharmonica.adk.types`. They carry the server name, tool
+Both items are defined in `src/augments/adk/types/items/items.py` and
+exported from `augments.adk.types`. They carry the server name, tool
 name, and JSON-encoded arguments so the human reviewer has full
 context.
 
@@ -263,7 +263,7 @@ When the runner queries a server's tool catalogue, it produces an
 of the tools discovered:
 
 ```python
-from philharmonica.adk.types import MCPListToolsItem
+from augments.adk.types import MCPListToolsItem
 
 for item in result.new_items:
     if isinstance(item, MCPListToolsItem):
@@ -284,7 +284,7 @@ MCP tools and function tools coexist naturally in one agent — they are
 all `FunctionTool` instances from the runner's perspective:
 
 ```python
-from philharmonica.adk.tools.function_tool import function_tool
+from augments.adk.tools.function_tool import function_tool
 
 
 @function_tool
@@ -389,7 +389,7 @@ connection while injecting different headers per call.
 For agents that span multiple MCP servers with a shared lifecycle:
 
 ```python
-from philharmonica.adk.mcp import MCPServerManager
+from augments.adk.mcp import MCPServerManager
 
 manager = MCPServerManager(servers=[server_a, server_b])
 async with manager:
@@ -416,7 +416,7 @@ The OpenAI Responses API can run the MCP loop server-side. Use
 `HostedMCPTool` — no Python-side connection is opened:
 
 ```python
-from philharmonica.adk.tools.hosted import HostedMCPTool
+from augments.adk.tools.hosted import HostedMCPTool
 
 agent = Agent(
     name="x",

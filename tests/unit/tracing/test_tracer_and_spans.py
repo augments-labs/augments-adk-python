@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from philharmonica.adk.tracing import (
+from augments.adk.tracing import (
     NoOpSpan,
     NoOpTracer,
     Span,
@@ -17,7 +17,7 @@ from philharmonica.adk.tracing import (
     response_span,
     set_tracer,
 )
-from philharmonica.adk.types.tracing import (
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

@@ -23,7 +23,7 @@ takes over at the graph boundary.
 
 ## Public surface
 
-All types are importable from `philharmonica.adk.graphs`:
+All types are importable from `augments.adk.graphs`:
 
 | Type | Description |
 |---|---|
@@ -48,18 +48,18 @@ approval. The first run defers; the caller approves the call and resumes.
 ```python
 import asyncio
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs import Graph
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.interrupt import (
     GraphResume,
     NestedAgentApproval,
     NestedAgentInterrupt,
     NestedAgentReply,
 )
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.function_tool import function_tool
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.run.runner import Runner
+from augments.adk.tools.function_tool import function_tool
 
 
 @function_tool(
@@ -231,10 +231,10 @@ checkpointer rather than retry against the same in-memory state.
   graph patterns.
 - `docs/graphs/checkpointing.md` — durable checkpointers and the
   selective re-fire contract that makes resume deterministic.
-- `src/philharmonica/adk/graphs/interrupt.py` — `NestedAgentInterrupt`,
+- `src/augments/adk/graphs/interrupt.py` — `NestedAgentInterrupt`,
   `NestedAgentApproval`, `NestedAgentRejection`, `NestedAgentReply`, and
   the error hierarchy.
-- `src/philharmonica/adk/graphs/adapters.py` — the `AgentExecutable` invoke /
+- `src/augments/adk/graphs/adapters.py` — the `AgentExecutable` invoke /
   resume path that lifts deferrals to interrupts and applies decisions
   on resume.
 - `tests/integration/graphs/test_nested_resume.py` — single-level

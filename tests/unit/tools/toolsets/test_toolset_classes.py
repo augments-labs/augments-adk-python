@@ -12,8 +12,8 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tools import (
+from augments.adk.run.context import RunContext
+from augments.adk.tools import (
     CombinedToolset,
     FilteredToolset,
     FunctionTool,

@@ -2,7 +2,7 @@ version: 1
 disable_existing_loggers: false  # don't silence litellm/httpx/pydantic loggers
 
 # NOTE: Console display is DISABLED by default — the terminal belongs to the
-# `VerboseConfig` event stream (see `philharmonica.adk.verbose`), and the rotating
+# `VerboseConfig` event stream (see `augments.adk.verbose`), and the rotating
 # `.log` file below is the system-of-record for classic log records. Mixing a
 # console StreamHandler with the verbose stream interleaves two outputs on
 # one terminal and garbles the coloured lifecycle panels. To re-enable
@@ -27,17 +27,17 @@ handlers:
     class: logging.handlers.RotatingFileHandler
     level: DEBUG
     formatter: standard
-    filename: ./logs/philharmonica_adk.log
+    filename: ./logs/augments_adk.log
     encoding: utf8
     maxBytes: 104857600   # 100 MB
-    backupCount: 5        # keep 5 rotated files (philharmonica.adk.log.1 … .5)
+    backupCount: 5        # keep 5 rotated files (augments.adk.log.1 … .5)
 
 root:
   level: INFO
   handlers: [file]
 
 loggers:
-  philharmonica.adk:
+  augments.adk:
     level: INFO
     propagate: no
     handlers: [file]

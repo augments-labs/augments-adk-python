@@ -9,21 +9,21 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.config import build_agent
-from philharmonica.adk.config.assembler import build_llm
-from philharmonica.adk.config.providers import PROVIDER_REGISTRY
-from philharmonica.adk.exceptions import ConfigResolutionError
-from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-from philharmonica.adk.llms.anthropic.anthropic_model import AnthropicLLM
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.prompts.system_prompt import SystemPrompt
-from philharmonica.adk.skills.activation import SkillActivation
-from philharmonica.adk.types.config import AgentConfig
-from philharmonica.adk.types.config.llm_config import LLMProviderConfig
-from philharmonica.adk.types.tools.tool_use_behavior import StopAtTools
-from philharmonica.adk.verbose.config import VerboseConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.config import build_agent
+from augments.adk.config.assembler import build_llm
+from augments.adk.config.providers import PROVIDER_REGISTRY
+from augments.adk.exceptions import ConfigResolutionError
+from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+from augments.adk.llms.anthropic.anthropic_model import AnthropicLLM
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.prompts.system_prompt import SystemPrompt
+from augments.adk.skills.activation import SkillActivation
+from augments.adk.types.config import AgentConfig
+from augments.adk.types.config.llm_config import LLMProviderConfig
+from augments.adk.types.tools.tool_use_behavior import StopAtTools
+from augments.adk.verbose.config import VerboseConfig
 
 
 def _build(data: dict[str, object]) -> Agent:
@@ -136,7 +136,7 @@ class TestBuildLLMErrors:
 
 class TestToolAssembly:
     def test_hosted_tool_built(self) -> None:
-        from philharmonica.adk.tools.hosted.web_search_tool import WebSearchTool
+        from augments.adk.tools.hosted.web_search_tool import WebSearchTool
 
         agent = _build({"name": "a", "system_prompt": "p", "tools": [{"type": "web_search", "args": {"max_uses": 3}}]})
         assert len(agent.tools) == 1

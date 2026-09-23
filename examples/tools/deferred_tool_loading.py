@@ -25,10 +25,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.tools import build_tool_search, function_tool
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.agents import Agent
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.tools import build_tool_search, function_tool
+from augments.adk.tools.function_tool import FunctionTool
 
 logger = logging.getLogger(__name__)
 

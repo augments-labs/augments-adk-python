@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica validate``."""
+"""Tests for ``augments validate``."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import Any
 
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 
 def _write_config(path: Path, payload: dict[str, Any]) -> Path:
@@ -59,7 +59,7 @@ def test_resolve_imports_sibling_tools_module(tmp_path: Path) -> None:
     (tmp_path / "cli_validate_fixture_tools.py").write_text(
         textwrap.dedent(
             '''
-            from philharmonica.adk.tools import function_tool
+            from augments.adk.tools import function_tool
 
 
             @function_tool

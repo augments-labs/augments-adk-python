@@ -1,4 +1,4 @@
-name: philharmonica-adk-python
+name: augments-adk-python
 channels:
   - defaults
   - conda-forge

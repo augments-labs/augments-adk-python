@@ -12,13 +12,13 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.verbose.config import (
+from augments.adk.verbose.config import (
     EVENT_AGENT_START,
     EVENT_TOOL_START,
     EventStyle,
     VerboseConfig,
 )
-from philharmonica.adk.verbose.renderer import (
+from augments.adk.verbose.renderer import (
     VerboseRenderer,
     _strip_ansi,
     format_payload,

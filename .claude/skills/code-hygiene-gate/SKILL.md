@@ -13,7 +13,7 @@ environment is already activated).
 
 1. `uv run ruff check src/ tests/`
 2. `uv run ruff format --check src/ tests/ examples/`
-3. `uv run mypy -p philharmonica.adk`  (canonical)
+3. `uv run mypy -p augments.adk`  (canonical)
 4. Pyright **scoped to the branch's changed Python files** — seconds, NOT the
    whole package inline:
 
@@ -24,7 +24,7 @@ environment is already activated).
 
    (The diff against the merge-base includes uncommitted edits.) Cross-file
    regressions are still caught by full-package mypy in step 3. The full
-   `pyright src/philharmonica/adk/` sweep is the NIGHTLY CI job — never run it
+   `pyright src/augments/adk/` sweep is the NIGHTLY CI job — never run it
    inline; it can take hours.
 5. IDE diagnostics via `mcp__ide__getDiagnostics`
 

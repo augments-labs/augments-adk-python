@@ -1,7 +1,7 @@
 """Verify Runner.arun_swarm / arun_swarm_from_checkpoint open a swarm_span.
 
 The runner opens a typed swarm_span keyed by a UUID; the same UUID is
-reused on resume so philharmonica.swarm.id correlates suspend and resume sides
+reused on resume so augments.swarm.id correlates suspend and resume sides
 of one logical run. A checkpoint missing the swarm_id triggers a
 warning log and regeneration.
 """
@@ -13,11 +13,11 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 
 def _swarm() -> Swarm:
@@ -46,9 +46,9 @@ class TestArunSwarmOpensSwarmSpan:
             return _make_mock_span()
 
         async def _fake_run_swarm_loop(**kwargs: Any) -> Any:
-            from philharmonica.adk.swarms.result import SwarmRunResult
-            from philharmonica.adk.swarms.state import SwarmState
-            from philharmonica.adk.swarms.stop_reason import StopReason
+            from augments.adk.swarms.result import SwarmRunResult
+            from augments.adk.swarms.state import SwarmState
+            from augments.adk.swarms.stop_reason import StopReason
 
             state = SwarmState(
                 swarm=sw,
@@ -66,9 +66,9 @@ class TestArunSwarmOpensSwarmSpan:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop.run_swarm_loop",
+                "augments.adk.run.swarm_loop.run_swarm_loop",
                 new=AsyncMock(side_effect=_fake_run_swarm_loop),
             ),
         ):
@@ -86,11 +86,11 @@ class TestArunSwarmOpensSwarmSpan:
 
 class TestArunSwarmFromCheckpointReusesSwarmId:
     async def test_loaded_swarm_id_is_reused(self) -> None:
-        from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-        from philharmonica.adk.swarms.checkpointers.in_memory import (
+        from augments.adk.swarms.checkpointer import SwarmCheckpoint
+        from augments.adk.swarms.checkpointers.in_memory import (
             InMemorySwarmCheckpointer,
         )
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.swarms.state import SwarmState
 
         sw = _swarm()
         cp = InMemorySwarmCheckpointer(thread_id="thr-1")
@@ -115,8 +115,8 @@ class TestArunSwarmFromCheckpointReusesSwarmId:
             return _make_mock_span()
 
         async def _fake_run_swarm_loop(**kwargs: Any) -> Any:
-            from philharmonica.adk.swarms.result import SwarmRunResult
-            from philharmonica.adk.swarms.stop_reason import StopReason
+            from augments.adk.swarms.result import SwarmRunResult
+            from augments.adk.swarms.stop_reason import StopReason
 
             loaded = kwargs["initial_state"]
             return SwarmRunResult(
@@ -128,9 +128,9 @@ class TestArunSwarmFromCheckpointReusesSwarmId:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop.run_swarm_loop",
+                "augments.adk.run.swarm_loop.run_swarm_loop",
                 new=AsyncMock(side_effect=_fake_run_swarm_loop),
             ),
         ):
@@ -142,11 +142,11 @@ class TestArunSwarmFromCheckpointReusesSwarmId:
         """A checkpoint payload missing swarm_id triggers warning + fresh UUID."""
         import logging
 
-        from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-        from philharmonica.adk.swarms.checkpointers.in_memory import (
+        from augments.adk.swarms.checkpointer import SwarmCheckpoint
+        from augments.adk.swarms.checkpointers.in_memory import (
             InMemorySwarmCheckpointer,
         )
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.swarms.state import SwarmState
 
         sw = _swarm()
         cp = InMemorySwarmCheckpointer(thread_id="thr-2")
@@ -167,8 +167,8 @@ class TestArunSwarmFromCheckpointReusesSwarmId:
             return _make_mock_span()
 
         async def _fake_run_swarm_loop(**kwargs: Any) -> Any:
-            from philharmonica.adk.swarms.result import SwarmRunResult
-            from philharmonica.adk.swarms.stop_reason import StopReason
+            from augments.adk.swarms.result import SwarmRunResult
+            from augments.adk.swarms.stop_reason import StopReason
 
             loaded = kwargs["initial_state"]
             return SwarmRunResult(
@@ -180,12 +180,12 @@ class TestArunSwarmFromCheckpointReusesSwarmId:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop.run_swarm_loop",
+                "augments.adk.run.swarm_loop.run_swarm_loop",
                 new=AsyncMock(side_effect=_fake_run_swarm_loop),
             ),
-            caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.runner"),
+            caplog.at_level(logging.WARNING, logger="augments.adk.run.runner"),
         ):
             result = await Runner.arun_swarm_from_checkpoint(sw, checkpointer=cp, thread_id="thr-2")
 

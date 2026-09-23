@@ -18,13 +18,13 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import HandoffDefinitionError
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.handoffs.handoff_helpers import (
+from augments.adk.exceptions import HandoffDefinitionError
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.handoffs.handoff_helpers import (
     find_handoff_target,
     normalize_handoffs,
 )
-from philharmonica.adk.run.context import RunContext
+from augments.adk.run.context import RunContext
 
 
 def _mock_agent(name: str) -> MagicMock:

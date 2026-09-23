@@ -13,8 +13,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.memory.in_memory import TemporaryMemory
-from philharmonica.adk.memory.sqlite_memory import SQLiteMemory
+from augments.adk.memory.in_memory import TemporaryMemory
+from augments.adk.memory.sqlite_memory import SQLiteMemory
 
 # ---------------------------------------------------------------------------
 # TemporaryMemory scope tests
@@ -339,7 +339,7 @@ class TestTemporaryMemoryGetNamespaceTransparency:
 class TestFilterNamespaceScoping:
     async def test_temporary_memory_filter_namespace_scoped(self) -> None:
         """search() with filter.namespace respects scope on TemporaryMemory."""
-        from philharmonica.adk.memory.memory_types import MemorySearchFilter
+        from augments.adk.memory.memory_types import MemorySearchFilter
 
         mem = TemporaryMemory(scope="run:a")
         await mem.add("dark mode preferred", namespace="user:1")
@@ -354,7 +354,7 @@ class TestFilterNamespaceScoping:
 
     async def test_temporary_memory_filter_namespace_wrong_ns_returns_empty(self) -> None:
         """filter.namespace for a different ns returns no results."""
-        from philharmonica.adk.memory.memory_types import MemorySearchFilter
+        from augments.adk.memory.memory_types import MemorySearchFilter
 
         mem = TemporaryMemory(scope="run:a")
         await mem.add("dark mode preferred", namespace="user:1")
@@ -369,7 +369,7 @@ class TestFilterNamespaceScoping:
         """search() with filter.namespace respects scope on SQLiteMemory."""
         import tempfile
 
-        from philharmonica.adk.memory.memory_types import MemorySearchFilter
+        from augments.adk.memory.memory_types import MemorySearchFilter
 
         with tempfile.TemporaryDirectory() as td:
             db_path = f"{td}/test.db"
@@ -388,7 +388,7 @@ class TestFilterNamespaceScoping:
         """filter.namespace for a different ns returns no results (SQLite)."""
         import tempfile
 
-        from philharmonica.adk.memory.memory_types import MemorySearchFilter
+        from augments.adk.memory.memory_types import MemorySearchFilter
 
         with tempfile.TemporaryDirectory() as td:
             db_path = f"{td}/test.db"

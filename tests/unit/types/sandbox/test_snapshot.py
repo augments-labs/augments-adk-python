@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.types.sandbox.snapshot``."""
+"""Tests for ``augments.adk.types.sandbox.snapshot``."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.types.sandbox.snapshot import (
+from augments.adk.types.sandbox.snapshot import (
     LocalSnapshotSpec,
     NoopSnapshotSpec,
     RemoteSnapshotSpec,

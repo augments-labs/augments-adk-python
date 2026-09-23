@@ -21,12 +21,12 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions.exceptions import ModelRefusalError, PhilharmonicaError
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner, _resolve_error_handler
-from philharmonica.adk.run.stream import RunResultStreaming
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions.exceptions import AugmentsError, ModelRefusalError
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner, _resolve_error_handler
+from augments.adk.run.stream import RunResultStreaming
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
 )
 
@@ -35,7 +35,7 @@ from philharmonica.adk.types.responses.llm_response import (
 
 def _final_text_response(text: str = "done") -> LLMResponse:
     """LLMResponse that produces a final text output (no tool call)."""
-    from philharmonica.adk.types.responses.llm_response import LLMResponseText
+    from augments.adk.types.responses.llm_response import LLMResponseText
 
     return LLMResponse(
         response_id="resp-final",
@@ -66,23 +66,23 @@ async def _patched_arun_raises(
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -117,8 +117,8 @@ class TestResolveErrorHandler:
 
     def test_base_class_match(self) -> None:
         handler = lambda e: "base"  # noqa: E731
-        handlers: dict[type[Exception], Any] = {PhilharmonicaError: handler}
-        exc = ModelRefusalError("x")  # subclass of PhilharmonicaError
+        handlers: dict[type[Exception], Any] = {AugmentsError: handler}
+        exc = ModelRefusalError("x")  # subclass of AugmentsError
         assert _resolve_error_handler(exc, handlers) is handler
 
     def test_no_match_returns_none(self) -> None:
@@ -130,7 +130,7 @@ class TestResolveErrorHandler:
         specific = lambda e: "specific"  # noqa: E731
         base = lambda e: "base"  # noqa: E731
         handlers: dict[type[Exception], Any] = {
-            PhilharmonicaError: base,
+            AugmentsError: base,
             ModelRefusalError: specific,
         }
         exc = ModelRefusalError("x")
@@ -162,21 +162,21 @@ class TestErrorHandlersNonStreaming:
         config = RunConfig(error_handlers={ModelRefusalError: lambda e: "fallback"})
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_llm)),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_llm)),
             patch(
-                "philharmonica.adk.run.loop.call_llm_streamed",
+                "augments.adk.run.loop.call_llm_streamed",
                 new=AsyncMock(side_effect=fake_llm),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             pytest.raises(ValueError, match="not a refusal"),
@@ -195,12 +195,12 @@ class TestErrorHandlersNonStreaming:
 
     @pytest.mark.asyncio
     async def test_mro_most_derived_wins(self) -> None:
-        """error_handlers has both ModelRefusalError and PhilharmonicaError; specific wins."""
+        """error_handlers has both ModelRefusalError and AugmentsError; specific wins."""
         agent = _make_agent()
         config = RunConfig(
             error_handlers={
                 ModelRefusalError: lambda e: "specific-fallback",
-                PhilharmonicaError: lambda e: "base-fallback",
+                AugmentsError: lambda e: "base-fallback",
             }
         )
 

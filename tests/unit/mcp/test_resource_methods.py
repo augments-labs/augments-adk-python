@@ -19,8 +19,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.exceptions import MCPConnectionError
-from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+from augments.adk.mcp.exceptions import MCPConnectionError
+from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
 # --------------------------------------------------------------- concrete stub
 
@@ -138,7 +138,7 @@ async def test_read_resource_raises_when_not_connected() -> None:
 
 async def test_mcp_server_abc_list_resource_templates_raises() -> None:
     """The MCPServer ABC's list_resource_templates raises NotImplementedError by default."""
-    from philharmonica.adk.mcp.mcp_server import MCPServer
+    from augments.adk.mcp.mcp_server import MCPServer
 
     class _BareServer(MCPServer):
         async def connect(self) -> None:
@@ -177,7 +177,7 @@ async def test_mcp_server_abc_list_resource_templates_raises() -> None:
 async def test_build_resource_tool_still_works_after_server_changes() -> None:
     """extras.build_resource_tool still delegates to server.read_resource correctly."""
 
-    from philharmonica.adk.mcp.extras import build_resource_tool
+    from augments.adk.mcp.extras import build_resource_tool
 
     session = _make_session()
     # Return a real-ish ReadResourceResult

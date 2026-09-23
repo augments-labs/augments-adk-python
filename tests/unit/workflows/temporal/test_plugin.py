@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.plugin``."""
+"""Tests for ``augments.adk.workflows.temporal.plugin``."""
 
 from __future__ import annotations
 
@@ -8,73 +8,73 @@ import pytest
 
 temporalio = pytest.importorskip("temporalio")
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.workflows.temporal.determinism import DEFAULT_PASSTHROUGH_MODULES
-from philharmonica.adk.workflows.temporal.plugin import PhilharmonicaTemporalPlugin
+from augments.adk.llms.llm import LLM
+from augments.adk.workflows.temporal.determinism import DEFAULT_PASSTHROUGH_MODULES
+from augments.adk.workflows.temporal.plugin import AugmentsTemporalPlugin
 
 
 class TestPluginDefaultPassthroughModules:
     def test_plugin_default_passthrough_modules(self) -> None:
         """Default passthrough_modules matches DEFAULT_PASSTHROUGH_MODULES exactly."""
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         assert plugin.passthrough_modules == DEFAULT_PASSTHROUGH_MODULES
 
     def test_default_includes_pydantic(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         assert "pydantic" in plugin.passthrough_modules
 
     def test_default_includes_litellm(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         assert "litellm" in plugin.passthrough_modules
 
-    def test_default_includes_philharmonica(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin()
-        assert "philharmonica" in plugin.passthrough_modules
+    def test_default_includes_augments(self) -> None:
+        plugin = AugmentsTemporalPlugin()
+        assert "augments" in plugin.passthrough_modules
 
 
 class TestPluginCustomPassthroughModules:
     def test_plugin_custom_passthrough_modules(self) -> None:
         """Extra modules are appended after the defaults."""
-        plugin = PhilharmonicaTemporalPlugin(extra_passthrough_modules=["numpy", "scipy"])
+        plugin = AugmentsTemporalPlugin(extra_passthrough_modules=["numpy", "scipy"])
         assert "numpy" in plugin.passthrough_modules
         assert "scipy" in plugin.passthrough_modules
 
     def test_defaults_still_present_with_extras(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin(extra_passthrough_modules=["pandas"])
+        plugin = AugmentsTemporalPlugin(extra_passthrough_modules=["pandas"])
         for module in DEFAULT_PASSTHROUGH_MODULES:
             assert module in plugin.passthrough_modules
 
     def test_extra_appended_after_defaults(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin(extra_passthrough_modules=["mylib"])
+        plugin = AugmentsTemporalPlugin(extra_passthrough_modules=["mylib"])
         default_count = len(DEFAULT_PASSTHROUGH_MODULES)
         assert plugin.passthrough_modules[:default_count] == DEFAULT_PASSTHROUGH_MODULES
         assert plugin.passthrough_modules[default_count:] == ("mylib",)
 
     def test_passthrough_is_tuple(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin(extra_passthrough_modules=["x"])
+        plugin = AugmentsTemporalPlugin(extra_passthrough_modules=["x"])
         assert isinstance(plugin.passthrough_modules, tuple)
 
 
 class TestPluginRegisterModel:
     def test_plugin_register_model(self) -> None:
         """Registered model appears in model_registry."""
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         mock_llm = MagicMock(spec=LLM)
         plugin.register_model("my-model", mock_llm)
         assert plugin.model_registry["my-model"] is mock_llm
 
     def test_register_model_propagates_to_activity_registry(self) -> None:
         """register_model() also updates the activity module registry."""
-        from philharmonica.adk.workflows.temporal.activity import get_model
+        from augments.adk.workflows.temporal.activity import get_model
 
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         mock_llm = MagicMock(spec=LLM)
         plugin.register_model("propagation-test-model", mock_llm)
         assert get_model("propagation-test-model") is mock_llm
 
     def test_register_model_overwrites(self) -> None:
         """Registering the same name twice replaces the previous entry."""
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         first = MagicMock(spec=LLM)
         second = MagicMock(spec=LLM)
         plugin.register_model("overwrite-model", first)
@@ -89,7 +89,7 @@ class TestPluginBuildWorkerKwargsKeys:
         Worker has no data_converter parameter — the converter is a client
         setting — so it must NOT appear here or Worker(**kwargs) raises.
         """
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         kwargs = plugin.build_worker_kwargs()
         assert set(kwargs.keys()) == {"workflow_runner"}
         import inspect
@@ -104,62 +104,62 @@ class TestPluginBuildWorkerKwargsKeys:
         """workflow_runner is a SandboxedWorkflowRunner instance."""
         from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         kwargs = plugin.build_worker_kwargs()
         assert isinstance(kwargs["workflow_runner"], SandboxedWorkflowRunner)
 
     def test_build_worker_kwargs_registers_models(self) -> None:
         """Models pre-loaded in model_registry are synced to the activity registry."""
-        from philharmonica.adk.workflows.temporal.activity import get_model
+        from augments.adk.workflows.temporal.activity import get_model
 
         mock_llm = MagicMock(spec=LLM)
-        plugin = PhilharmonicaTemporalPlugin(model_registry={"preloaded-model": mock_llm})
+        plugin = AugmentsTemporalPlugin(model_registry={"preloaded-model": mock_llm})
         plugin.build_worker_kwargs()
         assert get_model("preloaded-model") is mock_llm
 
 
 class TestPluginAbcSurfaces:
-    """PhilharmonicaTemporalPlugin composes via temporalio's plugin chains."""
+    """AugmentsTemporalPlugin composes via temporalio's plugin chains."""
 
     def test_implements_both_plugin_abcs(self) -> None:
         from temporalio.client import Plugin as ClientPlugin
         from temporalio.worker import Plugin as WorkerPlugin
 
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         assert isinstance(plugin, ClientPlugin)
         assert isinstance(plugin, WorkerPlugin)
 
     def test_configure_client_installs_data_converter(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         config = plugin.configure_client({})  # type: ignore[typeddict-item]  # partial config suffices for the chain
         assert "data_converter" in config
 
     def test_configure_worker_installs_sandboxed_runner(self) -> None:
         from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         config = plugin.configure_worker({})  # type: ignore[typeddict-item]  # partial config suffices for the chain
         assert isinstance(config["workflow_runner"], SandboxedWorkflowRunner)
 
     def test_configure_worker_syncs_models(self) -> None:
-        from philharmonica.adk.workflows.temporal.activity import get_model
+        from augments.adk.workflows.temporal.activity import get_model
 
         mock_llm = MagicMock(spec=LLM)
-        plugin = PhilharmonicaTemporalPlugin(model_registry={"abc-sync-model": mock_llm})
+        plugin = AugmentsTemporalPlugin(model_registry={"abc-sync-model": mock_llm})
         plugin.configure_worker({})  # type: ignore[typeddict-item]  # partial config suffices for the chain
         assert get_model("abc-sync-model") is mock_llm
 
     def test_configure_replayer_mirrors_worker_and_client(self) -> None:
         from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         config = plugin.configure_replayer({})  # type: ignore[typeddict-item]  # partial config suffices for the chain
         assert isinstance(config["workflow_runner"], SandboxedWorkflowRunner)
         assert "data_converter" in config
 
     @pytest.mark.asyncio
     async def test_run_worker_delegates_to_next(self) -> None:
-        plugin = PhilharmonicaTemporalPlugin()
+        plugin = AugmentsTemporalPlugin()
         worker = MagicMock()
         seen: list[object] = []
 

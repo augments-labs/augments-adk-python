@@ -11,7 +11,7 @@ agent-level deferral mechanism, the swarm loop catches the
 `AgentToolDeferral` and lifts it to a `NestedAgentInterrupt`:
 
 ```python
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 result = await Runner.arun_swarm(swarm, "review-and-approve")
 
@@ -43,8 +43,8 @@ snapshotted, because no tool deferral occurred.
 ## Persisting and resuming
 
 ```python
-from philharmonica.adk.swarms import SwarmResume
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms import SwarmResume
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
 # Auto-save on every turn boundary — pass the checkpointer to the
 # runner and the driver wires the swarm hook registry itself:
@@ -75,7 +75,7 @@ Custom `SwarmHooks` can observe interrupt events via the
 
 ```python
 from typing import override
-from philharmonica.adk.swarms.hooks import SwarmHooks
+from augments.adk.swarms.hooks import SwarmHooks
 
 class ApprovalAuditor(SwarmHooks):
     @override
@@ -179,14 +179,14 @@ parked decision but continue the swarm.
 Swarms emit a typed OTel span tree when a tracer is installed:
 
 - One `swarm.<swarm_id>` root span per run, with attributes
-  `philharmonica.swarm.id`, `philharmonica.swarm.entry`, `philharmonica.swarm.status`,
-  `philharmonica.swarm.turns_total`.
+  `augments.swarm.id`, `augments.swarm.entry`, `augments.swarm.status`,
+  `augments.swarm.turns_total`.
 - One `swarm.turn.<index>` span per iteration that runs a member
-  turn, with attributes `philharmonica.swarm.id`, `philharmonica.swarm.turn.index`,
-  `philharmonica.swarm.turn.member`, `philharmonica.swarm.turn.status`,
-  `philharmonica.swarm.turn.duration_ms`, and (on resumed turns)
-  `philharmonica.swarm.turn.resume_attempt`.
-- `philharmonica.swarm.id` is a UUID generated at runner entry and persisted
+  turn, with attributes `augments.swarm.id`, `augments.swarm.turn.index`,
+  `augments.swarm.turn.member`, `augments.swarm.turn.status`,
+  `augments.swarm.turn.duration_ms`, and (on resumed turns)
+  `augments.swarm.turn.resume_attempt`.
+- `augments.swarm.id` is a UUID generated at runner entry and persisted
   on `SwarmState.swarm_id` so suspend + resume share one root-span
   identity. Tracing dashboards can correlate the full lifecycle by
   joining on this attribute.
@@ -230,7 +230,7 @@ per-agent stream plus these swarm-scoped variants:
 Suspending mid-stream:
 
 ```python
-from philharmonica.adk.swarms.events import SwarmTurnInterruptEvent
+from augments.adk.swarms.events import SwarmTurnInterruptEvent
 
 result = await Runner.arun_swarm_streamed(swarm, "review-and-approve")
 async for ev in result.stream_events():
@@ -244,7 +244,7 @@ Resume-through-stream: pass the persisted `SwarmState` as
 `initial_state` and the caller's `SwarmResume` as `resume` to a
 second `arun_swarm_streamed` call. The same deep-resume splice
 from `swarm_resume.py` fires inside the streamed loop, and the
-same `philharmonica.swarm.id` flows through both root spans for
+same `augments.swarm.id` flows through both root spans for
 end-to-end trace correlation.
 
 Cancellation: `result.cancel()` cancels the background driver and

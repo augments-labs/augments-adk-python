@@ -1,4 +1,4 @@
-"""Regression tests for ``philharmonica.adk.run.state`` (``RunState``).
+"""Regression tests for ``augments.adk.run.state`` (``RunState``).
 
 Covers three confirmed defects:
 
@@ -18,8 +18,8 @@ from datetime import datetime
 
 import pytest
 
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import (
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import (
     DeferredToolCall,
     DeferredToolCallMetadata,
     DeferredToolRequests,

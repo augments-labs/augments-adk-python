@@ -1,7 +1,7 @@
 """RedisCostLedger unit tests — run unconditionally via fakeredis (in-process).
 
 ``fakeredis[lua]>=2.21`` is a dev dependency; no Redis server is needed.
-An optional live-server smoke test runs only when ``PHILHARMONICA_TEST_REDIS_URL``
+An optional live-server smoke test runs only when ``AUGMENTS_TEST_REDIS_URL``
 is set in the environment.
 """
 
@@ -12,8 +12,8 @@ import os
 import pytest
 from fakeredis.aioredis import FakeRedis
 
-from philharmonica.adk.budgets import CostLedger
-from philharmonica.adk.budgets.ledgers.redis import RedisCostLedger
+from augments.adk.budgets import CostLedger
+from augments.adk.budgets.ledgers.redis import RedisCostLedger
 
 # ---------------------------------------------------------------------------
 # Core fakeredis-backed tests — always run
@@ -171,13 +171,13 @@ async def test_pipeline_expire_nx_does_not_slide_forward() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Optional live-server smoke test (skipped when PHILHARMONICA_TEST_REDIS_URL is unset)
+# Optional live-server smoke test (skipped when AUGMENTS_TEST_REDIS_URL is unset)
 # ---------------------------------------------------------------------------
 
-_REDIS_URL = os.environ.get("PHILHARMONICA_TEST_REDIS_URL")
+_REDIS_URL = os.environ.get("AUGMENTS_TEST_REDIS_URL")
 
 
-@pytest.mark.skipif(_REDIS_URL is None, reason="set PHILHARMONICA_TEST_REDIS_URL to run live smoke test")
+@pytest.mark.skipif(_REDIS_URL is None, reason="set AUGMENTS_TEST_REDIS_URL to run live smoke test")
 async def test_live_record_and_spend() -> None:
     """Live Redis smoke test: record + spend round-trip on a real server."""
     import uuid

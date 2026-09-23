@@ -35,8 +35,8 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.tools.function_tool import function_tool
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.tools.function_tool import function_tool
 
 logger = logging.getLogger(__name__)
 

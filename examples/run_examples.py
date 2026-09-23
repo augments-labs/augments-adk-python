@@ -8,7 +8,7 @@ subprocesses with a per-example timeout. Results — PASSED / FAILED /
 SKIPPED / TIMEOUT — go to per-example log files plus a console summary,
 and the failures are written to a rerun list.
 
-Auto mode (``--auto-mode``, or ``PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto``
+Auto mode (``--auto-mode``, or ``AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto``
 in the environment) is injected into every subprocess so examples wired
 with the ``auto_mode`` helpers run without a human at the terminal.
 
@@ -46,7 +46,7 @@ EXAMPLES_DIR = REPO_ROOT / "examples"
 
 logger = logging.getLogger("run_examples")
 
-AUTO_MODE_ENV = "PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE"
+AUTO_MODE_ENV = "AUGMENTS_EXAMPLES_INTERACTIVE_MODE"
 DEFAULT_TIMEOUT = 120.0
 DEFAULT_JOBS = min(8, os.cpu_count() or 4)
 DEFAULT_LOGS_DIR = REPO_ROOT / "logs" / "run_examples"
@@ -472,7 +472,7 @@ def run_example(spec: ExampleSpec, log_file: Path, timeout: float, auto_mode: bo
     """Run one example as a subprocess, capturing output to ``log_file``.
 
     The subprocess runs from the repo root with stdin closed and, in auto
-    mode, ``PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto`` in its environment. It is
+    mode, ``AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto`` in its environment. It is
     placed in its own session so a timeout can kill the whole process tree.
 
     Args:
@@ -732,7 +732,7 @@ def _add_selection_args(parser: argparse.ArgumentParser) -> None:
         "--auto-mode",
         action="store_true",
         dest="auto_mode",
-        help="Inject PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto into each subprocess.",
+        help="Inject AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto into each subprocess.",
     )
     parser.add_argument(
         "--include-server",

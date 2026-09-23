@@ -5,8 +5,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import MemoryExtractionError
-from philharmonica.adk.memory.extractor import LLMExtractor
+from augments.adk.exceptions import MemoryExtractionError
+from augments.adk.memory.extractor import LLMExtractor
 
 
 def _make_extractor(content: str, **kwargs) -> tuple[LLMExtractor, MagicMock]:
@@ -139,7 +139,7 @@ class TestLLMExtractor:
 
     @pytest.mark.asyncio
     async def test_passes_llm_config(self):
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         mock_llm = MagicMock()
         mock_llm.model = "gpt-4o-mini"

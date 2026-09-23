@@ -8,19 +8,19 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.context.context_config import (
+from augments.adk.context.context_config import (
     CompactionConfig,
     ContextEditingConfig,
     ContextManagementConfig,
 )
-from philharmonica.adk.context.context_editing import ContextEditor
-from philharmonica.adk.context.context_manager import ContextManager
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.context.context_editing import ContextEditor
+from augments.adk.context.context_manager import ContextManager
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import Tool
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
     LLMStreamEvent,
@@ -65,7 +65,7 @@ def _make_conversation(n: int) -> list[LLMInputContentItem]:
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=100)
 async def test_prepare_messages_passthrough(_mock_count):
     """When nothing is enabled, messages pass through unchanged."""
     config = ContextManagementConfig()
@@ -83,7 +83,7 @@ async def test_prepare_messages_passthrough(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=120_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=120_000)
 async def test_tool_result_clearing_triggered(_mock_count):
     """Tool results should be cleared when above the trigger threshold."""
     config = ContextManagementConfig(
@@ -119,7 +119,7 @@ async def test_tool_result_clearing_triggered(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=50_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=50_000)
 async def test_tool_result_clearing_not_triggered_below_threshold(_mock_count):
     """Tool results should NOT be cleared when below the trigger threshold."""
     config = ContextManagementConfig(
@@ -156,7 +156,7 @@ async def test_tool_result_clearing_not_triggered_below_threshold(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages")
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages")
 async def test_compaction_triggered(mock_count):
     """Compaction should trigger when token count exceeds threshold."""
     # First call (editing check): above threshold
@@ -185,7 +185,7 @@ async def test_compaction_triggered(mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=10_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=10_000)
 async def test_compaction_not_triggered_below_threshold(_mock_count):
     config = ContextManagementConfig(
         compaction=CompactionConfig(
@@ -207,7 +207,7 @@ async def test_compaction_not_triggered_below_threshold(_mock_count):
 # ── should_compact ───────────────────────────────────────────────────
 
 
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=200_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=200_000)
 def test_should_compact_true(_mock_count):
     config = ContextManagementConfig(
         compaction=CompactionConfig(enabled=True, trigger_tokens=150_000),
@@ -217,7 +217,7 @@ def test_should_compact_true(_mock_count):
     assert mgr.should_compact([], "gpt-4o") is True
 
 
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=100_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=100_000)
 def test_should_compact_false_below_threshold(_mock_count):
     config = ContextManagementConfig(
         compaction=CompactionConfig(enabled=True, trigger_tokens=150_000),
@@ -236,7 +236,7 @@ def test_should_compact_false_when_disabled():
     assert mgr.should_compact([], "gpt-4o") is False
 
 
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=200_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=200_000)
 def test_should_compact_respects_total_budget(_mock_count):
     config = ContextManagementConfig(
         compaction=CompactionConfig(
@@ -254,7 +254,7 @@ def test_should_compact_respects_total_budget(_mock_count):
 # ── get_token_usage ──────────────────────────────────────────────────
 
 
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=80_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=80_000)
 def test_get_token_usage(_mock_count):
     config = ContextManagementConfig(max_context_tokens=200_000)
     mgr = ContextManager(config)
@@ -299,7 +299,7 @@ async def test_truncation_drops_oldest_messages():
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
 async def test_truncation_noop_when_under_budget(_mock_count):
     config = ContextManagementConfig(
         max_context_tokens=200,
@@ -316,7 +316,7 @@ async def test_truncation_noop_when_under_budget(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
 async def test_truncation_disabled_by_default(_mock_count):
     config = ContextManagementConfig(max_context_tokens=10)  # Way under
     mgr = ContextManager(config)
@@ -332,7 +332,7 @@ async def test_truncation_disabled_by_default(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=900)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=900)
 async def test_pressure_feedback_injected_when_above_threshold(_mock_count):
     config = ContextManagementConfig(
         max_context_tokens=1000,
@@ -357,7 +357,7 @@ async def test_pressure_feedback_injected_when_above_threshold(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=500)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=500)
 async def test_pressure_feedback_not_injected_below_threshold(_mock_count):
     config = ContextManagementConfig(
         max_context_tokens=1000,
@@ -379,7 +379,7 @@ async def test_pressure_feedback_not_injected_below_threshold(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=900)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=900)
 async def test_pressure_feedback_not_duplicated(_mock_count):
     config = ContextManagementConfig(
         max_context_tokens=1000,
@@ -403,7 +403,7 @@ async def test_pressure_feedback_not_duplicated(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=50)
 async def test_pressure_feedback_disabled_by_default(_mock_count):
     config = ContextManagementConfig(max_context_tokens=100)
     mgr = ContextManager(config)
@@ -463,7 +463,7 @@ def test_remove_orphaned_tool_results_layer2_still_supported():
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages")
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages")
 async def test_compaction_routes_through_provided_llm(mock_count):
     """The LLM passed into prepare_messages is the one invoked for compaction."""
     mock_count.side_effect = [160_000, 160_000, 160_000, 160_000, 50_000]
@@ -494,7 +494,7 @@ async def test_compaction_routes_through_provided_llm(mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages")
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages")
 async def test_total_tokens_compacted_never_goes_negative(mock_count):
     """When the LLM summary exceeds the original token count, the running
     total must be clamped to 0 (not go negative), so total_token_budget
@@ -547,10 +547,10 @@ async def test_total_tokens_compacted_never_goes_negative(mock_count):
 # ── Regression: TokenUsage is a typed TypedDict ──────────────────────
 
 
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages", return_value=80_000)
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages", return_value=80_000)
 def test_get_token_usage_returns_token_usage_typeddict(_mock_count):
     """get_token_usage must return a TokenUsage TypedDict, not dict[str, Any]."""
-    from philharmonica.adk.context.context_config import TokenUsage
+    from augments.adk.context.context_config import TokenUsage
 
     config = ContextManagementConfig(max_context_tokens=200_000)
     mgr = ContextManager(config)
@@ -573,7 +573,7 @@ def test_get_token_usage_returns_token_usage_typeddict(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.context_manager.TokenCounter.count_messages")
+@patch("augments.adk.context.context_manager.TokenCounter.count_messages")
 async def test_forced_tool_uses_pre_feedback_token_count(mock_count):
     """The forced-tool threshold check must use the pre-feedback token count.
 

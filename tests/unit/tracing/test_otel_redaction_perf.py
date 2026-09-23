@@ -23,7 +23,7 @@ import time
 
 import pytest
 
-from philharmonica.adk.tracing.otel.otel_tracer import _redact
+from augments.adk.tracing.otel.otel_tracer import _redact
 
 # Per-input wall-clock budget. Any single `_redact` call that takes
 # longer than this on the CI worker represents a regression in the

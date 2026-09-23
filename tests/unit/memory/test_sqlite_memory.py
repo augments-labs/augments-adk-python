@@ -2,12 +2,12 @@
 
 import pytest
 
-from philharmonica.adk.memory.memory_types import (
+from augments.adk.memory.memory_types import (
     MemoryMetadata,
     MemorySearchFilter,
     MemorySource,
 )
-from philharmonica.adk.memory.sqlite_memory import SQLiteMemory
+from augments.adk.memory.sqlite_memory import SQLiteMemory
 
 
 @pytest.fixture

@@ -1,3 +1,3 @@
 # `LLM`
 
-- `philharmonica.adk.llms.LLM`
+- `augments.adk.llms.LLM`

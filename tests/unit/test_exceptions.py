@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.exceptions import CheckpointConflictError
-from philharmonica.adk.exceptions.exceptions import PhilharmonicaError
+from augments.adk.exceptions import CheckpointConflictError
+from augments.adk.exceptions.exceptions import AugmentsError
 
 
 class TestCheckpointConflictError:
@@ -21,14 +21,14 @@ class TestCheckpointConflictError:
 
     def test_is_opus_ai_error(self) -> None:
         err = CheckpointConflictError("t1")
-        assert isinstance(err, PhilharmonicaError)
+        assert isinstance(err, AugmentsError)
 
 
 def test_tool_not_permitted_for_tenant() -> None:
-    from philharmonica.adk.exceptions import PhilharmonicaError, ToolNotPermittedForTenant
+    from augments.adk.exceptions import AugmentsError, ToolNotPermittedForTenant
 
     err = ToolNotPermittedForTenant(tenant_id="t1", tool_name="search", agent_name="a")
-    assert isinstance(err, PhilharmonicaError)
+    assert isinstance(err, AugmentsError)
     assert err.tenant_id == "t1"
     assert err.tool_name == "search"
     assert err.agent_name == "a"
@@ -38,7 +38,7 @@ def test_tool_not_permitted_for_tenant() -> None:
 
 
 def test_tool_not_permitted_custom_message() -> None:
-    from philharmonica.adk.exceptions import ToolNotPermittedForTenant
+    from augments.adk.exceptions import ToolNotPermittedForTenant
 
     err = ToolNotPermittedForTenant(tenant_id="t1", tool_name="x", agent_name="a", message="nope")
     assert str(err) == "nope"

@@ -14,7 +14,7 @@ sync:
 
 # Fast inner-loop gate: mypy only (canonical; matches the per-PR CI gate).
 typecheck-fast:
-	$(RUN) mypy -p philharmonica.adk
+	$(RUN) mypy -p augments.adk
 
 # Inner-loop gate WITH pyright signal, without the slow whole-tree run: mypy
 # (canonical) + pyright scoped to the src files you changed (staged, unstaged,
@@ -35,7 +35,7 @@ typecheck-changed: typecheck-fast
 # prefer `make typecheck-fast` (mypy) or `make typecheck-changed` (mypy +
 # pyright on just your changes).
 typecheck: typecheck-fast
-	$(RUN) pyright src/philharmonica/adk/
+	$(RUN) pyright src/augments/adk/
 
 # Self-contained unit coverage — mirrors the per-PR CI gate (ci.yml "Unit
 # tests"). LLMs are mocked and fakeredis/moto/embedded stores keep it offline,
@@ -43,24 +43,24 @@ typecheck: typecheck-fast
 # deselected by marker (they run in integration.yml); --reruns 2 absorbs two known
 # timing-flaky tests. The coverage.report fail_under gate applies automatically.
 coverage:
-	$(RUN) pytest tests/unit -m "not integration and not postgres" -n auto --dist loadfile --reruns 2 --cov=src/philharmonica --cov-report=term-missing
+	$(RUN) pytest tests/unit -m "not integration and not postgres" -n auto --dist loadfile --reruns 2 --cov=src/augments --cov-report=term-missing
 
 # Same self-contained run, plus a browsable HTML report.
 coverage-html:
-	$(RUN) pytest tests/unit -m "not integration and not postgres" -n auto --dist loadfile --reruns 2 --cov=src/philharmonica --cov-report=html --cov-report=term-missing
+	$(RUN) pytest tests/unit -m "not integration and not postgres" -n auto --dist loadfile --reruns 2 --cov=src/augments --cov-report=html --cov-report=term-missing
 	@echo "HTML report: .coverage/html/index.html"
 
 # Unit + integration coverage in one combined number (coverage.run parallel=true
 # merges the -n auto workers), plus a browsable HTML report. REQUIRES local
 # infra, unlike `coverage`:
 #   - Postgres+pgvector on :5432 with the `vector` extension and the PG *server*
-#     binaries on PATH, plus PHILHARMONICA_TEST_PG_DSN
-#     (e.g. postgresql://postgres:postgres@localhost:5432/philharmonica_test)
-#   - Redis on :6379, plus PHILHARMONICA_TEST_REDIS_URL (e.g. redis://localhost:6379/0)
+#     binaries on PATH, plus AUGMENTS_TEST_PG_DSN
+#     (e.g. postgresql://postgres:postgres@localhost:5432/augments_test)
+#   - Redis on :6379, plus AUGMENTS_TEST_REDIS_URL (e.g. redis://localhost:6379/0)
 #   - a running Docker daemon and `uv sync --extra dev --extra sandbox-docker`
 # Live-LLM e2e is EXCLUDED here (-m "not e2e"); use `coverage-full` to add it.
 coverage-integration:
-	$(RUN) pytest tests/unit tests/integration -m "not e2e" -n auto --dist loadfile --cov=src/philharmonica --cov-report=html --cov-report=term-missing
+	$(RUN) pytest tests/unit tests/integration -m "not e2e" -n auto --dist loadfile --cov=src/augments --cov-report=html --cov-report=term-missing
 	@echo "HTML report: .coverage/html/index.html"
 
 # Everything, including live-LLM e2e (tests/integration/llms), plus a browsable
@@ -70,5 +70,5 @@ coverage-integration:
 # keys the e2e tests skip; with fake keys they fail on auth, so use real keys or
 # none.
 coverage-full:
-	set -a; [ -f .env ] && . ./.env; set +a; $(RUN) pytest tests/unit tests/integration -n auto --dist loadfile --cov=src/philharmonica --cov-report=html --cov-report=term-missing
+	set -a; [ -f .env ] && . ./.env; set +a; $(RUN) pytest tests/unit tests/integration -n auto --dist loadfile --cov=src/augments --cov-report=html --cov-report=term-missing
 	@echo "HTML report: .coverage/html/index.html"

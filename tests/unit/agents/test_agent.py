@@ -11,10 +11,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import UserError
-from philharmonica.adk.handoffs import HandoffRoute
-from philharmonica.adk.types.intents import Intent
+from augments.adk.agents import Agent
+from augments.adk.exceptions import UserError
+from augments.adk.handoffs import HandoffRoute
+from augments.adk.types.intents import Intent
 
 
 def _agent(name: str = "TestAgent") -> Agent:

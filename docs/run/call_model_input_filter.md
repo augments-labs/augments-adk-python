@@ -7,7 +7,7 @@ current agent and the run context.
 ## Type signature
 
 ```python
-from philharmonica.adk.run.config import (
+from augments.adk.run.config import (
     CallModelData,
     CallModelInputFilter,
     ModelInputData,
@@ -38,7 +38,7 @@ every turn — once per LLM call, across handoffs.
 
 ## When it runs
 
-Philharmonica has three pre-LLM hooks; they run in this order, each stage's
+Augments has three pre-LLM hooks; they run in this order, each stage's
 output flowing into the next:
 
 | Hook                                   | Layer                              | Access to agent/context | Sync/async    | Runs        |
@@ -54,13 +54,13 @@ Immediately after the filter returns, the Runner fires
 ## Worked example — inject a per-request system note
 
 ```python
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import (
     CallModelData,
     ModelInputData,
     RunConfig,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 def add_user_context(payload: CallModelData) -> ModelInputData:
     user_id = (payload.context or {}).get("user_id", "anonymous")

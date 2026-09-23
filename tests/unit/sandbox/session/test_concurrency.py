@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.concurrency``."""
+"""Tests for ``augments.adk.sandbox.session.concurrency``."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from collections.abc import Awaitable, Callable
 
 import pytest
 
-from philharmonica.adk.sandbox.session.concurrency import gather_in_order
+from augments.adk.sandbox.session.concurrency import gather_in_order
 
 
 def _make_factory(result: int, delay: float = 0.0) -> Callable[[], Awaitable[int]]:

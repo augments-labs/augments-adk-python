@@ -10,7 +10,7 @@ full rationale.
 
 ## Anatomy of an `Agent`
 
-`Agent` is a `@dataclass` defined in `src/philharmonica/adk/agents/agent.py`. All
+`Agent` is a `@dataclass` defined in `src/augments/adk/agents/agent.py`. All
 fields have defaults except `name` and `system_prompt`.
 
 | Field | Type | Default | Description |
@@ -37,8 +37,8 @@ fields have defaults except `name` and `system_prompt`.
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.run import Runner
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ agent = Agent(
 For longer prompts with discrete sections, use `SystemPrompt`:
 
 ```python
-from philharmonica.adk.prompts import SystemPrompt, SystemPromptTone
+from augments.adk.prompts import SystemPrompt, SystemPromptTone
 
 agent = Agent(
     name="Code Reviewer",
@@ -109,8 +109,8 @@ per-tenant config, session data, feature flags.
 
 ```python
 import logging
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.prompts import DynamicSystemPrompt, DynamicSystemPromptData, SystemPrompt
+from augments.adk.agents import Agent
+from augments.adk.prompts import DynamicSystemPrompt, DynamicSystemPromptData, SystemPrompt
 
 logger = logging.getLogger(__name__)
 
@@ -154,7 +154,7 @@ The `tools` field accepts any mix of `Tool` and `Toolset` instances:
   servers and dynamic tool lists without name collisions.
 
 ```python
-from philharmonica.adk.tools import function_tool
+from augments.adk.tools import function_tool
 
 @function_tool(name="lookup", description="Look up a support article by keyword.")
 def lookup(keyword: str) -> str:
@@ -186,8 +186,8 @@ another agent:
   zero routing tokens.
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import Handoff
+from augments.adk.agents import Agent
+from augments.adk.handoffs import Handoff
 
 # LLM-orchestrated
 triage = Agent(
@@ -215,7 +215,7 @@ routing (`HandoffRoute`), typed handoff input, and input filters, see
   `remediation` is set.
 
 ```python
-from philharmonica.adk.agents import Agent, AgentGuardrails
+from augments.adk.agents import Agent, AgentGuardrails
 
 agent = Agent(
     name="Support",
@@ -244,8 +244,8 @@ string, not the sub-agent's internal turns.
 
 ```python
 import logging
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.run import Runner
 
 logger = logging.getLogger(__name__)
 
@@ -302,8 +302,8 @@ agent definition:
 
 ```python
 import dataclasses
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
 
 base_agent = Agent(
     name="Analyst",
@@ -333,8 +333,8 @@ matching the schema and validates the response automatically.
 import asyncio
 import logging
 from pydantic import BaseModel, Field
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.run import Runner
 
 logger = logging.getLogger(__name__)
 
@@ -366,7 +366,7 @@ and the framework wraps it automatically. For advanced enforcement control,
 pass an explicit `AgentOutputSchema` instance:
 
 ```python
-from philharmonica.adk.schemas import AgentOutputSchema, SchemaEnforcement
+from augments.adk.schemas import AgentOutputSchema, SchemaEnforcement
 
 agent = Agent(
     name="Support Classifier",
@@ -431,7 +431,7 @@ to `Runner.arun()` concurrently:
 
 ```python
 import asyncio
-from philharmonica.adk.run import Runner
+from augments.adk.run import Runner
 
 # Run the same agent with three different inputs in parallel
 results = await asyncio.gather(

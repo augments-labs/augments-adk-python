@@ -11,8 +11,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.run.llm_calls import resolve_llm_config
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.run.llm_calls import resolve_llm_config
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -22,9 +22,9 @@ def _make_agent(
     tools: list | None = None,
 ):
     """Minimal agent-like object for testing."""
-    from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-    from philharmonica.adk.agents.middleware import Middleware
-    from philharmonica.adk.skills.activation import SkillActivation
+    from augments.adk.agents.agent_guardrails import AgentGuardrails
+    from augments.adk.agents.middleware import Middleware
+    from augments.adk.skills.activation import SkillActivation
 
     return SimpleNamespace(
         name="test_agent",
@@ -136,8 +136,8 @@ class TestResetToolChoiceInLoop:
     @pytest.mark.asyncio
     async def test_required_with_reset_uses_auto_on_second_call(self) -> None:
         """REQUIRED + reset_tool_choice=True → second LLM call uses 'auto'."""
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseFunctionToolCall,
             LLMResponseText,
@@ -189,11 +189,11 @@ class TestResetToolChoiceInLoop:
                     response=[LLMResponseText(text="Here is the data.")],
                 )
 
-        with patch("philharmonica.adk.run.loop.call_llm", side_effect=mock_call_llm):
-            from philharmonica.adk.hooks.hooks import RunHooks
-            from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.run.loop import run_agent_loop
+        with patch("augments.adk.run.loop.call_llm", side_effect=mock_call_llm):
+            from augments.adk.hooks.hooks import RunHooks
+            from augments.adk.run.config import DEFAULT_RUN_CONFIG
+            from augments.adk.run.context import RunContext
+            from augments.adk.run.loop import run_agent_loop
 
             ctx = RunContext(context=None)
             result = await run_agent_loop(
@@ -216,8 +216,8 @@ class TestResetToolChoiceInLoop:
     @pytest.mark.asyncio
     async def test_required_without_reset_stays_required(self) -> None:
         """REQUIRED + reset_tool_choice=False → second LLM call still uses REQUIRED."""
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseFunctionToolCall,
             LLMResponseText,
@@ -266,11 +266,11 @@ class TestResetToolChoiceInLoop:
                     response=[LLMResponseText(text="Done.")],
                 )
 
-        with patch("philharmonica.adk.run.loop.call_llm", side_effect=mock_call_llm):
-            from philharmonica.adk.hooks.hooks import RunHooks
-            from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.run.loop import run_agent_loop
+        with patch("augments.adk.run.loop.call_llm", side_effect=mock_call_llm):
+            from augments.adk.hooks.hooks import RunHooks
+            from augments.adk.run.config import DEFAULT_RUN_CONFIG
+            from augments.adk.run.context import RunContext
+            from augments.adk.run.loop import run_agent_loop
 
             ctx = RunContext(context=None)
             _ = await run_agent_loop(
@@ -290,8 +290,8 @@ class TestResetToolChoiceInLoop:
     @pytest.mark.asyncio
     async def test_auto_strategy_no_reset(self) -> None:
         """'auto' tool_choice → reset_tool_choice has no effect (no override ever set)."""
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseFunctionToolCall,
             LLMResponseText,
@@ -337,11 +337,11 @@ class TestResetToolChoiceInLoop:
                     response=[LLMResponseText(text="Result.")],
                 )
 
-        with patch("philharmonica.adk.run.loop.call_llm", side_effect=mock_call_llm):
-            from philharmonica.adk.hooks.hooks import RunHooks
-            from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.run.loop import run_agent_loop
+        with patch("augments.adk.run.loop.call_llm", side_effect=mock_call_llm):
+            from augments.adk.hooks.hooks import RunHooks
+            from augments.adk.run.config import DEFAULT_RUN_CONFIG
+            from augments.adk.run.context import RunContext
+            from augments.adk.run.loop import run_agent_loop
 
             ctx = RunContext(context=None)
             await run_agent_loop(
@@ -361,8 +361,8 @@ class TestResetToolChoiceInLoop:
     @pytest.mark.asyncio
     async def test_hitl_rejection_with_reset_uses_auto(self) -> None:
         """REQUIRED + HITL rejection + reset_tool_choice=True → resumed loop uses 'auto'."""
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseFunctionToolCall,
             LLMResponseText,
@@ -415,11 +415,11 @@ class TestResetToolChoiceInLoop:
                     response=[LLMResponseText(text="OK, I won't do that.")],
                 )
 
-        with patch("philharmonica.adk.run.loop.call_llm", side_effect=mock_call_llm):
-            from philharmonica.adk.hooks.hooks import RunHooks
-            from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.run.loop import run_agent_loop
+        with patch("augments.adk.run.loop.call_llm", side_effect=mock_call_llm):
+            from augments.adk.hooks.hooks import RunHooks
+            from augments.adk.run.config import DEFAULT_RUN_CONFIG
+            from augments.adk.run.context import RunContext
+            from augments.adk.run.loop import run_agent_loop
 
             ctx = RunContext(context=None)
             result = await run_agent_loop(
@@ -455,8 +455,8 @@ class TestResetToolChoiceInLoop:
                 response=[LLMResponseText(text="OK, I won't do that.")],
             )
 
-        with patch("philharmonica.adk.run.loop.call_llm", side_effect=mock_call_llm_resumed):
-            from philharmonica.adk.run.resumption import resume_from_state
+        with patch("augments.adk.run.loop.call_llm", side_effect=mock_call_llm_resumed):
+            from augments.adk.run.resumption import resume_from_state
 
             resumed_result = await resume_from_state(
                 agent=agent,

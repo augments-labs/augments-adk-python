@@ -1,6 +1,6 @@
 # Multi-Agent Patterns
 
-The Philharmonica Agents ADK provides three primitives for building multi-agent systems. Each primitive makes a different trade-off between control retention, context sharing, token cost, and orchestration flexibility.
+The Augments Agents ADK provides three primitives for building multi-agent systems. Each primitive makes a different trade-off between control retention, context sharing, token cost, and orchestration flexibility.
 
 | Pattern | Who Decides | Control After | History Shared |
 |---------|-------------|---------------|----------------|
@@ -18,8 +18,8 @@ The Philharmonica Agents ADK provides three primitives for building multi-agent 
 ### Basic usage
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.run import Runner
 
 researcher = Agent(
     name="Researcher",
@@ -72,7 +72,7 @@ When you need the LLM to provide structured parameters instead of a plain string
 
 ```python
 from pydantic import BaseModel, Field
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.tools.tool_context import ToolContext
 
 class TranslationInput(BaseModel):
     text: str = Field(description="Text to translate.")
@@ -97,7 +97,7 @@ translator_tool = translator_agent.as_tool(
 By default, the parent LLM receives `str(result.final_output)`. Use `extractor` to control exactly what is returned:
 
 ```python
-from philharmonica.adk.types.run import RunResult
+from augments.adk.types.run import RunResult
 
 def extract_summary(result: RunResult) -> str:
     output = str(result.final_output)
@@ -182,8 +182,8 @@ The ADK provides two handoff strategies with different trade-offs for token cost
 The source agent's available tool list includes `transfer_to_<target_name>` function tools. The LLM decides when and to whom to hand off by calling the appropriate tool.
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import Handoff
+from augments.adk.agents import Agent
+from augments.adk.handoffs import Handoff
 
 refunds_agent = Agent(
     name="Refunds Specialist",
@@ -237,9 +237,9 @@ The source agent outputs a structured Intent type rather than calling a transfer
 from pydantic import Field
 from typing import Literal, Optional, Union
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import HandoffRoute
-from philharmonica.adk.types.intents import Intent, Respond
+from augments.adk.agents import Agent
+from augments.adk.handoffs import HandoffRoute
+from augments.adk.types.intents import Intent, Respond
 
 class RefundIntent(Intent):
     kind: Literal["refund"] = "refund"
@@ -276,7 +276,7 @@ The `.when()` method accepts multiple intent types that map to the same target. 
 By default, the full conversation history is forwarded to the target agent. `HandoffConfig` controls how much history transfers and at what cost.
 
 ```python
-from philharmonica.adk.handoffs import Handoff, HandoffConfig
+from augments.adk.handoffs import Handoff, HandoffConfig
 
 # Transfer only the last 10 messages, capped at 5,000 tokens
 Handoff(
@@ -306,11 +306,11 @@ Handoff(
 
 ### Handoff input filters
 
-Input filters transform `HandoffInputData` before it reaches the target agent. Built-in filters live in `philharmonica.adk.handoffs.handoff_filters`.
+Input filters transform `HandoffInputData` before it reaches the target agent. Built-in filters live in `augments.adk.handoffs.handoff_filters`.
 
 ```python
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.handoffs.handoff_filters import remove_tool_calls, keep_last_n, compose
+from augments.adk.handoffs import Handoff
+from augments.adk.handoffs.handoff_filters import remove_tool_calls, keep_last_n, compose
 
 Handoff(
     target=specialist_agent,
@@ -331,8 +331,8 @@ For fan-out workloads — generating multiple candidates, gathering perspectives
 ```python
 import asyncio
 from pydantic import BaseModel, Field
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.run import Runner
 
 class JudgeVerdict(BaseModel):
     best_index: int = Field(ge=0, lt=3, description="Index of the best result (0-2).")
@@ -452,14 +452,14 @@ The key constraint is that handoffs are one-way permanent transfers. If the orig
 
 ## Reference
 
-- Source: `src/philharmonica/adk/agents/agent.py` — `Agent.as_tool()`, `Agent.get_delegate_tools()`, `Agent.get_agent_graph()`
-- Source: `src/philharmonica/adk/handoffs/handoff.py` — `Handoff`, `handoff()`
-- Source: `src/philharmonica/adk/handoffs/handoff_route.py` — `HandoffRoute`, `handoff_route()`
-- Source: `src/philharmonica/adk/handoffs/handoff_config.py` — `HandoffConfig`
-- Source: `src/philharmonica/adk/handoffs/handoff_filters.py` — built-in filters
-- Source: `src/philharmonica/adk/handoffs/handoff_input_data.py` — `HandoffInputData`
-- Source: `src/philharmonica/adk/types/agents/agent_as_tool_types.py` — `AgentToolInput`, `AgentToolOutputExtractor`, `AgentToolInputBuilder`
-- Source: `src/philharmonica/adk/types/intents/__init__.py` — `Intent`, `Respond`
+- Source: `src/augments/adk/agents/agent.py` — `Agent.as_tool()`, `Agent.get_delegate_tools()`, `Agent.get_agent_graph()`
+- Source: `src/augments/adk/handoffs/handoff.py` — `Handoff`, `handoff()`
+- Source: `src/augments/adk/handoffs/handoff_route.py` — `HandoffRoute`, `handoff_route()`
+- Source: `src/augments/adk/handoffs/handoff_config.py` — `HandoffConfig`
+- Source: `src/augments/adk/handoffs/handoff_filters.py` — built-in filters
+- Source: `src/augments/adk/handoffs/handoff_input_data.py` — `HandoffInputData`
+- Source: `src/augments/adk/types/agents/agent_as_tool_types.py` — `AgentToolInput`, `AgentToolOutputExtractor`, `AgentToolInputBuilder`
+- Source: `src/augments/adk/types/intents/__init__.py` — `Intent`, `Respond`
 - Examples: `./examples/agent_patterns/agents_as_tools.py`
 - Examples: `./examples/agent_patterns/parallelization.py`
 - Examples: `./examples/handoffs/llm_orchestrated.py`

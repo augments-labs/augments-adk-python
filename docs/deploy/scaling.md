@@ -9,7 +9,7 @@ replicas or process restarts.
 The generated Kubernetes Deployment sets `replicas: 1`. A single replica:
 
 - Runs the SQLite A2A task store entirely in-process (pass `--task-db` to
-  `philharmonica serve` to make it durable across restarts).
+  `augments serve` to make it durable across restarts).
 - Uses any `SessionStore` the developer wires into the app (in-memory or
   SQLite-backed via the `session` extra).
 - Satisfies the [container contract](container.md): binds `0.0.0.0:$PORT`,
@@ -23,11 +23,11 @@ replica with a durable SQLite store is sufficient.
 
 When traffic requires more than one replica, two shared backends must be
 configured before increasing the replica count. Both are provided by the ADK
-and wired via `philharmonica serve` flags.
+and wired via `augments serve` flags.
 
 ### A2A task store — `PostgresTaskStore`
 
-`PostgresTaskStore` (`philharmonica.adk.a2a.postgres_task_store`) is a durable,
+`PostgresTaskStore` (`augments.adk.a2a.postgres_task_store`) is a durable,
 shared A2A executor task store backed by a PostgreSQL `a2a_tasks` table reached
 through a `psycopg` async connection pool. Because every replica talks to the
 same database, background task state and `A2AContinuationToken` resumption
@@ -36,7 +36,7 @@ survive across replicas — which a per-pod SQLite file cannot provide.
 Wire it via `--task-dsn`:
 
 ```bash
-philharmonica serve \
+augments serve \
   --agent my_pkg.agents:assistant \
   --card card.json \
   --task-dsn "postgresql://user:pass@db-host/agents"
@@ -45,7 +45,7 @@ philharmonica serve \
 Install the required extras:
 
 ```bash
-pip install 'philharmonica-adk[a2a,a2a-postgres]'
+pip install 'augments-adk[a2a,a2a-postgres]'
 ```
 
 `PostgresTaskStore` also runs `recover_on_startup`: any task a prior process
@@ -65,7 +65,7 @@ exclusive; choose one.
 
 ### Session store — `PostgresMultiSessions`
 
-`PostgresMultiSessions` (`philharmonica.adk.session.postgres_multi_sessions`) is
+`PostgresMultiSessions` (`augments.adk.session.postgres_multi_sessions`) is
 the Postgres counterpart of `SQLiteMultiSessions`. It owns a `psycopg` async
 connection pool and makes REST session history fully shared across replicas —
 any replica can continue any conversation from the last persisted message.
@@ -73,7 +73,7 @@ any replica can continue any conversation from the last persisted message.
 Wire it via `--session-dsn`:
 
 ```bash
-philharmonica serve \
+augments serve \
   --agent my_pkg.agents:assistant \
   --session-dsn "postgresql://user:pass@db-host/agents"
 ```
@@ -81,7 +81,7 @@ philharmonica serve \
 Install the required extra:
 
 ```bash
-pip install 'philharmonica-adk[session-postgres]'
+pip install 'augments-adk[session-postgres]'
 ```
 
 `--session-db` (SQLite file) and `--session-dsn` (Postgres DSN) are mutually
@@ -93,7 +93,7 @@ For a horizontally-scaled deployment, point both DSNs at the same Postgres
 instance and set `replicas > 1`:
 
 ```bash
-philharmonica serve \
+augments serve \
   --agent my_pkg.agents:assistant \
   --card card.json \
   --task-dsn "$PG_DSN" \
@@ -101,7 +101,7 @@ philharmonica serve \
 ```
 
 ```bash
-pip install 'philharmonica-adk[a2a,a2a-postgres,session-postgres]'
+pip install 'augments-adk[a2a,a2a-postgres,session-postgres]'
 ```
 
 ## Enabling the HPA
@@ -148,7 +148,7 @@ when more than one instance can be active simultaneously. Use `--task-dsn` and
 For Cloud Run, set `--min-instances` to control cold-start behaviour:
 
 ```bash
-philharmonica deploy cloud-run \
+augments deploy cloud-run \
   --agent my_pkg.agents:assistant \
   --project my-project \
   --region us-central1 \
@@ -177,5 +177,5 @@ service configuration.
 
 - [Container contract](container.md) — the universal image contract
 - [Kubernetes and Helm](kubernetes.md) — Kustomize manifests and HPA
-- [Serving layer](serving.md) — `philharmonica serve` flag reference
+- [Serving layer](serving.md) — `augments serve` flag reference
 - [A2A guide](../a2a/a2a.md#production-warning-persistent-task-store) — persistent task store setup

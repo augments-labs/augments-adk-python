@@ -9,8 +9,8 @@ from __future__ import annotations
 import pytest
 from pytest_postgresql.factories import postgresql, postgresql_proc
 
-from philharmonica.adk.session.postgres_multi_sessions import PostgresMultiSessions
-from philharmonica.adk.session.session_event import create_session_event
+from augments.adk.session.postgres_multi_sessions import PostgresMultiSessions
+from augments.adk.session.session_event import create_session_event
 
 pytestmark = pytest.mark.postgres
 

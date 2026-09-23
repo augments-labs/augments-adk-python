@@ -17,8 +17,8 @@ spent on a request that was doomed by a missing `SLACK_TOKEN`.
 ## Quick example
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools import function_tool
+from augments.adk.agents import Agent
+from augments.adk.tools import function_tool
 
 
 @function_tool(
@@ -53,7 +53,7 @@ on each. Missing requirements are aggregated into a single
 `ToolDependencyError`:
 
 ```
-philharmonica.adk.exceptions.ToolDependencyError:
+augments.adk.exceptions.ToolDependencyError:
 Agent 'Notifier' has tools with unsatisfied dependencies:
   - slack_notify: env:SLACK_TOKEN, package:slack-sdk>=3.0
 ```
@@ -62,7 +62,7 @@ The exception attribute `missing` is a `dict[tool_name, list[str]]` so
 ops tooling can inspect failures programmatically:
 
 ```python
-from philharmonica.adk.exceptions import ToolDependencyError
+from augments.adk.exceptions import ToolDependencyError
 
 try:
     agent = Agent(name="...", system_prompt="...", tools=[...])

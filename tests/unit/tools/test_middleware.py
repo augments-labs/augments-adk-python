@@ -20,10 +20,10 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.run.tools_executor import maybe_wrap_with_agent_middleware
-from philharmonica.adk.tools import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.middleware import Middleware
+from augments.adk.run.tools_executor import maybe_wrap_with_agent_middleware
+from augments.adk.tools import (
     FunctionTool,
     FunctionToolset,
     ToolLoggingMiddleware,
@@ -35,8 +35,8 @@ from philharmonica.adk.tools import (
     function_tool,
     wrap_tool_with_middleware,
 )
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
 
 
 @function_tool(name="hello", description="greet")
@@ -207,7 +207,7 @@ class TestToolLoggingMiddleware:
             middleware=Middleware(tools=[ToolLoggingMiddleware(level=logging.INFO)]),
         )
         wrapped = maybe_wrap_with_agent_middleware(hello, agent.middleware.tools)
-        with caplog.at_level("INFO", logger="philharmonica.adk.tools.tool_middleware"):
+        with caplog.at_level("INFO", logger="augments.adk.tools.tool_middleware"):
             await wrapped(_ctx(), '{"name": "World"}')
         text = caplog.text
         assert "tool 'hello' starting" in text
@@ -221,7 +221,7 @@ class TestToolLoggingMiddleware:
             middleware=Middleware(tools=[ToolLoggingMiddleware(log_args=True, log_result=True)]),
         )
         wrapped = maybe_wrap_with_agent_middleware(hello, agent.middleware.tools)
-        with caplog.at_level("INFO", logger="philharmonica.adk.tools.tool_middleware"):
+        with caplog.at_level("INFO", logger="augments.adk.tools.tool_middleware"):
             await wrapped(_ctx(), '{"name": "World"}')
         text = caplog.text
         assert "World" in text  # args logged

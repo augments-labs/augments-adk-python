@@ -32,8 +32,8 @@ are deliberately **not** retried — no category covers them.
 ## Basic usage
 
 ```python
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.types.llms import LLMRetryPolicy
+from augments.adk.llms import LLMConfig
+from augments.adk.types.llms import LLMRetryPolicy
 
 config = LLMConfig(
     retry_policy=LLMRetryPolicy(
@@ -65,7 +65,7 @@ workers retry in lock-step after a shared upstream outage.
 ## Category filtering
 
 ```python
-from philharmonica.adk.types.llms import LLMRetryPolicy
+from augments.adk.types.llms import LLMRetryPolicy
 
 # Retry server errors and timeouts, but give up immediately on rate limits
 # (useful when upstream has a hard quota and retries are pointless).
@@ -83,6 +83,6 @@ your own loop that discards the partial output and starts fresh.
 
 ## See also
 
-- `src/philharmonica/adk/types/llms/retry_policy.py` — dataclass definition
-- `src/philharmonica/adk/llms/litellm/litellm_retry.py` — litellm exception classifier and retry loop
+- `src/augments/adk/types/llms/retry_policy.py` — dataclass definition
+- `src/augments/adk/llms/litellm/litellm_retry.py` — litellm exception classifier and retry loop
 - `tests/unit/llms/test_retry_policy.py` — tests for the policy and loop

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.apply_patch`` — WorkspaceEditor.
+"""Tests for ``augments.adk.sandbox.apply_patch`` — WorkspaceEditor.
 
 These cover engine semantics with an in-memory fake session — the
 real backends are exercised in their per-backend test files.
@@ -13,14 +13,14 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import ApplyPatchError
-from philharmonica.adk.sandbox.apply_patch import (
+from augments.adk.exceptions.exceptions import ApplyPatchError
+from augments.adk.sandbox.apply_patch import (
     V4AFormat,
     WorkspaceEditor,
     coerce_operations,
     resolve_patch_format,
 )
-from philharmonica.adk.sandbox.editor import ApplyPatchOperation
+from augments.adk.sandbox.editor import ApplyPatchOperation
 
 
 class _FakeSession:

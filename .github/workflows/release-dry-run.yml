@@ -28,8 +28,8 @@ jobs:
         run: uvx twine check dist/*
       - name: Fresh-venv install + smoke test (from /tmp)
         run: |
-          uv venv /tmp/philharmonica-dry-run
-          uv pip install --python /tmp/philharmonica-dry-run/bin/python dist/*.whl
+          uv venv /tmp/augments-dry-run
+          uv pip install --python /tmp/augments-dry-run/bin/python dist/*.whl
           cd /tmp
-          /tmp/philharmonica-dry-run/bin/python -c "import philharmonica.adk"
-          /tmp/philharmonica-dry-run/bin/philharmonica --help >/dev/null
+          /tmp/augments-dry-run/bin/python -c "import augments.adk"
+          /tmp/augments-dry-run/bin/augments --help >/dev/null

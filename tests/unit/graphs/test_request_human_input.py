@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs import Interrupt, InterruptException, request_human_input
-from philharmonica.adk.orchestration.executable import ExecutableInput
+from augments.adk.graphs import Interrupt, InterruptException, request_human_input
+from augments.adk.orchestration.executable import ExecutableInput
 
 
 def _input(metadata: dict[str, object] | None = None) -> ExecutableInput:

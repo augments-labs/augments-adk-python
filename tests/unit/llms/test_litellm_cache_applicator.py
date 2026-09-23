@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.llms.litellm.litellm_cache_applicator import resolve_cache_control_injection_points
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLMConfig
+from augments.adk.llms.litellm.litellm_cache_applicator import resolve_cache_control_injection_points
+from augments.adk.llms.litellm.litellm_model import LiteLLMConfig
 
 
 class TestResolveOff:

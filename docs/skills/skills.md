@@ -37,7 +37,7 @@ Compatible with LangChain/CrewAI/Google ADK:
 name: code-review
 description: Expert Python code review with security focus
 version: 1.0.0
-author: Philharmonica
+author: Augments
 tags: python, security, review
 license: MIT
 ---

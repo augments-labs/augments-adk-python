@@ -1,8 +1,8 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.iterator_io``."""
+"""Tests for ``augments.adk.sandbox.utils.iterator_io``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.utils.iterator_io import IteratorIO
+from augments.adk.sandbox.utils.iterator_io import IteratorIO
 
 
 def test_read_all() -> None:

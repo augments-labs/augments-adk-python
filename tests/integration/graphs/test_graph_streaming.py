@@ -8,20 +8,20 @@ from contextlib import ExitStack, contextmanager
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.events import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.events import (
     GRAPH_END,
     GRAPH_START,
     NODE_END,
     NODE_START,
     NODE_STREAM,
 )
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.result import GraphRunResultStreaming
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.graph_loop import run_graph_loop_streamed
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.result import GraphRunResultStreaming
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.graph_loop import run_graph_loop_streamed
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
 
 def _linear() -> Graph:
@@ -114,23 +114,23 @@ def _patched_llm(text: str) -> Iterator[None]:
     with ExitStack() as stack:
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.loop.call_llm",
+                "augments.adk.run.loop.call_llm",
                 new=AsyncMock(side_effect=lambda *args, **kwargs: _fake_response(text)),
             )
         )
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.loop.call_llm_streamed",
+                "augments.adk.run.loop.call_llm_streamed",
                 new=AsyncMock(side_effect=lambda *args, **kwargs: _fake_response(text)),
             )
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[]))
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[]))
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[]))
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[]))
         )
-        stack.enter_context(patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])))
+        stack.enter_context(patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])))
         yield
 
 
@@ -253,7 +253,7 @@ async def test_runner_arun_graph_streamed_returns_streaming_result() -> None:
     """Runner.arun_graph_streamed returns a GraphRunResultStreaming immediately;
     draining stream_events() yields a graph.start first and graph.end last,
     and the result is completed with the expected final_output."""
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     g = _linear()
     result = await Runner.arun_graph_streamed(g, "go")
@@ -269,7 +269,7 @@ async def test_runner_arun_graph_streamed_returns_streaming_result() -> None:
 async def test_graph_runner_stream_true_routes_to_streamed() -> None:
     """Runner.configure().graph(g).arun(stream=True) returns a GraphRunResultStreaming
     and produces the expected final_output."""
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     g = _linear()
     result = await Runner.configure().graph(g).arun("go", stream=True)
@@ -283,7 +283,7 @@ async def test_cancel_immediate_stops_streamed_run() -> None:
     """cancel(mode='immediate') genuinely interrupts a slow node — the drain
     completes well within the slow node's sleep duration and the slow path
     never produces its output."""
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     async def slow() -> str:
         await asyncio.sleep(5.0)
@@ -337,9 +337,9 @@ async def test_streaming_composes_with_sp2_timeout() -> None:
     The drain is wrapped in a 5 s hard bound so the test cannot hang even if
     the timeout logic regresses.
     """
-    from philharmonica.adk.graphs.config import GraphConfig
-    from philharmonica.adk.graphs.events import NODE_ERROR
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.graphs.config import GraphConfig
+    from augments.adk.graphs.events import NODE_ERROR
+    from augments.adk.run.runner import Runner
 
     async def slow() -> str:
         await asyncio.sleep(1.0)
@@ -402,9 +402,9 @@ async def test_streaming_composes_with_sp1_resume() -> None:
        ``a`` had re-fired (incorrect barrier seeding) its output ``"a-done"``
        would shadow ``b``.
     """
-    from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-    from philharmonica.adk.graphs.config import GraphConfig
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+    from augments.adk.graphs.config import GraphConfig
+    from augments.adk.run.runner import Runner
 
     cp = InMemoryCheckpointer()
 

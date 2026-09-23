@@ -8,8 +8,8 @@ import pytest
 
 pytest.importorskip("qdrant_client")
 
-from philharmonica.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
+from augments.adk.memory.vector_store import VectorRecord
 
 
 def _rec(rid: str, vector: tuple[float, ...], *, kind: MemoryKind = MemoryKind.EPISODIC) -> VectorRecord:
@@ -25,7 +25,7 @@ def _rec(rid: str, vector: tuple[float, ...], *, kind: MemoryKind = MemoryKind.E
 
 
 async def test_qdrant_namespace_isolation() -> None:
-    from philharmonica.adk.memory.stores.qdrant import QdrantVectorStore
+    from augments.adk.memory.stores.qdrant import QdrantVectorStore
 
     store = QdrantVectorStore(collection="ns_isolation", dimensions=2, location=":memory:")
     a, b = str(uuid.uuid4()), str(uuid.uuid4())
@@ -61,7 +61,7 @@ def test_qdrant_to_record_raises_on_missing_required_payload() -> None:
     pytest.importorskip("qdrant_client")
     from qdrant_client import models
 
-    from philharmonica.adk.memory.stores.qdrant import _to_record
+    from augments.adk.memory.stores.qdrant import _to_record
 
     # Point with empty payload — namespace and content are required
     point = models.Record(id="some-id", payload={}, vector=[1.0, 0.0])
@@ -70,7 +70,7 @@ def test_qdrant_to_record_raises_on_missing_required_payload() -> None:
 
 
 async def test_qdrant_round_trip() -> None:
-    from philharmonica.adk.memory.stores.qdrant import QdrantVectorStore
+    from augments.adk.memory.stores.qdrant import QdrantVectorStore
 
     store = QdrantVectorStore(collection="round_trip", dimensions=2, location=":memory:")
     a, b = str(uuid.uuid4()), str(uuid.uuid4())

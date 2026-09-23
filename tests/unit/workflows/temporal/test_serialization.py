@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.serialization``.
+"""Tests for ``augments.adk.workflows.temporal.serialization``.
 
 Covers:
 - DataConverter roundtrips a dataclass payload.
@@ -15,8 +15,8 @@ temporalio = pytest.importorskip("temporalio")
 
 from temporalio.converter import DataConverter
 
-from philharmonica.adk.workflows.temporal.serialization import (
-    build_philharmonica_data_converter,
+from augments.adk.workflows.temporal.serialization import (
+    build_augments_data_converter,
     config_from_json_dict,
     config_to_json_dict,
 )
@@ -28,9 +28,9 @@ class _SamplePayload:
     value: int
 
 
-class TestPhilharmonicaPayloadConverterRoundtrips:
-    def test_philharmonica_payload_converter_roundtrips_dataclass(self) -> None:
-        converter: DataConverter = build_philharmonica_data_converter()
+class TestAugmentsPayloadConverterRoundtrips:
+    def test_augments_payload_converter_roundtrips_dataclass(self) -> None:
+        converter: DataConverter = build_augments_data_converter()
         original = _SamplePayload(name="hello", value=42)
 
         payloads = converter.payload_converter.to_payloads([original])
@@ -42,8 +42,8 @@ class TestPhilharmonicaPayloadConverterRoundtrips:
         assert roundtripped.name == original.name
         assert roundtripped.value == original.value
 
-    def test_philharmonica_payload_converter_handles_none(self) -> None:
-        converter: DataConverter = build_philharmonica_data_converter()
+    def test_augments_payload_converter_handles_none(self) -> None:
+        converter: DataConverter = build_augments_data_converter()
 
         payloads = converter.payload_converter.to_payloads([None])
         restored = converter.payload_converter.from_payloads(payloads, [type(None)])
@@ -63,7 +63,7 @@ class TestConfigJsonRoundtrip:
     def test_plain_config_roundtrips(self) -> None:
         import json
 
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         cfg = LLMConfig(temperature=0.7, max_output_tokens=256)
         out = config_from_json_dict(json.loads(json.dumps(config_to_json_dict(cfg))))
@@ -73,8 +73,8 @@ class TestConfigJsonRoundtrip:
     def test_retry_policy_roundtrips(self) -> None:
         import json
 
-        from philharmonica.adk.llms.llm_config import LLMConfig
-        from philharmonica.adk.types.llms.retry_policy import LLMRetryPolicy
+        from augments.adk.llms.llm_config import LLMConfig
+        from augments.adk.types.llms.retry_policy import LLMRetryPolicy
 
         cfg = LLMConfig(
             retry_policy=LLMRetryPolicy(max_retries=5, retry_on=frozenset(["rate_limit", "timeout"])),
@@ -90,7 +90,7 @@ class TestConfigJsonRoundtrip:
 
         import httpx
 
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         cfg = LLMConfig(timeout=httpx.Timeout(connect=5.0, read=10.0, write=10.0, pool=2.0))
         out = config_from_json_dict(json.loads(json.dumps(config_to_json_dict(cfg))))
@@ -100,7 +100,7 @@ class TestConfigJsonRoundtrip:
     def test_float_timeout_passes_through(self) -> None:
         import json
 
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         cfg = LLMConfig(timeout=30.0)
         out = config_from_json_dict(json.loads(json.dumps(config_to_json_dict(cfg))))
@@ -113,9 +113,9 @@ class TestConfigJsonRoundtrip:
 
 from pydantic import BaseModel
 
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.workflows.temporal.serialization import (
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.tools import function_tool
+from augments.adk.workflows.temporal.serialization import (
     ForwardedOutputSchema,
     output_schema_from_json_dict,
     output_schema_to_json_dict,
@@ -152,7 +152,7 @@ class TestToolJsonRoundtrip:
         assert rebuilt.on_invoke is None
 
     def test_hosted_tool_is_not_forwardable(self) -> None:
-        from philharmonica.adk.tools.hosted.code_execution_tool import CodeExecutionTool
+        from augments.adk.tools.hosted.code_execution_tool import CodeExecutionTool
 
         # Provider-hosted tools cannot be reconstructed as function definitions;
         # the serializer returns None so the caller skips (and logs) them.

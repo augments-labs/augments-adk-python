@@ -8,8 +8,8 @@ import pytest
 
 pytest.importorskip("pinecone")
 
-from philharmonica.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
+from augments.adk.memory.vector_store import VectorRecord
 
 
 class _FakeIndex:
@@ -60,7 +60,7 @@ def _rec(rid: str) -> VectorRecord:
 
 async def test_pinecone_clear(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("pinecone.Pinecone", _FakePinecone)
-    from philharmonica.adk.memory.stores.pinecone import PineconeVectorStore
+    from augments.adk.memory.stores.pinecone import PineconeVectorStore
 
     store = PineconeVectorStore(index="testidx", api_key="k")
     await store.upsert([_rec("a")])
@@ -71,7 +71,7 @@ async def test_pinecone_clear(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_pinecone_build_filter_shapes() -> None:
-    from philharmonica.adk.memory.stores.pinecone import _build_filter
+    from augments.adk.memory.stores.pinecone import _build_filter
 
     assert _build_filter("u1", None) == {"namespace": {"$eq": "u1"}}
     multi = _build_filter("u1", MemorySearchFilter(kind=MemoryKind.SEMANTIC, importance=4))
@@ -85,7 +85,7 @@ def test_pinecone_build_filter_shapes() -> None:
 
 def test_pinecone_from_meta_raises_on_missing_required_fields() -> None:
     """_from_meta must raise RuntimeError (not KeyError) on missing required fields."""
-    from philharmonica.adk.memory.stores.pinecone import _from_meta
+    from augments.adk.memory.stores.pinecone import _from_meta
 
     # Missing 'namespace'
     with pytest.raises(RuntimeError, match="namespace"):
@@ -101,7 +101,7 @@ def test_to_meta_omits_empty_categories() -> None:
     Pinecone rejects an empty-list metadata value, so the key is omitted; it
     round-trips back to an empty tuple via _from_meta.
     """
-    from philharmonica.adk.memory.stores.pinecone import _from_meta, _to_meta
+    from augments.adk.memory.stores.pinecone import _from_meta, _to_meta
 
     meta = _to_meta(_rec("a"))
     assert "categories" not in meta
@@ -112,7 +112,7 @@ def test_to_meta_omits_empty_categories() -> None:
 
 def test_to_meta_keeps_nonempty_categories() -> None:
     """A non-empty categories tuple is still written as a list of strings."""
-    from philharmonica.adk.memory.stores.pinecone import _to_meta
+    from augments.adk.memory.stores.pinecone import _to_meta
 
     record = VectorRecord(
         id="a",
@@ -128,7 +128,7 @@ def test_to_meta_keeps_nonempty_categories() -> None:
 
 async def test_pinecone_upsert_query_get(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr("pinecone.Pinecone", _FakePinecone)
-    from philharmonica.adk.memory.stores.pinecone import PineconeVectorStore
+    from augments.adk.memory.stores.pinecone import PineconeVectorStore
 
     store = PineconeVectorStore(index="testidx", api_key="k")
     await store.upsert([_rec("a")])

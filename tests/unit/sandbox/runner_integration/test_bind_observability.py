@@ -3,8 +3,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.runner_integration.capability_lifecycle import bind_capabilities
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.runner_integration.capability_lifecycle import bind_capabilities
 
 
 class TestBindObservability:

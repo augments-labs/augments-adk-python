@@ -13,7 +13,7 @@ import pickle
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     And,
     FlowDefinition,
     FlowDefinitionError,
@@ -25,7 +25,7 @@ from philharmonica.adk.flows import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.definition import build_flow_definition as _build_flow_definition
+from augments.adk.flows.definition import build_flow_definition as _build_flow_definition
 
 
 class _S(BaseModel):
@@ -172,7 +172,7 @@ class TestBuildFlowDefinitionTopology:
 
 class TestFlowGetDefinition:
     def test_start_step_in_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -183,7 +183,7 @@ class TestFlowGetDefinition:
         assert defn.roles["kickoff"] == "start"
 
     def test_listen_step_in_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -197,7 +197,7 @@ class TestFlowGetDefinition:
         assert defn.direct_triggers["after"] == ("kickoff",)
 
     def test_router_step_in_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -212,7 +212,7 @@ class TestFlowGetDefinition:
         assert defn.router_triggers["route"] == ("kickoff",)
 
     def test_and_gate_in_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -232,7 +232,7 @@ class TestFlowGetDefinition:
         assert gate.triggers == frozenset({"a", "b"})
 
     def test_or_gate_in_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -250,7 +250,7 @@ class TestFlowGetDefinition:
         assert gate.kind == "or"
 
     def test_description_from_decorator(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start(description="Seed the run")
@@ -261,7 +261,7 @@ class TestFlowGetDefinition:
         assert step.description == "Seed the run"
 
     def test_multiple_instances_same_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -380,7 +380,7 @@ class TestFlowDefinitionImmutability:
         """FlowDefinition must not hold a reference to any Flow instance."""
         import gc
 
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start

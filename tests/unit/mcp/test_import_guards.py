@@ -1,15 +1,15 @@
 """Subprocess regression tests for the optional-dependency import guards in
-``philharmonica.adk.mcp.__init__`` and ``philharmonica.adk.tools.toolsets``.
+``augments.adk.mcp.__init__`` and ``augments.adk.tools.toolsets``.
 
 The ``mcp`` extra pulls two distributions, not one: the ``mcp`` client itself
 and ``httpx2``, which the streamable HTTP transport imports directly to build
 the client it hands to the transport. A guard that swallows only
 ``ModuleNotFoundError(name="mcp")`` therefore re-raises when ``httpx2`` is the
-missing piece, and ``import philharmonica.adk.mcp`` crashes instead of
+missing piece, and ``import augments.adk.mcp`` crashes instead of
 degrading to the documented ``None`` bindings.
 
 Each case runs in a fresh subprocess so a meta-path blocker installed before
-import sees an interpreter with no cached ``philharmonica`` modules.
+import sees an interpreter with no cached ``augments`` modules.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ def _run_blocked_import(block_name: str, body: str) -> subprocess.CompletedProce
 
 
 _MCP_BODY = """
-from philharmonica.adk.mcp import (
+from augments.adk.mcp import (
     MCPServerSse,
     MCPServerStdio,
     MCPServerStreamableHttp,
@@ -64,7 +64,7 @@ assert MCPServerSse is None, "MCPServerSse must degrade to None"
 # with either distribution absent and the toolsets guard never fires. These
 # cases pin that: the package must import cleanly rather than degrade.
 _TOOLSETS_BODY = """
-from philharmonica.adk.tools.toolsets import FunctionToolset, MCPToolset
+from augments.adk.tools.toolsets import FunctionToolset, MCPToolset
 
 assert FunctionToolset is not None, "the non-optional toolsets must remain importable"
 assert MCPToolset is not None, "MCPToolset defers its client imports and stays importable"
@@ -87,7 +87,7 @@ def test_mcp_import_survives_missing_mcp() -> None:
 
 
 def test_toolsets_import_survives_missing_httpx2() -> None:
-    # The toolsets guard reaches philharmonica.adk.mcp through mcp_toolset, so if
+    # The toolsets guard reaches augments.adk.mcp through mcp_toolset, so if
     # that ever stops deferring its imports it inherits this same failure.
     result = _run_blocked_import("httpx2", _TOOLSETS_BODY)
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"

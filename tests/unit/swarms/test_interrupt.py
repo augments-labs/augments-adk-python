@@ -9,9 +9,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.swarms.interrupt import request_human_input_in_swarm
+from augments.adk.graphs.interrupt import Interrupt, InterruptException
+from augments.adk.run.context import RunContext
+from augments.adk.swarms.interrupt import request_human_input_in_swarm
 
 
 class TestRunContextSwarmReplySlot:

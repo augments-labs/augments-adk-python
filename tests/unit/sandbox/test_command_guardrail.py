@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxCommandRejected
-from philharmonica.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
+from augments.adk.exceptions.exceptions import SandboxCommandRejected
+from augments.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
 
 
 class TestExactMode:

@@ -4,7 +4,7 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.budgets import CostLedger, InMemoryCostLedger
+from augments.adk.budgets import CostLedger, InMemoryCostLedger
 
 
 async def test_record_and_spend() -> None:

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.types.sandbox.exec_result``."""
+"""Tests for ``augments.adk.types.sandbox.exec_result``."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import dataclasses
 
 import pytest
 
-from philharmonica.adk.types.sandbox.exec_result import (
+from augments.adk.types.sandbox.exec_result import (
     ExecResult,
     ExposedPortEndpoint,
     PtyHandle,

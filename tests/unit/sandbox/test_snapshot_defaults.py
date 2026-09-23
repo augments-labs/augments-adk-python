@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.snapshot_defaults``."""
+"""Tests for ``augments.adk.sandbox.snapshot_defaults``."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.sandbox.snapshot_defaults import (
+from augments.adk.sandbox.snapshot_defaults import (
     cleanup_stale_default_local_snapshots,
     default_local_snapshot_base_dir,
     resolve_default_local_snapshot_spec,
@@ -23,7 +23,7 @@ class TestDefaultLocalSnapshotBaseDir:
             os_name="posix",
         )
         assert out.is_relative_to(tmp_path / "custom_state")
-        assert "philharmonica-adk" in str(out)
+        assert "augments-adk" in str(out)
 
     def test_linux_falls_back_to_home_local_state(self, tmp_path: Path) -> None:
         out = default_local_snapshot_base_dir(

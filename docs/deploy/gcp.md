@@ -1,6 +1,6 @@
 # GCP Cloud Run
 
-`philharmonica deploy cloud-run` deploys an agent to Google Cloud Run using
+`augments deploy cloud-run` deploys an agent to Google Cloud Run using
 `gcloud run deploy --source`. Cloud Build builds the generated Dockerfile in
 the cloud — no local Docker daemon is required. The only prerequisite is the
 `gcloud` CLI, authenticated and configured.
@@ -17,7 +17,7 @@ the cloud — no local Docker daemon is required. The only prerequisite is the
 ### Step 1 — generate artifacts
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target cloudrun \
   --agent my_pkg.agents:assistant \
   --image gcr.io/my-project/my-agent:latest \
@@ -37,7 +37,7 @@ This writes:
 ### Step 2 — edit requirements.txt
 
 Cloud Build runs `pip install -r requirements.txt` inside the image. The
-generated file installs `philharmonica-adk` from PyPI by name; adjust it
+generated file installs `augments-adk` from PyPI by name; adjust it
 beforehand only if you want a pin, a vendored wheel, or a VCS URL instead
 (see [Container contract](container.md#package-installation)).
 
@@ -62,7 +62,7 @@ echo -n "$ANTHROPIC_API_KEY" | \
 ### Step 4 — deploy
 
 ```bash
-philharmonica deploy cloud-run \
+augments deploy cloud-run \
   --agent my_pkg.agents:assistant \
   --image gcr.io/my-project/my-agent:latest \
   --project my-project \
@@ -94,7 +94,7 @@ By default the service requires authentication (`--no-allow-unauthenticated`).
 To allow public access without credentials, pass `--allow-unauthenticated`:
 
 ```bash
-philharmonica deploy cloud-run \
+augments deploy cloud-run \
   --agent my_pkg.agents:assistant \
   --project my-project \
   --region us-central1 \
@@ -112,7 +112,7 @@ Cloud Run scales to zero by default. Set `--min-instances` to keep warm
 instances and avoid cold-start latency:
 
 ```bash
-philharmonica deploy cloud-run \
+augments deploy cloud-run \
   --agent my_pkg.agents:assistant \
   --project my-project \
   --region us-central1 \

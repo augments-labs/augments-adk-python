@@ -1,4 +1,4 @@
-"""Tests for the ``philharmonica`` root command group."""
+"""Tests for the ``augments`` root command group."""
 
 from __future__ import annotations
 
@@ -7,14 +7,14 @@ import sys
 
 from click.testing import CliRunner
 
-from philharmonica.adk import __version__
-from philharmonica.adk.cli import main
+from augments.adk import __version__
+from augments.adk.cli import main
 
 
 def test_help_exits_zero() -> None:
     result = CliRunner().invoke(main, ["--help"])
     assert result.exit_code == 0
-    assert "philharmonica" in result.output
+    assert "augments" in result.output
 
 
 def test_version_prints_package_version() -> None:
@@ -25,10 +25,10 @@ def test_version_prints_package_version() -> None:
 
 def test_python_dash_m_entry_point() -> None:
     proc = subprocess.run(
-        [sys.executable, "-m", "philharmonica.adk.cli", "--help"],
+        [sys.executable, "-m", "augments.adk.cli", "--help"],
         capture_output=True,
         text=True,
         check=False,
     )
     assert proc.returncode == 0
-    assert "philharmonica" in proc.stdout
+    assert "augments" in proc.stdout

@@ -12,8 +12,8 @@ import io
 from pathlib import Path
 from typing import Any
 
-from philharmonica.adk.sandbox.capabilities.memory import MemoryLayoutConfig
-from philharmonica.adk.sandbox.memory.storage import SandboxMemoryStorage
+from augments.adk.sandbox.capabilities.memory import MemoryLayoutConfig
+from augments.adk.sandbox.memory.storage import SandboxMemoryStorage
 
 
 class _YieldingSession:

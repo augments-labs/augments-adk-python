@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from philharmonica.adk.audit.event import AuditEvent, hash_payload
+from augments.adk.audit.event import AuditEvent, hash_payload
 
 
 def test_hash_payload_is_stable_and_order_independent() -> None:

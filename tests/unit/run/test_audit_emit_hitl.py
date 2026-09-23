@@ -8,11 +8,11 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.audit import InMemoryAuditSink
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.tools_executor import execute_approved_tool
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.audit import InMemoryAuditSink
+from augments.adk.run.config import RunConfig
+from augments.adk.run.tools_executor import execute_approved_tool
+from augments.adk.tools.deferred_tool import DeferredToolCall
+from augments.adk.tools.function_tool import FunctionTool
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -20,7 +20,7 @@ from philharmonica.adk.tools.function_tool import FunctionTool
 def _make_agent(tools: list) -> object:
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         tools=tools,
@@ -34,13 +34,13 @@ def _make_agent(tools: list) -> object:
 
 
 def _make_ctx(tenant_id: str | None = None) -> object:
-    from philharmonica.adk.run.context import RunContext
+    from augments.adk.run.context import RunContext
 
     return RunContext(context=None, tenant_id=tenant_id)
 
 
 def _make_hooks() -> object:
-    from philharmonica.adk.hooks.hooks import RunHooks
+    from augments.adk.hooks.hooks import RunHooks
 
     return RunHooks()
 

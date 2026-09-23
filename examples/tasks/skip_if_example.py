@@ -36,12 +36,12 @@ import asyncio
 import logging
 from collections.abc import Sequence
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tasks import Task, TaskPipeline
-from philharmonica.adk.tasks.task_output import TaskOutput
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.tasks import Task, TaskPipeline
+from augments.adk.tasks.task_output import TaskOutput
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

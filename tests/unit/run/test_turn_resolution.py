@@ -16,17 +16,17 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.handoffs.handoff_route import HandoffRoute
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run import turn_resolution
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.next_step import NextStepHandoff
-from philharmonica.adk.run.turn_resolution import resolve_structured_output_step
-from philharmonica.adk.types.intents import Intent
-from philharmonica.adk.types.items.items import ReasoningItem
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseReasoning, LLMResponseText
+from augments.adk.agents.agent import Agent
+from augments.adk.handoffs.handoff_route import HandoffRoute
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run import turn_resolution
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.next_step import NextStepHandoff
+from augments.adk.run.turn_resolution import resolve_structured_output_step
+from augments.adk.types.intents import Intent
+from augments.adk.types.items.items import ReasoningItem
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseReasoning, LLMResponseText
 
 
 class _RouteIntent(Intent):
@@ -42,7 +42,7 @@ def _build_route(target_agent: Agent) -> HandoffRoute[Any, Any]:
 def _patch_handoff_machinery(monkeypatch: pytest.MonkeyPatch, target_agent: Agent) -> None:
     """Stub the post-triage handoff execution so the test isolates the
     triage-message construction at the top of the deterministic path."""
-    from philharmonica.adk.handoffs.handoff_input_data import HandoffInputData
+    from augments.adk.handoffs.handoff_input_data import HandoffInputData
 
     handoff_data = HandoffInputData(intent=None, context=(), output=())
 

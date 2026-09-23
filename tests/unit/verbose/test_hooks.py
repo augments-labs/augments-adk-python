@@ -14,12 +14,12 @@ from dataclasses import dataclass
 
 import pytest
 
-from philharmonica.adk.verbose.config import (
+from augments.adk.verbose.config import (
     EVENT_TOOL_START,
     EventStyle,
     VerboseConfig,
 )
-from philharmonica.adk.verbose.hooks import VerboseHooks
+from augments.adk.verbose.hooks import VerboseHooks
 
 
 @dataclass

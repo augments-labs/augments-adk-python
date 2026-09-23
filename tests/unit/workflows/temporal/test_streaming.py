@@ -24,7 +24,7 @@ pytest.importorskip("temporalio")
 class TestStreamTokenEventDefaults:
     def test_stream_token_event_defaults(self) -> None:
         """StreamTokenEvent has correct default field values."""
-        from philharmonica.adk.workflows.temporal.streaming import StreamTokenEvent
+        from augments.adk.workflows.temporal.streaming import StreamTokenEvent
 
         event = StreamTokenEvent()
 
@@ -34,7 +34,7 @@ class TestStreamTokenEventDefaults:
 
     def test_stream_token_event_accepts_values(self) -> None:
         """StreamTokenEvent stores provided field values."""
-        from philharmonica.adk.workflows.temporal.streaming import StreamTokenEvent
+        from augments.adk.workflows.temporal.streaming import StreamTokenEvent
 
         event = StreamTokenEvent(content="hello", is_final=True, metadata={"k": "v"})
 
@@ -46,7 +46,7 @@ class TestStreamTokenEventDefaults:
 class TestStreamTokenEventIsFrozen:
     def test_stream_token_event_is_frozen(self) -> None:
         """StreamTokenEvent is a frozen dataclass (mutation raises)."""
-        from philharmonica.adk.workflows.temporal.streaming import StreamTokenEvent
+        from augments.adk.workflows.temporal.streaming import StreamTokenEvent
 
         event = StreamTokenEvent(content="x")
 
@@ -55,7 +55,7 @@ class TestStreamTokenEventIsFrozen:
 
     def test_stream_token_event_is_dataclass(self) -> None:
         """StreamTokenEvent is registered as a dataclass."""
-        from philharmonica.adk.workflows.temporal.streaming import StreamTokenEvent
+        from augments.adk.workflows.temporal.streaming import StreamTokenEvent
 
         assert dataclasses.is_dataclass(StreamTokenEvent)
 
@@ -68,8 +68,8 @@ class TestStreamTokenEventIsFrozen:
 class TestTemporalStreamingLLMInheritsTemporalLLM:
     def test_temporal_streaming_llm_inherits_temporal_llm(self) -> None:
         """TemporalStreamingLLM is a subclass of TemporalLLM."""
-        from philharmonica.adk.workflows.temporal.llm import TemporalLLM
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.workflows.temporal.llm import TemporalLLM
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         assert issubclass(TemporalStreamingLLM, TemporalLLM)
 
@@ -77,10 +77,10 @@ class TestTemporalStreamingLLMInheritsTemporalLLM:
         """A TemporalStreamingLLM instance satisfies isinstance checks for TemporalLLM."""
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.llm import TemporalLLM
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.llm import TemporalLLM
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         wrapped = MagicMock(spec=LLM)
         llm = TemporalStreamingLLM(
@@ -102,9 +102,9 @@ class TestTemporalStreamingLLMHasStreamTopicName:
         """TemporalStreamingLLM exposes the stream_topic_prefix field."""
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         wrapped = MagicMock(spec=LLM)
         llm = TemporalStreamingLLM(
@@ -120,9 +120,9 @@ class TestTemporalStreamingLLMHasStreamTopicName:
         """stream_topic_prefix accepts a custom value at construction time."""
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         wrapped = MagicMock(spec=LLM)
         llm = TemporalStreamingLLM(
@@ -153,10 +153,10 @@ class TestTemporalStreamingLLMOutsideWorkflowBug:
         from collections.abc import AsyncIterator
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.types.responses.llm_response import LLMStreamEvent
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.types.responses.llm_response import LLMStreamEvent
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         async def _wrapped_acomplete(
             messages,
@@ -208,10 +208,10 @@ class TestTemporalStreamingLLMOutsideWorkflow:
         from collections.abc import AsyncIterator
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.types.responses.llm_response import LLMStreamEvent
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.types.responses.llm_response import LLMStreamEvent
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         seen_calls: list[tuple] = []
 
@@ -268,10 +268,10 @@ class TestTemporalStreamingLLMOutsideWorkflow:
 
         from temporalio import workflow as temporal_workflow
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.types.responses.llm_response import LLMResponse
-        from philharmonica.adk.workflows.engine import ModelActivityConfig
-        from philharmonica.adk.workflows.temporal.streaming import TemporalStreamingLLM
+        from augments.adk.llms.llm import LLM
+        from augments.adk.types.responses.llm_response import LLMResponse
+        from augments.adk.workflows.engine import ModelActivityConfig
+        from augments.adk.workflows.temporal.streaming import TemporalStreamingLLM
 
         fake_response = LLMResponse(response_id="r1", model="gpt-4o")
 

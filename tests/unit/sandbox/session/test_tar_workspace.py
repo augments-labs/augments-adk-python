@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.sandbox.session.tar_workspace``."""
+"""Tests for ``augments.adk.sandbox.session.tar_workspace``."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
-from philharmonica.adk.sandbox.session.tar_workspace import shell_tar_exclude_args
+from augments.adk.sandbox.session.tar_workspace import shell_tar_exclude_args
 
 
 def test_empty_input_returns_empty_list() -> None:

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.a2a.task_store``.
+"""Tests for ``augments.adk.a2a.task_store``.
 
 Covers:
 * ``TaskStore`` protocol — ``InMemoryTaskStore`` and
@@ -29,14 +29,14 @@ pytest.importorskip("a2a.server.agent_execution")
 
 from a2a.types import Task, TaskState, TaskStatus
 
-from philharmonica.adk.a2a.task_store import (
+from augments.adk.a2a.task_store import (
     InMemoryTaskStore,
     SQLiteTaskStore,
     TaskStore,
     _deserialize,
     _serialize,
 )
-from philharmonica.adk.databases.connections.sqlite import SQLiteDatabaseConnection
+from augments.adk.databases.connections.sqlite import SQLiteDatabaseConnection
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -400,7 +400,7 @@ class TestRetentionSweep:
             await store._ensure_ready()
             old_time = time.time() - 7200  # 2 h ago, older than TTL=1 h
             t = _task("old-t", TaskState.TASK_STATE_COMPLETED)
-            from philharmonica.adk.a2a.task_store import _serialize as _s
+            from augments.adk.a2a.task_store import _serialize as _s
 
             task_json = _s(t)
             async with db.connect() as conn:
@@ -429,7 +429,7 @@ class TestRetentionSweep:
             for i in range(3):
                 old_time = time.time() - (10 - i)  # t-0 oldest, t-2 newest
                 t = _task(f"t-{i}", TaskState.TASK_STATE_COMPLETED)
-                from philharmonica.adk.a2a.task_store import _serialize as _s
+                from augments.adk.a2a.task_store import _serialize as _s
 
                 task_json = _s(t)
                 async with db.connect() as conn:

@@ -30,18 +30,18 @@ import asyncio
 import logging
 import operator
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.skills import Skill, SkillActivation, SkillGovernance, SkillMetadata
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.skills import Skill, SkillActivation, SkillGovernance, SkillMetadata
+from augments.adk.tools import function_tool
+from augments.adk.tools.tool_guardrails import (
     ToolGuardrailFunctionOutput,
     ToolGuardrails,
     ToolInputGuardrailData,
     tool_input_guardrail,
 )
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

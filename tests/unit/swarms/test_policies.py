@@ -21,21 +21,21 @@ from typing import Literal
 import pytest
 from pydantic import Field
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.handoffs.handoff_route import HandoffRoute
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.swarms.policy import (
+from augments.adk.agents.agent import Agent
+from augments.adk.handoffs.handoff_route import HandoffRoute
+from augments.adk.run.context import RunContext
+from augments.adk.swarms.policy import (
     CustomPolicy,
     LLMHandoffPolicy,
     RoundRobinPolicy,
     StructuredRoutingPolicy,
 )
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.swarms.yield_signal import SWARM_DONE_TOOL_NAME
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.intents import Intent, Respond
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.yield_signal import SWARM_DONE_TOOL_NAME
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.intents import Intent, Respond
 
 
 def _agent(name: str) -> Agent:

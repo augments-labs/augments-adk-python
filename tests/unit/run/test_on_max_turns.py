@@ -22,12 +22,12 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions.exceptions import MaxTurnsExceeded
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import RunResultStreaming
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions.exceptions import MaxTurnsExceeded
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import RunResultStreaming
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
 )
@@ -56,7 +56,7 @@ def _tool_call_response(call_id: str = "call_0") -> LLMResponse:
 
 def _make_agent_with_tool() -> Agent:
     """Agent with one simple tool so the loop has something to execute."""
-    from philharmonica.adk.tools.function_tool import FunctionTool
+    from augments.adk.tools.function_tool import FunctionTool
 
     async def _echo_invoker(_ctx: Any, _raw_args: str) -> str:
         return "echoed"
@@ -105,23 +105,23 @@ async def _patched_arun(
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):

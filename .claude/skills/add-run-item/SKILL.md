@@ -1,6 +1,6 @@
 ---
 name: add-run-item
-description: Procedure to add a new RunItem (Layer 3 conversation-history entry) to the Philharmonica ADK. Use when modeling a new kind of turn artifact (tool call, message, handoff, provider-native output, etc.).
+description: Procedure to add a new RunItem (Layer 3 conversation-history entry) to the Augments ADK. Use when modeling a new kind of turn artifact (tool call, message, handoff, provider-native output, etc.).
 ---
 
 # Add a RunItem
@@ -10,7 +10,7 @@ when you edit `types/items/`). This is the ordered procedure.
 
 ## 1. Define the item
 
-In `src/philharmonica/adk/types/items/`:
+In `src/augments/adk/types/items/`:
 
 - Subclass `RunItemBase[T]` with a concrete `raw: T` (the Layer 1
   wire-format snapshot). `raw` is REQUIRED and NEVER `None` — absence
@@ -32,7 +32,7 @@ item replays into the next turn's input.
 ## 3. Add to the union
 
 Add the new class to the `RunItem` union in
-`src/philharmonica/adk/types/items/items.py`. Update any `ItemHelpers`
+`src/augments/adk/types/items/items.py`. Update any `ItemHelpers`
 conversion (`response_to_run_items`, `run_items_to_params`,
 `message_to_run_items`) that must now produce/consume it.
 

@@ -31,7 +31,7 @@ Resume:
   inner graph completes, the outer graph completes.
 
 Pre-existing gap surfaced by this test. ``Graph.invoke`` (in
-``src/philharmonica/adk/graphs/graph.py``) calls ``run_graph_loop`` for the
+``src/augments/adk/graphs/graph.py``) calls ``run_graph_loop`` for the
 inner graph and translates the resulting ``GraphRunResult`` into a
 ``NodeResult`` UNCONDITIONALLY — including when
 ``inner_result.status == GraphRunStatus.INTERRUPTED``. The outer loop has
@@ -51,7 +51,7 @@ metadata. Resume cannot work because:
    ``GraphState.nested_agent_snapshots`` is typed
    ``dict[str, RunState]`` — it has no slot for a nested
    ``GraphState``. Outer-loop dispatch (`_dispatch_node` /
-   `_dispatch_nested_resume` in ``src/philharmonica/adk/run/graph_loop.py``)
+   `_dispatch_nested_resume` in ``src/augments/adk/run/graph_loop.py``)
    only knows how to call ``AgentExecutable.resume_from_snapshot``.
 
 This test is marked ``pytest.mark.xfail(strict=True)`` — when the
@@ -66,21 +66,21 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import AgentToolDeferral
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import AgentToolDeferral
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import (
     GraphResume,
     NestedAgentApproval,
     NestedAgentInterrupt,
     NestedAgentReply,
 )
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------
 # Stand-ins for the ``Runner.arun`` return shape
@@ -189,7 +189,7 @@ def _install_scripted_arun(
         calls["raised"].append(None)
         return nxt
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
     return calls

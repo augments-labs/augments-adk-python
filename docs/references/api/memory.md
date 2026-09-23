@@ -4,37 +4,37 @@ Extracted, searchable knowledge carried across sessions.
 
 ## Core
 
-- `philharmonica.adk.memory.Memory`
-- `philharmonica.adk.memory.MemoryConfig`
-- `philharmonica.adk.memory.MemoryInjectionPosition`
+- `augments.adk.memory.Memory`
+- `augments.adk.memory.MemoryConfig`
+- `augments.adk.memory.MemoryInjectionPosition`
 
 ## Entries and search
 
-- `philharmonica.adk.memory.MemoryEntry`
-- `philharmonica.adk.memory.MemoryKind`
-- `philharmonica.adk.memory.MemoryMetadata`
-- `philharmonica.adk.memory.MemorySource`
-- `philharmonica.adk.memory.MemorySearchFilter`
-- `philharmonica.adk.memory.MemorySearchResult`
+- `augments.adk.memory.MemoryEntry`
+- `augments.adk.memory.MemoryKind`
+- `augments.adk.memory.MemoryMetadata`
+- `augments.adk.memory.MemorySource`
+- `augments.adk.memory.MemorySearchFilter`
+- `augments.adk.memory.MemorySearchResult`
 
 ## Implementations
 
-- `philharmonica.adk.memory.TemporaryMemory`
-- `philharmonica.adk.memory.SQLiteMemory`
-- `philharmonica.adk.memory.VectorMemory`
+- `augments.adk.memory.TemporaryMemory`
+- `augments.adk.memory.SQLiteMemory`
+- `augments.adk.memory.VectorMemory`
 
 ## Vector stores
 
-- `philharmonica.adk.memory.VectorStore`
-- `philharmonica.adk.memory.VectorRecord`
-- `philharmonica.adk.memory.VectorQueryResult`
-- `philharmonica.adk.memory.InMemoryVectorStore`
+- `augments.adk.memory.VectorStore`
+- `augments.adk.memory.VectorRecord`
+- `augments.adk.memory.VectorQueryResult`
+- `augments.adk.memory.InMemoryVectorStore`
 
 ## Extraction
 
-- `philharmonica.adk.memory.MemoryExtractor`
-- `philharmonica.adk.memory.LLMExtractor`
-- `philharmonica.adk.memory.ExtractionResult`
-- `philharmonica.adk.memory.distill_to_semantic`
+- `augments.adk.memory.MemoryExtractor`
+- `augments.adk.memory.LLMExtractor`
+- `augments.adk.memory.ExtractionResult`
+- `augments.adk.memory.distill_to_semantic`
 
 Usage lives in the [Memory guide](../../memory/memory.md).

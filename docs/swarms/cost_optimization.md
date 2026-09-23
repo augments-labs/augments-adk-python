@@ -1,7 +1,7 @@
 # Swarm Cost Optimization
 
 Swarms amplify token cost because the same conversation is replayed
-across multiple turns and (potentially) multiple agents. Philharmonica gives
+across multiple turns and (potentially) multiple agents. Augments gives
 you **five composable levers** and one absolute safety net.
 
 ## The Five Levers
@@ -23,9 +23,9 @@ when you genuinely want unbounded multi-agent turns.
 ## Minimal-Cost Starter Template
 
 ```python
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     Swarm, SwarmConfig, SharedContextConfig, SharedContextStrategy,
     LLMHandoffPolicy,
     ExplicitDoneTermination, MaxTurnsTermination, TokenBudgetTermination,

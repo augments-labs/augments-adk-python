@@ -21,10 +21,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task, TaskOutput, TaskPipeline
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task, TaskOutput, TaskPipeline
+from augments.adk.types.run.run_result import RunResult
 
 
 def _agent() -> Agent:
@@ -53,7 +53,7 @@ class TestRunOneLevelCancelledError:
         running). Genuine task *failures* (Exceptions) still become error slots so
         siblings finish — only CancelledError is special-cased to propagate, per
         the asyncio cancellation contract."""
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         agent = _agent()
         # Both t1 and t2 depend on root; they run concurrently in level-1.
@@ -86,7 +86,7 @@ class TestStreamedTaskCancelledError:
         """CancelledError inside run_impl must call set_exception so that
         stream_events() surfaces the cancellation rather than completing
         cleanly. Pre-fix: except Exception gap silently ate the cancellation."""
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         agent = _agent()
         task = Task(description="do it", agent=agent)
@@ -97,17 +97,17 @@ class TestStreamedTaskCancelledError:
             raise asyncio.CancelledError("simulated mid-run cancel")
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
+            patch("augments.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):
@@ -144,7 +144,7 @@ class TestStreamedPipelineErrorNotification:
         """When skip_if raises, the generator must yield (index, None)
         before breaking. Pre-fix: the break happened with no yield, so
         the consumer received no notification of the halted task index."""
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         agent = _agent()
 

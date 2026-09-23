@@ -10,9 +10,9 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.llms import Embedder, Embedding
-from philharmonica.adk.rag.loaders import DocumentLoader, MarkdownLoader, PDFLoader, TextLoader
-from philharmonica.adk.tools.builtin.document_search_tool import (
+from augments.adk.llms import Embedder, Embedding
+from augments.adk.rag.loaders import DocumentLoader, MarkdownLoader, PDFLoader, TextLoader
+from augments.adk.tools.builtin.document_search_tool import (
     DirectorySearchTool,
     DocumentSearchTool,
     MarkdownSearchTool,

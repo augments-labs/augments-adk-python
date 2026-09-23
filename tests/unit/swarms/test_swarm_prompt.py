@@ -7,7 +7,7 @@ prompt preserved verbatim) is pinned here.
 
 from __future__ import annotations
 
-from philharmonica.adk.swarms.swarm_prompt import (
+from augments.adk.swarms.swarm_prompt import (
     RECOMMENDED_SWARM_PROMPT_PREFIX,
     prompt_with_swarm_instructions,
 )

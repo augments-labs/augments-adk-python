@@ -1,4 +1,4 @@
-# Philharmonica Agents ADK
+# Augments Agents ADK
 
 Lightweight, provider-agnostic Python framework for multi-agent workflows
 with 100+ LLMs via litellm.
@@ -32,7 +32,7 @@ either path affect both agents.
 ## Architecture Overview
 
 ```
-src/philharmonica/adk/
+src/augments/adk/
 ├── agents/      # Agent, guardrails, handoffs
 ├── prompts/     # SystemPrompt, tone, dynamic prompts
 ├── run/         # Runner, config, context, streaming
@@ -57,7 +57,7 @@ src/philharmonica/adk/
 `Input → Input guardrails → Agent loop (LLM → tools → handoffs) → Output
 guardrails → Final result`
 
-Each module under `src/philharmonica/adk/` (and `examples/`, `tests/`)
+Each module under `src/augments/adk/` (and `examples/`, `tests/`)
 carries its own `CLAUDE.md` with module-specific decisions.
 
 ## .claude/ layout

@@ -6,20 +6,20 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import (
     GraphResume,
     InterruptException,
     NestedGraphInterrupt,
     request_human_input,
 )
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.graph_loop import run_graph_loop
-from philharmonica.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.graph_loop import run_graph_loop
+from augments.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
 
 
 def _ask_inner(inp: ExecutableInput, ctx: Any) -> str:

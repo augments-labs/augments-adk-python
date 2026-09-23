@@ -5,9 +5,9 @@ import time
 
 import pytest
 
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -16,7 +16,7 @@ def _make_agent(tools):
     """Minimal agent-like object with .tools, .tool_use_behavior, and .handoffs."""
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name="test_agent",
@@ -48,19 +48,19 @@ def _make_slow_tool(name: str) -> FunctionTool:
 
 
 def _make_ctx():
-    from philharmonica.adk.run.context import RunContext
+    from augments.adk.run.context import RunContext
 
     return RunContext(context=None)
 
 
 def _make_hooks():
-    from philharmonica.adk.hooks.hooks import RunHooks
+    from augments.adk.hooks.hooks import RunHooks
 
     return RunHooks()
 
 
 def _make_config():
-    from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+    from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
     return DEFAULT_RUN_CONFIG
 

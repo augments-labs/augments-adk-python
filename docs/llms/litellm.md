@@ -1,12 +1,12 @@
 # LiteLLM Provider
 
-The default LLM provider in Philharmonica Agents, using [litellm](https://github.com/BerriAI/litellm) to access 100+ language models through a unified API.
+The default LLM provider in Augments Agents, using [litellm](https://github.com/BerriAI/litellm) to access 100+ language models through a unified API.
 
 ## Quick Start
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM, LLMConfig
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM, LLMConfig
 
 agent = Agent(
     name="Assistant",
@@ -35,7 +35,7 @@ llm = LiteLLM(api_key="sk-...", base_url="https://custom-endpoint.com")
 
 ## Package Structure
 
-All litellm-specific code lives in `philharmonica.adk/llms/litellm/`:
+All litellm-specific code lives in `augments.adk/llms/litellm/`:
 
 ```
 llms/
@@ -57,7 +57,7 @@ Provider-agnostic types (`LLM`, `LLMConfig`, `LLMUsage`) stay at the `llms/` roo
 `LLMConfig` is a provider-agnostic `@dataclass`. The `LiteLLM` class maps its fields to litellm parameter names via explicit named arguments — no dict spreading.
 
 ```python
-from philharmonica.adk.llms import LLMConfig
+from augments.adk.llms import LLMConfig
 
 config = LLMConfig(
     temperature=0.7,
@@ -98,7 +98,7 @@ Prompt caching reduces costs by reusing previously computed token representation
 Anthropic uses explicit `cache_control` breakpoints injected into messages. litellm's `AnthropicCacheControlHook` handles injection automatically.
 
 ```python
-from philharmonica.adk.types.caching import AnthropicPromptCaching, CacheTTL
+from augments.adk.types.caching import AnthropicPromptCaching, CacheTTL
 
 config = LLMConfig(
     prompt_caching=AnthropicPromptCaching(
@@ -128,7 +128,7 @@ config = LLMConfig(
 Gemini uses **reference-based** caching: create a `CachedContent` resource via Google's API, then reference it by ID.
 
 ```python
-from philharmonica.adk.types.caching import GeminiPromptCaching
+from augments.adk.types.caching import GeminiPromptCaching
 
 config = LLMConfig(
     prompt_caching=GeminiPromptCaching(
@@ -150,7 +150,7 @@ config = LLMConfig(
 OpenAI caches automatically for prompts >= 1024 tokens. Optional hints improve hit rates.
 
 ```python
-from philharmonica.adk.types.caching import OpenAIPromptCaching
+from augments.adk.types.caching import OpenAIPromptCaching
 
 config = LLMConfig(
     prompt_caching=OpenAIPromptCaching(
@@ -225,7 +225,7 @@ Usage tracking in streaming mode requires `LLMConfig.include_usage=True` (defaul
 Utilities for detecting which provider backs a model:
 
 ```python
-from philharmonica.adk.llms.litellm.litellm_provider import detect_provider, is_anthropic
+from augments.adk.llms.litellm.litellm_provider import detect_provider, is_anthropic
 
 detect_provider("claude-sonnet-4-20250514")  # "anthropic"
 detect_provider("gpt-4o")                   # "openai"

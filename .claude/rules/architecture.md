@@ -29,7 +29,7 @@ siblings in this directory and load only when you touch matching files.
 
 ## Type System
 
-- ALL type definitions live in `src/philharmonica/adk/types/`.
+- ALL type definitions live in `src/augments/adk/types/`.
 - Three layers: Layer 1 (`LLMInputContentItem`, provider-agnostic) /
   Layer 2 (`ChatCompletion*`, wire) / Layer 3 (`RunItem`, developer-facing).
   Developer-facing APIs use Layer 1 or 3 — NEVER Layer 2. Wire conversion

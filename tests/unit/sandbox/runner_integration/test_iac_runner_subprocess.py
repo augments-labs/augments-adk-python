@@ -17,12 +17,12 @@ from unittest.mock import AsyncMock, MagicMock, call, patch
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxConfigurationError
-from philharmonica.adk.sandbox.runner_integration.iac_runner import _terminate_and_reap, apply_iac, destroy_iac
-from philharmonica.adk.types.sandbox.iac import IaCBundle
+from augments.adk.exceptions.exceptions import SandboxConfigurationError
+from augments.adk.sandbox.runner_integration.iac_runner import _terminate_and_reap, apply_iac, destroy_iac
+from augments.adk.types.sandbox.iac import IaCBundle
 
-_PATCH = "philharmonica.adk.sandbox.runner_integration.iac_runner.asyncio.create_subprocess_exec"
-_WAIT_FOR = "philharmonica.adk.sandbox.runner_integration.iac_runner.asyncio.wait_for"
+_PATCH = "augments.adk.sandbox.runner_integration.iac_runner.asyncio.create_subprocess_exec"
+_WAIT_FOR = "augments.adk.sandbox.runner_integration.iac_runner.asyncio.wait_for"
 
 
 async def _expire_wait_for(awaitable: Coroutine[object, object, object], *, timeout: object = None) -> NoReturn:
@@ -274,8 +274,8 @@ class TestDestroy:
         with (
             patch(_PATCH, AsyncMock(side_effect=[proc])),
             patch(_WAIT_FOR, _cancel_wait_for),
-            patch("philharmonica.adk.sandbox.runner_integration.iac_runner.os.getpgid", return_value=1234) as getpgid,
-            patch("philharmonica.adk.sandbox.runner_integration.iac_runner.os.killpg") as killpg,
+            patch("augments.adk.sandbox.runner_integration.iac_runner.os.getpgid", return_value=1234) as getpgid,
+            patch("augments.adk.sandbox.runner_integration.iac_runner.os.killpg") as killpg,
             pytest.raises(asyncio.CancelledError),
         ):
             await destroy_iac(bundle)
@@ -335,8 +335,8 @@ class TestTimeoutReapsChild:
 
         proc.wait = AsyncMock(side_effect=wait_side_effect)
         with (
-            patch("philharmonica.adk.sandbox.runner_integration.iac_runner.os.getpgid", return_value=1234),
-            patch("philharmonica.adk.sandbox.runner_integration.iac_runner.os.killpg") as killpg,
+            patch("augments.adk.sandbox.runner_integration.iac_runner.os.getpgid", return_value=1234),
+            patch("augments.adk.sandbox.runner_integration.iac_runner.os.killpg") as killpg,
         ):
             await _terminate_and_reap(proc, grace_seconds=0.001)
 

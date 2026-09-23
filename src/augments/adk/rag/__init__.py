@@ -1,0 +1,60 @@
+"""Retrieval-augmented generation (RAG) primitives.
+
+A small, reusable layer for turning documents into a semantically searchable
+index, built on the framework's existing ``Embedder`` and
+``VectorStore`` abstractions:
+
+- ``loaders`` — format loaders (PDF, DOCX, CSV, JSON, text,
+  Markdown, directory, website, GitHub, YouTube) behind a common
+  ``DocumentLoader`` ABC, plus ``resolve_loader`` dispatch.
+- ``TextChunker`` — recursive, bounded text splitting.
+- ``DocumentIndex`` — chunk → embed → store → search over any
+  ``VectorStore`` backend.
+
+The agent-facing ``DocumentSearchTool`` (and its ``PDFSearchTool`` /
+``WebsiteSearchTool`` / … wrappers) live in
+``augments.adk.tools.builtin.document_search_tool`` and compose these
+primitives. See ``docs/rag/`` and ``examples/rag/``.
+"""
+
+from augments.adk.rag.chunking import DEFAULT_SEPARATORS, TextChunker
+from augments.adk.rag.document import DocumentSearchHit, LoadedDocument
+from augments.adk.rag.index import DocumentIndex
+from augments.adk.rag.loaders import (
+    CSVLoader,
+    DirectoryLoader,
+    DocumentLoader,
+    DOCXLoader,
+    GithubLoader,
+    JSONLoader,
+    MarkdownLoader,
+    PDFLoader,
+    TextLoader,
+    WebsiteLoader,
+    YoutubeChannelLoader,
+    YoutubeVideoLoader,
+    is_url,
+    resolve_loader,
+)
+
+__all__ = [
+    "DEFAULT_SEPARATORS",
+    "CSVLoader",
+    "DOCXLoader",
+    "DirectoryLoader",
+    "DocumentIndex",
+    "DocumentLoader",
+    "DocumentSearchHit",
+    "GithubLoader",
+    "JSONLoader",
+    "LoadedDocument",
+    "MarkdownLoader",
+    "PDFLoader",
+    "TextChunker",
+    "TextLoader",
+    "WebsiteLoader",
+    "YoutubeChannelLoader",
+    "YoutubeVideoLoader",
+    "is_url",
+    "resolve_loader",
+]

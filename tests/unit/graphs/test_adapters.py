@@ -10,18 +10,18 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import (
     AgentExecutable,
     CallableExecutable,
     SwarmExecutable,
     to_executable,
 )
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.graphs.graph import Graph
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 # ---------------------------------------------------------------------------
 # Helpers

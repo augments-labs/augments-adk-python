@@ -13,7 +13,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     SandboxStartFailed,
     WorkspaceReadNotFoundError,
 )
@@ -104,7 +104,7 @@ def _make_session(
     returncode: int = 0,
     phase: str = "Running",
 ):
-    from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+    from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
 
     core_v1 = MagicMock()
     core_v1.read_namespaced_pod_status.return_value = _mock_pod_status(phase)
@@ -135,7 +135,7 @@ class TestK8sSessionLifecycle:
     async def test_start_installs_runtime_helpers(self) -> None:
         session, _ = _make_session(phase="Running")
         with patch(
-            "philharmonica.adk.sandbox.session.runtime_helpers.install_runtime_helpers",
+            "augments.adk.sandbox.session.runtime_helpers.install_runtime_helpers",
             new_callable=AsyncMock,
         ) as installer:
             await session.start()
@@ -227,10 +227,10 @@ class TestK8sSessionFileOps:
 class TestK8sApplyPatch:
     @pytest.mark.asyncio
     async def test_patch_file_removed_when_run_raises(self) -> None:
-        """Regression: k8s apply_patch left .philharmonica_patch.diff when run() raised."""
+        """Regression: k8s apply_patch left .augments_patch.diff when run() raised."""
         from unittest.mock import patch as mock_patch
 
-        from philharmonica.adk.exceptions.exceptions import SandboxStopFailed
+        from augments.adk.exceptions.exceptions import SandboxStopFailed
 
         session, _core_v1 = _make_session()
         removed_paths: list[str] = []
@@ -253,8 +253,8 @@ class TestK8sApplyPatch:
         ):
             await session.apply_patch("--- a/foo\n+++ b/foo\n")
 
-        assert any(".philharmonica_patch.diff" in p for p in removed_paths), (
-            f"Expected .philharmonica_patch.diff cleanup but rm was called with: {removed_paths}"
+        assert any(".augments_patch.diff" in p for p in removed_paths), (
+            f"Expected .augments_patch.diff cleanup but rm was called with: {removed_paths}"
         )
 
 
@@ -270,7 +270,7 @@ class TestK8sSessionPort:
 class TestK8sClient:
     @pytest.mark.asyncio
     async def test_create_builds_pod_with_image(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s import (
+        from augments.adk.sandbox.clients.k8s import (
             K8sPodSandboxClient,
             K8sSandboxClientOptions,
         )
@@ -300,11 +300,11 @@ class TestK8sClient:
         policy started the pod with UNRESTRICTED network and skipped the policy
         with no error. It now tears the pod down and raises.
         """
-        from philharmonica.adk.sandbox.clients.k8s import (
+        from augments.adk.sandbox.clients.k8s import (
             K8sPodSandboxClient,
             K8sSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.network import NetworkPolicy
+        from augments.adk.types.sandbox.network import NetworkPolicy
 
         core_v1 = MagicMock()
         core_v1.create_namespaced_pod = MagicMock()
@@ -325,7 +325,7 @@ class TestK8sClient:
 
     @pytest.mark.asyncio
     async def test_restricted_pss_sets_security_context(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s import (
+        from augments.adk.sandbox.clients.k8s import (
             K8sPodSandboxClient,
             K8sSandboxClientOptions,
         )
@@ -343,8 +343,8 @@ class TestK8sClient:
 
     @pytest.mark.asyncio
     async def test_resume_finds_pod(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s import K8sPodSandboxClient
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.sandbox.clients.k8s import K8sPodSandboxClient
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         core_v1 = MagicMock()
         core_v1.read_namespaced_pod_status.return_value = _mock_pod_status("Running")
@@ -359,8 +359,8 @@ class TestK8sClient:
 
     @pytest.mark.asyncio
     async def test_resume_missing_payload_raises(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s import K8sPodSandboxClient
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.sandbox.clients.k8s import K8sPodSandboxClient
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         client = K8sPodSandboxClient(core_v1=MagicMock())
         state = SandboxSessionState(backend_id="k8s_pod")
@@ -440,7 +440,7 @@ class TestK8sClientCancellationSafety:
     @pytest.mark.asyncio
     async def test_cancelled_during_pod_creation_triggers_cleanup(self) -> None:
         """If create_namespaced_pod is cancelled, best-effort delete is called."""
-        from philharmonica.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
+        from augments.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
 
         core_v1 = MagicMock()
         deleted_pods: list[str] = []
@@ -465,8 +465,8 @@ class TestK8sClientCancellationSafety:
     @pytest.mark.asyncio
     async def test_cancelled_during_netpol_creation_triggers_pod_cleanup(self) -> None:
         """If create_namespaced_network_policy is cancelled, the pod is deleted."""
-        from philharmonica.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
-        from philharmonica.adk.types.sandbox.network import NetworkPolicy
+        from augments.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
+        from augments.adk.types.sandbox.network import NetworkPolicy
 
         core_v1 = MagicMock()
         networking_v1 = MagicMock()
@@ -590,7 +590,7 @@ class TestK8sExecStdinDoesNotCrash:
 
     @pytest.mark.asyncio
     async def test_write_with_stdin_drains_and_does_not_crash(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
 
         created: list[_RealisticWS] = []
 
@@ -618,7 +618,7 @@ class TestK8sExecStdinDoesNotCrash:
 
     @pytest.mark.asyncio
     async def test_exec_returncode_swallows_empty_error_channel(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
 
         ws = _RealisticWS()
         ws.close()  # closed, empty error channel → property raises TypeError
@@ -631,7 +631,7 @@ class TestK8sExecBinaryMode:
 
     @pytest.mark.asyncio
     async def test_exec_sync_requests_binary_stream(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
 
         captured_kwargs: list[dict[str, object]] = []
 
@@ -657,8 +657,8 @@ class TestK8sNetworkPolicyCleanup:
 
     @pytest.mark.asyncio
     async def test_stop_deletes_network_policy(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
-        from philharmonica.adk.types.sandbox.network import NetworkPolicy
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.types.sandbox.network import NetworkPolicy
 
         core_v1 = MagicMock()
         core_v1.delete_namespaced_pod = MagicMock()
@@ -682,7 +682,7 @@ class TestK8sNetworkPolicyCleanup:
 
     @pytest.mark.asyncio
     async def test_stop_without_policy_skips_netpol_delete(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
 
         core_v1 = MagicMock()
         core_v1.delete_namespaced_pod = MagicMock()
@@ -702,8 +702,8 @@ class TestK8sNetworkPolicyCleanup:
 
     @pytest.mark.asyncio
     async def test_netpol_cleanup_failure_does_not_raise(self) -> None:
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
-        from philharmonica.adk.types.sandbox.network import NetworkPolicy
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.types.sandbox.network import NetworkPolicy
 
         core_v1 = MagicMock()
         core_v1.delete_namespaced_pod = MagicMock()
@@ -730,9 +730,9 @@ class TestK8sNetworkPolicyCleanup:
         pod-delete failure raised SandboxStopFailed and skipped the cleanup,
         orphaning the per-pod policy object. Cleanup now runs in a finally.
         """
-        from philharmonica.adk.exceptions.exceptions import SandboxStopFailed
-        from philharmonica.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
-        from philharmonica.adk.types.sandbox.network import NetworkPolicy
+        from augments.adk.exceptions.exceptions import SandboxStopFailed
+        from augments.adk.sandbox.clients.k8s.k8s_session import K8sPodSandboxSession
+        from augments.adk.types.sandbox.network import NetworkPolicy
 
         core_v1 = MagicMock()
         core_v1.delete_namespaced_pod = MagicMock(side_effect=RuntimeError("pod delete failed"))

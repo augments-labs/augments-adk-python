@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.types.guardrails import GuardrailAction
-from philharmonica.adk.types.tracing.span_data import GuardrailSpanData
+from augments.adk.types.guardrails import GuardrailAction
+from augments.adk.types.tracing.span_data import GuardrailSpanData
 
 
 class TestGuardrailSpanDataAction:

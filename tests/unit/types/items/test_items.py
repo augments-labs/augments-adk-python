@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from philharmonica.adk.types.items import ItemHelpers, ReasoningItem
+from augments.adk.types.items import ItemHelpers, ReasoningItem
 
 
 class TestRedactedThinkingNullData:

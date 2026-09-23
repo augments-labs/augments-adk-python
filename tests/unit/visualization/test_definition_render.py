@@ -14,7 +14,7 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     And,
     FlowStepRegistry,
     Or,
@@ -22,8 +22,8 @@ from philharmonica.adk.flows import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.definition import build_flow_definition
-from philharmonica.adk.visualization import definition_to_dot, definition_to_mermaid
+from augments.adk.flows.definition import build_flow_definition
+from augments.adk.visualization import definition_to_dot, definition_to_mermaid
 
 # ---------------------------------------------------------------------------
 # Shared helpers
@@ -211,7 +211,7 @@ class _S(BaseModel):
 class TestGetDefinitionThenRender:
     def test_mermaid_from_get_definition_no_run(self) -> None:
         """Render Mermaid from get_definition() — no Flow execution path touched."""
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start(description="Seed")
@@ -228,7 +228,7 @@ class TestGetDefinitionThenRender:
 
     def test_dot_from_get_definition_no_run(self) -> None:
         """Render DOT from get_definition() — no Flow execution path touched."""
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -244,7 +244,7 @@ class TestGetDefinitionThenRender:
         assert "shape=diamond" in out
 
     def test_mermaid_and_gate_from_get_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -262,7 +262,7 @@ class TestGetDefinitionThenRender:
         assert "--> merged" in out
 
     def test_mermaid_or_gate_from_get_definition(self) -> None:
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start
@@ -280,7 +280,7 @@ class TestGetDefinitionThenRender:
 
     def test_definition_render_matches_flow_render_structure(self) -> None:
         """definition_to_mermaid and flow.to_mermaid should encode the same topology."""
-        from philharmonica.adk.flows import Flow
+        from augments.adk.flows import Flow
 
         class _F(Flow[_S]):
             @flow_start

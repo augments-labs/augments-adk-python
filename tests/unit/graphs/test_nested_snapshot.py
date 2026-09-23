@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.nested_snapshot import NestedSnapshot
-from philharmonica.adk.run.state import RunState
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.nested_snapshot import NestedSnapshot
+from augments.adk.run.state import RunState
 
 
 def _make_graph_with_agent_node() -> Graph[None]:

@@ -8,9 +8,9 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.swarms.events import SwarmDoneEvent, SwarmStartEvent
-from philharmonica.adk.swarms.result import SwarmRunResultStreaming
-from philharmonica.adk.swarms.stop_reason import StopReason
+from augments.adk.swarms.events import SwarmDoneEvent, SwarmStartEvent
+from augments.adk.swarms.result import SwarmRunResultStreaming
+from augments.adk.swarms.stop_reason import StopReason
 
 
 def _start_event() -> SwarmStartEvent:
@@ -246,7 +246,7 @@ class TestSwarmDriverCancelSemantics:
         must NOT re-raise a spurious ``CancelledError`` from
         ``stream_events()``.
         """
-        from philharmonica.adk.run import swarm_loop_streamed as driver_mod
+        from augments.adk.run import swarm_loop_streamed as driver_mod
 
         result: SwarmRunResultStreaming[None] = SwarmRunResultStreaming(
             user_prompt="go",

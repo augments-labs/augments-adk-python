@@ -27,7 +27,7 @@ import logging
 
 from pydantic import BaseModel
 
-from philharmonica.adk import (
+from augments.adk import (
     Flow,
     FlowCheckpoint,
     FlowConfig,

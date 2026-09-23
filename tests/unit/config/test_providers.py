@@ -11,23 +11,23 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.config.providers import (
+from augments.adk.config.providers import (
     PROVIDER_REGISTRY,
     build_agnostic_config,
     register_llm_provider,
 )
-from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-from philharmonica.adk.llms.anthropic.anthropic_model import AnthropicLLM
-from philharmonica.adk.llms.gemini.gemini_config import GeminiConfig
-from philharmonica.adk.llms.gemini.gemini_model import GeminiLLM
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM, LiteLLMConfig
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.openai.openai_chatcompletions_config import OpenAIChatCompletionsConfig
-from philharmonica.adk.llms.openai.openai_chatcompletions_model import OpenAIChatCompletionsLLM
-from philharmonica.adk.llms.openai.openai_responses_config import OpenAIResponsesConfig
-from philharmonica.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
-from philharmonica.adk.types.config.llm_config import (
+from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+from augments.adk.llms.anthropic.anthropic_model import AnthropicLLM
+from augments.adk.llms.gemini.gemini_config import GeminiConfig
+from augments.adk.llms.gemini.gemini_model import GeminiLLM
+from augments.adk.llms.litellm.litellm_model import LiteLLM, LiteLLMConfig
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.openai.openai_chatcompletions_config import OpenAIChatCompletionsConfig
+from augments.adk.llms.openai.openai_chatcompletions_model import OpenAIChatCompletionsLLM
+from augments.adk.llms.openai.openai_responses_config import OpenAIResponsesConfig
+from augments.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
+from augments.adk.types.config.llm_config import (
     AnthropicProviderBlock,
     GeminiProviderBlock,
     LiteLLMProviderBlock,
@@ -36,7 +36,7 @@ from philharmonica.adk.types.config.llm_config import (
     OpenAIChatProviderBlock,
     OpenAIResponsesProviderBlock,
 )
-from philharmonica.adk.types.llms.retry_policy import LLMRetryPolicy
+from augments.adk.types.llms.retry_policy import LLMRetryPolicy
 
 
 class TestBuiltinProviders:
@@ -191,12 +191,12 @@ class TestRegistry:
 
 class TestExports:
     def test_register_llm_provider_exported_from_config(self) -> None:
-        from philharmonica.adk.config import register_llm_provider as exported
+        from augments.adk.config import register_llm_provider as exported
 
         assert exported is register_llm_provider
 
     def test_provider_models_exported_from_types_config(self) -> None:
-        from philharmonica.adk.types import config as types_config
+        from augments.adk.types import config as types_config
 
         assert types_config.LLMConfigBlock is LLMConfigBlock
         assert types_config.LLMProviderConfig is LLMProviderConfig

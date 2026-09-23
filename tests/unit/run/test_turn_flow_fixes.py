@@ -22,14 +22,14 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import CallModelData, ModelInputData, RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import CallModelData, ModelInputData, RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
 )
@@ -60,8 +60,8 @@ class TestMultimodalToolOutputPreserved:
         """A list-of-parts tool output must be appended to history verbatim,
         not stringified into a repr — otherwise the provider converter can no
         longer emit the image/text blocks."""
-        from philharmonica.adk.run.next_step import NextStepRunAgain
-        from philharmonica.adk.run.turn_resolution import resolve_tool_results_step
+        from augments.adk.run.next_step import NextStepRunAgain
+        from augments.adk.run.turn_resolution import resolve_tool_results_step
 
         multimodal: list[Any] = [
             {"type": "input_text", "text": "chart description"},
@@ -94,7 +94,7 @@ class TestMultimodalToolOutputPreserved:
 
     async def test_string_output_still_passes_through(self) -> None:
         """A plain-string output is unaffected by dropping the ``str()`` call."""
-        from philharmonica.adk.run.turn_resolution import resolve_tool_results_step
+        from augments.adk.run.turn_resolution import resolve_tool_results_step
 
         tr = FunctionToolCallResult(call_id="call_1", output="plain text")
         agent = Agent(name="a", system_prompt="s", tools=[_echo_tool()])
@@ -116,7 +116,7 @@ class TestCumulativeTurnCountOnInterruption:
         """With a non-zero ``turn_offset`` (a block reached after a handoff),
         a first-block-turn HITL deferral must record ``turn_offset + 1`` on the
         ``RunState`` so a resume does not over-grant the remaining-turn budget."""
-        from philharmonica.adk.run.loop import run_agent_block
+        from augments.adk.run.loop import run_agent_block
 
         agent = Agent(name="specialist", system_prompt="s", tools=[_echo_tool(requires_approval=True)])
         ctx: RunContext[Any] = RunContext(context=None)
@@ -124,7 +124,7 @@ class TestCumulativeTurnCountOnInterruption:
         async def fake_call_llm(*_args: Any, **_kwargs: Any) -> LLMResponse:
             return LLMResponse(response_id="r", model="test", response=[_tool_call("echo", "call_0")])
 
-        with patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)):
+        with patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)):
             outcome = await run_agent_block(
                 agent=agent,
                 messages=[{"role": "system", "content": "s"}, {"role": "user", "content": "go"}],
@@ -159,7 +159,7 @@ class TestCumulativeTurnCountOnInterruption:
 # ---------------------------------------------------------------------------
 class TestContextEndTracksRebind:
     def test_adjust_context_end_shifts_by_delta_and_clamps(self) -> None:
-        from philharmonica.adk.run.loop import _adjust_context_end
+        from augments.adk.run.loop import _adjust_context_end
 
         # No length change → unchanged (the default, no-rebind hot path).
         assert _adjust_context_end(2, 4, 4) == 2
@@ -176,8 +176,8 @@ class TestContextEndTracksRebind:
         """A ``call_model_input_filter`` that drops the leading context message
         shrinks ``messages`` by one; the loop must hand the step resolvers the
         adjusted boundary (``2 - 1 == 1``), not the stale block-entry ``2``."""
-        from philharmonica.adk.run import turn_resolution
-        from philharmonica.adk.run.loop import run_agent_loop
+        from augments.adk.run import turn_resolution
+        from augments.adk.run.loop import run_agent_loop
 
         captured: dict[str, int] = {}
 
@@ -199,7 +199,7 @@ class TestContextEndTracksRebind:
         config = RunConfig(call_model_input_filter=shrink_filter)
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
             patch.object(turn_resolution, "resolve_structured_output_step", new=capture_structured),
         ):
             await run_agent_loop(
@@ -225,7 +225,7 @@ class TestStreamedInterruptionNoDuplicateToolOutput:
         """One tool completes and a sibling defers in the same batch. The
         completed tool's ``TOOL_OUTPUT`` is emitted once by the executor; the
         interruption handler must not re-emit it."""
-        from philharmonica.adk.run.stream import RunItemStreamEvent, RunItemType
+        from augments.adk.run.stream import RunItemStreamEvent, RunItemType
 
         agent = Agent(
             name="hitl-agent",
@@ -242,10 +242,10 @@ class TestStreamedInterruptionNoDuplicateToolOutput:
 
         tool_output_events = 0
         with (
-            patch("philharmonica.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_stream)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_stream)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             streaming = await Runner.arun(agent, "go", max_turns=3, run_config=RunConfig(), stream=True)
             async for event in streaming.stream_events():

@@ -26,11 +26,11 @@ def test_release_workflow_install_tests_built_wheel() -> None:
 
     assert "uv build" in workflow
     assert "uvx twine check dist/*" in workflow
-    assert "uv venv /tmp/philharmonica-wheel-smoke" in workflow
-    assert "uv pip install --python /tmp/philharmonica-wheel-smoke/bin/python dist/*.whl" in workflow
-    assert "philharmonica.adk.__version__" in workflow
-    assert "philharmonica/adk/py.typed" in workflow
-    assert "bin/philharmonica --help" in workflow
+    assert "uv venv /tmp/augments-wheel-smoke" in workflow
+    assert "uv pip install --python /tmp/augments-wheel-smoke/bin/python dist/*.whl" in workflow
+    assert "augments.adk.__version__" in workflow
+    assert "augments/adk/py.typed" in workflow
+    assert "bin/augments --help" in workflow
 
 
 def test_release_smoke_test_imports_resolve() -> None:
@@ -43,9 +43,7 @@ def test_release_smoke_test_imports_resolve() -> None:
     workflow = _read(".github/workflows/release-tag.yml")
 
     statements = [
-        line.strip()
-        for line in workflow.splitlines()
-        if line.strip().startswith(("import philharmonica", "from philharmonica"))
+        line.strip() for line in workflow.splitlines() if line.strip().startswith(("import augments", "from augments"))
     ]
     assert statements, "release-tag.yml no longer smoke-tests any import"
 

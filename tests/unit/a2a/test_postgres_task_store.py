@@ -13,8 +13,8 @@ pytest.importorskip("pytest_postgresql")
 from a2a.types import Task, TaskState, TaskStatus
 from pytest_postgresql.factories import postgresql, postgresql_proc
 
-from philharmonica.adk.a2a.postgres_task_store import PostgresTaskStore
-from philharmonica.adk.a2a.task_store import TaskStore
+from augments.adk.a2a.postgres_task_store import PostgresTaskStore
+from augments.adk.a2a.task_store import TaskStore
 
 pytestmark = pytest.mark.postgres
 

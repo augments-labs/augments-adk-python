@@ -15,7 +15,7 @@ from unittest.mock import AsyncMock
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.sandbox.tools.apply_patch_tool import (
+from augments.adk.sandbox.tools.apply_patch_tool import (
     ApplyPatchArgs,
     make_apply_patch_tool,
 )

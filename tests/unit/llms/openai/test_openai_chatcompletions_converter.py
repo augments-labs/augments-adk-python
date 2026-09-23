@@ -36,13 +36,13 @@ from openai.types.completion_usage import (
 )
 from pydantic import BaseModel
 
-from philharmonica.adk.llms.openai.openai_chatcompletions_converter import (
+from augments.adk.llms.openai.openai_chatcompletions_converter import (
     OpenAIChatCompletionsConverter,
 )
-from philharmonica.adk.schemas.utils import SchemaEnforcement
-from philharmonica.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.schemas.utils import SchemaEnforcement
+from augments.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import (
     LLMResponseFunctionToolCall,
     LLMResponseRefusal,
     LLMResponseText,
@@ -282,7 +282,7 @@ class TestItemsToMessages:
             "call_id": "orphan_1",
             "output": "oops",
         }
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.llms.openai.openai_chatcompletions_converter"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.llms.openai.openai_chatcompletions_converter"):
             out = OpenAIChatCompletionsConverter.items_to_messages([out_item])
 
         # Conversion still emits the tool message — the warning is
@@ -315,7 +315,7 @@ class TestItemsToMessages:
                 "output": "ok",
             },
         ]
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.llms.openai.openai_chatcompletions_converter"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.llms.openai.openai_chatcompletions_converter"):
             OpenAIChatCompletionsConverter.items_to_messages(items)
 
         assert not any("has no preceding function_call" in record.message for record in caplog.records)
@@ -426,7 +426,7 @@ class TestItemsToMessages:
             {"type": "function_call_output", "call_id": "c2", "output": "r2"},
             {"type": "function_call_output", "call_id": "c3", "output": "r3"},
         ]
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.llms.openai.openai_chatcompletions_converter"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.llms.openai.openai_chatcompletions_converter"):
             out = OpenAIChatCompletionsConverter.items_to_messages(stream)
 
         # Shape stays correct: one assistant message + three tool messages.

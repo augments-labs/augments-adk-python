@@ -100,5 +100,5 @@ await save_audit(result)                 # final_output + usage still there
 
 ## See also
 
-- `src/philharmonica/adk/types/run/run_result.py` — dataclass definition
+- `src/augments/adk/types/run/run_result.py` — dataclass definition
 - `tests/unit/run/test_run_result_helpers.py` — full behavior tests

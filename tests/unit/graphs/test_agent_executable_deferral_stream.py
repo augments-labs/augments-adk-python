@@ -22,14 +22,14 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import AgentExecutable
-from philharmonica.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import AgentExecutable
+from augments.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 class _DeferredStreamed:
@@ -96,7 +96,7 @@ async def test_stream_async_lifts_deferred_requests_to_nested_interrupt(
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return fake
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -146,7 +146,7 @@ async def test_stream_async_raises_when_snapshots_key_missing(monkeypatch: pytes
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return fake
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -177,7 +177,7 @@ async def test_stream_async_raises_when_node_id_key_missing(monkeypatch: pytest.
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return fake
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -207,7 +207,7 @@ async def test_stream_async_raises_when_state_missing(monkeypatch: pytest.Monkey
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return fake
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -246,7 +246,7 @@ async def test_stream_async_emits_terminal_result_on_success(monkeypatch: pytest
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return _SuccessStreamed()
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 

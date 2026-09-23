@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.network``."""
+"""Tests for ``augments.adk.types.sandbox.network``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.network import NetworkPolicy, PortForwardRule
+from augments.adk.types.sandbox.network import NetworkPolicy, PortForwardRule
 
 
 class TestNetworkPolicyDefaults:

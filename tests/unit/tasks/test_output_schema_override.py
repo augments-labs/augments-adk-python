@@ -12,10 +12,10 @@ from unittest.mock import AsyncMock, patch
 
 from pydantic import BaseModel
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task
+from augments.adk.types.run.run_result import RunResult
 
 
 class Summary(BaseModel):
@@ -45,7 +45,7 @@ async def test_task_schema_overrides_agent_schema() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         await Runner.arun_task(task)
@@ -73,7 +73,7 @@ async def test_no_override_passes_original_agent_unchanged() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         await Runner.arun_task(task)

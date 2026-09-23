@@ -6,12 +6,12 @@ import logging
 
 import pytest
 
-from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-from philharmonica.adk.llms.anthropic.anthropic_reasoning_resolver import (
+from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+from augments.adk.llms.anthropic.anthropic_reasoning_resolver import (
     ANTHROPIC_MIN_THINKING_BUDGET,
     resolve_thinking,
 )
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_config import LLMConfig
 
 
 class TestResolveThinking:

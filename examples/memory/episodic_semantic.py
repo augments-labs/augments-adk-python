@@ -15,10 +15,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.memory import (
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.memory import (
     MemoryKind,
     MemoryMetadata,
     MemorySearchFilter,
@@ -26,8 +26,8 @@ from philharmonica.adk.memory import (
     VectorMemory,
     distill_to_semantic,
 )
-from philharmonica.adk.memory.extractor import LLMExtractor
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.memory.extractor import LLMExtractor
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
 
 logger = logging.getLogger(__name__)
 

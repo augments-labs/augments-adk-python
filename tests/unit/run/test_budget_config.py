@@ -4,15 +4,15 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.budgets import InMemoryCostLedger, TenantBudget
-from philharmonica.adk.exceptions import UserError
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.cost import validate_budget_config
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents import Agent
+from augments.adk.budgets import InMemoryCostLedger, TenantBudget
+from augments.adk.exceptions import UserError
+from augments.adk.run.config import RunConfig
+from augments.adk.run.cost import validate_budget_config
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 
 def _minimal_swarm() -> Swarm[Any]:

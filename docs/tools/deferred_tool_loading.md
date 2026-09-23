@@ -45,8 +45,8 @@ is fine.
 ## Quick example (single-user)
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools import build_tool_search, function_tool
+from augments.adk.agents import Agent
+from augments.adk.tools import build_tool_search, function_tool
 
 
 @function_tool(name="echo", description="Echo a message.")

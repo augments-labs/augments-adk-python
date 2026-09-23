@@ -38,9 +38,9 @@ import logging
 
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

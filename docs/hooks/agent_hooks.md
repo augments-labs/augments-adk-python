@@ -16,7 +16,7 @@ Both can be active at the same time: `RunHooks` fires first, then `AgentHooks` f
 ## Method surface
 
 ```python
-from philharmonica.adk.hooks.hooks import AgentHooks
+from augments.adk.hooks.hooks import AgentHooks
 
 class MyAgentHooks(AgentHooks):
     async def on_start(self, context, agent) -> None: ...
@@ -62,9 +62,9 @@ RunHooks.on_agent_end    ─►  AgentHooks.on_end
 
 ```python
 import logging
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.hooks.hooks import AgentHooks
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.hooks.hooks import AgentHooks
+from augments.adk.run import Runner
 
 logger = logging.getLogger(__name__)
 

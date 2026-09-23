@@ -7,22 +7,22 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     SandboxConcurrencyError,
     SandboxConfigurationError,
     UnsupportedSnapshotFeatureError,
 )
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.runner_integration.concurrency_guard import (
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.runner_integration.concurrency_guard import (
     SandboxConcurrencyGuard,
 )
-from philharmonica.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
-from philharmonica.adk.types.sandbox.iac import IaCBundle
-from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+from augments.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
+from augments.adk.types.sandbox.iac import IaCBundle
+from augments.adk.types.sandbox.session_state import SandboxSessionState
 
-_APPLY = "philharmonica.adk.sandbox.runner_integration.lifecycle.apply_iac"
-_DESTROY = "philharmonica.adk.sandbox.runner_integration.lifecycle.destroy_iac"
+_APPLY = "augments.adk.sandbox.runner_integration.lifecycle.apply_iac"
+_DESTROY = "augments.adk.sandbox.runner_integration.lifecycle.destroy_iac"
 
 
 def _fake_session() -> Any:
@@ -542,12 +542,12 @@ class TestManifestMaterialization:
         # file MUST already exist on disk INSIDE the yield (the
         # agent-loop phase) — proving apply_manifest fires after
         # start() and before the loop.
-        from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+        from augments.adk.sandbox.clients.local.subprocess_client import (
             LocalSandboxClientOptions,
             LocalSubprocessSandboxClient,
         )
-        from philharmonica.adk.types.sandbox.entries import File
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.entries import File
+        from augments.adk.types.sandbox.manifest import Manifest
 
         manifest = Manifest(entries={"hello.txt": File(content=b"from-manifest")})
         config = SandboxRunConfig(
@@ -566,9 +566,9 @@ class TestManifestMaterialization:
     async def test_apply_manifest_skipped_for_injected_session(self) -> None:
         # Injected session: runner_owns_session is False → the lifecycle
         # must NOT call apply_manifest (the caller owns that workspace).
-        from philharmonica.adk.sandbox.clients.session import MaterializationResult
-        from philharmonica.adk.types.sandbox.entries import File
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.sandbox.clients.session import MaterializationResult
+        from augments.adk.types.sandbox.entries import File
+        from augments.adk.types.sandbox.manifest import Manifest
 
         injected = _fake_session()
         injected.apply_manifest = AsyncMock(return_value=MaterializationResult())
@@ -590,8 +590,8 @@ class TestManifestMaterialization:
         # fresh-session-only contract the resumed workspace persists,
         # so the lifecycle must NOT call apply_manifest even when a
         # manifest is configured (no pointless no-op / spurious POST).
-        from philharmonica.adk.types.sandbox.entries import File
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.entries import File
+        from augments.adk.types.sandbox.manifest import Manifest
 
         resumed = _fake_session()
         resumed.apply_manifest = AsyncMock()

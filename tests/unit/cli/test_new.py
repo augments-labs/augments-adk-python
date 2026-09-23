@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica new`` — every scaffold must validate with no edits."""
+"""Tests for ``augments new`` — every scaffold must validate with no edits."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 
 def test_agent_scaffold_resolves(tmp_path: Path) -> None:

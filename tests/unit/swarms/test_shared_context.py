@@ -16,16 +16,16 @@ import logging
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.config import SharedContextConfig
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.shared_context import prepare_turn_input
-from philharmonica.adk.swarms.shared_context_strategy import SharedContextStrategy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.swarms.yield_signal import SwarmHandoff
-from philharmonica.adk.types.items.items import UserItem
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.config import SharedContextConfig
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.shared_context import prepare_turn_input
+from augments.adk.swarms.shared_context_strategy import SharedContextStrategy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.yield_signal import SwarmHandoff
+from augments.adk.types.items.items import UserItem
 
 
 def _user_item(content: str, agent_name: str = "a") -> UserItem:
@@ -220,7 +220,7 @@ class TestHandoffMessageSizeCap:
         oversized = "x" * 500
         handoff = SwarmHandoff(target="b", message=oversized)
 
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.swarms.shared_context"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.swarms.shared_context"):
             result = asyncio.run(prepare_turn_input(state, b, handoff, config))
 
         assert len(result) == 1
@@ -289,14 +289,14 @@ class TestSummarizedCompactionErrorFallback:
             # Force the history over budget so compaction is actually attempted
             # (the gate skips summarization while under budget).
             patch(
-                "philharmonica.adk.context.token_counter.TokenCounter.count_messages",
+                "augments.adk.context.token_counter.TokenCounter.count_messages",
                 return_value=10**9,
             ),
             patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new=AsyncMock(side_effect=RuntimeError("LLM unavailable")),
             ),
-            caplog.at_level(logging.ERROR, logger="philharmonica.adk.swarms.shared_context"),
+            caplog.at_level(logging.ERROR, logger="augments.adk.swarms.shared_context"),
         ):
             result = asyncio.run(
                 prepare_turn_input(
@@ -340,11 +340,11 @@ class TestSummarizedCompactionErrorFallback:
         with (
             # Force over-budget so compaction is attempted before it fails.
             patch(
-                "philharmonica.adk.context.token_counter.TokenCounter.count_messages",
+                "augments.adk.context.token_counter.TokenCounter.count_messages",
                 return_value=10**9,
             ),
             patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new=AsyncMock(side_effect=RuntimeError("LLM unavailable")),
             ),
         ):
@@ -384,14 +384,14 @@ class TestSummarizedCompactionErrorFallback:
         with (
             # Force over-budget so compaction is attempted and its failure logs.
             patch(
-                "philharmonica.adk.context.token_counter.TokenCounter.count_messages",
+                "augments.adk.context.token_counter.TokenCounter.count_messages",
                 return_value=10**9,
             ),
             patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new=AsyncMock(side_effect=RuntimeError("LLM auth failure")),
             ),
-            caplog.at_level(logging.ERROR, logger="philharmonica.adk.swarms.shared_context"),
+            caplog.at_level(logging.ERROR, logger="augments.adk.swarms.shared_context"),
         ):
             asyncio.run(
                 prepare_turn_input(

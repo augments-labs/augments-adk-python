@@ -21,8 +21,8 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
 
 logger = logging.getLogger(__name__)
 

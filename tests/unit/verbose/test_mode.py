@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.verbose.mode``.
+"""Tests for ``augments.adk.verbose.mode``.
 
 Covers the full precedence ladder of ``resolve_mode`` — explicit
 developer override, ``NO_COLOR`` / ``FORCE_COLOR`` envs, CI detection,
@@ -19,8 +19,8 @@ from unittest import mock
 
 import pytest
 
-from philharmonica.adk.verbose.config import VerboseConfig
-from philharmonica.adk.verbose.mode import (
+from augments.adk.verbose.config import VerboseConfig
+from augments.adk.verbose.mode import (
     is_ci,
     is_force_color,
     is_no_color,
@@ -175,7 +175,7 @@ class TestIsRichAvailable:
     def test_downgrade_when_find_spec_returns_none(self) -> None:
         """When find_spec returns None, the function reports unavailable."""
         with mock.patch(
-            "philharmonica.adk.verbose.mode.importlib.util.find_spec",
+            "augments.adk.verbose.mode.importlib.util.find_spec",
             return_value=None,
         ):
             assert is_rich_available() is False
@@ -208,7 +208,7 @@ class TestResolveMode:
     def test_mode_panel_downgrades_when_rich_missing(self) -> None:
         cfg = VerboseConfig(mode="panel")
         with mock.patch(
-            "philharmonica.adk.verbose.mode.is_rich_available",
+            "augments.adk.verbose.mode.is_rich_available",
             return_value=False,
         ):
             assert resolve_mode(cfg) == "line"
@@ -237,7 +237,7 @@ class TestResolveMode:
         monkeypatch.setenv("FORCE_COLOR", "1")
         cfg = VerboseConfig(mode="auto", output=_tty_stream())
         with mock.patch(
-            "philharmonica.adk.verbose.mode.is_rich_available",
+            "augments.adk.verbose.mode.is_rich_available",
             return_value=False,
         ):
             assert resolve_mode(cfg) == "line"
@@ -265,7 +265,7 @@ class TestResolveMode:
     def test_auto_without_rich_returns_line(self) -> None:
         cfg = VerboseConfig(mode="auto", output=_tty_stream())
         with mock.patch(
-            "philharmonica.adk.verbose.mode.is_rich_available",
+            "augments.adk.verbose.mode.is_rich_available",
             return_value=False,
         ):
             assert resolve_mode(cfg) == "line"

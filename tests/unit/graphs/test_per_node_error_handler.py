@@ -14,10 +14,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.config import GraphConfig
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.node import GraphNode
-from philharmonica.adk.orchestration.executable import NodeResult
+from augments.adk.graphs.config import GraphConfig
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.node import GraphNode
+from augments.adk.orchestration.executable import NodeResult
 
 
 def _minimal_graph(*, default_error_handler=None) -> Graph:
@@ -41,7 +41,7 @@ class TestCallErrorHandler:
     """Unit tests for _call_error_handler internals."""
 
     async def test_no_handler_returns_none(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         g = _minimal_graph()
         exc = RuntimeError("boom")
@@ -49,7 +49,7 @@ class TestCallErrorHandler:
         assert result is None
 
     async def test_node_sync_handler_returns_fallback(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         fallback = NodeResult(output="recovered")
 
@@ -70,7 +70,7 @@ class TestCallErrorHandler:
         assert result is fallback
 
     async def test_node_async_handler_returns_fallback(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         fallback = NodeResult(output="async-recovered")
 
@@ -90,7 +90,7 @@ class TestCallErrorHandler:
         assert result is fallback
 
     async def test_graph_level_default_handler_used_when_node_unset(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         fallback = NodeResult(output="graph-default-fallback")
 
@@ -102,7 +102,7 @@ class TestCallErrorHandler:
         assert result is fallback
 
     async def test_per_node_handler_takes_precedence_over_graph_default(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         node_fallback = NodeResult(output="per-node")
         graph_fallback = NodeResult(output="graph-default")
@@ -127,7 +127,7 @@ class TestCallErrorHandler:
         assert result is node_fallback
 
     async def test_handler_exception_propagates(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         handler_exc = ValueError("handler-failed")
 
@@ -148,7 +148,7 @@ class TestCallErrorHandler:
         assert ei.value is handler_exc
 
     async def test_handler_returning_none_propagates_original(self) -> None:
-        from philharmonica.adk.run.graph_loop import _call_error_handler
+        from augments.adk.run.graph_loop import _call_error_handler
 
         def none_handler(_nid: str, _exc: BaseException) -> None:
             return None
@@ -170,7 +170,7 @@ class TestGraphNodeOnErrorField:
     """Ensure GraphNode accepts and stores on_error correctly."""
 
     def test_graphnode_stores_handler(self) -> None:
-        from philharmonica.adk.graphs.adapters import to_executable
+        from augments.adk.graphs.adapters import to_executable
 
         def my_handler(_nid: str, _exc: BaseException) -> NodeResult | None:
             return None
@@ -183,7 +183,7 @@ class TestGraphNodeOnErrorField:
         assert node.on_error is my_handler
 
     def test_graphnode_default_on_error_is_none(self) -> None:
-        from philharmonica.adk.graphs.adapters import to_executable
+        from augments.adk.graphs.adapters import to_executable
 
         node = GraphNode(id="n1", executable=to_executable(lambda: "x"))
         assert node.on_error is None

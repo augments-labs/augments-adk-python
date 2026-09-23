@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.flows import FlowCheckpoint, SqliteFlowWorkerBackend
+from augments.adk.flows import FlowCheckpoint, SqliteFlowWorkerBackend
 
 
 def _make_checkpoint(flow_id: str = "flow1") -> FlowCheckpoint:

@@ -15,7 +15,7 @@ import pytest
 
 pytest.importorskip("opentelemetry")
 
-from philharmonica.adk.tracing.otel import OTelTracer, setup_otel_from_env
+from augments.adk.tracing.otel import OTelTracer, setup_otel_from_env
 
 
 class TestSetupOtelFromEnvMissingEndpoint:
@@ -40,7 +40,7 @@ class TestSetupOtelFromEnvDelegatesToSetupOtel:
         """setup_otel_from_env must not pass endpoint= so the SDK reads the env var directly."""
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         fake_tracer = MagicMock(spec=OTelTracer)
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
             result = setup_otel_from_env()
         mock_setup.assert_called_once()
         call_kwargs = mock_setup.call_args[1]
@@ -50,7 +50,7 @@ class TestSetupOtelFromEnvDelegatesToSetupOtel:
     def test_passes_console_kwarg(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         fake_tracer = MagicMock(spec=OTelTracer)
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
             setup_otel_from_env(console=True)
         assert mock_setup.call_args[1].get("console") is True
 
@@ -58,14 +58,14 @@ class TestSetupOtelFromEnvDelegatesToSetupOtel:
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         fake_tracer = MagicMock(spec=OTelTracer)
         fake_processor = MagicMock()
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
             setup_otel_from_env(additional_processors=[fake_processor])
         assert mock_setup.call_args[1].get("additional_processors") == [fake_processor]
 
     def test_returns_oteltracer(self, monkeypatch: pytest.MonkeyPatch) -> None:
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         fake_tracer = MagicMock(spec=OTelTracer)
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer):
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer):
             result = setup_otel_from_env()
         assert result is fake_tracer
 
@@ -82,7 +82,7 @@ class TestSetupOtelFromEnvServiceName:
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         monkeypatch.setenv("OTEL_SERVICE_NAME", "my-prod-service")
         fake_tracer = MagicMock(spec=OTelTracer)
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
             setup_otel_from_env()
         assert mock_setup.call_args[1].get("service_name") == "my-prod-service"
 
@@ -90,15 +90,15 @@ class TestSetupOtelFromEnvServiceName:
         monkeypatch.setenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4317")
         monkeypatch.delenv("OTEL_SERVICE_NAME", raising=False)
         fake_tracer = MagicMock(spec=OTelTracer)
-        with patch("philharmonica.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
+        with patch("augments.adk.tracing.otel.setup.setup_otel", return_value=fake_tracer) as mock_setup:
             setup_otel_from_env()
-        assert mock_setup.call_args[1].get("service_name") == "philharmonica-adk"
+        assert mock_setup.call_args[1].get("service_name") == "augments-adk"
 
     def test_resource_attribute_reflects_env_service_name(self, monkeypatch: pytest.MonkeyPatch) -> None:
         """End-to-end: the installed provider's resource carries the env value.
 
         Without the explicit OTEL_SERVICE_NAME passthrough, setup_otel's
-        hard-coded service.name="philharmonica-adk" shadows the env value and this
+        hard-coded service.name="augments-adk" shadows the env value and this
         assertion fails.
         """
         from opentelemetry.sdk.trace import TracerProvider
@@ -114,12 +114,12 @@ class TestSetupOtelFromEnvServiceName:
 
 class TestSetupOtelFromEnvPublicExport:
     def test_importable_from_tracing_otel(self) -> None:
-        from philharmonica.adk.tracing.otel import setup_otel_from_env as fn
+        from augments.adk.tracing.otel import setup_otel_from_env as fn
 
         assert callable(fn)
 
     def test_importable_from_tracing_top_level(self) -> None:
-        from philharmonica.adk import tracing
+        from augments.adk import tracing
 
         assert hasattr(tracing, "setup_otel_from_env")
         assert tracing.setup_otel_from_env is not None

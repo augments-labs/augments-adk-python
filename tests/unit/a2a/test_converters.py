@@ -18,8 +18,8 @@ import pytest
 # the rest of the framework gates optional-extra modules.
 a2a_types = pytest.importorskip("a2a.types")
 
-from philharmonica.adk.a2a import converters
-from philharmonica.adk.a2a.a2a_continuation_token import A2ATaskStatus
+from augments.adk.a2a import converters
+from augments.adk.a2a.a2a_continuation_token import A2ATaskStatus
 
 
 class TestTaskStateMapping:
@@ -67,7 +67,7 @@ class TestMessageExtraction:
                 a2a_types.Part(text="suffix"),
             ],
         )
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.a2a.converters"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.a2a.converters"):
             result = converters.extract_text_from_message(msg)
         assert result == "prefix suffix"
         # Exactly one warning should have fired for the URL part.

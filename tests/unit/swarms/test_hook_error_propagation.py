@@ -18,14 +18,14 @@ from typing import Any, override
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
-from philharmonica.adk.swarms.hooks import HookRegistry, SwarmHooks
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
+from augments.adk.swarms.hooks import HookRegistry, SwarmHooks
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -132,7 +132,7 @@ async def test_fake_checkpointer_save_error_propagates_via_registry() -> None:
     """End-to-end: a fake checkpointer whose ``save`` raises is registered
     on a HookRegistry; firing on_swarm_turn_end propagates the error.
     """
-    from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint, SwarmCheckpointer
+    from augments.adk.swarms.checkpointer import SwarmCheckpoint, SwarmCheckpointer
 
     class _FailingCheckpointer:
         async def save(self, checkpoint: SwarmCheckpoint) -> None:

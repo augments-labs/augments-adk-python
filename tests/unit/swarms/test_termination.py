@@ -8,21 +8,21 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import (
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import (
     ExplicitDoneTermination,
     HandoffToTermination,
     MaxTurnsTermination,
     TextMentionTermination,
     TokenBudgetTermination,
 )
-from philharmonica.adk.swarms.yield_signal import SwarmDone, SwarmHandoff
-from philharmonica.adk.types.items.items import MessageOutputItem, UserItem
-from philharmonica.adk.types.responses.llm_response import LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.swarms.yield_signal import SwarmDone, SwarmHandoff
+from augments.adk.types.items.items import MessageOutputItem, UserItem
+from augments.adk.types.responses.llm_response import LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _state(
@@ -195,7 +195,7 @@ class TestTextMentionTermination:
         assert reason is not None
 
     def test_user_input_never_triggers(self) -> None:
-        from philharmonica.adk.types.input import LLMInputEasyMessage
+        from augments.adk.types.input import LLMInputEasyMessage
 
         user_item = UserItem(raw=LLMInputEasyMessage(role="user", content="TERMINATE"))
         state = _history_state([user_item])

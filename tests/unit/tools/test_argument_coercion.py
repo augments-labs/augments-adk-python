@@ -34,8 +34,8 @@ from typing import Annotated, Any, Literal, cast
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.tools import FunctionTool, function_tool
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.tools import FunctionTool, function_tool
+from augments.adk.tools.tool_context import ToolContext
 
 
 def _ctx(raw: str = "{}") -> ToolContext[dict[str, Any]]:
@@ -363,7 +363,7 @@ class TestVariadicArgsRejection:
     / dict parameter spell it explicitly."""
 
     def test_var_positional_rejected(self) -> None:
-        from philharmonica.adk.exceptions import UserError
+        from augments.adk.exceptions import UserError
 
         with pytest.raises(UserError, match=r"\*args parameter"):
 
@@ -372,7 +372,7 @@ class TestVariadicArgsRejection:
                 return sum(items)
 
     def test_var_keyword_rejected(self) -> None:
-        from philharmonica.adk.exceptions import UserError
+        from augments.adk.exceptions import UserError
 
         with pytest.raises(UserError, match=r"\*\*kwargs parameter"):
 

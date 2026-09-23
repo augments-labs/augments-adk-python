@@ -14,7 +14,7 @@ from unittest.mock import patch
 import httpx2
 import pytest
 
-from philharmonica.adk.mcp.http import MCPServerStreamableHttp, MCPServerStreamableHttpParams
+from augments.adk.mcp.http import MCPServerStreamableHttp, MCPServerStreamableHttpParams
 
 # ── Parameter construction ─────────────────────────────────────────────────
 

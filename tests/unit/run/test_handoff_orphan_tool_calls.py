@@ -18,7 +18,7 @@ TypedDict variant.
 
 from typing import Any
 
-from philharmonica.adk.run.handoffs_executor import (  # test-only import
+from augments.adk.run.handoffs_executor import (  # test-only import
     _drop_orphan_tool_calls,
     _rewrite_trailing_assistant,
 )

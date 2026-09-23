@@ -25,12 +25,12 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions.exceptions import AgentInputGuardrailTripwireTriggered
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner, _inject_memories
-from philharmonica.adk.run.stream import CancelMode
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions.exceptions import AgentInputGuardrailTripwireTriggered
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner, _inject_memories
+from augments.adk.run.stream import CancelMode
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -68,7 +68,7 @@ class TestInjectMemoriesStructuredContent:
     async def test_list_content_gets_text_part_not_str_coercion(self) -> None:
         """A system message whose content is a list of parts must keep its
         list shape with an appended text part, not be str()-flattened."""
-        from philharmonica.adk.memory.memory_config import MemoryInjectionPosition
+        from augments.adk.memory.memory_config import MemoryInjectionPosition
 
         effective_input = [
             {"role": "system", "content": [{"type": "input_text", "text": "You are helpful."}]},
@@ -87,7 +87,7 @@ class TestInjectMemoriesStructuredContent:
 
     async def test_string_content_still_concatenates(self) -> None:
         """Scalar string content keeps the existing concatenation behavior."""
-        from philharmonica.adk.memory.memory_config import MemoryInjectionPosition
+        from augments.adk.memory.memory_config import MemoryInjectionPosition
 
         effective_input = [
             {"role": "system", "content": "Base prompt."},
@@ -120,9 +120,9 @@ class TestStreamedImmediateCancelGuard:
         config = RunConfig()
 
         with (
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_agent_loop_streamed", new=_cancel_and_raise),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_agent_loop_streamed", new=_cancel_and_raise),
         ):
             streaming = await Runner.arun(agent, "hi", run_config=config, stream=True)
             # Must NOT re-raise the immediate-cancel CancelledError.
@@ -155,10 +155,10 @@ class TestStreamedTripwirePrecedence:
         config = RunConfig(error_handlers={Exception: lambda _e: "recovered!"})
 
         with (
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=_tripping_parallel),
-            patch("philharmonica.adk.run.runner.run_agent_loop_streamed", new=_failing_loop),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=_tripping_parallel),
+            patch("augments.adk.run.runner.run_agent_loop_streamed", new=_failing_loop),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             streaming = await Runner.arun(agent, "hi", run_config=config, stream=True)
             with pytest.raises(AgentInputGuardrailTripwireTriggered):
@@ -195,8 +195,8 @@ class TestSandboxBracketClosedOnSetupFailure:
         agent = _make_agent()
 
         with (
-            patch("philharmonica.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_open),
-            patch("philharmonica.adk.tools.tool_search.reset_revealed_sets", new=_boom_reset),
+            patch("augments.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_open),
+            patch("augments.adk.tools.tool_search.reset_revealed_sets", new=_boom_reset),
             pytest.raises(RuntimeError, match="reset boom"),
         ):
             await Runner.arun(agent, "hi", run_config=RunConfig())
@@ -217,7 +217,7 @@ class TestSandboxBracketClosedOnSetupFailure:
         agent = _make_agent()
 
         with (
-            patch("philharmonica.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_open),
+            patch("augments.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_open),
             contextlib.suppress(RuntimeError),
         ):
             await Runner.arun(agent, "hi", hooks=_BoomStartHooks(), run_config=RunConfig())

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, MagicMock
 
-from philharmonica.adk.sandbox.capabilities.base import SandboxCapability
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
-from philharmonica.adk.types.sandbox.cost import SandboxBackendCapabilities, SandboxCostDescriptor
+from augments.adk.sandbox.capabilities.base import SandboxCapability
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
+from augments.adk.types.sandbox.cost import SandboxBackendCapabilities, SandboxCostDescriptor
 
 
 def _client() -> tuple[MagicMock, AsyncMock]:

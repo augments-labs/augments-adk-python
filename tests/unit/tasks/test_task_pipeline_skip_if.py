@@ -12,11 +12,11 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task, TaskPipeline
-from philharmonica.adk.tasks.task_output import TaskOutput
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task, TaskPipeline
+from augments.adk.tasks.task_output import TaskOutput
+from augments.adk.types.run.run_result import RunResult
 
 
 def _agent() -> Agent:
@@ -50,7 +50,7 @@ async def test_skip_if_true_inserts_skipped_slot() -> None:
         call_count["n"] += 1
         return _run_result(f"out_{call_count['n']}")
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         result = await Runner.arun_task_pipeline(
@@ -81,7 +81,7 @@ async def test_skip_if_receives_prior_outputs_in_order() -> None:
     t2 = Task(description="B", agent=agent, skip_if=capture_and_skip)
     t3 = Task(description="C", agent=agent, skip_if=capture_and_skip)
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     counter = {"n": 0}
 
@@ -117,7 +117,7 @@ async def test_skipped_slot_preserves_positional_indexing() -> None:
         counter["n"] += 1
         return _run_result(f"r{counter['n']}")
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         result = await Runner.arun_task_pipeline(TaskPipeline(tasks=(t1, t2, t3)))

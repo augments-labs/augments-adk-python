@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from mcp import types as mcp_types
 
-from philharmonica.adk.mcp.sampling import make_sampling_callback
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseFunctionToolCall, LLMResponseText
+from augments.adk.mcp.sampling import make_sampling_callback
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseFunctionToolCall, LLMResponseText
 
 
 async def test_tool_call_response_returns_with_tools_result() -> None:

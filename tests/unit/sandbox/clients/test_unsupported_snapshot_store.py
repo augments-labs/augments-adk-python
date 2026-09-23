@@ -16,7 +16,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
+from augments.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
 
 # (kind, hosted_module, client_cls_name, expected_backend_id)
 _BACKENDS: list[tuple[str, str | None, str | None, str]] = [
@@ -40,17 +40,17 @@ def _make_client(kind: str, hosted_module: str | None, client_cls_name: str | No
         # → str for importlib / getattr.
         if hosted_module is None or client_cls_name is None:
             raise TypeError("hosted backend rows must carry module + client class names")
-        module = importlib.import_module(f"philharmonica.adk.sandbox.clients.hosted.{hosted_module}")
+        module = importlib.import_module(f"augments.adk.sandbox.clients.hosted.{hosted_module}")
         return getattr(module, client_cls_name)()
     if kind == "docker":
-        from philharmonica.adk.sandbox.clients.docker.docker_client import DockerSandboxClient
+        from augments.adk.sandbox.clients.docker.docker_client import DockerSandboxClient
 
         return DockerSandboxClient(docker_client=MagicMock())
     if kind == "k8s":
-        from philharmonica.adk.sandbox.clients.k8s.k8s_client import K8sPodSandboxClient
+        from augments.adk.sandbox.clients.k8s.k8s_client import K8sPodSandboxClient
 
         return K8sPodSandboxClient(core_v1=MagicMock())
-    from philharmonica.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
+    from augments.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
 
     return LocalSubprocessSandboxClient(warn_banner=False)
 

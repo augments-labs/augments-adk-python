@@ -1,5 +1,5 @@
 {
-  "$schema": "../../src/philharmonica/adk/types/config/topology_config.schema.json",
+  "$schema": "../../src/augments/adk/types/config/topology_config.schema.json",
   "agents": {
     "triage": {"config_path": "triage.json"},
     "spanish": {"config_path": "spanish.json"}

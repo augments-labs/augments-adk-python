@@ -1,15 +1,15 @@
-"""Tests for ``philharmonica.adk.sandbox.remote_mount_policy``."""
+"""Tests for ``augments.adk.sandbox.remote_mount_policy``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.remote_mount_policy import (
+from augments.adk.sandbox.remote_mount_policy import (
     REMOTE_MOUNT_POLICY_TEMPLATE,
     build_remote_mount_policy_instructions,
     get_remote_mounts,
 )
-from philharmonica.adk.types.sandbox.entries import File
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.entries import File
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.mounts import (
     InContainerMountStrategy,
     RcloneMountPattern,
     S3Mount,

@@ -1,4 +1,4 @@
-"""Unit tests for ``philharmonica.adk.visualization.helpers``.
+"""Unit tests for ``augments.adk.visualization.helpers``.
 
 Covers the collision detector, the empty-input edges of ``safe``, and
 the escape function — the regression hooks the review-gate asked for.
@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.visualization.helpers import (
+from augments.adk.visualization.helpers import (
     assert_no_collision,
     escape_label,
     escape_mermaid_label,

@@ -5,96 +5,96 @@ supersteps, with checkpointing, interrupts, and streaming events.
 
 ## Core
 
-- `philharmonica.adk.graphs.Graph`
-- `philharmonica.adk.graphs.GraphBuilder`
-- `philharmonica.adk.graphs.GraphConfig`
+- `augments.adk.graphs.Graph`
+- `augments.adk.graphs.GraphBuilder`
+- `augments.adk.graphs.GraphConfig`
 
 ## Nodes and edges
 
-- `philharmonica.adk.graphs.GraphNode`
-- `philharmonica.adk.graphs.GraphEdge`
-- `philharmonica.adk.graphs.EdgeCondition`
-- `philharmonica.adk.graphs.NodeInputStrategy`
-- `philharmonica.adk.graphs.NodeRetryPolicy`
-- `philharmonica.adk.graphs.prepare_node_input`
+- `augments.adk.graphs.GraphNode`
+- `augments.adk.graphs.GraphEdge`
+- `augments.adk.graphs.EdgeCondition`
+- `augments.adk.graphs.NodeInputStrategy`
+- `augments.adk.graphs.NodeRetryPolicy`
+- `augments.adk.graphs.prepare_node_input`
 
 ## State and results
 
-- `philharmonica.adk.graphs.GraphState`
-- `philharmonica.adk.graphs.GraphRunResult`
-- `philharmonica.adk.graphs.GraphRunResultStreaming`
-- `philharmonica.adk.graphs.GraphRunStatus`
-- `philharmonica.adk.graphs.StructuredInterrupts`
+- `augments.adk.graphs.GraphState`
+- `augments.adk.graphs.GraphRunResult`
+- `augments.adk.graphs.GraphRunResultStreaming`
+- `augments.adk.graphs.GraphRunStatus`
+- `augments.adk.graphs.StructuredInterrupts`
 
 ## Composition seam and adapters
 
-- `philharmonica.adk.graphs.Executable`
-- `philharmonica.adk.graphs.ExecutableInput`
-- `philharmonica.adk.graphs.NodeResult`
-- `philharmonica.adk.graphs.AgentExecutable`
-- `philharmonica.adk.graphs.SwarmExecutable`
-- `philharmonica.adk.graphs.CallableExecutable`
-- `philharmonica.adk.graphs.CallableNodeFn`
-- `philharmonica.adk.graphs.to_executable`
+- `augments.adk.graphs.Executable`
+- `augments.adk.graphs.ExecutableInput`
+- `augments.adk.graphs.NodeResult`
+- `augments.adk.graphs.AgentExecutable`
+- `augments.adk.graphs.SwarmExecutable`
+- `augments.adk.graphs.CallableExecutable`
+- `augments.adk.graphs.CallableNodeFn`
+- `augments.adk.graphs.to_executable`
 
 ## Merge and join
 
-- `philharmonica.adk.graphs.Merge`
-- `philharmonica.adk.graphs.MergeFn`
-- `philharmonica.adk.graphs.DEFAULT_MERGE`
-- `philharmonica.adk.graphs.JoinBarrier`
-- `philharmonica.adk.graphs.JoinSemantics`
+- `augments.adk.graphs.Merge`
+- `augments.adk.graphs.MergeFn`
+- `augments.adk.graphs.DEFAULT_MERGE`
+- `augments.adk.graphs.JoinBarrier`
+- `augments.adk.graphs.JoinSemantics`
 
 ## Checkpointers
 
-- `philharmonica.adk.graphs.Checkpointer`
-- `philharmonica.adk.graphs.GraphCheckpoint`
-- `philharmonica.adk.graphs.InMemoryCheckpointer`
-- `philharmonica.adk.graphs.SQLiteCheckpointer`
-- `philharmonica.adk.graphs.TieredCheckpointer`
+- `augments.adk.graphs.Checkpointer`
+- `augments.adk.graphs.GraphCheckpoint`
+- `augments.adk.graphs.InMemoryCheckpointer`
+- `augments.adk.graphs.SQLiteCheckpointer`
+- `augments.adk.graphs.TieredCheckpointer`
 
 ## Hooks
 
-- `philharmonica.adk.graphs.GraphHooks`
-- `philharmonica.adk.graphs.HookProvider`
-- `philharmonica.adk.graphs.HookRegistry`
+- `augments.adk.graphs.GraphHooks`
+- `augments.adk.graphs.HookProvider`
+- `augments.adk.graphs.HookRegistry`
 
 ## Interrupts and resume
 
-- `philharmonica.adk.graphs.Interrupt`
-- `philharmonica.adk.graphs.InterruptException`
-- `philharmonica.adk.graphs.GraphResume`
-- `philharmonica.adk.graphs.GraphResumeError`
-- `philharmonica.adk.graphs.NestedGraphInterrupt`
-- `philharmonica.adk.graphs.NestedAgentInterrupt`
-- `philharmonica.adk.graphs.NestedAgentApproval`
-- `philharmonica.adk.graphs.NestedAgentRejection`
-- `philharmonica.adk.graphs.NestedAgentReply`
-- `philharmonica.adk.graphs.NestedAgentDecision`
-- `philharmonica.adk.graphs.NestedAgentResumeError`
-- `philharmonica.adk.graphs.NestedAgentSerializationError`
-- `philharmonica.adk.graphs.request_human_input`
-- `philharmonica.adk.graphs.NESTED_AGENT_TOOL_APPROVAL_KIND`
-- `philharmonica.adk.graphs.NESTED_GRAPH_INTERRUPT_KIND`
+- `augments.adk.graphs.Interrupt`
+- `augments.adk.graphs.InterruptException`
+- `augments.adk.graphs.GraphResume`
+- `augments.adk.graphs.GraphResumeError`
+- `augments.adk.graphs.NestedGraphInterrupt`
+- `augments.adk.graphs.NestedAgentInterrupt`
+- `augments.adk.graphs.NestedAgentApproval`
+- `augments.adk.graphs.NestedAgentRejection`
+- `augments.adk.graphs.NestedAgentReply`
+- `augments.adk.graphs.NestedAgentDecision`
+- `augments.adk.graphs.NestedAgentResumeError`
+- `augments.adk.graphs.NestedAgentSerializationError`
+- `augments.adk.graphs.request_human_input`
+- `augments.adk.graphs.NESTED_AGENT_TOOL_APPROVAL_KIND`
+- `augments.adk.graphs.NESTED_GRAPH_INTERRUPT_KIND`
 
 ## Events
 
-- `philharmonica.adk.graphs.GraphStreamEvent`
-- `philharmonica.adk.graphs.GraphEndEvent`
-- `philharmonica.adk.graphs.NodeStartEvent`
-- `philharmonica.adk.graphs.NodeEndEvent`
-- `philharmonica.adk.graphs.NodeErrorEvent`
-- `philharmonica.adk.graphs.NodeStreamEvent`
-- `philharmonica.adk.graphs.SuperstepStartEvent`
-- `philharmonica.adk.graphs.GRAPH_START`
-- `philharmonica.adk.graphs.GRAPH_END`
-- `philharmonica.adk.graphs.NODE_START`
-- `philharmonica.adk.graphs.NODE_END`
-- `philharmonica.adk.graphs.NODE_ERROR`
-- `philharmonica.adk.graphs.NODE_INTERRUPT`
-- `philharmonica.adk.graphs.NODE_STREAM`
-- `philharmonica.adk.graphs.SUPERSTEP_START`
-- `philharmonica.adk.graphs.SUPERSTEP_END`
+- `augments.adk.graphs.GraphStreamEvent`
+- `augments.adk.graphs.GraphEndEvent`
+- `augments.adk.graphs.NodeStartEvent`
+- `augments.adk.graphs.NodeEndEvent`
+- `augments.adk.graphs.NodeErrorEvent`
+- `augments.adk.graphs.NodeStreamEvent`
+- `augments.adk.graphs.SuperstepStartEvent`
+- `augments.adk.graphs.GRAPH_START`
+- `augments.adk.graphs.GRAPH_END`
+- `augments.adk.graphs.NODE_START`
+- `augments.adk.graphs.NODE_END`
+- `augments.adk.graphs.NODE_ERROR`
+- `augments.adk.graphs.NODE_INTERRUPT`
+- `augments.adk.graphs.NODE_STREAM`
+- `augments.adk.graphs.SUPERSTEP_START`
+- `augments.adk.graphs.SUPERSTEP_END`
 
 Three further `GraphStreamEvent` subclasses, spelled out with the keys
 each one carries:

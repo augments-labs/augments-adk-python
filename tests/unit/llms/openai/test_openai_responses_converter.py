@@ -36,11 +36,11 @@ from openai.types.responses.response_usage import (
 )
 from pydantic import BaseModel
 
-from philharmonica.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
-from philharmonica.adk.schemas.utils import SchemaEnforcement
-from philharmonica.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
+from augments.adk.schemas.utils import SchemaEnforcement
+from augments.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import (
     LLMResponseFunctionToolCall,
     LLMResponseProviderItem,
     LLMResponseReasoning,

@@ -14,8 +14,8 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.spans import graph_node_span, graph_span, graph_superstep_span
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.spans import graph_node_span, graph_span, graph_superstep_span
 
 otel_sdk_trace = pytest.importorskip("opentelemetry.sdk.trace")
 otel_sdk_export = pytest.importorskip("opentelemetry.sdk.trace.export")
@@ -25,7 +25,7 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from philharmonica.adk.tracing.otel import OTelTracer
+from augments.adk.tracing.otel import OTelTracer
 
 
 @pytest.fixture
@@ -49,7 +49,7 @@ def _finished_span_by_name(exporter: InMemorySpanExporter, name: str) -> Any:
 
 
 class TestGraphSpanOTelAttributes:
-    def test_graph_span_emits_philharmonica_graph_attributes(self, exporter_and_tracer: Any) -> None:
+    def test_graph_span_emits_augments_graph_attributes(self, exporter_and_tracer: Any) -> None:
         exporter, _ = exporter_and_tracer
         with graph_span(
             graph_id="my-graph",
@@ -62,10 +62,10 @@ class TestGraphSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.my-graph")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.id"] == "my-graph"
-        assert attrs["philharmonica.graph.entry"] == "start_node"
-        assert attrs["philharmonica.graph.status"] == "completed"
-        assert attrs["philharmonica.graph.supersteps_total"] == 4
+        assert attrs["augments.graph.id"] == "my-graph"
+        assert attrs["augments.graph.entry"] == "start_node"
+        assert attrs["augments.graph.status"] == "completed"
+        assert attrs["augments.graph.supersteps_total"] == 4
 
     def test_graph_span_omits_optional_none_attributes(self, exporter_and_tracer: Any) -> None:
         exporter, _ = exporter_and_tracer
@@ -75,11 +75,11 @@ class TestGraphSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.g1")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.id"] == "g1"
+        assert attrs["augments.graph.id"] == "g1"
         # None-valued fields MUST be omitted (OTel rejects None values).
-        assert "philharmonica.graph.entry" not in attrs
-        assert "philharmonica.graph.status" not in attrs
-        assert "philharmonica.graph.supersteps_total" not in attrs
+        assert "augments.graph.entry" not in attrs
+        assert "augments.graph.status" not in attrs
+        assert "augments.graph.supersteps_total" not in attrs
 
 
 class TestGraphSuperstepSpanOTelAttributes:
@@ -96,10 +96,10 @@ class TestGraphSuperstepSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.superstep.2")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.id"] == "g1"
-        assert attrs["philharmonica.graph.superstep.index"] == 2
-        assert list(attrs["philharmonica.graph.superstep.ready_nodes"]) == ["a", "b"]
-        assert list(attrs["philharmonica.graph.superstep.fired_nodes"]) == ["a", "b"]
+        assert attrs["augments.graph.id"] == "g1"
+        assert attrs["augments.graph.superstep.index"] == 2
+        assert list(attrs["augments.graph.superstep.ready_nodes"]) == ["a", "b"]
+        assert list(attrs["augments.graph.superstep.fired_nodes"]) == ["a", "b"]
 
     def test_graph_superstep_span_omits_unset_node_lists(self, exporter_and_tracer: Any) -> None:
         exporter, _ = exporter_and_tracer
@@ -109,9 +109,9 @@ class TestGraphSuperstepSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.superstep.0")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.superstep.index"] == 0
-        assert "philharmonica.graph.superstep.ready_nodes" not in attrs
-        assert "philharmonica.graph.superstep.fired_nodes" not in attrs
+        assert attrs["augments.graph.superstep.index"] == 0
+        assert "augments.graph.superstep.ready_nodes" not in attrs
+        assert "augments.graph.superstep.fired_nodes" not in attrs
 
 
 class TestGraphNodeSpanOTelAttributes:
@@ -129,11 +129,11 @@ class TestGraphNodeSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.node.enrich")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.id"] == "g1"
-        assert attrs["philharmonica.graph.node.name"] == "enrich"
-        assert attrs["philharmonica.graph.node.attempts"] == 2
-        assert attrs["philharmonica.graph.node.status"] == "success"
-        assert attrs["philharmonica.graph.node.duration_ms"] == 512
+        assert attrs["augments.graph.id"] == "g1"
+        assert attrs["augments.graph.node.name"] == "enrich"
+        assert attrs["augments.graph.node.attempts"] == 2
+        assert attrs["augments.graph.node.status"] == "success"
+        assert attrs["augments.graph.node.duration_ms"] == 512
 
     def test_graph_node_span_includes_resume_attempt_when_set(self, exporter_and_tracer: Any) -> None:
         exporter, _ = exporter_and_tracer
@@ -148,7 +148,7 @@ class TestGraphNodeSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.node.enrich")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert attrs["philharmonica.graph.node.resume_attempt"] == 1
+        assert attrs["augments.graph.node.resume_attempt"] == 1
 
     def test_graph_node_span_omits_unset_optional_fields(self, exporter_and_tracer: Any) -> None:
         exporter, _ = exporter_and_tracer
@@ -158,10 +158,10 @@ class TestGraphNodeSpanOTelAttributes:
         otel_span = _finished_span_by_name(exporter, "graph.node.enrich")
         attrs = otel_span.attributes
         assert attrs is not None
-        assert "philharmonica.graph.node.attempts" not in attrs
-        assert "philharmonica.graph.node.status" not in attrs
-        assert "philharmonica.graph.node.duration_ms" not in attrs
-        assert "philharmonica.graph.node.resume_attempt" not in attrs
+        assert "augments.graph.node.attempts" not in attrs
+        assert "augments.graph.node.status" not in attrs
+        assert "augments.graph.node.duration_ms" not in attrs
+        assert "augments.graph.node.resume_attempt" not in attrs
 
 
 class TestNestedGraphSpanHierarchy:

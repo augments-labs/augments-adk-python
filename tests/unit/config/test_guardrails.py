@@ -5,14 +5,14 @@ from __future__ import annotations
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-from philharmonica.adk.config.guardrails import build_guardrails
-from philharmonica.adk.exceptions import ConfigResolutionError
-from philharmonica.adk.types.config.guardrail_config import (
+from augments.adk.agents.agent_guardrails import AgentGuardrails
+from augments.adk.config.guardrails import build_guardrails
+from augments.adk.exceptions import ConfigResolutionError
+from augments.adk.types.config.guardrail_config import (
     DottedGuardrailRef,
     GuardrailsConfig,
 )
-from philharmonica.adk.types.config.prompt_config import DynamicPromptRef
+from augments.adk.types.config.prompt_config import DynamicPromptRef
 
 _GUARDRAIL_ADAPTER: TypeAdapter[object] = TypeAdapter(DottedGuardrailRef)
 

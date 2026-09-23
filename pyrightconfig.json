@@ -11,7 +11,7 @@
     ".venv",
     "venv",
     ".coverage",
-    "src/philharmonica/adk/run/loop.py"
+    "src/augments/adk/run/loop.py"
   ],
   "typeCheckingMode": "basic",
   "useLibraryCodeForTypes": true,

@@ -1,16 +1,16 @@
 import pytest
 
-from philharmonica.adk.sandbox.clients.docker.docker_client import DockerSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.blaxel.blaxel_client import BlaxelSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.cloudflare.cloudflare_client import CloudflareSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.daytona.daytona_client import DaytonaSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.modal.modal_client import ModalSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.runloop.runloop_client import RunloopSandboxClient
-from philharmonica.adk.sandbox.clients.hosted.vercel.vercel_client import VercelSandboxClient
-from philharmonica.adk.sandbox.clients.k8s.k8s_client import K8sPodSandboxClient
-from philharmonica.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
-from philharmonica.adk.types.sandbox.cost import SandboxBackendCapabilities, SandboxCostDescriptor
+from augments.adk.sandbox.clients.docker.docker_client import DockerSandboxClient
+from augments.adk.sandbox.clients.hosted.blaxel.blaxel_client import BlaxelSandboxClient
+from augments.adk.sandbox.clients.hosted.cloudflare.cloudflare_client import CloudflareSandboxClient
+from augments.adk.sandbox.clients.hosted.daytona.daytona_client import DaytonaSandboxClient
+from augments.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
+from augments.adk.sandbox.clients.hosted.modal.modal_client import ModalSandboxClient
+from augments.adk.sandbox.clients.hosted.runloop.runloop_client import RunloopSandboxClient
+from augments.adk.sandbox.clients.hosted.vercel.vercel_client import VercelSandboxClient
+from augments.adk.sandbox.clients.k8s.k8s_client import K8sPodSandboxClient
+from augments.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
+from augments.adk.types.sandbox.cost import SandboxBackendCapabilities, SandboxCostDescriptor
 
 _FREE_BACKENDS = [LocalSubprocessSandboxClient, DockerSandboxClient, K8sPodSandboxClient]
 _PRICED_BACKENDS = [

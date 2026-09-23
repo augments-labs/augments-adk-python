@@ -9,10 +9,10 @@ from collections.abc import AsyncGenerator
 
 import pytest
 
-from philharmonica.adk.exceptions import (
+from augments.adk.exceptions import (
+    AugmentsError,
     GraphNodeTimeoutError,
     NodeRetriesExhaustedError,
-    PhilharmonicaError,
 )
 
 
@@ -24,7 +24,7 @@ class _NoSleep:
 class TestReliabilityExceptions:
     def test_timeout_error_attrs_and_subclass(self) -> None:
         err = GraphNodeTimeoutError(node_id="a", timeout=2.5, attempts=3)
-        assert isinstance(err, PhilharmonicaError)
+        assert isinstance(err, AugmentsError)
         assert err.node_id == "a"
         assert err.timeout == 2.5
         assert err.attempts == 3
@@ -33,7 +33,7 @@ class TestReliabilityExceptions:
     def test_retries_exhausted_attrs_and_subclass(self) -> None:
         cause = ValueError("boom")
         err = NodeRetriesExhaustedError(node_id="b", attempts=4, last_error=cause)
-        assert isinstance(err, PhilharmonicaError)
+        assert isinstance(err, AugmentsError)
         assert err.node_id == "b"
         assert err.attempts == 4
         assert err.last_error is cause
@@ -49,8 +49,8 @@ class TestReliabilityExceptions:
 
 class TestResolveNodeReliability:
     def _graph(self, *, default_retry=None, per_node_timeout=None):
-        from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
-        from philharmonica.adk.graphs.graph import Graph
+        from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
+        from augments.adk.graphs.graph import Graph
 
         config = GraphConfig(
             default_retry=default_retry if default_retry is not None else NodeRetryPolicy(),
@@ -68,8 +68,8 @@ class TestResolveNodeReliability:
         )
 
     def test_inherits_graph_defaults_when_node_unset(self) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import resolve_node_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import resolve_node_reliability
 
         gdef = NodeRetryPolicy(max_attempts=2)
         g = self._graph(default_retry=gdef, per_node_timeout=7.0)
@@ -80,8 +80,8 @@ class TestResolveNodeReliability:
     def test_node_field_overrides_graph_default(self) -> None:
         import dataclasses
 
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import resolve_node_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import resolve_node_reliability
 
         gdef = NodeRetryPolicy(max_attempts=2)
         g = self._graph(default_retry=gdef, per_node_timeout=7.0)
@@ -94,8 +94,8 @@ class TestResolveNodeReliability:
     def test_per_field_independence(self) -> None:
         import dataclasses
 
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import resolve_node_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import resolve_node_reliability
 
         gdef = NodeRetryPolicy(max_attempts=2)
         g = self._graph(default_retry=gdef, per_node_timeout=7.0)
@@ -107,9 +107,9 @@ class TestResolveNodeReliability:
 
 class TestRunNodeWithReliability:
     async def test_success_first_try_no_sleep(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.orchestration.executable import NodeResult
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.orchestration.executable import NodeResult
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         sleeps: list[float] = []
 
@@ -136,9 +136,9 @@ class TestRunNodeWithReliability:
         assert len(sleeps) == 0
 
     async def test_retries_then_succeeds_with_backoff(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.orchestration.executable import NodeResult
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.orchestration.executable import NodeResult
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         sleeps: list[float] = []
 
@@ -167,8 +167,8 @@ class TestRunNodeWithReliability:
         assert sleeps == [1.0, 2.0]
 
     async def test_backoff_capped_at_max(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         sleeps: list[float] = []
 
@@ -190,8 +190,8 @@ class TestRunNodeWithReliability:
         assert sleeps == [4.0, 8.0, 10.0, 10.0]
 
     async def test_retry_on_filters(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         sleeps: list[float] = []
 
@@ -218,8 +218,8 @@ class TestRunNodeWithReliability:
         assert len(sleeps) == 0
 
     async def test_max_attempts_one_no_timeout_reraises_original(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         monkeypatch.setattr("asyncio.sleep", _NoSleep())
 
@@ -238,8 +238,8 @@ class TestRunNodeWithReliability:
         assert ei.value is sentinel
 
     async def test_retries_exhausted_wraps(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         monkeypatch.setattr("asyncio.sleep", _NoSleep())
 
@@ -262,8 +262,8 @@ class TestRunNodeWithReliability:
         assert err.__cause__ is boom
 
     async def test_timeout_wraps_and_is_retryable(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         monkeypatch.setattr("asyncio.sleep", _NoSleep())
 
@@ -290,9 +290,9 @@ class TestRunNodeWithReliability:
         assert err.attempts == 2
 
     async def test_non_retryable_timeout_still_wraps(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.exceptions import GraphNodeTimeoutError
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.exceptions import GraphNodeTimeoutError
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         monkeypatch.setattr("asyncio.sleep", _NoSleep())
 
@@ -321,8 +321,8 @@ class TestRunNodeWithReliability:
         assert isinstance(ei.value.__cause__, TimeoutError)
 
     async def test_cancelled_not_swallowed(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        from philharmonica.adk.graphs.config import NodeRetryPolicy
-        from philharmonica.adk.run.node_reliability import run_node_with_reliability
+        from augments.adk.graphs.config import NodeRetryPolicy
+        from augments.adk.run.node_reliability import run_node_with_reliability
 
         monkeypatch.setattr("asyncio.sleep", _NoSleep())
 

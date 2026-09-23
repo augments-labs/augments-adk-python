@@ -3,10 +3,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.sandbox.observability.observability import SandboxObservability
-from philharmonica.adk.types.sandbox.cost import SandboxCostDescriptor
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
-from philharmonica.adk.types.sandbox.usage import SandboxUsage
+from augments.adk.sandbox.observability.observability import SandboxObservability
+from augments.adk.types.sandbox.cost import SandboxCostDescriptor
+from augments.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.types.sandbox.usage import SandboxUsage
 
 
 def _exec_result(exit_code: int = 0, duration_ms: int = 60000) -> ExecResult:

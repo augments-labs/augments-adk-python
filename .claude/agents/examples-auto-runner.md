@@ -31,7 +31,7 @@ substring (a topic dir or an example path). Work only within it.
 `if __name__ == "__main__"` guard, classifies the API keys / infrastructure
 each needs, skips those whose prerequisites are absent (with a reason), and
 runs the rest as isolated subprocesses with a per-example timeout. Auto mode
-(`--auto-mode`) injects `PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto` so examples
+(`--auto-mode`) injects `AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto` so examples
 wired with the `examples/auto_mode.py` helpers run unattended. Per-example
 logs land under `logs/run_examples/<timestamp>/`; failures are written to a
 rerun list.
@@ -52,7 +52,7 @@ Useful invocations (run from the repo root):
    logging.getLogger(__name__)`. `print()` is banned project-wide.
 2. **`load_dotenv()` first.** Any example reading env vars must call it
    (inside `try/except ImportError`) BEFORE importing anything that captures
-   env at module load (`philharmonica.adk.llms`, litellm).
+   env at module load (`augments.adk.llms`, litellm).
 3. **An example is "fixed" only after it actually runs** end-to-end: exit 0
    AND a log that shows the intended work happened (a real agent turn, the
    documented output) — not merely a clean early exit with no output.

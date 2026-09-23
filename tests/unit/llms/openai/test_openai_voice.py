@@ -15,12 +15,12 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.llms.openai.openai_stt import OpenAISTTModel, OpenAISTTSession
-from philharmonica.adk.llms.openai.openai_tts import OpenAITTSModel
-from philharmonica.adk.voice.audio import AudioInput, StreamedAudioInput
-from philharmonica.adk.voice.exceptions import STTWebsocketError
-from philharmonica.adk.voice.stt import STTModelSettings, TurnDetection, TurnDetectionMode
-from philharmonica.adk.voice.tts import TTSModelSettings
+from augments.adk.llms.openai.openai_stt import OpenAISTTModel, OpenAISTTSession
+from augments.adk.llms.openai.openai_tts import OpenAITTSModel
+from augments.adk.voice.audio import AudioInput, StreamedAudioInput
+from augments.adk.voice.exceptions import STTWebsocketError
+from augments.adk.voice.stt import STTModelSettings, TurnDetection, TurnDetectionMode
+from augments.adk.voice.tts import TTSModelSettings
 
 
 class _FakeStreamingResponse:

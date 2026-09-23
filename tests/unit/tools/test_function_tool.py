@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.tools.function_tool import FunctionTool, function_tool
+from augments.adk.tools.function_tool import FunctionTool, function_tool
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -158,7 +158,7 @@ class TestGetJsonSchema:
         ``required``, etc.). The fix deep-copies the dict before passing
         it to ``enforce_schema`` so ``self.schema`` is never modified.
         """
-        from philharmonica.adk.schemas import SchemaEnforcement
+        from augments.adk.schemas import SchemaEnforcement
 
         original_schema: dict[str, Any] = {
             "type": "object",
@@ -186,7 +186,7 @@ class TestGetJsonSchema:
 
     def test_dict_schema_shared_object_not_cross_mutated(self) -> None:
         """Two tools sharing the same dict object must not cross-mutate."""
-        from philharmonica.adk.schemas import SchemaEnforcement
+        from augments.adk.schemas import SchemaEnforcement
 
         shared: dict[str, Any] = {
             "type": "object",
@@ -279,24 +279,24 @@ class TestToolErrorFunctionContext:
     def test_default_tool_error_function_typed_for_run_context(self) -> None:
         import typing
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.tools.function_tool import default_tool_error_function
+        from augments.adk.run.context import RunContext
+        from augments.adk.tools.function_tool import default_tool_error_function
 
         hints = typing.get_type_hints(default_tool_error_function)
         # First parameter is the run context (RunContext[Any]).
         assert typing.get_origin(hints["ctx"]) is RunContext
 
     def test_tool_error_function_alias_uses_run_context(self) -> None:
-        from philharmonica.adk.tools.function_tool import ToolErrorFunction
+        from augments.adk.tools.function_tool import ToolErrorFunction
 
         # The alias is typed against RunContext, not ToolContext.
         assert "RunContext" in repr(ToolErrorFunction)
 
     async def test_error_function_receives_tool_context_at_runtime(self) -> None:
         """Error function is called with a ToolContext instance at runtime (wrapper path)."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.tools.function_tool import function_tool
-        from philharmonica.adk.tools.tool_context import ToolContext
+        from augments.adk.run.context import RunContext
+        from augments.adk.tools.function_tool import function_tool
+        from augments.adk.tools.tool_context import ToolContext
 
         received_ctx: list[object] = []
 
@@ -330,9 +330,9 @@ class TestErrorFunctionExceptionIsLogged:
     async def test_broken_error_function_is_logged_and_generic_returned(self, caplog: Any) -> None:
         import logging
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.tools.function_tool import function_tool
-        from philharmonica.adk.tools.tool_context import ToolContext
+        from augments.adk.run.context import RunContext
+        from augments.adk.tools.function_tool import function_tool
+        from augments.adk.tools.tool_context import ToolContext
 
         def exploding_error_fn(ctx: RunContext[Any], error: Exception) -> str:
             raise RuntimeError("error function broke!")
@@ -348,7 +348,7 @@ class TestErrorFunctionExceptionIsLogged:
             tool_arguments={},
             raw_arguments="{}",
         )
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tools.function_tool"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.tools.function_tool"):
             result = await boom.on_invoke(ctx, "{}")
         # Returns generic fallback, not raw exception
         assert "error" in result.lower()
@@ -368,7 +368,7 @@ class TestEnabledTypeAcceptsMaybeAwaitable:
     def test_enabled_field_type_includes_maybe_awaitable(self) -> None:
         import dataclasses
 
-        from philharmonica.adk.tools.function_tool import FunctionTool
+        from augments.adk.tools.function_tool import FunctionTool
 
         fields = {f.name: f for f in dataclasses.fields(FunctionTool)}
         enabled_field = fields["enabled"]

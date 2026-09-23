@@ -10,15 +10,15 @@ import contextlib
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
-from philharmonica.adk.graphs.config import GraphConfig
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.result import GraphRunResultStreaming, GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
+from augments.adk.graphs.config import GraphConfig
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.result import GraphRunResultStreaming, GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -94,7 +94,7 @@ class TestNodeResultSerialisation:
         return Graph.new("serial-test").node("a", lambda: {"key": "val", "n": 42}).entry("a").terminal("a").compile()
 
     def test_dict_output_round_trips(self) -> None:
-        from philharmonica.adk.graphs.state import _rehydrate_node_results, _serialise_node_results
+        from augments.adk.graphs.state import _rehydrate_node_results, _serialise_node_results
 
         g = self._graph()
         state = GraphState(graph=g, thread_id="t1")
@@ -110,7 +110,7 @@ class TestNodeResultSerialisation:
         assert rehydrated["a"].output == {"key": "val", "n": 42}
 
     def test_list_output_round_trips(self) -> None:
-        from philharmonica.adk.graphs.state import _rehydrate_node_results, _serialise_node_results
+        from augments.adk.graphs.state import _rehydrate_node_results, _serialise_node_results
 
         g = self._graph()
         state = GraphState(graph=g, thread_id="t2")
@@ -126,7 +126,7 @@ class TestNodeResultSerialisation:
 
     def test_non_json_object_still_coerced_to_str(self) -> None:
         """Objects that aren't JSON primitives/dicts/lists are str()-coerced."""
-        from philharmonica.adk.graphs.state import _serialise_node_results
+        from augments.adk.graphs.state import _serialise_node_results
 
         g = self._graph()
         state = GraphState(graph=g, thread_id="t3")
@@ -154,7 +154,7 @@ class TestDispatchInnerGraphResumeAssert:
         # Confirm the assert was replaced: get the source and check no bare assert.
         import inspect
 
-        from philharmonica.adk.run.graph_loop import _dispatch_inner_graph_resume
+        from augments.adk.run.graph_loop import _dispatch_inner_graph_resume
 
         src = inspect.getsource(_dispatch_inner_graph_resume)
         assert "assert next_inner_state is not None" not in src, "assert must be replaced with explicit RuntimeError"

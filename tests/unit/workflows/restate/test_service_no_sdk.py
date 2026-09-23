@@ -1,4 +1,4 @@
-"""PhilharmonicaRestateService contract tests that run WITHOUT the restate SDK.
+"""AugmentsRestateService contract tests that run WITHOUT the restate SDK.
 
 The WorkflowContext guard in ``wait_for_human_reply`` is pure Python (operates
 on ``ctx: Any``), so these tests must NOT ``importorskip('restate')`` — the
@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.workflows.restate.service import PhilharmonicaRestateService
+from augments.adk.workflows.restate.service import AugmentsRestateService
 
 
 class TestWaitForHumanReplyRequiresWorkflowContext:
@@ -26,7 +26,7 @@ class TestWaitForHumanReplyRequiresWorkflowContext:
 
     async def test_missing_promise_raises_type_error(self) -> None:
         """A plain service Context (no ``.promise``) is rejected with TypeError."""
-        service = PhilharmonicaRestateService()
+        service = AugmentsRestateService()
 
         class _ServiceContext:
             """Stand-in service Context: no durable-promise support."""
@@ -41,7 +41,7 @@ class TestWaitForHumanReplyRequiresWorkflowContext:
         ctx = MagicMock()
         ctx.promise = MagicMock(return_value=promise)
 
-        service = PhilharmonicaRestateService()
+        service = AugmentsRestateService()
         reply = await service.wait_for_human_reply(ctx)
 
         assert reply.node_id == "n"

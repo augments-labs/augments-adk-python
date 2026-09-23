@@ -11,9 +11,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from philharmonica.adk.types.items.items import ItemHelpers, ProviderItem
-from philharmonica.adk.types.output import LLMResponseProviderItemParam
-from philharmonica.adk.types.responses import (
+from augments.adk.types.items.items import ItemHelpers, ProviderItem
+from augments.adk.types.output import LLMResponseProviderItemParam
+from augments.adk.types.responses import (
     LLMResponse,
     LLMResponseProviderItem,
     LLMResponseText,
@@ -98,7 +98,7 @@ class TestResponseToRunItems:
 
         items = ItemHelpers.response_to_run_items(response)
 
-        from philharmonica.adk.types.items.items import MessageOutputItem
+        from augments.adk.types.items.items import MessageOutputItem
 
         assert sum(isinstance(i, MessageOutputItem) for i in items) == 1
         assert sum(isinstance(i, ProviderItem) for i in items) == 1
@@ -134,7 +134,7 @@ class TestLegacyResponsePartsUnchanged:
     response contains only pre-existing part types."""
 
     def test_text_only_response(self) -> None:
-        from philharmonica.adk.types.items.items import MessageOutputItem
+        from augments.adk.types.items.items import MessageOutputItem
 
         response = LLMResponse(
             response_id="resp_03",

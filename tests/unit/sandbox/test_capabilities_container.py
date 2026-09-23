@@ -1,8 +1,8 @@
-"""Tests for ``philharmonica.adk.sandbox.capabilities.Capabilities`` (P11)."""
+"""Tests for ``augments.adk.sandbox.capabilities.Capabilities`` (P11)."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.capabilities import Capabilities, CompactionCapability
+from augments.adk.sandbox.capabilities import Capabilities, CompactionCapability
 
 
 class TestDefaultsAreCostConservative:

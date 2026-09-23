@@ -13,15 +13,15 @@ from typing import Any, cast
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import Interrupt, NestedAgentInterrupt
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState, SwarmStateDict
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.swarms.yield_signal import SwarmDone, SwarmHandoff
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import Interrupt, NestedAgentInterrupt
+from augments.adk.run.state import RunState
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState, SwarmStateDict
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.yield_signal import SwarmDone, SwarmHandoff
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _mkswarm() -> Swarm:

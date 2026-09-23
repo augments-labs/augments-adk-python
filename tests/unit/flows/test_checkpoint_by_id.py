@@ -17,7 +17,7 @@ from pathlib import Path
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowCheckpoint,
     FlowCheckpointNotFoundError,
@@ -27,7 +27,7 @@ from philharmonica.adk.flows import (
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 # ---------------------------------------------------------------------------
 # Shared fixture helpers
@@ -195,7 +195,7 @@ class TestRunnerArunFlowFromId:
         assert exc_info.value.checkpoint_id == "missing-id"
 
     async def test_not_found_error_is_user_error(self) -> None:
-        from philharmonica.adk.exceptions import UserError
+        from augments.adk.exceptions import UserError
 
         backend = InMemoryFlowWorkerBackend()
         flow = _CountFlow(initial_state=_CountState())

@@ -15,7 +15,7 @@ from typing import Literal, Union
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
 
 
 class DiscriminatedA(BaseModel):

@@ -1,5 +1,5 @@
-"""Tests for ``philharmonica.adk.mcp.auth``, ``philharmonica.adk.mcp.otel`` and
-``philharmonica.adk.mcp.notifications``.
+"""Tests for ``augments.adk.mcp.auth``, ``augments.adk.mcp.otel`` and
+``augments.adk.mcp.notifications``.
 
 These three modules are small and tightly related (header injection,
 trace-context injection, and push-driven cache invalidation), so the
@@ -15,10 +15,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.auth import HeaderProvider, active_header_provider
-from philharmonica.adk.mcp.notifications import _extract_notification_method, make_message_handler
-from philharmonica.adk.mcp.otel import build_mcp_meta
-from philharmonica.adk.mcp.run_hooks_bridge import (
+from augments.adk.mcp.auth import HeaderProvider, active_header_provider
+from augments.adk.mcp.notifications import _extract_notification_method, make_message_handler
+from augments.adk.mcp.otel import build_mcp_meta
+from augments.adk.mcp.run_hooks_bridge import (
     active_run_context,
     active_run_hooks,
     fire_on_mcp_connect,
@@ -184,7 +184,7 @@ async def test_fire_on_mcp_error_logs_hook_failure_at_warning(
     active_run_hooks.set(hooks)
     active_run_context.set(ctx)
     try:
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.mcp.run_hooks_bridge"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.mcp.run_hooks_bridge"):
             await fire_on_mcp_error("my-server", ValueError("original error"))
     finally:
         active_run_hooks.set(None)
@@ -206,7 +206,7 @@ async def test_fire_on_mcp_connect_logs_hook_failure_at_warning(
     active_run_hooks.set(hooks)
     active_run_context.set(ctx)
     try:
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.mcp.run_hooks_bridge"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.mcp.run_hooks_bridge"):
             await fire_on_mcp_connect("my-server")
     finally:
         active_run_hooks.set(None)

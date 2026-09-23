@@ -24,20 +24,20 @@ import asyncio
 from typing import Any, override
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.swarm_loop import run_swarm_loop
-from philharmonica.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.hooks import SwarmHooks
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.result import SwarmRunResultStreaming
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.swarm_loop import run_swarm_loop
+from augments.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.hooks import SwarmHooks
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.result import SwarmRunResultStreaming
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(*, hooks: SwarmHooks[Any] | None = None, max_turns: int = 1) -> Swarm[Any]:
@@ -73,7 +73,7 @@ class TestSwarmLoopCheckpointerAutoSave:
 
         mock_result = _stub_result(sw.entry, ctx)
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(return_value=mock_result),
         ):
             await run_swarm_loop(
@@ -113,7 +113,7 @@ class TestSwarmLoopObserverPreserved:
         mock_result = _stub_result(sw.entry, ctx)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(return_value=mock_result),
         ):
             await run_swarm_loop(
@@ -149,7 +149,7 @@ class TestSwarmLoopRegistryBothHookTypes:
         mock_result = _stub_result(sw.entry, ctx)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(return_value=mock_result),
         ):
             await run_swarm_loop(
@@ -178,7 +178,7 @@ class TestSwarmLoopStreamedCheckpointerAutoSave:
             return _stub_result(sw.entry, ctx)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream),
         ):
             await run_swarm_loop_streamed(
@@ -224,7 +224,7 @@ class TestSwarmLoopStreamedObserverPreserved:
             return _stub_result(sw.entry, ctx)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream),
         ):
             await run_swarm_loop_streamed(

@@ -20,10 +20,10 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.run.llm_calls import build_tools, resolve_function_tool
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.local.apply_patch_tool import ApplyPatchEditor, ApplyPatchTool
-from philharmonica.adk.tools.local.shell_tool import ShellExecutor, ShellTool
+from augments.adk.run.llm_calls import build_tools, resolve_function_tool
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.local.apply_patch_tool import ApplyPatchEditor, ApplyPatchTool
+from augments.adk.tools.local.shell_tool import ShellExecutor, ShellTool
 
 
 class _NoopShellExecutor(ShellExecutor):

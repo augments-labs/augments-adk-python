@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.sandbox.apply_diff``."""
+"""Tests for ``augments.adk.sandbox.apply_diff``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.apply_diff import apply_diff
+from augments.adk.sandbox.apply_diff import apply_diff
 
 
 class TestCreateMode:

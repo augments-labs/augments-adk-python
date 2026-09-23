@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.clients.hosted.remote_vm import RemoteVMSandboxClientOptions
+from augments.adk.sandbox.clients.hosted.remote_vm import RemoteVMSandboxClientOptions
 
 
 class TestRemoteVMOptions:

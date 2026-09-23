@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.tracing.multi_tracer``.
+"""Tests for ``augments.adk.tracing.multi_tracer``.
 
 Covers fan-out semantics: every wrapped tracer receives the same
 factory call, and the composite span propagates ``start`` / ``finish``
@@ -13,15 +13,15 @@ from typing import Any, override
 
 import pytest
 
-from philharmonica.adk.tracing import (
+from augments.adk.tracing import (
     MultiTracer,
     NoOpSpan,
     Span,
     current_span,
     set_tracer,
 )
-from philharmonica.adk.tracing.multi_tracer import CompositeSpan
-from philharmonica.adk.types.tracing import (
+from augments.adk.tracing.multi_tracer import CompositeSpan
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

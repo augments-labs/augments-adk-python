@@ -6,7 +6,7 @@ serving the JSON-RPC dispatcher at /.
 
 Usage::
 
-    pip install 'philharmonica-adk[a2a]'
+    pip install 'augments-adk[a2a]'
     python examples/a2a/server_basic.py [PORT]
 
 Then in another terminal::
@@ -29,8 +29,8 @@ import sys
 import uvicorn
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.agents import Agent
 
 logger = logging.getLogger(__name__)
 

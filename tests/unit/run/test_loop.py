@@ -16,13 +16,13 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions.exceptions import MaxTurnsExceeded
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import RunResultStreaming
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions.exceptions import MaxTurnsExceeded
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import RunResultStreaming
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
 )
@@ -87,19 +87,19 @@ async def _run_streamed(
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm_streamed",
+            "augments.adk.run.loop.call_llm_streamed",
             new=AsyncMock(side_effect=fake_call_llm_streamed),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -164,10 +164,10 @@ class TestStreamedMaxTurnsSalvageGuard:
             return LLMResponse(response_id="resp-empty", model="fake", response=[])
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_empty)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_empty)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             streaming: RunResultStreaming = await Runner.arun(
                 agent,

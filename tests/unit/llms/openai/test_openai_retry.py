@@ -1,4 +1,4 @@
-"""Tests for philharmonica.adk.llms.openai.openai_retry.
+"""Tests for augments.adk.llms.openai.openai_retry.
 
 Covers:
 - ``openai_exception_to_kind`` mapping for every SDK exception class.
@@ -23,11 +23,11 @@ from openai import (
     RateLimitError,
 )
 
-from philharmonica.adk.llms.openai.openai_retry import (
+from augments.adk.llms.openai.openai_retry import (
     call_with_retry,
     openai_exception_to_kind,
 )
-from philharmonica.adk.types.llms import LLMRetryPolicy
+from augments.adk.types.llms import LLMRetryPolicy
 
 # ---------------------------------------------------------------------------
 # Helpers

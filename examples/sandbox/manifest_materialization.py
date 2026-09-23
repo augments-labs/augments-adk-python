@@ -43,15 +43,15 @@ import logging
 import tempfile
 from pathlib import Path
 
-from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+from augments.adk.sandbox.clients.local.subprocess_client import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
-from philharmonica.adk.types.sandbox.entries import Dir, File, LocalFile
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.workspace_paths import SandboxPathGrant
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.runner_integration.lifecycle import sandbox_run_context
+from augments.adk.types.sandbox.entries import Dir, File, LocalFile
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.workspace_paths import SandboxPathGrant
 
 logger = logging.getLogger(__name__)
 

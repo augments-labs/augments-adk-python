@@ -4,9 +4,9 @@ import json
 
 import pytest
 
-from philharmonica.adk.memory.in_memory import TemporaryMemory
-from philharmonica.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
-from philharmonica.adk.tools.builtin.memory_tool import (
+from augments.adk.memory.in_memory import TemporaryMemory
+from augments.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
+from augments.adk.tools.builtin.memory_tool import (
     ForgetMemoryTool,
     RecallMemoryTool,
     RememberMemoryTool,

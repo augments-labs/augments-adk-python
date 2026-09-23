@@ -2,7 +2,7 @@
 
 from unittest.mock import patch
 
-from philharmonica.adk.context.token_counter import TokenCounter
+from augments.adk.context.token_counter import TokenCounter
 
 
 @patch("litellm.token_counter", return_value=42)

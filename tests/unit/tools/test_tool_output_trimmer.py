@@ -12,9 +12,9 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.tools.tool_output_trimmer import (
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.tools.tool_output_trimmer import (
     DEFAULT_TRUNCATION_MARKER,
     trim_tool_output,
 )
@@ -175,7 +175,7 @@ class TestTokenCap:
     async def test_under_budget_passes_through(self) -> None:
         tool = _make_tool(returns="small payload")
         with patch(
-            "philharmonica.adk.tools.tool_output_trimmer.TokenCounter.count_text",
+            "augments.adk.tools.tool_output_trimmer.TokenCounter.count_text",
             return_value=5,
         ) as counter:
             trimmed = trim_tool_output(tool, max_tokens=100, model="gpt-4o")
@@ -189,7 +189,7 @@ class TestTokenCap:
         tool = _make_tool(returns="x" * 1000)
         counts = iter([500, 90, 50])  # first over, then under
         with patch(
-            "philharmonica.adk.tools.tool_output_trimmer.TokenCounter.count_text",
+            "augments.adk.tools.tool_output_trimmer.TokenCounter.count_text",
             side_effect=lambda *a, **kw: next(counts),
         ):
             trimmed = trim_tool_output(tool, max_tokens=100, model="gpt-4o")
@@ -288,7 +288,7 @@ class TestClonePreservesInternalState:
         """Streaming tools must be rejected before str() corrupts the async generator."""
         from collections.abc import AsyncIterator
 
-        from philharmonica.adk.tools.function_tool import function_tool
+        from augments.adk.tools.function_tool import function_tool
 
         @function_tool(streaming=True)
         async def streamer() -> AsyncIterator[str]:

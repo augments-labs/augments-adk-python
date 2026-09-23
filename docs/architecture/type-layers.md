@@ -30,7 +30,7 @@ roundtripping prior assistant turns.
 
 Provider-specific wire shapes. `ChatCompletionMessageParam`,
 `ChatCompletionToolMessageParam`, etc. These live inside
-`src/philharmonica/adk/llms/<provider>/` and never escape.
+`src/augments/adk/llms/<provider>/` and never escape.
 
 Layer 2 is `TypedDict`-shaped (sent-side, replay types). It is
 **never** converted to `@dataclass` or `BaseModel`.
@@ -82,7 +82,7 @@ flowchart LR
 
 The Runner only ever holds Layer 1 (going in) and Layer 3 (coming
 out). The Layer 2 conversion is contained within each provider
-implementation under `src/philharmonica/adk/llms/<provider>/`.
+implementation under `src/augments/adk/llms/<provider>/`.
 
 ## Matrix — which Python construct for which type
 

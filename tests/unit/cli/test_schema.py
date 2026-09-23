@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica schema``."""
+"""Tests for ``augments schema``."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
-from philharmonica.adk.config.schema import (
+from augments.adk.cli import main
+from augments.adk.config.schema import (
     dump_agent_config_schema,
     dump_agent_node_config_schema,
     dump_topology_config_schema,

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.pty_types``."""
+"""Tests for ``augments.adk.sandbox.session.pty_types``."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import time
 
 import pytest
 
-from philharmonica.adk.sandbox.session.pty_types import (
+from augments.adk.sandbox.session.pty_types import (
     PTY_EMPTY_YIELD_TIME_MS_MIN,
     PTY_YIELD_TIME_MS_MAX,
     PTY_YIELD_TIME_MS_MIN,

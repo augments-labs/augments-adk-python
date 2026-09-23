@@ -19,11 +19,11 @@ and carries a developer-owned typed state object across the run.
 
 ## Anti-Hidden-Behavior Contract
 
-Philharmonica Flow deliberately rejects every hidden behavior CrewAI Flow
+Augments Flow deliberately rejects every hidden behavior CrewAI Flow
 introduces. The contract is enforced at class-definition time where
 structurally possible:
 
-| CrewAI does this | Philharmonica Flow does NOT |
+| CrewAI does this | Augments Flow does NOT |
 |---|---|
 | `inspect.signature(method)` injects previous step's return value | Step methods take ONLY `self`. Return values are dropped (except `@flow_router`). |
 | Auto-instantiates state from `Flow[StateT]` generic | Requires explicit `initial_state=` or `state_factory` class attribute. |
@@ -38,7 +38,7 @@ structurally possible:
 ```python
 import asyncio
 from pydantic import BaseModel
-from philharmonica.adk import Flow, Runner, flow_start, flow_listen, flow_router
+from augments.adk import Flow, Runner, flow_start, flow_listen, flow_router
 
 class ResearchState(BaseModel):
     topic: str = ""
@@ -196,8 +196,8 @@ All defaults are cost-conservative. Raise via explicit `FlowConfig(...)`.
 With `error_policy="route_to_error_handler"`, the executor fires
 listeners declared on the error route — write
 `@flow_listen(FLOW_ERROR_TRIGGER)` (the exported constant for the
-`"__error__"` route literal, importable from `philharmonica.adk` or
-`philharmonica.adk.flows`) instead of spelling the magic string yourself.
+`"__error__"` route literal, importable from `augments.adk` or
+`augments.adk.flows`) instead of spelling the magic string yourself.
 Without such a listener the policy falls back to `"halt"` semantics.
 
 ## Streaming Events
@@ -221,7 +221,7 @@ want token-level streaming consume the inner runner's events directly.
 ## Persistence (Checkpoint + Resume)
 
 ```python
-from philharmonica.adk import FlowCheckpoint
+from augments.adk import FlowCheckpoint
 
 # Capture (typically from a hook or after partial run)
 checkpoint = FlowCheckpoint(
@@ -258,7 +258,7 @@ result; the stream ends on the deferred event, the decision is
 recorded off-stream, and a new run resumes from the checkpoint.
 
 ```python
-from philharmonica.adk.flows import Flow, FlowStepContext, flow_listen, flow_start
+from augments.adk.flows import Flow, FlowStepContext, flow_listen, flow_start
 
 def needs_review(ctx: FlowStepContext[CartState]) -> bool:
     return ctx.flow_state.amount >= 1000
@@ -306,7 +306,7 @@ out-of-band approval driver (UI, Slack bot, approval service) can
 enforce it:
 
 ```python
-from philharmonica.adk.flows import FlowApprovalPolicy
+from augments.adk.flows import FlowApprovalPolicy
 
 class RefundFlow(Flow[CartState]):
     @flow_listen(
@@ -351,7 +351,7 @@ and defaults to `None`:
 | `cache` | `FlowStepCachePolicy \| None` | Per-step LRU + TTL result cache. Hits restore a deep copy of the cached state snapshot and skip the body; misses run the body and write the new snapshot. The `cache_key_fn` derives the key from `FlowStepContext`. |
 
 ```python
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow, FlowStepCachePolicy, FlowStepGuardrails,
     FlowStepGuardrailVerdict, FlowStepRateLimit,
     flow_listen, flow_start,
@@ -393,7 +393,7 @@ tool's `requires_approval` gate, the bridge propagates the deferral
 up to the flow layer so the whole flow halts gracefully:
 
 ```python
-from philharmonica.adk.flows import arun_flow_agent
+from augments.adk.flows import arun_flow_agent
 
 class CartFlow(Flow[CartState]):
     @flow_start
@@ -463,8 +463,8 @@ runs every step in that batch in parallel within its process,
 and writes the resulting `FlowCheckpoint` back atomically.
 
 ```python
-from philharmonica.adk.flows import SqliteFlowWorkerBackend
-from philharmonica.adk.run.runner import Runner
+from augments.adk.flows import SqliteFlowWorkerBackend
+from augments.adk.run.runner import Runner
 
 backend = SqliteFlowWorkerBackend(path="/var/state/flows.db")
 result = await Runner.arun_flow_distributed(
@@ -498,7 +498,7 @@ A `Flow` is composable with the rest of the orchestration stack:
 
 ```python
 # Flow inside Graph (via FlowExecutable adapter)
-from philharmonica.adk.graphs import GraphBuilder
+from augments.adk.graphs import GraphBuilder
 graph = (
     GraphBuilder.new("g")
     .node("flow_node", my_flow)  # auto-wraps via to_executable()
@@ -522,7 +522,7 @@ class MyFlow(Flow[State]):
 
 ## Diverging from CrewAI (intentional choices)
 
-| CrewAI feature | Philharmonica Flow choice |
+| CrewAI feature | Augments Flow choice |
 |---|---|
 | Nested combinators `or_(and_(a, b), c)` | Flat gates only — use `Or(...)` / `And(...)` constructors for complex shapes |
 | Conditional `@flow_start("trigger")` | Use `@flow_listen` for delayed entry |

@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import GraphNodeTimeoutError, NodeRetriesExhaustedError
-from philharmonica.adk.graphs import Interrupt, InterruptException
-from philharmonica.adk.graphs.config import NodeRetryPolicy
-from philharmonica.adk.run.node_reliability import run_node_with_reliability
+from augments.adk.exceptions import GraphNodeTimeoutError, NodeRetriesExhaustedError
+from augments.adk.graphs import Interrupt, InterruptException
+from augments.adk.graphs.config import NodeRetryPolicy
+from augments.adk.run.node_reliability import run_node_with_reliability
 
 
 async def test_interrupt_passthrough_not_retried_not_wrapped() -> None:

@@ -19,11 +19,11 @@ from datetime import datetime
 
 import pytest
 
-from philharmonica.adk.run.state import (
+from augments.adk.run.state import (
     ApprovalMetadata,
     RunState,
 )
-from philharmonica.adk.tools.deferred_tool import (
+from augments.adk.tools.deferred_tool import (
     DeferredToolCall,
     DeferredToolRequests,
 )

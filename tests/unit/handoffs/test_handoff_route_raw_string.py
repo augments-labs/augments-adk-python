@@ -22,12 +22,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.handoffs.handoff_route import (
+from augments.adk.handoffs.handoff_route import (
     HandoffRoute,
     UnhandledIntentError,
     handoff_route,
 )
-from philharmonica.adk.types.intents import Intent
+from augments.adk.types.intents import Intent
 
 
 class _RefundIntent(Intent):

@@ -1,7 +1,7 @@
 # Declarative agent configuration (JSON)
 
 Build an `Agent` from a JSON file instead of Python, via
-`philharmonica.adk.config.load_agent`.
+`augments.adk.config.load_agent`.
 
 ```bash
 python examples/config/run_config_agent.py
@@ -23,13 +23,13 @@ python examples/config/run_config_agent.py
 ## The `$schema` pointer
 
 `agent.json` carries an optional `$schema` key pointing at the generated
-schema (`src/philharmonica/adk/types/config/agent_config.schema.json`). It enables
+schema (`src/augments/adk/types/config/agent_config.schema.json`). It enables
 editor autocomplete and external/CI validation; the loader ignores it at
 runtime (validation is always the Pydantic models). Regenerate the schema
 with:
 
 ```bash
-python -m philharmonica.adk.config.schema
+python -m augments.adk.config.schema
 ```
 
 ## Multi-agent topologies

@@ -1,6 +1,6 @@
-"""Tests for ``philharmonica.adk.tracing.spans`` contextvars parent tracking.
+"""Tests for ``augments.adk.tracing.spans`` contextvars parent tracking.
 
-Verifies that the ``philharmonica_current_span`` ContextVar correctly
+Verifies that the ``augments_current_span`` ContextVar correctly
 tracks nested parent-child relationships across ``with`` blocks,
 ``await`` boundaries, and concurrent ``asyncio.gather`` tasks.
 
@@ -15,7 +15,7 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.tracing import (
+from augments.adk.tracing import (
     NoOpSpan,
     NoOpTracer,
     Span,
@@ -24,7 +24,7 @@ from philharmonica.adk.tracing import (
     get_tracer,
     set_tracer,
 )
-from philharmonica.adk.types.tracing import (
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

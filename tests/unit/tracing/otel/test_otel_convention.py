@@ -15,9 +15,9 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
-from philharmonica.adk.types.tracing.convention import TracingConvention
-from philharmonica.adk.types.tracing.span_data import GenerationSpanData
+from augments.adk.tracing.otel.otel_tracer import OTelTracer
+from augments.adk.types.tracing.convention import TracingConvention
+from augments.adk.types.tracing.span_data import GenerationSpanData
 
 
 def _provider_and_exporter() -> tuple[TracerProvider, InMemorySpanExporter]:
@@ -48,7 +48,7 @@ def test_default_convention_unchanged() -> None:
     (finished,) = exporter.get_finished_spans()
     attrs = finished.attributes
     assert attrs is not None
-    assert attrs["gen_ai.system"] == "philharmonica"
+    assert attrs["gen_ai.system"] == "augments"
     assert "openinference.span.kind" not in attrs
 
 
@@ -66,7 +66,7 @@ def test_default_convention_reflects_post_rebind_usage() -> None:
 
 
 def test_openinference_agent_span() -> None:
-    from philharmonica.adk.types.tracing.span_data import AgentSpanData
+    from augments.adk.types.tracing.span_data import AgentSpanData
 
     provider, exporter = _provider_and_exporter()
     tracer = OTelTracer(provider=provider, convention=TracingConvention.OPENINFERENCE)
@@ -76,11 +76,11 @@ def test_openinference_agent_span() -> None:
     attrs = finished.attributes
     assert attrs is not None
     assert attrs["openinference.span.kind"] == "AGENT"
-    assert attrs["philharmonica.agent.name"] == "my-agent"
+    assert attrs["augments.agent.name"] == "my-agent"
 
 
 def test_openinference_guardrail_span() -> None:
-    from philharmonica.adk.types.tracing.span_data import GuardrailSpanData
+    from augments.adk.types.tracing.span_data import GuardrailSpanData
 
     provider, exporter = _provider_and_exporter()
     tracer = OTelTracer(provider=provider, convention=TracingConvention.OPENINFERENCE)
@@ -90,12 +90,12 @@ def test_openinference_guardrail_span() -> None:
     attrs = finished.attributes
     assert attrs is not None
     assert attrs["openinference.span.kind"] == "GUARDRAIL"
-    assert attrs["philharmonica.guardrail.triggered"] is True
+    assert attrs["augments.guardrail.triggered"] is True
 
 
 def test_openinference_function_span_redacts_tool_io() -> None:
     """OPENINFERENCE tool I/O must be credential-redacted when record_tool_io_full is False."""
-    from philharmonica.adk.types.tracing.span_data import FunctionSpanData
+    from augments.adk.types.tracing.span_data import FunctionSpanData
 
     provider, exporter = _provider_and_exporter()
     tracer = OTelTracer(provider=provider, convention=TracingConvention.OPENINFERENCE)
@@ -113,7 +113,7 @@ def test_openinference_function_span_redacts_tool_io() -> None:
 
 def test_openinference_function_span_record_full_emits_raw() -> None:
     """With record_tool_io_full=True the raw tool I/O must be emitted verbatim."""
-    from philharmonica.adk.types.tracing.span_data import FunctionSpanData
+    from augments.adk.types.tracing.span_data import FunctionSpanData
 
     provider, exporter = _provider_and_exporter()
     tracer = OTelTracer(
@@ -140,9 +140,9 @@ def test_setup_otel_forwards_convention() -> None:
 
     pytest.importorskip("opentelemetry.exporter.otlp.proto.grpc.trace_exporter")
 
-    from philharmonica.adk.tracing.otel.setup import setup_otel
+    from augments.adk.tracing.otel.setup import setup_otel
 
-    with patch("philharmonica.adk.tracing.otel.setup.OTelTracer") as mock_cls:
+    with patch("augments.adk.tracing.otel.setup.OTelTracer") as mock_cls:
         mock_cls.return_value = object()
         setup_otel(
             convention=TracingConvention.OPENINFERENCE,

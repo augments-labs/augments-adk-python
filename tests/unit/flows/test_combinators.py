@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.flows.combinators import And, Or
+from augments.adk.flows.combinators import And, Or
 
 
 class TestOrConstruction:

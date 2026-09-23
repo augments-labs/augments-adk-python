@@ -31,7 +31,7 @@ to an identity. It is the agent's log of what happened.
 `MemoryEntry` is the atom.  Every stored fact is a `MemoryEntry`:
 
 ```python
-from philharmonica.adk.memory import MemoryEntry, MemoryMetadata, MemoryKind, MemorySource
+from augments.adk.memory import MemoryEntry, MemoryMetadata, MemoryKind, MemorySource
 ```
 
 `MemoryMetadata` travels with every entry and controls how the entry is
@@ -63,7 +63,7 @@ Both implement the same `Memory` ABC, so you swap them without touching
 the rest of your code.
 
 ```python
-from philharmonica.adk.memory import TemporaryMemory, SQLiteMemory
+from augments.adk.memory import TemporaryMemory, SQLiteMemory
 
 # Prototype
 proto_memory = TemporaryMemory()
@@ -122,9 +122,9 @@ required between them.
 wiring is needed.
 
 ```python
-from philharmonica.adk.memory import VectorMemory
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.memory import VectorMemory
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 memory = VectorMemory(
     store=InMemoryVectorStore(),
@@ -153,7 +153,7 @@ All five implement the `VectorStore` Protocol.  Swap backends by replacing
 the `store=` argument on `VectorMemory` — no other code changes.
 
 ```python
-from philharmonica.adk.memory.stores.pgvector import PgVectorStore
+from augments.adk.memory.stores.pgvector import PgVectorStore
 
 store = PgVectorStore(dsn="postgresql://user:pass@localhost/db")
 await store.setup()   # creates the pgvector table once
@@ -183,7 +183,7 @@ models that encode documents and queries differently.  For symmetric models
 100+ provider routing:
 
 ```python
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 embedder = LiteLLMEmbedder(model="text-embedding-3-small")
 # or OpenAI large, Cohere, Bedrock Titan, etc. — any litellm embedding model
@@ -202,15 +202,15 @@ It extracts semantic facts from episodic content and stores them with
 `MemoryKind.SEMANTIC`.
 
 ```python
-from philharmonica.adk.memory import (
+from augments.adk.memory import (
     VectorMemory, MemoryKind, MemoryMetadata, MemorySource,
     MemorySearchFilter, distill_to_semantic,
 )
-from philharmonica.adk.memory.extractor import LLMExtractor
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.memory.extractor import LLMExtractor
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 memory = VectorMemory(
     store=InMemoryVectorStore(),
@@ -266,7 +266,7 @@ Pass a `MemoryConfig` to `Runner.arun()` to inject retrieved memories
 automatically before the agent loop:
 
 ```python
-from philharmonica.adk.memory import MemoryConfig, MemoryInjectionPosition
+from augments.adk.memory import MemoryConfig, MemoryInjectionPosition
 
 config = MemoryConfig(
     memory=memory,
@@ -291,7 +291,7 @@ Give the agent a `RecallMemoryTool` so it can query memory on demand during
 a turn:
 
 ```python
-from philharmonica.adk.tools import RecallMemoryTool, RememberMemoryTool, ForgetMemoryTool
+from augments.adk.tools import RecallMemoryTool, RememberMemoryTool, ForgetMemoryTool
 
 tools = [
     RecallMemoryTool(memory=memory, namespace="user:42"),
@@ -316,9 +316,9 @@ Set `auto_extract=True` on `MemoryConfig` to capture knowledge after every
 run.  An `extractor` is required:
 
 ```python
-from philharmonica.adk.memory import MemoryConfig, LLMExtractor
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.memory import MemoryConfig, LLMExtractor
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.llm_config import LLMConfig
 
 config = MemoryConfig(
     memory=memory,
@@ -422,4 +422,4 @@ if the entry existed.
 
 - [Concepts](../concepts/index.md) — Memory layers section: context vs sessions vs episodic vs semantic
 - `examples/memory/` — runnable examples: `basic_memory.py`, `vector_memory.py`, `episodic_semantic.py`, `persistent_memory.py`, `session_and_memory.py`
-- `src/philharmonica/adk/memory/` — full source for the module
+- `src/augments/adk/memory/` — full source for the module

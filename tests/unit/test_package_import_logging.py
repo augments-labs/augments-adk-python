@@ -6,14 +6,14 @@ import sys
 from pathlib import Path
 
 
-def test_import_philharmonica_adk_only_installs_null_handler() -> None:
+def test_import_augments_adk_only_installs_null_handler() -> None:
     code = """
 import json
 import logging
 import sys
-import philharmonica.adk
+import augments.adk
 
-logger = logging.getLogger("philharmonica.adk")
+logger = logging.getLogger("augments.adk")
 sys.stdout.write(json.dumps([type(handler).__name__ for handler in logger.handlers]))
 """
 

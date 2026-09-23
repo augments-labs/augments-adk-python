@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.templates import (
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.templates import (
     render_dockerfile,
     render_dockerignore,
     render_requirements,
@@ -32,7 +32,7 @@ def test_dockerfile_satisfies_container_contract() -> None:
 
 
 def test_dockerfile_references_extras() -> None:
-    assert "philharmonica-adk[serve]" in render_dockerfile(_ctx())
+    assert "augments-adk[serve]" in render_dockerfile(_ctx())
 
 
 def test_dockerignore_excludes_vcs_and_secrets() -> None:
@@ -42,4 +42,4 @@ def test_dockerignore_excludes_vcs_and_secrets() -> None:
 
 
 def test_requirements_pins_extras() -> None:
-    assert "philharmonica-adk[serve]" in render_requirements(_ctx())
+    assert "augments-adk[serve]" in render_requirements(_ctx())

@@ -20,7 +20,7 @@ from anthropic import (
     RateLimitError,
 )
 
-from philharmonica.adk.llms.anthropic.anthropic_retry import anthropic_exception_to_kind
+from augments.adk.llms.anthropic.anthropic_retry import anthropic_exception_to_kind
 
 
 def _request() -> httpx.Request:

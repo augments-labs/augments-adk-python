@@ -34,18 +34,18 @@ import logging
 import time
 from typing import Any
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.run.tools_executor import maybe_wrap_with_agent_middleware
-from philharmonica.adk.tools import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.middleware import Middleware
+from augments.adk.run.tools_executor import maybe_wrap_with_agent_middleware
+from augments.adk.tools import (
     FunctionTool,
     ToolLoggingMiddleware,
     ToolMiddlewareNext,
     ToolMiddlewareTermination,
     function_tool,
 )
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
 
 logger = logging.getLogger(__name__)
 

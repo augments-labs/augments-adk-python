@@ -6,8 +6,8 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.llms import EmbeddingLRUCache
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.llms import EmbeddingLRUCache
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 
 class _FakeAembedding:

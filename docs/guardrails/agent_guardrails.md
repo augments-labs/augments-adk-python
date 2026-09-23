@@ -48,7 +48,7 @@ Every guardrail verdict maps onto a shared three-value vocabulary that the
 runner uses to dispatch uniformly across agent, tool, and flow levels:
 
 ```python
-from philharmonica.adk.types.guardrails.action import GuardrailAction, GuardrailSpan
+from augments.adk.types.guardrails.action import GuardrailAction, GuardrailSpan
 ```
 
 | Action | Meaning |
@@ -87,19 +87,19 @@ Define an agent with one input guardrail and one output guardrail, run it, and h
 
 ```python
 import asyncio
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentInputGuardrailData,
     AgentOutputGuardrailData,
     agent_input_guardrail,
     agent_output_guardrail,
 )
-from philharmonica.adk.exceptions import (
+from augments.adk.exceptions import (
     AgentInputGuardrailTripwireTriggered,
     AgentOutputGuardrailTripwireTriggered,
 )
-from philharmonica.adk.run import Runner
+from augments.adk.run import Runner
 
 
 @agent_input_guardrail
@@ -161,7 +161,7 @@ The `@agent_input_guardrail` decorator wraps a function and produces an `AgentIn
 **With decorator (no arguments):**
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentInputGuardrailData,
     agent_input_guardrail,
@@ -193,7 +193,7 @@ async def check_topic_blocking(data: AgentInputGuardrailData) -> AgentGuardrailF
 **Direct construction (without decorator):**
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrail
+from augments.adk.agents.agent_guardrails import AgentInputGuardrail
 
 
 async def check_topic_fn(data: AgentInputGuardrailData) -> AgentGuardrailFunctionOutput:
@@ -274,8 +274,8 @@ prompt injection, and nuanced policy violations.
 
 ```python
 from pydantic import BaseModel, Field
-from philharmonica.adk import Agent, Runner, agent_input_guardrail, AgentGuardrailFunctionOutput
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrailData
+from augments.adk import Agent, Runner, agent_input_guardrail, AgentGuardrailFunctionOutput
+from augments.adk.agents.agent_guardrails import AgentInputGuardrailData
 
 
 class JailbreakVerdict(BaseModel):
@@ -347,7 +347,7 @@ Output guardrails receive the agent's final answer and return a verdict. They al
 ### Basic Usage
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentOutputGuardrailData,
     agent_output_guardrail,
@@ -385,8 +385,8 @@ hallucination?", "Does this violate our content policy?"
 
 ```python
 from pydantic import BaseModel, Field
-from philharmonica.adk import Agent, Runner, agent_output_guardrail, AgentGuardrailFunctionOutput
-from philharmonica.adk.agents.agent_guardrails import AgentOutputGuardrailData
+from augments.adk import Agent, Runner, agent_output_guardrail, AgentGuardrailFunctionOutput
+from augments.adk.agents.agent_guardrails import AgentOutputGuardrailData
 
 
 class MedicalAdviceVerdict(BaseModel):
@@ -469,12 +469,12 @@ setting `transformed_output` on its verdict. The runner then calls
 masked text rather than the raw output.
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentOutputGuardrailData,
     agent_output_guardrail,
 )
-from philharmonica.adk.types.guardrails.action import GuardrailSpan
+from augments.adk.types.guardrails.action import GuardrailSpan
 import re
 
 EMAIL_PATTERN = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
@@ -538,7 +538,7 @@ ready-made implementation.
 By default, a guardrail that returns `tripwire_triggered=True` halts execution immediately. The `AgentGuardrailSeverity` enum adds a second axis of control: whether a detected violation should halt execution or be recorded for audit/monitoring without blocking.
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrailFunctionOutput, AgentGuardrailSeverity
+from augments.adk.agents.agent_guardrails import AgentGuardrailFunctionOutput, AgentGuardrailSeverity
 ```
 
 Three severity levels are available:
@@ -630,7 +630,7 @@ Non-halting results (INFO and WARNING) are always included in `RunResult.guardra
 
 ### Logging Behavior
 
-The executor logs guardrail verdicts using the standard Python `logging` module under the logger name `philharmonica.adk.run.guardrails_executor`:
+The executor logs guardrail verdicts using the standard Python `logging` module under the logger name `augments.adk.run.guardrails_executor`:
 
 - **WARNING severity**: `logger.warning("... warning for agent '...'", ...)`
 - **INFO severity**: `logger.debug("... info for agent '...'", ...)`
@@ -648,7 +648,7 @@ Treat the timeout as a tripwire trigger. The guardrail is considered to have det
 Use `FAIL` for safety-critical guardrails where a slow response means something is wrong and the request should not proceed.
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_input_guardrail
+from augments.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_input_guardrail
 
 
 @agent_input_guardrail(timeout=3.0, timeout_policy=AgentTimeoutPolicy.FAIL)
@@ -680,7 +680,7 @@ async def enrichment_check(data: AgentInputGuardrailData) -> AgentGuardrailFunct
 Use `on_timeout` to run side effects when a timeout fires — metrics, alerting, or audit logging. The callback receives a `AgentGuardrailTimeoutInfo` dataclass and runs after the timeout policy is applied. It cannot change the outcome.
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrailTimeoutInfo, AgentInputGuardrail
+from augments.adk.agents.agent_guardrails import AgentGuardrailTimeoutInfo, AgentInputGuardrail
 
 
 async def alert_on_timeout(info: AgentGuardrailTimeoutInfo) -> None:
@@ -742,7 +742,7 @@ Remediation attempts are tracked per guardrail name. If two different guardrails
 ### Code Example
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentOutputGuardrailData,
     agent_output_guardrail,
@@ -799,8 +799,8 @@ Global guardrails can be applied to every agent in a run via `RunConfig.input_gu
 Config guardrails merge with agent-level guardrails and always run first. An agent's own guardrails run after config guardrails in both the blocking and parallel phases.
 
 ```python
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.agents.agent_guardrails import agent_input_guardrail, agent_output_guardrail
+from augments.adk.run import RunConfig, Runner
+from augments.adk.agents.agent_guardrails import agent_input_guardrail, agent_output_guardrail
 
 
 @agent_input_guardrail(run_in_parallel=False)
@@ -947,9 +947,9 @@ as an immutable tuple once the run finishes.
 The `RunHooks` class provides four guardrail lifecycle callbacks for observability, latency tracking, and audit logging.
 
 ```python
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrailResult, AgentOutputGuardrailResult
-from philharmonica.adk.run.context import RunContext
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.agents.agent_guardrails import AgentInputGuardrailResult, AgentOutputGuardrailResult
+from augments.adk.run.context import RunContext
 import time
 
 
@@ -1020,10 +1020,10 @@ Hooks fire for every guardrail — both passing and tripping ones. For parallel 
 
 ### AgentInputGuardrailTripwireTriggered
 
-Raised when any input guardrail halts execution. Inherits from `GuardrailTripwireTriggered` and `PhilharmonicaError`.
+Raised when any input guardrail halts execution. Inherits from `GuardrailTripwireTriggered` and `AugmentsError`.
 
 ```python
-from philharmonica.adk.exceptions import AgentInputGuardrailTripwireTriggered
+from augments.adk.exceptions import AgentInputGuardrailTripwireTriggered
 
 try:
     result = await Runner.arun(agent, user_input)
@@ -1044,10 +1044,10 @@ except AgentInputGuardrailTripwireTriggered as exc:
 
 ### AgentOutputGuardrailTripwireTriggered
 
-Raised when any output guardrail halts execution (and remediation is exhausted, if configured). Inherits from `GuardrailTripwireTriggered` and `PhilharmonicaError`.
+Raised when any output guardrail halts execution (and remediation is exhausted, if configured). Inherits from `GuardrailTripwireTriggered` and `AugmentsError`.
 
 ```python
-from philharmonica.adk.exceptions import AgentOutputGuardrailTripwireTriggered
+from augments.adk.exceptions import AgentOutputGuardrailTripwireTriggered
 
 try:
     result = await Runner.arun(agent, user_input)
@@ -1068,7 +1068,7 @@ except AgentOutputGuardrailTripwireTriggered as exc:
 ### Exception Hierarchy
 
 ```
-PhilharmonicaError
+AugmentsError
 └── GuardrailTripwireTriggered
     ├── AgentInputGuardrailTripwireTriggered
     │       .guardrail_result   AgentInputGuardrailResult
@@ -1157,7 +1157,7 @@ async def my_guardrail(data: AgentOutputGuardrailData) -> AgentGuardrailFunction
 ### AgentInputGuardrail
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrail
+from augments.adk.agents.agent_guardrails import AgentInputGuardrail
 ```
 
 | Attribute | Type | Default | Description |
@@ -1172,7 +1172,7 @@ from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrail
 ### AgentOutputGuardrail
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentOutputGuardrail
+from augments.adk.agents.agent_guardrails import AgentOutputGuardrail
 ```
 
 | Attribute | Type | Default | Description |
@@ -1188,7 +1188,7 @@ from philharmonica.adk.agents.agent_guardrails import AgentOutputGuardrail
 ### AgentGuardrailFunctionOutput
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrailFunctionOutput
+from augments.adk.agents.agent_guardrails import AgentGuardrailFunctionOutput
 ```
 
 | Attribute | Type | Default | Description |

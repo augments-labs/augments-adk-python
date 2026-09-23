@@ -30,7 +30,7 @@ Toolsets sit alongside individual tools in `Agent.tools`. The two
 forms compose freely:
 
 ```python
-from philharmonica.adk.tools import FunctionToolset, function_tool
+from augments.adk.tools import FunctionToolset, function_tool
 
 agent = Agent(
     name="Operations",
@@ -46,8 +46,8 @@ agent = Agent(
 ## Quickstart
 
 ```python
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.tools import FunctionToolset, function_tool
+from augments.adk.agents.agent import Agent
+from augments.adk.tools import FunctionToolset, function_tool
 
 
 @function_tool(name="get_temp", description="Get temperature")
@@ -148,7 +148,7 @@ Base for user subclasses. Override `get_tools()` to add custom
 transformation:
 
 ```python
-from philharmonica.adk.tools import WrapperToolset
+from augments.adk.tools import WrapperToolset
 
 
 class TaggedToolset(WrapperToolset):
@@ -217,6 +217,6 @@ agent = Agent(
 ## See also
 
 - `examples/tools/toolsets/` — runnable examples.
-- `src/philharmonica/adk/tools/toolsets/abstract.py` — the `Toolset` ABC and
+- `src/augments/adk/tools/toolsets/abstract.py` — the `Toolset` ABC and
   builder methods.
-- `src/philharmonica/adk/exceptions/exceptions.py` — `ToolsetNameConflictError`.
+- `src/augments/adk/exceptions/exceptions.py` — `ToolsetNameConflictError`.

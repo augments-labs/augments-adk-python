@@ -1,4 +1,4 @@
-"""Integration tests for PgVectorStore (skipped unless PHILHARMONICA_TEST_PG_DSN set)."""
+"""Integration tests for PgVectorStore (skipped unless AUGMENTS_TEST_PG_DSN set)."""
 
 from __future__ import annotations
 
@@ -6,16 +6,16 @@ import os
 
 import pytest
 
-from philharmonica.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
+from augments.adk.memory.vector_store import VectorRecord
 
 pytest.importorskip("pgvector")
 pytest.importorskip("psycopg")
 
-_DSN = os.environ.get("PHILHARMONICA_TEST_PG_DSN")
+_DSN = os.environ.get("AUGMENTS_TEST_PG_DSN")
 pytestmark = [
     pytest.mark.postgres,
-    pytest.mark.skipif(_DSN is None, reason="PHILHARMONICA_TEST_PG_DSN not set"),
+    pytest.mark.skipif(_DSN is None, reason="AUGMENTS_TEST_PG_DSN not set"),
 ]
 
 
@@ -32,7 +32,7 @@ def _rec(rid: str, vector: tuple[float, ...], *, kind: MemoryKind = MemoryKind.E
 
 
 async def test_pgvector_round_trip() -> None:
-    from philharmonica.adk.memory.stores.pgvector import PgVectorStore
+    from augments.adk.memory.stores.pgvector import PgVectorStore
 
     assert _DSN is not None
     store = PgVectorStore(conninfo=_DSN, dimensions=2, table="test_mega8_vectors")

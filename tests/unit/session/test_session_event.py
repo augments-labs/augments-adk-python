@@ -2,7 +2,7 @@
 
 import pytest
 
-from philharmonica.adk.session.session_event import create_session_event
+from augments.adk.session.session_event import create_session_event
 
 
 class TestCreateSessionEvent:

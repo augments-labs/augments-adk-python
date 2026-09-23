@@ -1,4 +1,4 @@
-# Philharmonica ADK
+# Augments ADK
 
 A provider-agnostic Python framework to orchestrate complex systems of agents
 that perform real-world actions, across 100+ LLMs via
@@ -16,9 +16,9 @@ that perform real-world actions, across 100+ LLMs via
 ## Quickstart
 
 ```bash
-uv add philharmonica-adk    # or: pip install philharmonica-adk
+uv add augments-adk    # or: pip install augments-adk
 
-python -c "from philharmonica.adk import Agent, Runner; print('OK')"
+python -c "from augments.adk import Agent, Runner; print('OK')"
 ```
 
 Working on the ADK itself instead? Clone the repo and run `uv sync --extra dev`
@@ -29,7 +29,7 @@ Working on the ADK itself instead? Clone the repo and run `uv sync --extra dev`
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, Runner
+from augments.adk import Agent, Runner
 
 logger = logging.getLogger(__name__)
 

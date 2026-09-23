@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.function_tool import FunctionTool
 
 
 def _names(result: Any) -> list[str]:
@@ -88,7 +88,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_no_failure_counts_includes_all_tools(self):
         """When tool_failure_counts is None, all tools are included."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -108,7 +108,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_exhausted_tool_filtered_out(self):
         """Tool with failures > max_retries is excluded from build_tools."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -130,7 +130,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_tool_at_budget_still_included(self):
         """Tool with failures == max_retries is still available (budget not exceeded)."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -154,7 +154,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_tool_exceeding_budget_filtered(self):
         """Tool with failures > max_retries is filtered out."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -176,7 +176,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_none_max_retries_never_filtered(self):
         """Tool with max_retries=None is never filtered regardless of failures."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -197,7 +197,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_zero_max_retries_filtered_after_first_failure(self):
         """Tool with max_retries=0 is filtered after first failure."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         tool = FunctionTool(
@@ -219,7 +219,7 @@ class TestBuildToolsFiltering:
     @pytest.mark.asyncio
     async def test_mixed_tools_selective_filtering(self):
         """Only exhausted tools are filtered; healthy tools remain."""
-        from philharmonica.adk.run.llm_calls import build_tools
+        from augments.adk.run.llm_calls import build_tools
 
         agent = MagicMock()
         exhausted_tool = FunctionTool(

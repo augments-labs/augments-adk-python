@@ -3,7 +3,7 @@
 ## Per-Agent Permission Mode
 
 ```python
-from philharmonica.adk import Agent, PermissionMode
+from augments.adk import Agent, PermissionMode
 
 # Plan mode: block all tools, LLM produces text only
 agent = Agent(
@@ -23,7 +23,7 @@ agent = Agent(
 ## Per-Agent Permission Callback
 
 ```python
-from philharmonica.adk import Agent, PermissionResultAllow, PermissionResultDeny
+from augments.adk import Agent, PermissionResultAllow, PermissionResultDeny
 
 async def require_admin(tool_name, args, ctx):
     """Only allow admin to call delete tools."""
@@ -67,7 +67,7 @@ async def sanitize_paths(tool_name, args, ctx):
 ## Global Permission Mode
 
 ```python
-from philharmonica.adk import RunConfig
+from augments.adk import RunConfig
 
 config = RunConfig(
     permission_mode="bypassPermissions",  # Skip all checks (CI/automated)

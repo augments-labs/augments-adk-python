@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.checksums``."""
+"""Tests for ``augments.adk.sandbox.utils.checksums``."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.sandbox.utils.checksums import sha256_file, sha256_io
+from augments.adk.sandbox.utils.checksums import sha256_file, sha256_io
 
 
 class TestSha256File:

@@ -25,9 +25,9 @@ readability-first surface — roster, entry, routing, and stopping each
 get one line:
 
 ```python
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     Swarm, ExplicitDoneTermination, MaxTurnsTermination, TokenBudgetTermination,
 )
 
@@ -104,7 +104,7 @@ optional `member=` restricts who can trigger it (validated against the
 roster at construction time). Always compose it with a safety net:
 
 ```python
-from philharmonica.adk.swarms import TextMentionTermination, MaxTurnsTermination
+from augments.adk.swarms import TextMentionTermination, MaxTurnsTermination
 
 termination = TextMentionTermination("VERDICT:", member="judge") | MaxTurnsTermination(20)
 ```
@@ -130,7 +130,7 @@ Its `stream_events()` iterator emits swarm lifecycle events around the
 same per-agent stream events used by regular streamed runs.
 
 ```python
-from philharmonica.adk.swarms import SwarmTurnStartEvent, SwarmHandoffEvent, SwarmDoneEvent
+from augments.adk.swarms import SwarmTurnStartEvent, SwarmHandoffEvent, SwarmDoneEvent
 
 streamed = await Runner.arun_swarm_streamed(swarm, "Refactor this module.")
 async for event in streamed.stream_events():

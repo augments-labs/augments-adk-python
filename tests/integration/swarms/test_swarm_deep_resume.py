@@ -17,25 +17,25 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import AgentToolDeferral
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import AgentToolDeferral
+from augments.adk.graphs.interrupt import (
     Interrupt,
     InterruptException,
     NestedAgentApproval,
     NestedAgentReply,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(name: str = "approver") -> Swarm:
@@ -84,7 +84,7 @@ class TestSwarmDeepResumeNestedDefer:
 
         # First arun_swarm: member defers — swarm parks.
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=deferral),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -111,11 +111,11 @@ class TestSwarmDeepResumeNestedDefer:
 
         with (
             patch(
-                "philharmonica.adk.run.runner.Runner.arun",
+                "augments.adk.run.runner.Runner.arun",
                 new=AsyncMock(return_value=resumed_result),
             ),
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(return_value=resumed_result),
             ),
         ):
@@ -155,7 +155,7 @@ class TestSwarmDeepResumeNestedDefer:
         )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=deferral),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -199,7 +199,7 @@ class TestSwarmDeepResumeNestedDefer:
         )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=deferral),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -237,7 +237,7 @@ class TestSwarmDeepResumeHitlPure:
         )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=InterruptException(interrupt)),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -269,11 +269,11 @@ class TestSwarmDeepResumeHitlPure:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_resume.run_agent_loop",
+                "augments.adk.run.swarm_resume.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
         ):
@@ -296,7 +296,7 @@ class TestSwarmDeepResumeHitlPure:
         interrupt = Interrupt(node_id=member.name, question="Decide?", kind="generic")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=InterruptException(interrupt)),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -321,11 +321,11 @@ class TestSwarmDeepResumeHitlPure:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_resume.run_agent_loop",
+                "augments.adk.run.swarm_resume.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
         ):
@@ -346,7 +346,7 @@ class TestSwarmDeepResumeHitlPure:
         interrupt_2 = Interrupt(node_id=member.name, question="Step 2?", kind="generic")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=InterruptException(interrupt_1)),
         ):
             first = await Runner.arun_swarm(sw, "go")
@@ -363,11 +363,11 @@ class TestSwarmDeepResumeHitlPure:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=InterruptException(interrupt_2)),
             ),
             patch(
-                "philharmonica.adk.run.swarm_resume.run_agent_loop",
+                "augments.adk.run.swarm_resume.run_agent_loop",
                 new=AsyncMock(side_effect=InterruptException(interrupt_2)),
             ),
         ):

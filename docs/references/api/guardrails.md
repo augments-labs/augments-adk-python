@@ -6,27 +6,27 @@ guardrail.
 
 ## Factories
 
-- `philharmonica.adk.guardrails.pii_guardrail`
-- `philharmonica.adk.guardrails.injection_scan_guardrail`
-- `philharmonica.adk.guardrails.semantic_scan_guardrail`
-- `philharmonica.adk.guardrails.wrong_language_guardrail`
+- `augments.adk.guardrails.pii_guardrail`
+- `augments.adk.guardrails.injection_scan_guardrail`
+- `augments.adk.guardrails.semantic_scan_guardrail`
+- `augments.adk.guardrails.wrong_language_guardrail`
 
 ## Scanners
 
-- `philharmonica.adk.guardrails.PatternScanner`
-- `philharmonica.adk.guardrails.SemanticScanner`
-- `philharmonica.adk.guardrails.SemanticMatch`
+- `augments.adk.guardrails.PatternScanner`
+- `augments.adk.guardrails.SemanticScanner`
+- `augments.adk.guardrails.SemanticMatch`
 
 ## Helpers
 
-- `philharmonica.adk.guardrails.mask_pii_spans`
-- `philharmonica.adk.guardrails.fence_untrusted_text`
-- `philharmonica.adk.guardrails.detect_wrong_language`
+- `augments.adk.guardrails.mask_pii_spans`
+- `augments.adk.guardrails.fence_untrusted_text`
+- `augments.adk.guardrails.detect_wrong_language`
 
 ## Defaults
 
-- `philharmonica.adk.guardrails.DEFAULT_PII_MASK`
-- `philharmonica.adk.guardrails.DEFAULT_INJECTION_EXEMPLARS`
+- `augments.adk.guardrails.DEFAULT_PII_MASK`
+- `augments.adk.guardrails.DEFAULT_INJECTION_EXEMPLARS`
 
 Three further defaults, spelled out because their content is the
 interesting part:

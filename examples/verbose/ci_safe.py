@@ -4,7 +4,7 @@ Demonstrates that ``mode="auto"`` is the responsible default for any
 script that might run in a non-interactive environment (CI, piped
 stdout, file-redirected output, ``TERM=dumb``).
 
-The resolution ladder in ``philharmonica.adk.verbose.mode.resolve_mode``
+The resolution ladder in ``augments.adk.verbose.mode.resolve_mode``
 silently downgrades ``panel`` to ``line`` in each hostile environment,
 so operators get coloured output on their laptop and plain lines in
 GitHub Actions — with zero changes to application code.
@@ -36,8 +36,8 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.verbose import is_ci, is_no_color, is_rich_available, is_tty, resolve_mode
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.verbose import is_ci, is_no_color, is_rich_available, is_tty, resolve_mode
 
 logger = logging.getLogger(__name__)
 

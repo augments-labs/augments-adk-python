@@ -5,19 +5,19 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.config.hosted_tools import (
+from augments.adk.config.hosted_tools import (
     HOSTED_TOOL_REGISTRY,
     build_hosted_tool,
     register_hosted_tool,
 )
-from philharmonica.adk.exceptions import ConfigResolutionError
-from philharmonica.adk.tools.hosted.code_execution_tool import CodeExecutionTool
-from philharmonica.adk.tools.hosted.file_search_tool import FileSearchTool
-from philharmonica.adk.tools.hosted.image_generation_tool import ImageGenerationTool
-from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
-from philharmonica.adk.tools.hosted.url_context_tool import URLContextTool
-from philharmonica.adk.tools.hosted.web_search_tool import WebSearchTool
-from philharmonica.adk.types.config.tool_config import HostedToolRef
+from augments.adk.exceptions import ConfigResolutionError
+from augments.adk.tools.hosted.code_execution_tool import CodeExecutionTool
+from augments.adk.tools.hosted.file_search_tool import FileSearchTool
+from augments.adk.tools.hosted.image_generation_tool import ImageGenerationTool
+from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
+from augments.adk.tools.hosted.url_context_tool import URLContextTool
+from augments.adk.tools.hosted.web_search_tool import WebSearchTool
+from augments.adk.types.config.tool_config import HostedToolRef
 
 
 class TestHostedToolRef:
@@ -98,7 +98,7 @@ class TestHostedToolFactories:
 
 class TestExports:
     def test_register_hosted_tool_exported(self) -> None:
-        from philharmonica.adk.config import register_hosted_tool as exported
-        from philharmonica.adk.config.hosted_tools import register_hosted_tool as direct
+        from augments.adk.config import register_hosted_tool as exported
+        from augments.adk.config.hosted_tools import register_hosted_tool as direct
 
         assert exported is direct

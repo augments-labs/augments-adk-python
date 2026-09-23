@@ -8,8 +8,8 @@ Proves:
 (c) a normal run with no tenant_budget is a complete no-op (zero
     behaviour change when unconfigured).
 
-LLM-mocking pattern: patch ``philharmonica.adk.run.loop.call_llm`` to return a
-fake ``LLMResponse``, patch ``philharmonica.adk.run.loop.resolve_llm`` to return
+LLM-mocking pattern: patch ``augments.adk.run.loop.call_llm`` to return a
+fake ``LLMResponse``, patch ``augments.adk.run.loop.resolve_llm`` to return
 a stub ``LLM`` subclass whose ``cost()`` and ``estimate_cost()`` return
 controlled values, and patch the runner-level guardrail coroutines (same
 pattern as ``test_tenant_e2e.py``).
@@ -23,15 +23,15 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.budgets import BudgetPeriod, InMemoryCostLedger, TenantBudget, period_key
-from philharmonica.adk.exceptions import TenantBudgetExceeded
-from philharmonica.adk.llms.cost import CostEstimate
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.budgets import BudgetPeriod, InMemoryCostLedger, TenantBudget, period_key
+from augments.adk.exceptions import TenantBudgetExceeded
+from augments.adk.llms.cost import CostEstimate
+from augments.adk.llms.llm import LLM
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Shared fake LLM + response helpers
@@ -99,15 +99,15 @@ def _patch_runner_guardrails() -> tuple[Any, Any, Any]:
     """Return three patch context managers for the runner-level guardrails."""
     return (
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     )
@@ -134,8 +134,8 @@ async def test_per_run_budget_kills_before_call() -> None:
 
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (  # noqa: SIM117  # pytest.raises cannot be merged into the patch block
-        patch("philharmonica.adk.run.loop.call_llm", new=call_llm_mock),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", new=call_llm_mock),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,
@@ -177,10 +177,10 @@ async def test_warn_mode_continues_and_records() -> None:
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=lambda *a, **kw: _text_response()),
         ),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,
@@ -208,11 +208,11 @@ async def test_no_budget_is_noop() -> None:
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=lambda *a, **kw: _text_response()),
         ),
         patch(
-            "philharmonica.adk.run.loop.resolve_llm",
+            "augments.adk.run.loop.resolve_llm",
             return_value=_FakeLLM(estimate_usd=None, actual_usd=None),
         ),
         grd1,
@@ -264,8 +264,8 @@ async def test_ledger_outage_fails_closed_by_default() -> None:
 
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (  # noqa: SIM117
-        patch("philharmonica.adk.run.loop.call_llm", new=call_llm_mock),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", new=call_llm_mock),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,
@@ -294,8 +294,8 @@ async def test_ledger_outage_fail_open_proceeds() -> None:
 
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
-        patch("philharmonica.adk.run.loop.call_llm", new=call_llm_mock),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", new=call_llm_mock),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,
@@ -324,8 +324,8 @@ async def test_ledger_outage_warn_mode_continues() -> None:
 
     grd1, grd2, grd3 = _patch_runner_guardrails()
     with (
-        patch("philharmonica.adk.run.loop.call_llm", new=call_llm_mock),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.call_llm", new=call_llm_mock),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         grd1,
         grd2,
         grd3,

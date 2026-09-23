@@ -11,11 +11,11 @@ import asyncio
 import pytest
 from fakeredis.aioredis import FakeRedis
 
-from philharmonica.adk.exceptions import CheckpointConflictError
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.redis import RedisCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.exceptions import CheckpointConflictError
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.redis import RedisCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
 
 # ---------------------------------------------------------------------------
 # Helpers

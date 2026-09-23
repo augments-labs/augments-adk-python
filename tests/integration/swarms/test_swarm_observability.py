@@ -5,7 +5,7 @@ in-memory OTel exporter to assert:
 
 - One root swarm.<id> span per invocation.
 - One swarm.turn.<n> span per iteration that runs a member turn.
-- Stable philharmonica.swarm.id across suspend/resume.
+- Stable augments.swarm.id across suspend/resume.
 - resume_attempt set only on the resumed turn span.
 - Zero spans when config.tracing_enabled is False.
 """
@@ -22,20 +22,20 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
-from philharmonica.adk.tracing.tracer import set_tracer
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import Interrupt, InterruptException
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tracing.otel.otel_tracer import OTelTracer
+from augments.adk.tracing.tracer import set_tracer
+from augments.adk.types.run.run_result import RunResult
 
 
 @pytest.fixture
@@ -50,7 +50,7 @@ def otel_exporter() -> Iterator[InMemorySpanExporter]:
     exporter = InMemorySpanExporter()
     provider.add_span_processor(SimpleSpanProcessor(exporter))
     otel_trace.set_tracer_provider(provider)
-    set_tracer(OTelTracer(provider=provider, service_name="philharmonica-adk-test"))
+    set_tracer(OTelTracer(provider=provider, service_name="augments-adk-test"))
     yield exporter
     exporter.clear()
     set_tracer(None)
@@ -84,7 +84,7 @@ class TestSwarmObservabilityHappyPath:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=_fake_run_agent_loop),
         ):
             result = await Runner.arun_swarm(sw, "go", run_config=RunConfig(tracing_enabled=True))
@@ -103,14 +103,14 @@ class TestSwarmObservabilityHappyPath:
 
         root_attrs = roots[0].attributes or {}
         turn_attrs = turns[0].attributes or {}
-        assert root_attrs.get("philharmonica.swarm.id") == swarm_id
-        assert root_attrs.get("philharmonica.swarm.entry") == "approver"
-        assert root_attrs.get("philharmonica.swarm.status") == "max_turns"
-        assert root_attrs.get("philharmonica.swarm.turns_total") == 1
-        assert turn_attrs.get("philharmonica.swarm.id") == swarm_id
-        assert turn_attrs.get("philharmonica.swarm.turn.index") == 1
-        assert turn_attrs.get("philharmonica.swarm.turn.member") == "approver"
-        assert turn_attrs.get("philharmonica.swarm.turn.status") == "success"
+        assert root_attrs.get("augments.swarm.id") == swarm_id
+        assert root_attrs.get("augments.swarm.entry") == "approver"
+        assert root_attrs.get("augments.swarm.status") == "max_turns"
+        assert root_attrs.get("augments.swarm.turns_total") == 1
+        assert turn_attrs.get("augments.swarm.id") == swarm_id
+        assert turn_attrs.get("augments.swarm.turn.index") == 1
+        assert turn_attrs.get("augments.swarm.turn.member") == "approver"
+        assert turn_attrs.get("augments.swarm.turn.status") == "success"
 
 
 class TestSwarmObservabilitySuspendResume:
@@ -124,7 +124,7 @@ class TestSwarmObservabilitySuspendResume:
         interrupt = Interrupt(node_id="approver", question="ok?", kind="generic")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=InterruptException(interrupt)),
         ):
             first = await Runner.arun_swarm(sw, "go", run_config=RunConfig(tracing_enabled=True))
@@ -157,11 +157,11 @@ class TestSwarmObservabilitySuspendResume:
         # which imports the symbol at its own module level.
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_resumed_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_resume.run_agent_loop",
+                "augments.adk.run.swarm_resume.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_resumed_run_agent_loop),
             ),
         ):
@@ -182,11 +182,11 @@ class TestSwarmObservabilitySuspendResume:
         # that closes with status="success".
         assert len(roots) == 2
         assert len(turns) == 2
-        ids = {(s.attributes or {}).get("philharmonica.swarm.id") for s in roots}
+        ids = {(s.attributes or {}).get("augments.swarm.id") for s in roots}
         assert ids == {original_swarm_id}
 
         # The resumed turn span carries resume_attempt=1.
-        resumed_turns = [s for s in turns if (s.attributes or {}).get("philharmonica.swarm.turn.resume_attempt") == 1]
+        resumed_turns = [s for s in turns if (s.attributes or {}).get("augments.swarm.turn.resume_attempt") == 1]
         assert len(resumed_turns) == 1
 
 
@@ -208,7 +208,7 @@ class TestSwarmObservabilityDisabled:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop",
+            "augments.adk.run.swarm_loop.run_agent_loop",
             new=AsyncMock(side_effect=_fake_run_agent_loop),
         ):
             await Runner.arun_swarm(sw, "go", run_config=RunConfig(tracing_enabled=False))

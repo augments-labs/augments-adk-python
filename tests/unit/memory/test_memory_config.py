@@ -2,8 +2,8 @@
 
 import logging
 
-from philharmonica.adk.memory.in_memory import TemporaryMemory
-from philharmonica.adk.memory.memory_config import MemoryConfig
+from augments.adk.memory.in_memory import TemporaryMemory
+from augments.adk.memory.memory_config import MemoryConfig
 
 
 class TestMemoryConfigValidation:

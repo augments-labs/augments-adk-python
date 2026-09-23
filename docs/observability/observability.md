@@ -11,14 +11,14 @@ when it serializes a framework span to an OpenTelemetry span:
 
 | Convention | What it emits | Best for |
 |---|---|---|
-| `TracingConvention.DEFAULT` | GenAI semconv (`gen_ai.*`) + framework (`philharmonica.*`) attributes | Jaeger, Honeycomb, Datadog, Grafana Tempo, generic OTLP collectors |
+| `TracingConvention.DEFAULT` | GenAI semconv (`gen_ai.*`) + framework (`augments.*`) attributes | Jaeger, Honeycomb, Datadog, Grafana Tempo, generic OTLP collectors |
 | `TracingConvention.OPENINFERENCE` | OpenInference keys (`openinference.span.kind`, `input.value`, `output.value`, `llm.token_count.*`) | Phoenix / Arize — read natively by their LLM dashboards without an adapter |
 
 The convention is a **setup-time choice** passed to `setup_otel(convention=...)`:
 
 ```python
-from philharmonica.adk.tracing import TracingConvention, set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import TracingConvention, set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 tracer = setup_otel(
     service_name="my-agent",
@@ -27,7 +27,7 @@ tracer = setup_otel(
 set_tracer(tracer)
 ```
 
-`TracingConvention` is unconditionally importable from `philharmonica.adk.tracing`
+`TracingConvention` is unconditionally importable from `augments.adk.tracing`
 with no optional extras required.
 
 **Privacy note.** Selecting `TracingConvention.OPENINFERENCE` causes span
@@ -61,9 +61,9 @@ payloads at `Span.finish()`. It integrates with no extra protocol — compose
 it alongside any span tracer in a `MultiTracer`:
 
 ```python
-from philharmonica.adk.tracing import MetricsTracer, MultiTracer, set_tracer
-from philharmonica.adk.tracing.metrics import setup_metrics
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import MetricsTracer, MultiTracer, set_tracer
+from augments.adk.tracing.metrics import setup_metrics
+from augments.adk.tracing.otel import setup_otel
 
 otel = setup_otel(service_name="my-agent")
 metrics: MetricsTracer = setup_metrics(service_name="my-agent")
@@ -77,7 +77,7 @@ It is **independent** of `RunConfig.tracing_enabled`: both flags can be
 active at the same time, or individually:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.run.config import RunConfig
 
 config = RunConfig(tracing_enabled=True, metrics_enabled=True)
 ```
@@ -90,13 +90,13 @@ recording.
 
 | Instrument name | Type | Unit | Recorded from |
 |---|---|---|---|
-| `philharmonica.agent.turn.duration_ms` | Histogram | `ms` | `AgentSpanData` at finish |
-| `philharmonica.llm.tokens.prompt` | Histogram | `{token}` | `GenerationSpanData.usage` — `prompt_tokens` or `input_tokens` |
-| `philharmonica.llm.tokens.completion` | Histogram | `{token}` | `GenerationSpanData.usage` — `completion_tokens` or `output_tokens` |
-| `philharmonica.llm.requests` | Counter | `1` | `GenerationSpanData` at finish; label `status=success\|error` |
-| `philharmonica.agent.tool.calls` | Counter | `1` | `FunctionSpanData` at finish; label `status=success\|error` |
-| `philharmonica.graph.node.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="graph_node"` |
-| `philharmonica.swarm.turn.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="swarm_turn"` |
+| `augments.agent.turn.duration_ms` | Histogram | `ms` | `AgentSpanData` at finish |
+| `augments.llm.tokens.prompt` | Histogram | `{token}` | `GenerationSpanData.usage` — `prompt_tokens` or `input_tokens` |
+| `augments.llm.tokens.completion` | Histogram | `{token}` | `GenerationSpanData.usage` — `completion_tokens` or `output_tokens` |
+| `augments.llm.requests` | Counter | `1` | `GenerationSpanData` at finish; label `status=success\|error` |
+| `augments.agent.tool.calls` | Counter | `1` | `FunctionSpanData` at finish; label `status=success\|error` |
+| `augments.graph.node.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="graph_node"` |
+| `augments.swarm.turn.duration_ms` | Histogram | `ms` | `custom_span` with `data["type"]="swarm_turn"` |
 
 `setup_metrics` wires a `MeterProvider` with a
 `PeriodicExportingMetricReader` (default export interval: 60 s) and returns a
@@ -105,7 +105,7 @@ recording.
 ## Exporter helpers
 
 Four thin setup helpers cover the most common backends. All require the
-`otel` extra (`pip install 'philharmonica-adk[otel]'`).
+`otel` extra (`pip install 'augments-adk[otel]'`).
 
 ### Phoenix (Arize)
 
@@ -114,8 +114,8 @@ Phoenix ingests OTLP and reads OpenInference attributes natively. The
 `TracingConvention.OPENINFERENCE`:
 
 ```python
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
 
 set_tracer(setup_phoenix(service_name="my-agent"))
 ```
@@ -126,8 +126,8 @@ read `OTEL_EXPORTER_OTLP_ENDPOINT` from the environment.
 ### Logfire (Pydantic)
 
 ```python
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_logfire
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_logfire
 
 set_tracer(setup_logfire(token="<write-token>", service_name="my-agent"))
 ```
@@ -138,8 +138,8 @@ The Logfire OTLP ingestion endpoint accepts the write token as the raw
 ### LangSmith
 
 ```python
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.exporters import setup_langsmith
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.exporters import setup_langsmith
 
 set_tracer(setup_langsmith(api_key="<ls-api-key>", project="my-project"))
 ```
@@ -152,7 +152,7 @@ calling `set_tracer`:
 
 ```python
 import os
-from philharmonica.adk.tracing.exporters import setup_helicone
+from augments.adk.tracing.exporters import setup_helicone
 
 cfg = setup_helicone(api_key=os.environ["HELICONE_API_KEY"])
 # cfg.base_url  →  set as provider base_url
@@ -166,8 +166,8 @@ cfg = setup_helicone(api_key=os.environ["HELICONE_API_KEY"])
 handlers (JSON formatters, OTel log bridges) can key off the fields:
 
 ```python
-from philharmonica.adk.tracing import log_event
-from philharmonica.adk.tracing.logging import EVENT_AGENT_TURN_START, EVENT_LLM_REQUEST
+from augments.adk.tracing import log_event
+from augments.adk.tracing.logging import EVENT_AGENT_TURN_START, EVENT_LLM_REQUEST
 
 log_event(logger, EVENT_AGENT_TURN_START, agent_name="classifier", turn=1)
 log_event(logger, EVENT_LLM_REQUEST, model="gpt-4o-mini", level=logging.DEBUG)
@@ -194,9 +194,9 @@ Combine a span tracer, a metrics tracer, and an in-memory recorder for
 local testing:
 
 ```python
-from philharmonica.adk.tracing import MultiTracer, set_tracer
-from philharmonica.adk.tracing.exporters import setup_phoenix
-from philharmonica.adk.tracing.metrics import setup_metrics
+from augments.adk.tracing import MultiTracer, set_tracer
+from augments.adk.tracing.exporters import setup_phoenix
+from augments.adk.tracing.metrics import setup_metrics
 
 phoenix = setup_phoenix(service_name="my-agent")
 metrics = setup_metrics(service_name="my-agent")
@@ -215,7 +215,7 @@ Pass `tenant_id` to `RunConfig` to attach an opaque tenant identifier to
 every observability signal emitted during that run:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.run.config import RunConfig
 
 config = RunConfig(
     tenant_id="acme",
@@ -227,16 +227,16 @@ result = await Runner.arun(agent, "Hello!", run_config=config)
 
 The identifier threads to:
 
-- **Spans** — the `philharmonica.tenant.id` attribute is set on the root agent
+- **Spans** — the `augments.tenant.id` attribute is set on the root agent
   span **and on every generation span**, under both
   `TracingConvention.DEFAULT` and `TracingConvention.OPENINFERENCE`, so
   it is visible in every OTLP-compatible backend (Jaeger, Phoenix,
   Honeycomb, Datadog, Logfire, LangSmith).
 - **Metric dimensions** — a `tenant` label is added to the LLM
   instruments recorded by `record_generation` (token counts,
-  request counter, cost histogram: `philharmonica.llm.tokens.prompt`,
-  `philharmonica.llm.tokens.completion`, `philharmonica.llm.requests`,
-  `philharmonica.llm.cost.usd`) when `tenant_id` is non-None.
+  request counter, cost histogram: `augments.llm.tokens.prompt`,
+  `augments.llm.tokens.completion`, `augments.llm.requests`,
+  `augments.llm.cost.usd`) when `tenant_id` is non-None.
   When no tenant is set the dimension is absent, keeping the cardinality
   of untenanted runs under control.
 - **Status records** — `AgentRunRecord.tenant_id` is persisted in the
@@ -271,7 +271,7 @@ every completed run, including `tenant_id` and `cost_usd`. Pass
 `StatusTrackingHooks` to `Runner.arun` to enable recording:
 
 ```python
-from philharmonica.adk.status import AgentStatusStore, StatusTrackingHooks
+from augments.adk.status import AgentStatusStore, StatusTrackingHooks
 
 store = AgentStatusStore(path="agent_status.db")
 hooks = StatusTrackingHooks(store=store)

@@ -26,15 +26,15 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.memory import (
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.memory import (
     LLMExtractor,
     MemoryConfig,
     SQLiteMemory,
 )
-from philharmonica.adk.session import SQLiteMultiSessions
-from philharmonica.adk.tools.builtin.memory_tool import RecallMemoryTool, RememberMemoryTool
+from augments.adk.session import SQLiteMultiSessions
+from augments.adk.tools.builtin.memory_tool import RecallMemoryTool, RememberMemoryTool
 
 logger = logging.getLogger(__name__)
 

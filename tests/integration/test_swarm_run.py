@@ -8,7 +8,7 @@ Covers:
 - ``SwarmState.total_turns`` / ``handoff_count`` / ``cumulative_usage``
   are populated from actual turn execution.
 
-Mocking strategy: patch ``philharmonica.adk.run.loop.call_llm`` to return
+Mocking strategy: patch ``augments.adk.run.loop.call_llm`` to return
 scripted ``LLMResponse`` sequences, plus stub the guardrail pipeline
 (which is not under test here).
 """
@@ -21,16 +21,16 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.policy import LLMHandoffPolicy, RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.policy import LLMHandoffPolicy, RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
 )
-from philharmonica.adk.swarms.yield_signal import SWARM_DONE_TOOL_NAME
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.swarms.yield_signal import SWARM_DONE_TOOL_NAME
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
@@ -80,19 +80,19 @@ async def _run_with_mocked_llm(
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -211,19 +211,19 @@ class TestPolicyDrivenTransitionCarriesPrompt:
 
         with (
             patch(
-                "philharmonica.adk.run.loop.call_llm",
+                "augments.adk.run.loop.call_llm",
                 new=AsyncMock(side_effect=fake_call_llm),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):

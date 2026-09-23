@@ -33,8 +33,8 @@ from __future__ import annotations
 import asyncio
 import logging
 
-from philharmonica.adk.graphs import Graph, Merge
-from philharmonica.adk.graphs.events import (
+from augments.adk.graphs import Graph, Merge
+from augments.adk.graphs.events import (
     GRAPH_END,
     GRAPH_START,
     NODE_END,
@@ -44,10 +44,10 @@ from philharmonica.adk.graphs.events import (
     SUPERSTEP_END,
     SUPERSTEP_START,
 )
-from philharmonica.adk.graphs.result import GraphRunResultStreaming
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.graphs.result import GraphRunResultStreaming
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

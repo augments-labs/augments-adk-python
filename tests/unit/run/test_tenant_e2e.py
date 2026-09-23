@@ -25,20 +25,20 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import GraphHooks
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.status.hooks import StatusTrackingHooks
-from philharmonica.adk.status.store import AgentStatusStore
-from philharmonica.adk.tracing import Span, set_tracer
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
-from philharmonica.adk.types.tracing import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import GraphHooks
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.status.hooks import StatusTrackingHooks
+from augments.adk.status.store import AgentStatusStore
+from augments.adk.tracing import Span, set_tracer
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -117,19 +117,19 @@ def _patched_arun(agent: Agent, config: RunConfig) -> Any:
     """Context manager that patches the agent loop + guardrails for a clean run."""
     return (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=_make_fake_call_llm(),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     )
@@ -178,7 +178,7 @@ async def test_agent_run_status_tenant_and_cost() -> None:
     under the correct tenant with the accumulated cost."""
     from collections.abc import AsyncIterator
 
-    from philharmonica.adk.llms.llm import LLM
+    from augments.adk.llms.llm import LLM
 
     class _FixedCostLLM(LLM):
         """Stub LLM that returns a fixed cost; acomplete is never called here."""
@@ -209,20 +209,20 @@ async def test_agent_run_status_tenant_and_cost() -> None:
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=_make_fake_call_llm(),
         ),
-        patch("philharmonica.adk.run.loop.resolve_llm", return_value=fake_llm),
+        patch("augments.adk.run.loop.resolve_llm", return_value=fake_llm),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):

@@ -5,11 +5,11 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.llms.litellm.litellm_retry import (
+from augments.adk.llms.litellm.litellm_retry import (
     call_with_retry,
     litellm_exception_to_kind,
 )
-from philharmonica.adk.types.llms import LLMRetryPolicy
+from augments.adk.types.llms import LLMRetryPolicy
 
 # ── Policy dataclass ─────────────────────────────────────────────────
 

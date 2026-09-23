@@ -1,8 +1,8 @@
 ---
 paths:
-  - "src/philharmonica/adk/run/**/*.py"
-  - "src/philharmonica/adk/llms/**/*.py"
-  - "src/philharmonica/adk/types/**/*.py"
+  - "src/augments/adk/run/**/*.py"
+  - "src/augments/adk/llms/**/*.py"
+  - "src/augments/adk/types/**/*.py"
 ---
 
 # Type Layer Boundaries — CRITICAL

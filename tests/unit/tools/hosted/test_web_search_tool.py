@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.tools.hosted import WebSearchTool
+from augments.adk.tools.hosted import WebSearchTool
 
 
 class TestWebSearchToolDomainXor:

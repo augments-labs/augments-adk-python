@@ -12,19 +12,19 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import AgentToolDeferral
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import AgentToolDeferral
+from augments.adk.graphs.interrupt import (
     Interrupt,
     InterruptException,
     NestedAgentInterrupt,
 )
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
 
 
 def _swarm_with_member(name: str = "ask") -> Swarm:
@@ -51,7 +51,7 @@ class TestSwarmInterruptExceptionSuspend:
             del args, kwargs
             raise InterruptException(interrupt)
 
-        with patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_hitl)):
+        with patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_hitl)):
             result = await Runner.arun_swarm(sw, "go")
 
         assert result.stop_reason.kind == "interrupted"
@@ -90,7 +90,7 @@ class TestSwarmNestedAgentDeferralLift:
             del args, kwargs
             raise deferral
 
-        with patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_deferral)):
+        with patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_deferral)):
             result = await Runner.arun_swarm(sw, "go")
 
         assert result.stop_reason.kind == "interrupted"
@@ -109,11 +109,11 @@ class TestSwarmNestedAgentDeferralLift:
 class TestSwarmResumeFromCheckpoint:
     async def test_resume_clears_pending_interrupts_and_continues(self) -> None:
         """arun_swarm_from_checkpoint loads parked state and re-runs cleanly."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.interrupt import SwarmResume
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointer import SwarmCheckpoint
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.interrupt import SwarmResume
+        from augments.adk.swarms.state import SwarmState
 
         sw = _swarm_with_member()
 
@@ -136,7 +136,7 @@ class TestSwarmResumeFromCheckpoint:
 
         # Stub run_agent_loop so the resumed swarm advances one clean turn
         # and then handoffs/terminates via MaxTurnsTermination(3).
-        from philharmonica.adk.types.run.run_result import RunResult
+        from augments.adk.types.run.run_result import RunResult
 
         stub_result = RunResult[Any](
             final_output=None,
@@ -156,8 +156,8 @@ class TestSwarmResumeFromCheckpoint:
         # own import binding — stub both call sites so the resumed turn and
         # the subsequent policy-driven turn complete without a real LLM call.
         with (
-            patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_stub_turn)),
-            patch("philharmonica.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_stub_turn)),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_stub_turn)),
+            patch("augments.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_stub_turn)),
         ):
             result = await Runner.arun_swarm_from_checkpoint(
                 sw,
@@ -174,8 +174,8 @@ class TestSwarmResumeFromCheckpoint:
         assert result.state.total_turns >= 2
 
     async def test_resume_unknown_thread_id_raises(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.interrupt import SwarmResume
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.interrupt import SwarmResume
 
         sw = _swarm_with_member()
         cp = InMemorySwarmCheckpointer()
@@ -195,9 +195,9 @@ class TestSwarmTurnInterruptHookFires:
         """Custom SwarmHooks subclass receives the interrupt at parking time."""
         from typing import override
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.hooks import SwarmHooks
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.hooks import SwarmHooks
+        from augments.adk.swarms.state import SwarmState
 
         class _Recorder(SwarmHooks[Any]):
             calls: list[tuple[str, Interrupt]] = []
@@ -228,7 +228,7 @@ class TestSwarmTurnInterruptHookFires:
             del args, kwargs
             raise InterruptException(interrupt)
 
-        with patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_hitl)):
+        with patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_raise_hitl)):
             await Runner.arun_swarm(sw, "go")
 
         assert len(_Recorder.calls) == 1

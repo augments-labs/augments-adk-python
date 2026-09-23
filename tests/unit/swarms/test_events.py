@@ -15,8 +15,8 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from philharmonica.adk.graphs.interrupt import Interrupt, NestedAgentInterrupt
-from philharmonica.adk.swarms.events import (
+from augments.adk.graphs.interrupt import Interrupt, NestedAgentInterrupt
+from augments.adk.swarms.events import (
     SwarmDoneEvent,
     SwarmEvent,
     SwarmHandoffEvent,
@@ -25,7 +25,7 @@ from philharmonica.adk.swarms.events import (
     SwarmTurnInterruptEvent,
     SwarmTurnStartEvent,
 )
-from philharmonica.adk.swarms.stop_reason import StopReason
+from augments.adk.swarms.stop_reason import StopReason
 
 
 class TestSwarmStartEvent:

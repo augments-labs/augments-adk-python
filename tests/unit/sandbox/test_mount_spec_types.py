@@ -14,14 +14,14 @@ import json
 
 import pytest
 
-from philharmonica.adk.exceptions import (
-    PhilharmonicaError,
+from augments.adk.exceptions import (
+    AugmentsError,
     SandboxConfigurationError,
     SandboxError,
     UnsupportedMountPatternError,
     UnsupportedMountStrategyError,
 )
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.mounts import (
     DockerVolumeMountSpec,
     InContainerMountSpec,
     MountSpec,
@@ -186,9 +186,9 @@ class TestUnsupportedMountStrategyError:
         assert isinstance(err, SandboxConfigurationError)
         assert isinstance(err, SandboxError)
         # Reaches the framework-wide base every top-level handler keys
-        # on: if SandboxError were reparented off PhilharmonicaError, an
-        # `except PhilharmonicaError` handler would silently miss this.
-        assert isinstance(err, PhilharmonicaError)
+        # on: if SandboxError were reparented off AugmentsError, an
+        # `except AugmentsError` handler would silently miss this.
+        assert isinstance(err, AugmentsError)
 
     def test_is_distinct_from_pattern_error(self) -> None:
         # Symmetric to TestUnsupportedMountPatternError's distinctness
@@ -216,7 +216,7 @@ class TestUnsupportedMountPatternError:
         err = UnsupportedMountPatternError(mount_type="GCSMount", pattern_type="mountpoint")
         assert isinstance(err, SandboxConfigurationError)
         assert isinstance(err, SandboxError)
-        assert isinstance(err, PhilharmonicaError)
+        assert isinstance(err, AugmentsError)
 
     def test_is_distinct_from_strategy_error(self) -> None:
         # Pattern-incompat and strategy-incompat are different

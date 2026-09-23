@@ -1,4 +1,4 @@
-# Pre-commit hook chain for Philharmonica ADK.
+# Pre-commit hook chain for Augments ADK.
 #
 # Two-tier gate designed to keep `git commit` fast. The authoritative
 # quality gate is ruff + mypy + pyright + pytest, run in full before work
@@ -103,7 +103,7 @@ repos:
     hooks:
       - id: mypy
         name: mypy (canonical type check)
-        entry: uv run mypy -p philharmonica.adk
+        entry: uv run mypy -p augments.adk
         language: system
         pass_filenames: false
         stages: [manual]

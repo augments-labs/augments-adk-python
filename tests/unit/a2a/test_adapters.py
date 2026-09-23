@@ -8,15 +8,15 @@ import pytest
 # Skip module if the optional `a2a` extra is missing.
 pytest.importorskip("a2a.client")
 
-from philharmonica.adk.a2a import A2AAgent, A2AClient, A2AExecutableAdapter, A2ARunResult
-from philharmonica.adk.graphs.adapters import to_executable
-from philharmonica.adk.orchestration.executable import (
+from augments.adk.a2a import A2AAgent, A2AClient, A2AExecutableAdapter, A2ARunResult
+from augments.adk.graphs.adapters import to_executable
+from augments.adk.orchestration.executable import (
     Executable,
     ExecutableInput,
     NodeResult,
 )
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
 
 
 @pytest.fixture
@@ -167,7 +167,7 @@ class TestAdapterInvoke:
         )
         with (
             patch.object(remote, "get_client", _patched_get_client(remote, mock_client)),
-            caplog.at_level(logging.DEBUG, logger="philharmonica.adk.a2a.adapters"),
+            caplog.at_level(logging.DEBUG, logger="augments.adk.a2a.adapters"),
         ):
             await adapter.invoke(mixed, _ctx(), DEFAULT_RUN_CONFIG)
         mock_client.send_message.assert_awaited_once_with(

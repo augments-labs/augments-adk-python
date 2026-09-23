@@ -3,9 +3,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxSelectionError
-from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-from philharmonica.adk.types.sandbox.cost import (
+from augments.adk.exceptions.exceptions import SandboxSelectionError
+from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+from augments.adk.types.sandbox.cost import (
     SandboxBackendCapabilities,
     SandboxCostDescriptor,
     SandboxRequirements,

@@ -16,9 +16,9 @@ import json
 from contextvars import copy_context
 from typing import Any
 
-from philharmonica.adk.tools import build_tool_search
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_search import ToolSearchState
+from augments.adk.tools import build_tool_search
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_search import ToolSearchState
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 

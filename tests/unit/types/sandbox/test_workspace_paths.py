@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.workspace_paths``."""
+"""Tests for ``augments.adk.types.sandbox.workspace_paths``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.workspace_paths import (
+from augments.adk.types.sandbox.workspace_paths import (
     SandboxPathGrant,
     WorkspacePathPolicy,
 )

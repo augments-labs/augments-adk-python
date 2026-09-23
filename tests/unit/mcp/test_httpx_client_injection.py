@@ -21,7 +21,7 @@ from __future__ import annotations
 import httpx2
 import pytest
 
-from philharmonica.adk.mcp.http import MCPServerStreamableHttpParams
+from augments.adk.mcp.http import MCPServerStreamableHttpParams
 
 # --------------------------------------------------------------- params contract
 
@@ -119,7 +119,7 @@ async def test_connect_uses_prebuilt_client_when_httpx_client_set(
         yield read, write, get_session_id
 
     # Also mock _make_client_session and _attach_session to avoid real session creation
-    from philharmonica.adk.mcp import http as http_module
+    from augments.adk.mcp import http as http_module
 
     fake_client = httpx2.AsyncClient()
 
@@ -128,7 +128,7 @@ async def test_connect_uses_prebuilt_client_when_httpx_client_set(
         httpx_client=fake_client,
     )
 
-    from philharmonica.adk.mcp.http import MCPServerStreamableHttp
+    from augments.adk.mcp.http import MCPServerStreamableHttp
 
     server = MCPServerStreamableHttp(name="test", params=params)
 
@@ -136,8 +136,8 @@ async def test_connect_uses_prebuilt_client_when_httpx_client_set(
         patch.object(http_module, "streamable_http_client", fake_streamable_http_client),
         patch.object(server, "_make_client_session") as mock_make_session,
         patch.object(server, "_attach_session", AsyncMock()),
-        patch("philharmonica.adk.mcp.http.fire_on_mcp_connect", AsyncMock()),
-        patch("philharmonica.adk.mcp.http.fire_on_mcp_connected", AsyncMock()),
+        patch("augments.adk.mcp.http.fire_on_mcp_connect", AsyncMock()),
+        patch("augments.adk.mcp.http.fire_on_mcp_connected", AsyncMock()),
     ):
         # _make_client_session must return an async context manager
         fake_session = MagicMock()

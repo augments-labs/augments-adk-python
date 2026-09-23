@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.clients.k8s import K8sSandboxClientOptions
+from augments.adk.sandbox.clients.k8s import K8sSandboxClientOptions
 
 
 class TestK8sClientImports:

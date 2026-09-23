@@ -14,9 +14,9 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.retry import call_with_retry
-from philharmonica.adk.types.llms import LLMRetryErrorKind, LLMRetryPolicy
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.retry import call_with_retry
+from augments.adk.types.llms import LLMRetryErrorKind, LLMRetryPolicy
 
 # ---------------------------------------------------------------------------
 # Finding 1: _parse_usage overwrites OpenAI cached_tokens with Anthropic
@@ -101,7 +101,7 @@ class TestBuildStreamResponseThinkingBlockOrder:
     """
 
     def test_two_thinking_blocks_preserved_in_forward_order(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+        from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
         llm = LiteLLM(model="claude-3-5-sonnet-20241022")
         blocks = [
@@ -138,7 +138,7 @@ class TestStreamPartIndicesMonotonic:
         return SimpleNamespace(choices=[choice])
 
     async def _collect_events(self, chunks):  # type: ignore[no-untyped-def]
-        from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
+        from augments.adk.llms.litellm.litellm_model import LiteLLM
 
         llm = LiteLLM(model="gpt-4o")
         events = []
@@ -182,7 +182,7 @@ class TestGeminiGetClientNoKwargs:
     """_get_client must use explicit constructor calls, not a kwargs dict."""
 
     def test_developer_api_path_explicit_constructor(self) -> None:
-        from philharmonica.adk.llms.gemini.gemini_model import GeminiLLM
+        from augments.adk.llms.gemini.gemini_model import GeminiLLM
 
         llm = GeminiLLM(model="gemini-2.5-flash", api_key="test-key")
         captured: list = []
@@ -207,7 +207,7 @@ class TestGeminiGetClientNoKwargs:
         assert captured[0].get("api_key") == "test-key"
 
     def test_vertexai_path_explicit_constructor(self) -> None:
-        from philharmonica.adk.llms.gemini.gemini_model import GeminiLLM
+        from augments.adk.llms.gemini.gemini_model import GeminiLLM
 
         llm = GeminiLLM(
             model="gemini-2.5-flash",
@@ -319,7 +319,7 @@ class TestFixToolMessageOrderingOrphanedResults:
         return msg  # type: ignore[return-value]
 
     def test_orphaned_tool_result_preserved(self) -> None:
-        from philharmonica.adk.llms.litellm.litellm_converter import ChatCompletionConverter as LiteLLMConverter
+        from augments.adk.llms.litellm.litellm_converter import ChatCompletionConverter as LiteLLMConverter
 
         # Assistant has two tool calls: "tc1" and "tc2".
         # There are three tool results: tc1, tc2, PLUS an orphan "tc_orphan".
@@ -352,7 +352,7 @@ class TestCallLitellmReturnAnnotation:
     def test_annotation_in_source(self) -> None:
         import inspect
 
-        import philharmonica.adk.llms.litellm.litellm_model as mod
+        import augments.adk.llms.litellm.litellm_model as mod
 
         src = inspect.getsource(mod)
         assert "async def _call_litellm() -> Any:" not in src, "_call_litellm return annotation must not be Any"
@@ -448,7 +448,7 @@ class TestConvertToolsReturnAnnotation:
     def test_annotation_in_source(self) -> None:
         import inspect
 
-        import philharmonica.adk.llms.litellm.litellm_model as mod
+        import augments.adk.llms.litellm.litellm_model as mod
 
         src = inspect.getsource(mod)
         # The old annotation used list[Any]
@@ -469,7 +469,7 @@ class TestLitellmRetryImportErrorReraise:
     def test_importerror_reraises(self) -> None:
         import sys
 
-        from philharmonica.adk.llms.litellm.litellm_retry import litellm_exception_to_kind
+        from augments.adk.llms.litellm.litellm_retry import litellm_exception_to_kind
 
         # Temporarily hide litellm
         real_litellm = sys.modules.get("litellm")
@@ -497,7 +497,7 @@ class TestCostLookupExceptionLevels:
         import litellm
 
         llm = LiteLLM(model="gpt-4o")
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         usage = LLMUsage(requests=1, input_tokens=10, output_tokens=5, total_tokens=15)
         not_found = litellm.NotFoundError(
@@ -507,7 +507,7 @@ class TestCostLookupExceptionLevels:
         )
         with (
             patch("litellm.cost_per_token", side_effect=not_found),
-            caplog.at_level("DEBUG", logger="philharmonica.adk.llms.litellm.litellm_model"),
+            caplog.at_level("DEBUG", logger="augments.adk.llms.litellm.litellm_model"),
         ):
             result = llm.cost("unknown-model", usage)
         assert result is None
@@ -517,12 +517,12 @@ class TestCostLookupExceptionLevels:
 
     def test_unexpected_exception_logged_at_warning(self, caplog: pytest.LogCaptureFixture) -> None:
         llm = LiteLLM(model="gpt-4o")
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         usage = LLMUsage(requests=1, input_tokens=10, output_tokens=5, total_tokens=15)
         with (
             patch("litellm.cost_per_token", side_effect=RuntimeError("network timeout")),
-            caplog.at_level("WARNING", logger="philharmonica.adk.llms.litellm.litellm_model"),
+            caplog.at_level("WARNING", logger="augments.adk.llms.litellm.litellm_model"),
         ):
             result = llm.cost("gpt-4o", usage)
         assert result is None

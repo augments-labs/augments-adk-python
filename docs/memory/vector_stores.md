@@ -38,10 +38,10 @@ and upserts; `search` embeds the query and queries the store.
 | Backend | Install extra | Notes |
 |---|---|---|
 | `InMemoryVectorStore` | *(none)* | Zero-dep baseline; O(N) cosine; not persistent |
-| `PgVectorStore` | `philharmonica-adk[memory-pgvector]` | Needs Postgres with the `pgvector` extension |
-| `PineconeVectorStore` | `philharmonica-adk[memory-pinecone]` | Hosted (Pinecone cloud); no local option |
-| `ChromaVectorStore` | `philharmonica-adk[memory-chroma]` | Can run embedded/in-process or as a server |
-| `QdrantVectorStore` | `philharmonica-adk[memory-qdrant]` | Can run embedded/in-process or as a server |
+| `PgVectorStore` | `augments-adk[memory-pgvector]` | Needs Postgres with the `pgvector` extension |
+| `PineconeVectorStore` | `augments-adk[memory-pinecone]` | Hosted (Pinecone cloud); no local option |
+| `ChromaVectorStore` | `augments-adk[memory-chroma]` | Can run embedded/in-process or as a server |
+| `QdrantVectorStore` | `augments-adk[memory-qdrant]` | Can run embedded/in-process or as a server |
 
 For development and testing, `InMemoryVectorStore` requires no external
 process. For production, pgvector and Qdrant support embedded modes;
@@ -50,10 +50,10 @@ Chroma also supports a local persistent mode; Pinecone is always hosted.
 ## Wiring VectorMemory
 
 ```python
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
-from philharmonica.adk.memory import MemoryConfig, VectorMemory
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.tools import RecallMemoryTool, RememberMemoryTool
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.memory import MemoryConfig, VectorMemory
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.tools import RecallMemoryTool, RememberMemoryTool
 
 memory = VectorMemory(
     store=InMemoryVectorStore(),
@@ -94,14 +94,14 @@ framework never calls it automatically.
 embedding tokens (per fact) plus one LLM extraction call.
 
 ```python
-from philharmonica.adk.memory import (
+from augments.adk.memory import (
     MemoryKind,
     MemorySearchFilter,
     distill_to_semantic,
 )
-from philharmonica.adk.memory.extractor import LLMExtractor
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.memory.extractor import LLMExtractor
+from augments.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.llm_config import LLMConfig
 
 # Retrieve episodic entries to distill:
 episodic = await memory.search("user", namespace="user:42", limit=20)
@@ -144,8 +144,8 @@ results in memory, bounded to `max_size` entries. Pass it when constructing
 the embedder:
 
 ```python
-from philharmonica.adk.llms.embedder import EmbeddingLRUCache
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.llms.embedder import EmbeddingLRUCache
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 embedder = LiteLLMEmbedder(
     model="text-embedding-3-small",

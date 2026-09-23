@@ -7,7 +7,7 @@ import wave
 
 import pytest
 
-from philharmonica.adk.voice.audio import AudioInput, StreamedAudioInput, pcm16_from_float32, pcm16_from_int16
+from augments.adk.voice.audio import AudioInput, StreamedAudioInput, pcm16_from_float32, pcm16_from_int16
 
 
 def test_to_wav_bytes_roundtrips_pcm():

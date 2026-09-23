@@ -18,12 +18,12 @@ from typing import Any, override
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointers.hooks import CheckpointerHooks
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import GraphHooks, HookRegistry
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.run.context import RunContext
+from augments.adk.graphs.checkpointers.hooks import CheckpointerHooks
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import GraphHooks, HookRegistry
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.run.context import RunContext
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -122,7 +122,7 @@ async def test_fake_checkpointer_save_error_propagates_via_registry() -> None:
     """End-to-end: a fake checkpointer whose ``save`` raises is registered
     on a HookRegistry; firing on_node_end propagates the error.
     """
-    from philharmonica.adk.graphs.checkpointer import Checkpointer, GraphCheckpoint
+    from augments.adk.graphs.checkpointer import Checkpointer, GraphCheckpoint
 
     class _FailingCheckpointer:
         async def save(self, checkpoint: GraphCheckpoint) -> None:

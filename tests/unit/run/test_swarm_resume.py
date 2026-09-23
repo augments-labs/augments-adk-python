@@ -14,8 +14,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import (
     Interrupt,
     InterruptException,
     NestedAgentApproval,
@@ -23,18 +23,18 @@ from philharmonica.adk.graphs.interrupt import (
     NestedAgentReply,
     NestedAgentResumeError,
 )
-from philharmonica.adk.llms.llm_usage import LLMUsage
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.run.swarm_resume import run_resumed_hitl_turn, run_resumed_nested_turn
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.items.items import RunItem
+from augments.adk.llms.llm_usage import LLMUsage
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.run.swarm_resume import run_resumed_hitl_turn, run_resumed_nested_turn
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.items.items import RunItem
 
 
 def _make_swarm(name: str = "approver") -> Swarm:
@@ -116,7 +116,7 @@ class TestRunResumedNestedTurnValidation:
         member = sw.entry
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         with pytest.raises(ValueError, match="no reply provided for parked member 'approver'.*nested-agent-defer"):
             await run_resumed_nested_turn(
@@ -135,7 +135,7 @@ class TestRunResumedNestedTurnValidation:
         member = sw.entry
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         with pytest.raises(ValueError, match="must be NestedAgentReply.*got str"):
             await run_resumed_nested_turn(
@@ -162,13 +162,13 @@ class TestRunResumedNestedTurnValidation:
         original_snapshot = state.nested_agent_snapshots[member.name]
         original_interrupt = state.pending_interrupts[member.name]
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         reply = NestedAgentReply(decisions=(NestedAgentApproval(tool_call_id="c1"),))
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+                "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
                 new=AsyncMock(side_effect=NestedAgentResumeError(node_id=member.name, detail="bad tool_call_id")),
             ),
             pytest.raises(NestedAgentResumeError),
@@ -193,13 +193,13 @@ class TestRunResumedNestedTurnHappyPath:
         member = sw.entry
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         node_result = _make_node_result(final_output="done")
         reply = NestedAgentReply(decisions=(NestedAgentApproval(tool_call_id="c1"),))
 
         with patch(
-            "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+            "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
             new=AsyncMock(return_value=node_result),
         ) as mock_resume:
             result = await run_resumed_nested_turn(
@@ -234,14 +234,14 @@ class TestRunResumedNestedTurnHappyPath:
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
         ctx.usage = LLMUsage(requests=2, total_tokens=100, input_tokens=80, output_tokens=20)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         inner_usage = LLMUsage(requests=1, total_tokens=42, input_tokens=30, output_tokens=12)
         node_result = _make_node_result(usage=inner_usage)
         reply = NestedAgentReply(decisions=(NestedAgentApproval(tool_call_id="c1"),))
 
         with patch(
-            "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+            "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
             new=AsyncMock(return_value=node_result),
         ):
             await run_resumed_nested_turn(
@@ -268,7 +268,7 @@ class TestRunResumedNestedTurnReDeferral:
         member = sw.entry
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         fresh_interrupt = NestedAgentInterrupt(
             node_id=member.name,
@@ -281,7 +281,7 @@ class TestRunResumedNestedTurnReDeferral:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+                "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
                 new=AsyncMock(side_effect=InterruptException(fresh_interrupt)),
             ),
             pytest.raises(InterruptException) as exc_info,
@@ -307,8 +307,8 @@ class TestRunResumedHitlTurnValidation:
         member = sw.entry
         state = _make_state_with_parked_hitl(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         with pytest.raises(ValueError, match="no reply provided for parked member 'approver'.*pure-HITL"):
             await run_resumed_hitl_turn(
@@ -334,9 +334,9 @@ class TestRunResumedHitlTurnHappyPath:
         member = sw.entry
         state = _make_state_with_parked_hitl(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.types.run.run_result import RunResult
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.types.run.run_result import RunResult
 
         captured_has_reply: list[bool] = []
 
@@ -352,9 +352,7 @@ class TestRunResumedHitlTurnHappyPath:
                 last_agent=member,
             )
 
-        with patch(
-            "philharmonica.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_fake_run_agent_loop)
-        ):
+        with patch("augments.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_fake_run_agent_loop)):
             result = await run_resumed_hitl_turn(
                 member=member,
                 swarm_resume=SwarmResume(replies={member.name: "approved"}),
@@ -383,9 +381,9 @@ class TestRunResumedHitlTurnHappyPath:
         member = sw.entry
         state = _make_state_with_parked_hitl(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.types.run.run_result import RunResult
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.types.run.run_result import RunResult
 
         captured: list[Any] = []
 
@@ -393,9 +391,7 @@ class TestRunResumedHitlTurnHappyPath:
             captured.append(ctx.consume_swarm_resume_reply())
             return RunResult(final_output="ok", user_prompt="", new_items=[], context=ctx, last_agent=member)
 
-        with patch(
-            "philharmonica.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_fake_run_agent_loop)
-        ):
+        with patch("augments.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_fake_run_agent_loop)):
             await run_resumed_hitl_turn(
                 member=member,
                 swarm_resume=SwarmResume(replies={member.name: None}),
@@ -419,15 +415,15 @@ class TestRunResumedHitlTurnHappyPath:
         member = sw.entry
         state = _make_state_with_parked_hitl(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         async def _raise(*args: Any, **kwargs: Any) -> Any:
             del args, kwargs
             raise InterruptException(Interrupt(node_id=member.name, question="again", kind="generic"))
 
         with (
-            patch("philharmonica.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_raise)),
+            patch("augments.adk.run.swarm_resume.run_agent_loop", new=AsyncMock(side_effect=_raise)),
             pytest.raises(InterruptException),
         ):
             await run_resumed_hitl_turn(
@@ -454,11 +450,11 @@ class TestRunResumedNestedTurnResumeCountsBump:
         member = sw.entry
         state = _make_state_with_parked_nested_defer(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         reply = NestedAgentReply(decisions=(NestedAgentApproval(tool_call_id="c1"),))
         with patch(
-            "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+            "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
             new=AsyncMock(return_value=_make_node_result()),
         ):
             await run_resumed_nested_turn(
@@ -476,11 +472,11 @@ class TestRunResumedNestedTurnResumeCountsBump:
         state = _make_state_with_parked_nested_defer(sw, member.name)
         state.resume_counts[member.name] = 2  # prior resume cycles
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         reply = NestedAgentReply(decisions=(NestedAgentApproval(tool_call_id="c1"),))
         with patch(
-            "philharmonica.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
+            "augments.adk.run.swarm_resume.AgentExecutable.resume_from_snapshot",
             new=AsyncMock(return_value=_make_node_result()),
         ):
             await run_resumed_nested_turn(
@@ -499,16 +495,16 @@ class TestRunResumedHitlTurnResumeCountsBump:
         member = sw.entry
         state = _make_state_with_parked_hitl(sw, member.name)
         ctx: RunContext[None] = RunContext.make(None)
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.types.run.run_result import RunResult
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.types.run.run_result import RunResult
 
         async def _fake_run_agent_loop(**kwargs: Any) -> RunResult[Any]:
             del kwargs
             return RunResult(final_output="ok", user_prompt="", new_items=[], context=ctx, last_agent=member)
 
         with patch(
-            "philharmonica.adk.run.swarm_resume.run_agent_loop",
+            "augments.adk.run.swarm_resume.run_agent_loop",
             new=AsyncMock(side_effect=_fake_run_agent_loop),
         ):
             await run_resumed_hitl_turn(

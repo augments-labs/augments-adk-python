@@ -15,9 +15,9 @@ backend (in-memory, pgvector, Chroma, Pinecone, Qdrant) works unchanged.
 Bind your sources at construction; the agent only supplies the query.
 
 ```python
-from philharmonica.adk import Agent, Runner
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
-from philharmonica.adk.tools import PDFSearchTool
+from augments.adk import Agent, Runner
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.tools import PDFSearchTool
 
 search = PDFSearchTool(
     sources=["handbook.pdf", "policies.pdf"],
@@ -54,7 +54,7 @@ description shown to the model. They add no pipeline of their own.
 | `YoutubeVideoSearchTool` / `YoutubeChannelSearchTool` | video / channel URL | `rag-youtube` |
 
 Install a loader's optional dependency with its extra, e.g. `pip install
-'philharmonica-adk[rag-pdf]'` (or `[rag]` for all loaders). A loader verifies its
+'augments-adk[rag-pdf]'` (or `[rag]` for all loaders). A loader verifies its
 package at construction and raises a clear `ImportError` with the extra to
 install if it is missing.
 
@@ -62,7 +62,7 @@ Pass `DocumentSearchTool` a mixed `sources` list to let it route each source to
 the right loader by extension or URL shape:
 
 ```python
-from philharmonica.adk.tools import DocumentSearchTool
+from augments.adk.tools import DocumentSearchTool
 
 tool = DocumentSearchTool(
     sources=["guide.pdf", "notes.md", "https://example.com/faq"],
@@ -86,8 +86,8 @@ For retrieval without an agent, use `DocumentIndex`
 with the loaders directly:
 
 ```python
-from philharmonica.adk.rag import DocumentIndex
-from philharmonica.adk.rag.loaders import resolve_loader
+from augments.adk.rag import DocumentIndex
+from augments.adk.rag.loaders import resolve_loader
 
 index = DocumentIndex(embedder=LiteLLMEmbedder(model="text-embedding-3-small"))
 docs = await resolve_loader("guide.pdf").load("guide.pdf")

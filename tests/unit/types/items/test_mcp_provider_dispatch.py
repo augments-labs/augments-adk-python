@@ -16,18 +16,18 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from philharmonica.adk.types.items import (
+from augments.adk.types.items import (
     ItemHelpers,
     MCPApprovalRequestItem,
     MCPApprovalResponseItem,
     MCPListToolsItem,
 )
-from philharmonica.adk.types.items.items import ProviderItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.types.items.items import ProviderItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseProviderItem,
 )
-from philharmonica.adk.types.tools.builtin_tool_types import (
+from augments.adk.types.tools.builtin_tool_types import (
     MCPApprovalRequest,
     MCPApprovalResponse,
     MCPListTools,

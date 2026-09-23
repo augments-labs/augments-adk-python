@@ -5,8 +5,8 @@ from collections.abc import Sequence
 
 import pytest
 
-from philharmonica.adk.llms.litellm import LiteLLM
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.llms.litellm import LiteLLM
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
 
 
 def test_routed_model_holds_llm_and_name() -> None:

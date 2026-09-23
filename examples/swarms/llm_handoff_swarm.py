@@ -7,7 +7,7 @@ of the injected tools. When ``swarm_done`` is called — and *only*
 then — the run is allowed to terminate via
 ``ExplicitDoneTermination``.
 
-This is the AutoGen/Strands parity pattern, but with the Philharmonica
+This is the AutoGen/Strands parity pattern, but with the Augments
 guardrails intact:
 
 - **Agent config is never mutated.** The ``transfer_to_<name>`` tools
@@ -40,10 +40,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run.config import DEFAULT_MODEL
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents import Agent
+from augments.adk.run.config import DEFAULT_MODEL
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
     SharedContextConfig,

@@ -12,23 +12,23 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowConfig,
     arun_flow_agent,
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.flows.events import (
+from augments.adk.flows.events import (
     FlowEndEvent,
     FlowEvent,
     FlowStartEvent,
     FlowStepEndEvent,
     FlowStepStartEvent,
 )
-from philharmonica.adk.flows.executor import FlowExecutor
-from philharmonica.adk.flows.result import FlowRunStatus
-from philharmonica.adk.run.runner import Runner
+from augments.adk.flows.executor import FlowExecutor
+from augments.adk.flows.result import FlowRunStatus
+from augments.adk.run.runner import Runner
 
 
 class _State(BaseModel):
@@ -48,8 +48,8 @@ class TestMaxTotalTokensCap:
         Pre-fix: the cap was never checked, so the run would complete
         normally even when token usage exceeded max_total_tokens.
         """
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.run.context import RunContext
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         class F(Flow[_State]):
             @flow_start
@@ -77,8 +77,8 @@ class TestMaxTotalTokensCap:
 
     async def test_no_cap_when_max_total_tokens_is_none(self) -> None:
         """Without a cap, the run completes normally regardless of token count."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.run.context import RunContext
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         class F(Flow[_State]):
             @flow_start
@@ -127,7 +127,7 @@ class TestDeferKeySkipsStackWalk:
                 self.state.events.append("done")
 
         flow = F(_State)
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed_result)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed_result)):
             result = await Runner.arun_flow(flow)
 
         assert result.status == "completed"
@@ -279,7 +279,7 @@ class TestFlowRunContextType:
 
     async def test_run_context_populated_during_run(self) -> None:
         """Flow.run_context must be a RunContext during execution."""
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.run.context import RunContext
 
         captured: list[Any] = []
 
@@ -305,7 +305,7 @@ class TestGuardrailPhaseLiteral:
         This confirms the Literal['pre','post'] narrowing doesn't break
         call-site behaviour.
         """
-        from philharmonica.adk.flows.step_guardrails import FlowStepGuardrails, FlowStepGuardrailVerdict
+        from augments.adk.flows.step_guardrails import FlowStepGuardrails, FlowStepGuardrailVerdict
 
         phases_seen: list[str] = []
 
@@ -340,10 +340,10 @@ class TestFlowExecutableStatusCheck:
         Pre-fix: result.status was ignored, so a failed flow returned a
         normal NodeResult to the graph loop, hiding the failure.
         """
-        from philharmonica.adk.exceptions import UserError
-        from philharmonica.adk.flows.executable import FlowExecutable
-        from philharmonica.adk.orchestration.executable import ExecutableInput
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.exceptions import UserError
+        from augments.adk.flows.executable import FlowExecutable
+        from augments.adk.orchestration.executable import ExecutableInput
+        from augments.adk.run.context import RunContext
 
         class _BadFlow(Flow[_State]):
             @flow_start
@@ -353,7 +353,7 @@ class TestFlowExecutableStatusCheck:
         exe = FlowExecutable(flow=_BadFlow(_State))
         ctx: RunContext[None] = RunContext(context=None)  # type: ignore[arg-type]
 
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         with pytest.raises(UserError, match="inner-flow-failed"):
             await exe.invoke(
@@ -368,9 +368,9 @@ class TestFlowExecutableStatusCheck:
         Pre-fix: result.status was ignored; deferred flows returned metadata
         without checkpoint/deferred_steps, making HITL invisible to graph callers.
         """
-        from philharmonica.adk.flows.executable import FlowExecutable
-        from philharmonica.adk.orchestration.executable import ExecutableInput
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.flows.executable import FlowExecutable
+        from augments.adk.orchestration.executable import ExecutableInput
+        from augments.adk.run.context import RunContext
 
         class _DeferredFlow(Flow[_State]):
             @flow_start(
@@ -382,7 +382,7 @@ class TestFlowExecutableStatusCheck:
         exe = FlowExecutable(flow=_DeferredFlow(_State))
         ctx: RunContext[None] = RunContext(context=None)  # type: ignore[arg-type]
 
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         node_result = await exe.invoke(
             input=ExecutableInput(content=[], from_node=None),
@@ -407,8 +407,8 @@ class TestSaveCheckpointSyncTransaction:
         loadable via the public async interface (indirect test of the
         sync path's transaction correctness).
         """
-        from philharmonica.adk.flows import FlowCheckpoint
-        from philharmonica.adk.flows.sqlite_worker_backend import SqliteFlowWorkerBackend
+        from augments.adk.flows import FlowCheckpoint
+        from augments.adk.flows.sqlite_worker_backend import SqliteFlowWorkerBackend
 
         class _SimpleFlow(Flow[_State]):
             @flow_start
@@ -520,7 +520,7 @@ class TestFlowStartEventStartStepsOnResume:
         # _seed_executor_from_checkpoint is the module-level helper called by
         # Runner.arun_flow_from_checkpoint; exercising it directly lets us
         # intercept the FlowStartEvent emitted at the start of executor.run().
-        from philharmonica.adk.run.runner import _seed_executor_from_checkpoint
+        from augments.adk.run.runner import _seed_executor_from_checkpoint
 
         executor = FlowExecutor(resumed_flow, config=FlowConfig(), on_event=_collect)
         _seed_executor_from_checkpoint(executor, checkpoint)
@@ -597,8 +597,8 @@ class TestPerStepUsageAttribution:
         the scalar delta, so streaming consumers can attribute spend per
         step instead of seeing zeros.
         """
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.run.context import RunContext
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         class F(Flow[_State]):
             @flow_start

@@ -4,8 +4,8 @@ import time
 
 import pytest
 
-from philharmonica.adk.exceptions import QuotaExceeded
-from philharmonica.adk.status import AgentQuota, AgentRunRecord, AgentStatusStore
+from augments.adk.exceptions import QuotaExceeded
+from augments.adk.status import AgentQuota, AgentRunRecord, AgentStatusStore
 
 # ── Helpers ──────────────────────────────────────────────────────────
 

@@ -11,10 +11,10 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.policy import LLMHandoffPolicy, RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import DEFAULT_TERMINATION, Swarm
-from philharmonica.adk.swarms.termination import (
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.policy import LLMHandoffPolicy, RoundRobinPolicy
+from augments.adk.swarms.swarm import DEFAULT_TERMINATION, Swarm
+from augments.adk.swarms.termination import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
     OrTermination,
@@ -139,8 +139,8 @@ class TestMemberNameValidation:
     def test_rejects_member_tool_shadowing_swarm_done(self) -> None:
         from pydantic import BaseModel
 
-        from philharmonica.adk.tools import FunctionTool
-        from philharmonica.adk.tools.tool_context import ToolContext
+        from augments.adk.tools import FunctionTool
+        from augments.adk.tools.tool_context import ToolContext
 
         class _Empty(BaseModel):
             pass
@@ -170,8 +170,8 @@ class TestMemberNameValidation:
     def test_rejects_member_tool_with_handoff_prefix(self) -> None:
         from pydantic import BaseModel
 
-        from philharmonica.adk.tools import FunctionTool
-        from philharmonica.adk.tools.tool_context import ToolContext
+        from augments.adk.tools import FunctionTool
+        from augments.adk.tools.tool_context import ToolContext
 
         class _Empty(BaseModel):
             pass

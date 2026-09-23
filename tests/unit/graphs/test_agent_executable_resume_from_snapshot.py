@@ -11,9 +11,9 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import AgentExecutable
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import AgentExecutable
+from augments.adk.graphs.interrupt import (
     InterruptException,
     NestedAgentApproval,
     NestedAgentInterrupt,
@@ -21,10 +21,10 @@ from philharmonica.adk.graphs.interrupt import (
     NestedAgentReply,
     NestedAgentResumeError,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _deferred_call(call_id: str) -> DeferredToolCall:
@@ -68,7 +68,7 @@ async def test_resume_applies_approval_then_re_enters_runner(monkeypatch: pytest
         seen_state["resumed"] = state_arg
         return _FakeRunResult()
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -173,7 +173,7 @@ async def test_resume_with_empty_decisions_re_enters_runner_unchanged(monkeypatc
         seen_state["resumed"] = state_arg
         return _FakeRunResult()
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -226,7 +226,7 @@ async def test_resume_lifts_re_deferral_to_fresh_nested_interrupt(
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return _ReDeferringRunResult()
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 

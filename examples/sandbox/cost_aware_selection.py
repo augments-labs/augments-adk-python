@@ -30,17 +30,17 @@ logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
-    from philharmonica.adk.run.config import RunConfig
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.sandbox.agent import SandboxAgent
-    from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-    from philharmonica.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
-    from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
-    from philharmonica.adk.sandbox.config import SandboxRunConfig
-    from philharmonica.adk.sandbox.observability.audit_sink import LoggingAuditSink
-    from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-    from philharmonica.adk.types.sandbox.cost import SandboxRequirements
-    from philharmonica.adk.verbose import VerboseConfig
+    from augments.adk.run.config import RunConfig
+    from augments.adk.run.runner import Runner
+    from augments.adk.sandbox.agent import SandboxAgent
+    from augments.adk.sandbox.capabilities.shell import ShellCapability
+    from augments.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
+    from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+    from augments.adk.sandbox.config import SandboxRunConfig
+    from augments.adk.sandbox.observability.audit_sink import LoggingAuditSink
+    from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+    from augments.adk.types.sandbox.cost import SandboxRequirements
+    from augments.adk.verbose import VerboseConfig
 
     # -----------------------------------------------------------------
     # 1. Cost-aware selection (offline, no LLM, no live session)

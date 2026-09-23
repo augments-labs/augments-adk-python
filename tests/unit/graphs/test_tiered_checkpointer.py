@@ -14,12 +14,12 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.checkpointers.tiered import TieredCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import HookRegistry
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.checkpointers.tiered import TieredCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import HookRegistry
+from augments.adk.graphs.state import GraphState
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -215,7 +215,7 @@ def test_negative_archive_after_rejected() -> None:
 async def test_archive_sees_hook_driven_saves() -> None:
     """register() routes hook-saves through the composite, so _saved_at is
     populated and archive() can migrate them."""
-    from philharmonica.adk.orchestration.executable import NodeResult
+    from augments.adk.orchestration.executable import NodeResult
 
     g = _g()
     hot = InMemoryCheckpointer()

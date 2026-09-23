@@ -13,7 +13,7 @@ import json
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.tasks import TaskOutput
+from augments.adk.tasks import TaskOutput
 
 
 class TestTaskOutputFromDictValidation:

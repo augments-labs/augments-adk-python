@@ -27,17 +27,17 @@ import asyncio
 import logging
 from typing import TypedDict
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.skills import (
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.skills import (
     Skill,
     SkillActivation,
     SkillDiscoveryToolset,
     SkillGovernance,
 )
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.tools import function_tool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

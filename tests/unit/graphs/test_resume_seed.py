@@ -3,14 +3,14 @@ reconstruction on resume from (produced_at, versions_seen)."""
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.run.graph_loop import (
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.run.graph_loop import (
     _build_join_barriers,
     _seed_barriers_from_checkpoint,
 )
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _noop() -> str:

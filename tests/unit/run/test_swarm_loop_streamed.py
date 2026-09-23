@@ -13,23 +13,23 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
-from philharmonica.adk.swarms.events import (
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
+from augments.adk.swarms.events import (
     SwarmDoneEvent,
     SwarmStartEvent,
     SwarmTurnEndEvent,
     SwarmTurnStartEvent,
 )
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.result import SwarmRunResultStreaming
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.swarms.yield_signal import SwarmDone
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.result import SwarmRunResultStreaming
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.yield_signal import SwarmDone
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(*, max_turns: int = 1) -> Swarm[Any]:
@@ -49,9 +49,9 @@ def _make_deferral(member_name: str = "approver", tool_call_id: str = "c1") -> A
     60-line cap; the fixture is reusable for any future
     nested-defer test that needs a parked deferral.
     """
-    from philharmonica.adk.exceptions import AgentToolDeferral
-    from philharmonica.adk.run.state import RunState
-    from philharmonica.adk.tools.deferred_tool import (
+    from augments.adk.exceptions import AgentToolDeferral
+    from augments.adk.run.state import RunState
+    from augments.adk.tools.deferred_tool import (
         DeferredToolCall,
         DeferredToolRequests,
     )
@@ -93,7 +93,7 @@ class TestRunSwarmLoopStreamedHappyPath:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream_member_turn),
         ):
             await run_swarm_loop_streamed(
@@ -154,7 +154,7 @@ class TestRunSwarmLoopStreamedHappyPath:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream_member_turn),
         ):
             await run_swarm_loop_streamed(
@@ -192,7 +192,7 @@ class TestRunSwarmLoopStreamedHappyPath:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream_member_turn),
         ):
             await run_swarm_loop_streamed(
@@ -228,7 +228,7 @@ class TestRunSwarmLoopStreamedPerAgentPassthrough:
     async def test_inner_agent_events_appear_between_turn_start_and_end(self) -> None:
         """Per-agent events from Runner._run_streamed land between
         SwarmTurnStartEvent and SwarmTurnEndEvent."""
-        from philharmonica.adk.run.stream import RawResponseStreamEvent, RunResultStreaming
+        from augments.adk.run.stream import RawResponseStreamEvent, RunResultStreaming
 
         sw = _make_swarm(max_turns=1)
         ctx: RunContext[None] = RunContext.make(None)
@@ -252,7 +252,7 @@ class TestRunSwarmLoopStreamedPerAgentPassthrough:
         fake_inner.new_items = []
 
         with patch(
-            "philharmonica.adk.run.runner.Runner._run_streamed",
+            "augments.adk.run.runner.Runner._run_streamed",
             return_value=fake_inner,
         ):
             await run_swarm_loop_streamed(
@@ -285,7 +285,7 @@ class TestRunSwarmLoopStreamedSuspendPaths:
     async def test_interrupt_exception_emits_turn_interrupt_then_done(self) -> None:
         """Pure HITL raises InterruptException; stream replaces SwarmTurnEndEvent
         with SwarmTurnInterruptEvent and populates result.interrupts."""
-        from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
+        from augments.adk.graphs.interrupt import Interrupt, InterruptException
 
         sw = _make_swarm(max_turns=3)
         ctx: RunContext[None] = RunContext.make(None)
@@ -303,7 +303,7 @@ class TestRunSwarmLoopStreamedSuspendPaths:
             raise InterruptException(interrupt)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_raise_interrupt),
         ):
             await run_swarm_loop_streamed(
@@ -342,7 +342,7 @@ class TestRunSwarmLoopStreamedSuspendPaths:
     async def test_agent_tool_deferral_lifts_to_nested_agent_interrupt(self) -> None:
         """Nested-agent defer emits SwarmTurnInterruptEvent carrying a
         NestedAgentInterrupt and parks nested_agent_snapshots."""
-        from philharmonica.adk.graphs.interrupt import NestedAgentInterrupt
+        from augments.adk.graphs.interrupt import NestedAgentInterrupt
 
         sw = _make_swarm(max_turns=3)
         ctx: RunContext[None] = RunContext.make(None)
@@ -356,7 +356,7 @@ class TestRunSwarmLoopStreamedSuspendPaths:
             raise deferral
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_raise_deferral),
         ):
             await run_swarm_loop_streamed(
@@ -393,19 +393,19 @@ class TestRunSwarmLoopStreamedResumeThroughStream:
         """The deep-resume splice from swarm_resume.py fires inside the streamed
         loop when initial_state has a parked nested-defer snapshot and
         swarm_resume carries the matching NestedAgentReply."""
-        from philharmonica.adk.graphs.interrupt import (
+        from augments.adk.graphs.interrupt import (
             NestedAgentApproval,
             NestedAgentInterrupt,
             NestedAgentReply,
         )
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.swarms.interrupt import SwarmResume
-        from philharmonica.adk.swarms.state import SwarmState
-        from philharmonica.adk.tools.deferred_tool import (
+        from augments.adk.run.state import RunState
+        from augments.adk.swarms.interrupt import SwarmResume
+        from augments.adk.swarms.state import SwarmState
+        from augments.adk.tools.deferred_tool import (
             DeferredToolCall,
             DeferredToolRequests,
         )
-        from philharmonica.adk.types.run.run_result import RunResult
+        from augments.adk.types.run.run_result import RunResult
 
         sw = _make_swarm(max_turns=3)
         ctx: RunContext[None] = RunContext.make(None)
@@ -450,7 +450,7 @@ class TestRunSwarmLoopStreamedResumeThroughStream:
         )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed.run_resumed_nested_turn",
+            "augments.adk.run.swarm_loop_streamed.run_resumed_nested_turn",
             new=AsyncMock(return_value=resumed_run_result),
         ):
             await run_swarm_loop_streamed(
@@ -499,7 +499,7 @@ class TestStreamedUsageAccumulation:
         were dead in streaming and per_member_usage stayed empty. The driver
         now accumulates each turn's usage from the returned inner context.
         """
-        from philharmonica.adk.llms.llm_usage import LLMUsage
+        from augments.adk.llms.llm_usage import LLMUsage
 
         sw = _make_swarm(max_turns=1)
         ctx: RunContext[None] = RunContext.make(None)
@@ -520,7 +520,7 @@ class TestStreamedUsageAccumulation:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_turn),
         ):
             await run_swarm_loop_streamed(
@@ -552,16 +552,16 @@ class TestStreamedResumeUsageAccumulation:
         ``max_total_tokens`` guard and the returned per-member breakdown. The
         snapshot/delta on ``ctx_wrapper.usage`` now captures resume turns too.
         """
-        from philharmonica.adk.graphs.interrupt import (
+        from augments.adk.graphs.interrupt import (
             NestedAgentApproval,
             NestedAgentInterrupt,
             NestedAgentReply,
         )
-        from philharmonica.adk.llms.llm_usage import LLMUsage
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.swarms.interrupt import SwarmResume
-        from philharmonica.adk.swarms.state import SwarmState
-        from philharmonica.adk.tools.deferred_tool import (
+        from augments.adk.llms.llm_usage import LLMUsage
+        from augments.adk.run.state import RunState
+        from augments.adk.swarms.interrupt import SwarmResume
+        from augments.adk.swarms.state import SwarmState
+        from augments.adk.tools.deferred_tool import (
             DeferredToolCall,
             DeferredToolRequests,
         )
@@ -612,7 +612,7 @@ class TestStreamedResumeUsageAccumulation:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed.run_resumed_nested_turn",
+            "augments.adk.run.swarm_loop_streamed.run_resumed_nested_turn",
             new=AsyncMock(side_effect=_fake_resumed_nested),
         ):
             await run_swarm_loop_streamed(
@@ -650,8 +650,8 @@ class TestStreamedOutOfRosterHandoff:
         ``max_handoffs`` hard guard and diverged from the sync loop's policy
         bookkeeping. The branch now mirrors the sync loop.
         """
-        from philharmonica.adk.swarms.config import SwarmConfig
-        from philharmonica.adk.swarms.yield_signal import SwarmHandoff
+        from augments.adk.swarms.config import SwarmConfig
+        from augments.adk.swarms.yield_signal import SwarmHandoff
 
         recorded: list[SwarmHandoff] = []
 
@@ -688,7 +688,7 @@ class TestStreamedOutOfRosterHandoff:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_turn),
         ):
             await run_swarm_loop_streamed(
@@ -747,7 +747,7 @@ class TestStreamedPolicyError:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_turn),
         ):
             await run_swarm_loop_streamed(
@@ -773,9 +773,9 @@ class TestStreamedHitlResumeTurnInput:
         The driver now builds the turn input (the sync loop's Step 4-5) before
         resuming — inject_system_prompt alone guarantees a non-empty list.
         """
-        from philharmonica.adk.graphs.interrupt import Interrupt
-        from philharmonica.adk.swarms.interrupt import SwarmResume
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.graphs.interrupt import Interrupt
+        from augments.adk.swarms.interrupt import SwarmResume
+        from augments.adk.swarms.state import SwarmState
 
         member = Agent(name="approver", system_prompt="x")
         sw: Swarm[Any] = Swarm(
@@ -804,7 +804,7 @@ class TestStreamedHitlResumeTurnInput:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed.run_resumed_hitl_turn",
+            "augments.adk.run.swarm_loop_streamed.run_resumed_hitl_turn",
             new=AsyncMock(side_effect=_fake_resumed_hitl),
         ):
             await run_swarm_loop_streamed(
@@ -853,7 +853,7 @@ class TestStreamedPerRunBudgetAccumulation:
         cost-conservative invariant). The driver now threads its shared
         ``ctx_wrapper`` into every member turn.
         """
-        from philharmonica.adk.llms.llm_usage import LLMUsage
+        from augments.adk.llms.llm_usage import LLMUsage
 
         sw = _make_swarm(max_turns=2)
         ctx: RunContext[None] = RunContext.make(None)
@@ -871,7 +871,7 @@ class TestStreamedPerRunBudgetAccumulation:
             return _FakeInnerStream(context=shared)
 
         with patch(
-            "philharmonica.adk.run.runner.Runner._run_streamed",
+            "augments.adk.run.runner.Runner._run_streamed",
             side_effect=_fake_run_streamed,
         ):
             await run_swarm_loop_streamed(

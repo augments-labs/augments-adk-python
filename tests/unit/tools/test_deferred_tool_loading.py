@@ -9,10 +9,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.tools import build_tool_search, function_tool
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_search import reset_revealed_sets
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.tools import build_tool_search, function_tool
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_search import reset_revealed_sets
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 
@@ -243,7 +243,7 @@ class TestBuildToolsFiltersDeferred:
 
         import logging
 
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tools.tool_search"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.tools.tool_search"):
             await build_tools(agent)
         assert any("tool_search instances" in r.message for r in caplog.records), (
             "expected a warning when multiple search tools are present"
@@ -255,13 +255,13 @@ class TestBuildToolsFiltersDeferred:
 
 class TestFindRevealedHelper:
     def test_no_search_tool_returns_empty(self) -> None:
-        from philharmonica.adk.tools.tool_search import find_revealed_deferred_tools
+        from augments.adk.tools.tool_search import find_revealed_deferred_tools
 
         regular = _make_tool("a")
         assert find_revealed_deferred_tools([regular]) == set()
 
     def test_returns_search_tools_revealed_set(self) -> None:
-        from philharmonica.adk.tools.tool_search import find_revealed_deferred_tools
+        from augments.adk.tools.tool_search import find_revealed_deferred_tools
 
         rare = _make_tool("rare", defer_loading=True)
         search = build_tool_search([rare])
@@ -280,11 +280,11 @@ class TestExecutorGate:
 
     @pytest.mark.asyncio
     async def test_unrevealed_deferred_tool_refused(self) -> None:
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.types.responses.llm_response import (
             LLMResponseFunctionToolCall,
         )
 
@@ -319,11 +319,11 @@ class TestExecutorGate:
 
     @pytest.mark.asyncio
     async def test_revealed_deferred_tool_executes(self) -> None:
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.types.responses.llm_response import (
             LLMResponseFunctionToolCall,
         )
 

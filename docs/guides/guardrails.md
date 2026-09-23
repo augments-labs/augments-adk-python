@@ -76,12 +76,12 @@ controls whether execution halts.
 
 A tripped input guardrail raises `AgentInputGuardrailTripwireTriggered`;
 a tripped output guardrail raises `AgentOutputGuardrailTripwireTriggered`.
-Both are importable from `philharmonica.adk.exceptions`.
+Both are importable from `augments.adk.exceptions`.
 
 ## Built-in guardrail hub
 
 For the most common safety concerns the ADK ships ready-to-use guardrails
-under `philharmonica.adk.guardrails`:
+under `augments.adk.guardrails`:
 
 | Factory | Level | Default `on_fail` | Description |
 |---|---|---|---|
@@ -91,8 +91,8 @@ under `philharmonica.adk.guardrails`:
 | `wrong_language_guardrail(target_language=…)` | output | `RAISE` | Trips when the output is in the wrong language. Needs `[guardrails-lingua]` extra. |
 
 ```python
-from philharmonica.adk.guardrails import injection_scan_guardrail, pii_guardrail
-from philharmonica.adk.types.guardrails.action import GuardrailAction
+from augments.adk.guardrails import injection_scan_guardrail, pii_guardrail
+from augments.adk.types.guardrails.action import GuardrailAction
 
 agent = Agent(
     name="Support",
@@ -120,7 +120,7 @@ The `@agent_input_guardrail` and `@agent_output_guardrail` decorators are
 the idiomatic approach. They accept both sync and async functions.
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     agent_input_guardrail,
     AgentInputGuardrailData,
     AgentGuardrailFunctionOutput,
@@ -170,7 +170,7 @@ Output guardrails follow the same pattern with `@agent_output_guardrail`,
 which additionally supports `remediation` and `max_retries`:
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     agent_output_guardrail,
     AgentOutputGuardrailData,
     AgentGuardrailFunctionOutput,
@@ -201,7 +201,7 @@ dynamically, construct `AgentInputGuardrail` or `AgentOutputGuardrail`
 directly:
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentInputGuardrail,
     AgentInputGuardrailData,
     AgentGuardrailFunctionOutput,
@@ -226,8 +226,8 @@ length_guard = AgentInputGuardrail(
 Pass guardrails as an `AgentGuardrails` config on the agent:
 
 ```python
-from philharmonica.adk import Agent
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
+from augments.adk import Agent
+from augments.adk.agents.agent_guardrails import AgentGuardrails
 
 agent = Agent(
     name="support-bot",
@@ -252,8 +252,8 @@ is useful for organisation-wide policies applied uniformly regardless of
 which agent handles the request:
 
 ```python
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
+from augments.adk.run import RunConfig
+from augments.adk.agents.agent_guardrails import AgentGuardrails
 
 result = await Runner.arun(
     agent,
@@ -309,7 +309,7 @@ invocation and have a richer three-state verdict.
 Tool guardrail example:
 
 ```python
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk.tools.tool_guardrails import (
     tool_input_guardrail,
     ToolInputGuardrailData,
     ToolGuardrailFunctionOutput,
@@ -395,7 +395,7 @@ spinning up a full agent run:
 ```python
 import asyncio
 from unittest.mock import MagicMock
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrailData
+from augments.adk.agents.agent_guardrails import AgentInputGuardrailData
 
 async def test_no_sql_injection_fires():
     agent_mock = MagicMock()
@@ -422,7 +422,7 @@ Both input and output guardrails accept `timeout` (seconds) and
 `timeout_policy`:
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentTimeoutPolicy
+from augments.adk.agents.agent_guardrails import AgentTimeoutPolicy
 
 @agent_input_guardrail(
     timeout=1.0,

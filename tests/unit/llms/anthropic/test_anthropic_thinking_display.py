@@ -11,9 +11,9 @@ The field must:
 
 from __future__ import annotations
 
-from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-from philharmonica.adk.llms.anthropic.anthropic_reasoning_resolver import resolve_thinking
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+from augments.adk.llms.anthropic.anthropic_reasoning_resolver import resolve_thinking
+from augments.adk.llms.llm_config import LLMConfig
 
 
 class TestThinkingDisplayDefault:

@@ -45,8 +45,8 @@ the outcome coming back, and can short-circuit by not calling
 ## Quickstart
 
 ```python
-from philharmonica.adk.agents import Agent, Middleware
-from philharmonica.adk.run.agent_middleware import AgentLoggingMiddleware
+from augments.adk.agents import Agent, Middleware
+from augments.adk.run.agent_middleware import AgentLoggingMiddleware
 
 agent = Agent(
     name="Researcher",
@@ -68,7 +68,7 @@ entry runs last (innermost, just before the actual agent block).
 import logging
 import time
 
-from philharmonica.adk.run.agent_middleware import AgentBlockOutcome
+from augments.adk.run.agent_middleware import AgentBlockOutcome
 
 
 class TimeAgentBlock:
@@ -165,13 +165,13 @@ class CacheHitMiddleware:
 
 ```python
 # 2. Raise AgentMiddlewareTermination — outer middleware unwinds.
-from philharmonica.adk.run.agent_middleware import AgentMiddlewareTermination
+from augments.adk.run.agent_middleware import AgentMiddlewareTermination
 
 class CircuitBreaker:
     async def __call__(self, agent, messages, context, next):
         if self._is_open(agent.name):
             from dataclasses import replace
-            from philharmonica.adk.run.agent_middleware import AgentBlockOutcome
+            from augments.adk.run.agent_middleware import AgentBlockOutcome
             raise AgentMiddlewareTermination(
                 AgentBlockOutcome(kind="final", result=self._fallback_result()),
             )
@@ -244,7 +244,7 @@ object inside the block.
 ## See also
 
 - `examples/agents/agent_middleware/` — runnable examples.
-- `src/philharmonica/adk/run/agent_middleware.py` — Protocol definition,
+- `src/augments/adk/run/agent_middleware.py` — Protocol definition,
   shipped middleware, and the chain composition helpers.
 - `docs/tools/middleware.md` — `ToolMiddleware` (sibling layer);
   contains the canonical forbidden-vs-allowed table.

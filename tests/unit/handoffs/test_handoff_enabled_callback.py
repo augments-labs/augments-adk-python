@@ -20,12 +20,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import HandoffDefinitionError
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled, is_handoff_enabled
-from philharmonica.adk.handoffs.handoff_route import HandoffRoute
-from philharmonica.adk.handoffs.handoff_target import HandoffTarget
-from philharmonica.adk.run.context import RunContext
+from augments.adk.exceptions import HandoffDefinitionError
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.handoffs.handoff_helpers import evaluate_enabled, is_handoff_enabled
+from augments.adk.handoffs.handoff_route import HandoffRoute
+from augments.adk.handoffs.handoff_target import HandoffTarget
+from augments.adk.run.context import RunContext
 
 
 def _mock_agent(name: str = "destination") -> MagicMock:
@@ -268,7 +268,7 @@ class TestCodeOrchSharedContract:
     async def test_code_orch_callable_returning_false_disables(self) -> None:
         from typing import Literal
 
-        from philharmonica.adk.types.intents import Intent
+        from augments.adk.types.intents import Intent
 
         class RefundIntent(Intent):
             kind: Literal["refund"] = "refund"
@@ -282,7 +282,7 @@ class TestCodeOrchSharedContract:
     async def test_code_orch_callable_without_context_raises(self) -> None:
         from typing import Literal
 
-        from philharmonica.adk.types.intents import Intent
+        from augments.adk.types.intents import Intent
 
         class RefundIntent(Intent):
             kind: Literal["refund"] = "refund"
@@ -297,7 +297,7 @@ class TestCodeOrchSharedContract:
     async def test_code_orch_non_bool_return_raises(self) -> None:
         from typing import Literal
 
-        from philharmonica.adk.types.intents import Intent
+        from augments.adk.types.intents import Intent
 
         class RefundIntent(Intent):
             kind: Literal["refund"] = "refund"

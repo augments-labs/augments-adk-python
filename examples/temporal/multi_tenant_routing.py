@@ -10,7 +10,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from philharmonica.adk.workflows.temporal.routing import (
+from augments.adk.workflows.temporal.routing import (
     MappingTaskQueueRouter,
     start_tenant_workflow,
 )
@@ -19,8 +19,8 @@ logger = logging.getLogger(__name__)
 
 # Premium tenants -> dedicated queue; all others -> the shared default.
 ROUTER = MappingTaskQueueRouter(
-    mapping={"premium-tenant": "philharmonica-premium"},
-    default="philharmonica-shared",
+    mapping={"premium-tenant": "augments-premium"},
+    default="augments-shared",
 )
 
 

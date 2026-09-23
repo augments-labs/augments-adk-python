@@ -1,6 +1,6 @@
 # Visualisation
 
-Philharmonica Agents ADK ships pure-function emitters that translate a
+Augments Agents ADK ships pure-function emitters that translate a
 constructed `Flow` or a compiled `Graph` into a Mermaid `flowchart`
 string or a Graphviz DOT digraph. The emitters read the immutable
 topology data the framework already keeps (`FlowTransitionTable`,
@@ -23,7 +23,7 @@ introspection, no run required.
 Import either set:
 
 ```python
-from philharmonica.adk.visualization import (
+from augments.adk.visualization import (
     flow_to_mermaid,
     flow_to_dot,
     graph_to_mermaid,
@@ -78,7 +78,7 @@ graph = Graph.new("review").node("fact_check", checker_agent, description="Fact-
 
 ```python
 from pydantic import BaseModel
-from philharmonica.adk.flows import Flow, flow_listen, flow_router, flow_start
+from augments.adk.flows import Flow, flow_listen, flow_router, flow_start
 
 
 class State(BaseModel):
@@ -115,7 +115,7 @@ A runnable version of the above lives at `examples/flows/flow_diagram.py`.
 ## Quick example: Graph
 
 ```python
-from philharmonica.adk.graphs.graph import Graph
+from augments.adk.graphs.graph import Graph
 
 graph = (
     Graph.new("review")
@@ -149,7 +149,7 @@ ways:
 ### 2. Python `viz` extra — render DOT to SVG/PNG/PDF
 
 ```bash
-pip install 'philharmonica-adk[viz]'
+pip install 'augments-adk[viz]'
 ```
 
 Adds the `graphviz` Python package, which shells out to the local
@@ -167,7 +167,7 @@ save the raw `.dot` string and render later.
 ### 3. Python `mermaid` extra — render Mermaid via Mermaid Live
 
 ```bash
-pip install 'philharmonica-adk[mermaid]'
+pip install 'augments-adk[mermaid]'
 ```
 
 Adds `mermaid-py`, which renders Mermaid strings through the Mermaid

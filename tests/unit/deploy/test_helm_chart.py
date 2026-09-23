@@ -7,8 +7,8 @@ import pytest
 pytest.importorskip("yaml")
 import yaml
 
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.helm_chart import render_helm_chart, split_image_reference
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.helm_chart import render_helm_chart, split_image_reference
 
 
 def _ctx(env_keys: tuple[str, ...] = ()) -> DeployContext:

@@ -16,9 +16,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.session.buffered_session import BufferedSession
-from philharmonica.adk.session.session_event import SessionEvent, create_session_event
-from philharmonica.adk.session.session_settings import SessionSettings
+from augments.adk.session.buffered_session import BufferedSession
+from augments.adk.session.session_event import SessionEvent, create_session_event
+from augments.adk.session.session_settings import SessionSettings
 
 # ---------------------------------------------------------------------------
 # In-memory inner store test double
@@ -435,7 +435,7 @@ class TestSaveState:
 
 class TestProtocolConformance:
     def test_satisfies_session_store_protocol(self) -> None:
-        from philharmonica.adk.types.session import SessionStore
+        from augments.adk.types.session import SessionStore
 
         inner = _InnerStore()
         buf = BufferedSession(inner)

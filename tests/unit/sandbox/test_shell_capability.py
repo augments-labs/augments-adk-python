@@ -6,14 +6,14 @@ import json
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxCommandRejected
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.local import (
+from augments.adk.exceptions.exceptions import SandboxCommandRejected
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.local import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
-from philharmonica.adk.sandbox.tools.run_command_tool import (
+from augments.adk.sandbox.guardrails.command_guardrail import SandboxCommandGuardrail
+from augments.adk.sandbox.tools.run_command_tool import (
     RunCommandArgs,
     make_run_command_tool,
 )
@@ -84,7 +84,7 @@ class TestShellCapability:
     @pytest.mark.asyncio
     async def test_instructions_returns_primer(self) -> None:
         cap = ShellCapability()
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.manifest import Manifest
 
         primer = await cap.instructions(Manifest())
         assert primer is not None
