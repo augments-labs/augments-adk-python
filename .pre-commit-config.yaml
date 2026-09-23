@@ -74,11 +74,11 @@ repos:
 
   # -------------------------------------------------------------------
   # Ruff pin aligned with the installed dev version; bump alongside
-  # `ruff==0.15.7` in pyproject.toml (and re-run `uv lock`) whenever the
+  # the `ruff==` pin in pyproject.toml (and re-run `uv lock`) whenever the
   # rule set changes so local / CI / hook stay in lockstep.
   # -------------------------------------------------------------------
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.1
+    rev: v0.16.5
     hooks:
       - id: ruff-format
         types_or: [python, pyi]
