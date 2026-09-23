@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.session import SQLiteMultiSessions
+from augments.adk.session import SQLiteMultiSessions
 
 
 @pytest.fixture

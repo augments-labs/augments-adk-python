@@ -24,15 +24,15 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import AgentExecutable
-from philharmonica.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.run.run_result import RunResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import AgentExecutable
+from augments.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.run.run_result import RunResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _deferral_run_result(
@@ -84,7 +84,7 @@ async def test_invoke_lifts_returned_requires_action_to_interrupt(
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return result
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -122,7 +122,7 @@ async def test_invoke_raises_runtime_error_when_returned_deferral_missing_state(
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return result
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -155,7 +155,7 @@ async def test_invoke_completes_normally_when_no_deferral(
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         return result
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 

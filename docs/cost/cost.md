@@ -48,9 +48,9 @@ comes from `RunContext.tenant_id` — set this field when starting a run for a
 specific customer.
 
 ```python
-from philharmonica.adk.budgets import TenantBudget, BudgetPeriod
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.context import RunContext
+from augments.adk.budgets import TenantBudget, BudgetPeriod
+from augments.adk.run import RunConfig
+from augments.adk.context import RunContext
 
 budget = TenantBudget(
     dollars_per_run=0.10,       # hard cap per single run
@@ -95,7 +95,7 @@ checks; applications that need strict enforcement should serialize LLM calls
 per tenant outside the framework.
 
 When `kill_on_exceed=True` and the gate fires, the runner raises
-`TenantBudgetExceeded` (a subclass of `PhilharmonicaError`). This exception propagates
+`TenantBudgetExceeded` (a subclass of `AugmentsError`). This exception propagates
 unchanged — the router does **not** escalate on it.
 
 **`dollars_per_period` requires a `cost_ledger`** (fail-fast at run start via
@@ -125,7 +125,7 @@ Process-local; suitable for single-process deployments and tests. No extras
 required.
 
 ```python
-from philharmonica.adk.budgets import InMemoryCostLedger
+from augments.adk.budgets import InMemoryCostLedger
 
 ledger = InMemoryCostLedger()
 ```
@@ -137,7 +137,7 @@ ACID-durable ledger. Each `(tenant_id, period_key)` pair maps to one row;
 runners for the same tenant are safe. Requires PostgreSQL 9.5+.
 
 ```python
-from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
 ledger = PostgresCostLedger(conninfo="postgresql://user:pass@host/db")
 # Call ledger.close() at application shutdown.
@@ -146,7 +146,7 @@ ledger = PostgresCostLedger(conninfo="postgresql://user:pass@host/db")
 Install the extra:
 
 ```
-pip install 'philharmonica-adk[cost-ledger-postgres]'
+pip install 'augments-adk[cost-ledger-postgres]'
 ```
 
 ### RedisCostLedger
@@ -155,7 +155,7 @@ Fast ephemeral ledger. Uses `INCRBYFLOAT` for atomic increments. Supports an
 optional TTL for self-evicting stale windows.
 
 ```python
-from philharmonica.adk.budgets.ledgers.redis import RedisCostLedger
+from augments.adk.budgets.ledgers.redis import RedisCostLedger
 
 # From a URL (this instance owns the client):
 ledger = RedisCostLedger(url="redis://localhost:6379/0", ttl_seconds=90000)
@@ -173,7 +173,7 @@ indefinitely — the cost-conservative default; TTL eviction is opt-in.
 Install the extra:
 
 ```
-pip install 'philharmonica-adk[cost-ledger-redis]'
+pip install 'augments-adk[cost-ledger-redis]'
 ```
 
 ---
@@ -184,8 +184,8 @@ A `LLMRouter` returns an ordered list of candidates; the runner tries them in
 order, escalating to the next on failure.
 
 ```python
-from philharmonica.adk.llms.routing import CheapestFirstRouter, RoutedModel
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.llms.routing import CheapestFirstRouter, RoutedModel
+from augments.adk.llms import LiteLLM
 
 router = CheapestFirstRouter(models=[
     RoutedModel(llm=LiteLLM(model="gpt-4o-mini"), model="gpt-4o-mini"),
@@ -211,7 +211,7 @@ hot paths.
 
 **`LatencyFirstRouter`** — orders candidates by a developer-supplied latency
 map (`model_name -> observed_latency_ms`). Models absent from the map sort
-last. The `philharmonica.agent.turn.duration_ms` histogram (emitted by the metrics
+last. The `augments.agent.turn.duration_ms` histogram (emitted by the metrics
 subsystem) is a natural source for this map.
 
 ### Custom routers
@@ -220,8 +220,8 @@ Subclass `LLMRouter` and implement `candidates()`. Override `should_escalate()`
 to drive escalation from response content:
 
 ```python
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
-from philharmonica.adk.types.responses.llm_response import LLMResponse
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.types.responses.llm_response import LLMResponse
 
 class MyRouter(LLMRouter):
     def candidates(self, ctx: RoutingContext) -> list[RoutedModel]:
@@ -245,7 +245,7 @@ The runner escalates to the next candidate on:
    agent's `output_schema`.
 3. **`should_escalate(response)` returns `True`** — custom content-based check.
 
-The runner does **not** escalate on framework exceptions (`PhilharmonicaError`
+The runner does **not** escalate on framework exceptions (`AugmentsError`
 subclasses, including `TenantBudgetExceeded` and guardrail rejections). These
 propagate directly to the caller.
 
@@ -279,7 +279,7 @@ per-run `TenantBudget` is active, compaction tightens as the run approaches
 its budget:
 
 ```python
-from philharmonica.adk.context import ContextManagementConfig, CompactionConfig
+from augments.adk.context import ContextManagementConfig, CompactionConfig
 
 config = RunConfig(
     tenant_budget=TenantBudget(dollars_per_run=0.10),

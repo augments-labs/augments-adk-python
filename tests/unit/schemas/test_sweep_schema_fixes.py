@@ -12,8 +12,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
-from philharmonica.adk.schemas.utils import normalize_schema
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.schemas.utils import normalize_schema
 
 
 class TestNormalizeNoSyntheticDescription:

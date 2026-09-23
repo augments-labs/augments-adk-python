@@ -5,9 +5,9 @@ Configure chain-of-thought reasoning across OpenAI, Anthropic, and Google Gemini
 ## Quick Start
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.types.common import Reasoning
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
+from augments.adk.types.common import Reasoning
 
 agent = Agent(
     name="Analyst",
@@ -170,7 +170,7 @@ async for event in result.stream_events():
 Thinking blocks accumulate tokens in conversation history. The framework provides `clear_thinking_blocks()` to remove older thinking content while preserving recent turns:
 
 ```python
-from philharmonica.adk.context import ContextConfig
+from augments.adk.context import ContextConfig
 
 # Keep thinking blocks from the last 2 turns, clear older ones
 config = ContextConfig(

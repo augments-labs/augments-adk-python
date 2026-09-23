@@ -7,9 +7,9 @@ import time
 from collections.abc import AsyncGenerator, AsyncIterator
 from typing import cast, override
 
-from philharmonica.adk.voice.events import VoiceStreamEvent
-from philharmonica.adk.voice.result import DEFAULT_AUDIO_QUEUE_SIZE, StreamedAudioResult
-from philharmonica.adk.voice.tts import TTSModel, TTSModelSettings
+from augments.adk.voice.events import VoiceStreamEvent
+from augments.adk.voice.result import DEFAULT_AUDIO_QUEUE_SIZE, StreamedAudioResult
+from augments.adk.voice.tts import TTSModel, TTSModelSettings
 
 
 class WordTTS(TTSModel):

@@ -9,7 +9,7 @@ from __future__ import annotations
 
 import json
 
-from philharmonica.adk.config.schema import (
+from augments.adk.config.schema import (
     AGENT_CONFIG_SCHEMA_PATH,
     AGENT_NODE_CONFIG_SCHEMA_PATH,
     TOPOLOGY_CONFIG_SCHEMA_PATH,
@@ -40,7 +40,7 @@ def test_schema_requires_name_and_prompt() -> None:
 def test_committed_schema_in_sync() -> None:
     committed = json.loads(AGENT_CONFIG_SCHEMA_PATH.read_text(encoding="utf-8"))
     assert committed == dump_agent_config_schema(), (
-        "Committed JSON Schema is stale. Regenerate it with:\n  python -m philharmonica.adk.config.schema"
+        "Committed JSON Schema is stale. Regenerate it with:\n  python -m augments.adk.config.schema"
     )
 
 
@@ -55,7 +55,7 @@ def test_agent_node_schema_documents_handoffs() -> None:
 def test_committed_agent_node_schema_in_sync() -> None:
     committed = json.loads(AGENT_NODE_CONFIG_SCHEMA_PATH.read_text(encoding="utf-8"))
     assert committed == dump_agent_node_config_schema(), (
-        "Committed agent-node JSON Schema is stale. Regenerate it with:\n  python -m philharmonica.adk.config.schema"
+        "Committed agent-node JSON Schema is stale. Regenerate it with:\n  python -m augments.adk.config.schema"
     )
 
 
@@ -69,7 +69,7 @@ def test_topology_schema_is_strict_and_documents_agents() -> None:
 def test_committed_topology_schema_in_sync() -> None:
     committed = json.loads(TOPOLOGY_CONFIG_SCHEMA_PATH.read_text(encoding="utf-8"))
     assert committed == dump_topology_config_schema(), (
-        "Committed topology JSON Schema is stale. Regenerate it with:\n  python -m philharmonica.adk.config.schema"
+        "Committed topology JSON Schema is stale. Regenerate it with:\n  python -m augments.adk.config.schema"
     )
 
 

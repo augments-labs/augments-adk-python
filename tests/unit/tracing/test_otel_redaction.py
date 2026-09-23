@@ -23,7 +23,7 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.types.tracing import FunctionSpanData
+from augments.adk.types.tracing import FunctionSpanData
 
 otel_sdk_trace = pytest.importorskip("opentelemetry.sdk.trace")
 otel_sdk_export = pytest.importorskip("opentelemetry.sdk.trace.export")
@@ -35,8 +35,8 @@ from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
     InMemorySpanExporter,
 )
 
-from philharmonica.adk.tracing.otel import OTelTracer
-from philharmonica.adk.tracing.otel.otel_tracer import (
+from augments.adk.tracing.otel import OTelTracer
+from augments.adk.tracing.otel.otel_tracer import (
     _DEFAULT_TOOL_IO_MAX_CHARS,
     _redact,
     _redact_and_truncate,
@@ -256,7 +256,7 @@ class TestFunctionSpanDefaultRedaction:
             pass
 
         attrs = _tool_span_attrs(exporter, "http_get")
-        raw_input = str(attrs["philharmonica.tool.input"])
+        raw_input = str(attrs["augments.tool.input"])
         assert "abcdef.ghijkl.mnopqr" not in raw_input
         assert "Bearer ***" in raw_input
 
@@ -275,7 +275,7 @@ class TestFunctionSpanDefaultRedaction:
             pass
 
         attrs = _tool_span_attrs(exporter, "fetch_creds")
-        raw_output = str(attrs["philharmonica.tool.output"])
+        raw_output = str(attrs["augments.tool.output"])
         assert "real-secret-value-123456" not in raw_output
 
     def test_oversize_tool_output_is_truncated(self, exporter: InMemorySpanExporter, provider: TracerProvider) -> None:
@@ -286,7 +286,7 @@ class TestFunctionSpanDefaultRedaction:
             pass
 
         attrs = _tool_span_attrs(exporter, "big_tool")
-        raw_output = str(attrs["philharmonica.tool.output"])
+        raw_output = str(attrs["augments.tool.output"])
         assert len(raw_output) <= _DEFAULT_TOOL_IO_MAX_CHARS + 64
         assert "truncated" in raw_output
         assert "7000" in raw_output
@@ -298,8 +298,8 @@ class TestFunctionSpanDefaultRedaction:
             pass
 
         attrs = _tool_span_attrs(exporter, "tiny_cap")
-        raw_input = str(attrs["philharmonica.tool.input"])
-        raw_output = str(attrs["philharmonica.tool.output"])
+        raw_input = str(attrs["augments.tool.input"])
+        raw_output = str(attrs["augments.tool.output"])
         # Cap is tight — both sides must be clipped under 32 + suffix.
         assert raw_input.startswith("a" * 32)
         assert raw_output.startswith("b" * 32)
@@ -319,8 +319,8 @@ class TestRecordFullOptOut:
             pass
 
         attrs = _tool_span_attrs(exporter, "raw_tool")
-        assert attrs["philharmonica.tool.input"] == verbatim
-        assert attrs["philharmonica.tool.output"] == verbatim
+        assert attrs["augments.tool.input"] == verbatim
+        assert attrs["augments.tool.output"] == verbatim
 
     def test_verbatim_preserves_oversize_payload(
         self, exporter: InMemorySpanExporter, provider: TracerProvider
@@ -332,5 +332,5 @@ class TestRecordFullOptOut:
             pass
 
         attrs = _tool_span_attrs(exporter, "raw_big")
-        assert attrs["philharmonica.tool.input"] == huge
-        assert attrs["philharmonica.tool.output"] == huge
+        assert attrs["augments.tool.input"] == huge
+        assert attrs["augments.tool.output"] == huge

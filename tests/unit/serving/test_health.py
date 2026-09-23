@@ -10,8 +10,8 @@ pytest.importorskip("httpx")
 
 from starlette.testclient import TestClient
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.serving import build_app, health_routes
+from augments.adk.agents.agent import Agent
+from augments.adk.serving import build_app, health_routes
 
 
 def test_healthz_reports_alive(scripted_agent: Agent[None]) -> None:

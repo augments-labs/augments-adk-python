@@ -11,9 +11,9 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.tracing import MultiTracer, NoOpSpan, Span
-from philharmonica.adk.tracing.multi_tracer import CompositeSpan
-from philharmonica.adk.types.tracing import (
+from augments.adk.tracing import MultiTracer, NoOpSpan, Span
+from augments.adk.tracing.multi_tracer import CompositeSpan
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -153,7 +153,7 @@ def test_factory_error_isolation_for_every_span_kind(caplog: pytest.LogCaptureFi
         healthy = _RecordingTracer()
         multi = MultiTracer([exploding, healthy])
 
-        with caplog.at_level(logging.ERROR, logger="philharmonica.adk.tracing.multi_tracer"):
+        with caplog.at_level(logging.ERROR, logger="augments.adk.tracing.multi_tracer"):
             span = getattr(multi, method_name)(data)
 
         assert isinstance(span, CompositeSpan), f"{method_name} should return a CompositeSpan with the healthy child"
@@ -168,12 +168,12 @@ def test_factory_error_isolation_for_every_span_kind(caplog: pytest.LogCaptureFi
 def test_multiple_otel_tracers_logs_warning(caplog: pytest.LogCaptureFixture) -> None:
     """MultiTracer with two OTelTracer instances must emit a warning."""
     pytest.importorskip("opentelemetry")
-    from philharmonica.adk.tracing.otel import OTelTracer
+    from augments.adk.tracing.otel import OTelTracer
 
     t1 = OTelTracer()
     t2 = OTelTracer()
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tracing.multi_tracer"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.tracing.multi_tracer"):
         MultiTracer([t1, t2])
 
     assert any("OTelTracer" in m for m in caplog.messages), "Expected a warning about multiple OTelTracers"
@@ -182,9 +182,9 @@ def test_multiple_otel_tracers_logs_warning(caplog: pytest.LogCaptureFixture) ->
 def test_single_otel_tracer_no_warning(caplog: pytest.LogCaptureFixture) -> None:
     """A single OTelTracer inside MultiTracer must not log a warning."""
     pytest.importorskip("opentelemetry")
-    from philharmonica.adk.tracing.otel import OTelTracer
+    from augments.adk.tracing.otel import OTelTracer
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.tracing.multi_tracer"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.tracing.multi_tracer"):
         MultiTracer([OTelTracer()])
 
     assert not any("OTelTracer" in m for m in caplog.messages)
@@ -208,7 +208,7 @@ def test_importerror_guard_uses_name_attribute() -> None:
     """
     # Build an ImportError that would fool the old str(exc) guard.
     exc = ImportError("cannot import 'opentelemetry.bogus' from broken_module")
-    exc.name = "philharmonica.adk.tracing.otel_tracer"  # first-party name — should re-raise
+    exc.name = "augments.adk.tracing.otel_tracer"  # first-party name — should re-raise
 
     # Simulate the guard logic from tracing/__init__.py.
     should_raise = exc.name is None or not exc.name.startswith("opentelemetry")
@@ -231,7 +231,7 @@ def test_importerror_guard_swallows_missing_otel() -> None:
 
 def test_extended_span_factories_in_all() -> None:
     """graph_span, swarm_span, sandbox_span etc. must be in tracing.__all__."""
-    import philharmonica.adk.tracing as tracing_pkg
+    import augments.adk.tracing as tracing_pkg
 
     expected = [
         "graph_span",
@@ -247,8 +247,8 @@ def test_extended_span_factories_in_all() -> None:
 
 
 def test_extended_span_factories_importable_from_package() -> None:
-    """``from philharmonica.adk.tracing import graph_span`` must work directly."""
-    from philharmonica.adk.tracing import (  # noqa: F401
+    """``from augments.adk.tracing import graph_span`` must work directly."""
+    from augments.adk.tracing import (  # noqa: F401
         graph_node_span,
         graph_span,
         graph_superstep_span,
@@ -271,7 +271,7 @@ def test_extended_factories_return_custom_span_data() -> None:
     The concrete SpanData payload is still embedded inside
     ``span.data.data`` when needed.
     """
-    from philharmonica.adk.tracing import (
+    from augments.adk.tracing import (
         graph_node_span,
         graph_span,
         graph_superstep_span,
@@ -279,7 +279,7 @@ def test_extended_factories_return_custom_span_data() -> None:
         swarm_span,
         swarm_turn_span,
     )
-    from philharmonica.adk.types.tracing.span_data import CustomSpanData
+    from augments.adk.types.tracing.span_data import CustomSpanData
 
     spans = [
         sandbox_span(backend_id="unix_local"),
@@ -310,8 +310,8 @@ def test_graph_node_extra_key_does_not_crash_metrics() -> None:
     from opentelemetry.sdk.metrics import MeterProvider
     from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
-    from philharmonica.adk.tracing.metrics.instruments import Instruments
-    from philharmonica.adk.tracing.metrics.tracer import MetricsTracer
+    from augments.adk.tracing.metrics.instruments import Instruments
+    from augments.adk.tracing.metrics.tracer import MetricsTracer
 
     reader = InMemoryMetricReader()
     provider = MeterProvider(metric_readers=[reader])
@@ -339,8 +339,8 @@ def test_swarm_turn_extra_key_does_not_crash_metrics() -> None:
     from opentelemetry.sdk.metrics import MeterProvider
     from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
-    from philharmonica.adk.tracing.metrics.instruments import Instruments
-    from philharmonica.adk.tracing.metrics.tracer import MetricsTracer
+    from augments.adk.tracing.metrics.instruments import Instruments
+    from augments.adk.tracing.metrics.tracer import MetricsTracer
 
     reader = InMemoryMetricReader()
     provider = MeterProvider(metric_readers=[reader])
@@ -373,7 +373,7 @@ def test_otel_agent_span_extra_key_does_not_crash() -> None:
     from opentelemetry.sdk.trace.export import SimpleSpanProcessor
     from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-    from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer, _filter_to_fields
+    from augments.adk.tracing.otel.otel_tracer import OTelTracer, _filter_to_fields
 
     exporter = InMemorySpanExporter()
     provider = TracerProvider()
@@ -416,7 +416,7 @@ def test_a2a_function_span_does_not_double_prefix() -> None:
     from opentelemetry.sdk.trace.export import SimpleSpanProcessor
     from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-    from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
+    from augments.adk.tracing.otel.otel_tracer import OTelTracer
 
     exporter = InMemorySpanExporter()
     provider = TracerProvider()

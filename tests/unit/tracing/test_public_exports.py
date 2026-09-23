@@ -7,7 +7,7 @@ import pytest
 
 def test_public_symbols_importable() -> None:
     pytest.importorskip("opentelemetry")
-    from philharmonica.adk.tracing import (
+    from augments.adk.tracing import (
         MetricsTracer,
         OTelTracer,
         TracingConvention,
@@ -15,7 +15,7 @@ def test_public_symbols_importable() -> None:
         setup_metrics,
         setup_otel,
     )
-    from philharmonica.adk.tracing.exporters import (
+    from augments.adk.tracing.exporters import (
         setup_helicone,
         setup_langsmith,
         setup_logfire,

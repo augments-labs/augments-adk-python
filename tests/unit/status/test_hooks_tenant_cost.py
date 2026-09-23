@@ -6,9 +6,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.status.hooks import StatusTrackingHooks
-from philharmonica.adk.status.store import AgentStatusStore
+from augments.adk.run.context import RunContext
+from augments.adk.status.hooks import StatusTrackingHooks
+from augments.adk.status.store import AgentStatusStore
 
 
 def _mock_agent(name: str = "a") -> MagicMock:
@@ -152,7 +152,7 @@ async def test_on_agent_end_without_start_warns_and_records(
     result = MagicMock()
 
     # Call on_agent_end WITHOUT a prior on_agent_start — no entry in _run_starts
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.status.hooks"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.status.hooks"):
         await hooks.on_agent_end(ctx, agent, result)
 
     warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]
@@ -173,7 +173,7 @@ async def test_record_error_without_start_warns_and_records(
     hooks: StatusTrackingHooks[object] = StatusTrackingHooks(store=store)
 
     # Call record_error WITHOUT a prior on_agent_start
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.status.hooks"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.status.hooks"):
         await hooks.record_error("a", "boom", tenant_id="acme", cost_usd=0.01)
 
     warning_records = [r for r in caplog.records if r.levelno == logging.WARNING]

@@ -2,7 +2,7 @@
 
 Usage::
 
-    pip install 'philharmonica-adk[a2a]'
+    pip install 'augments-adk[a2a]'
     python examples/a2a/client_basic.py [URL]
 
 If ``URL`` is omitted, defaults to ``http://localhost:8080`` (start
@@ -23,7 +23,7 @@ import asyncio
 import logging
 import sys
 
-from philharmonica.adk.a2a import A2AAgent, A2ARunner, A2ATaskError, A2ATransportError
+from augments.adk.a2a import A2AAgent, A2ARunner, A2ATaskError, A2ATransportError
 
 logger = logging.getLogger(__name__)
 

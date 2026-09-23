@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from philharmonica.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
+from augments.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
 
 
 async def test_e2b_fetch_billing_returns_none() -> None:

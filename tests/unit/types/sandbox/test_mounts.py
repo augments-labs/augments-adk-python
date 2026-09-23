@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.mounts``."""
+"""Tests for ``augments.adk.types.sandbox.mounts``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.mounts import (
     DockerVolumeMountStrategy,
     FuseMountPattern,
     GCSMount,

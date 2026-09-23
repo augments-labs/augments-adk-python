@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.mcp.manager.MCPServerManager``."""
+"""Tests for ``augments.adk.mcp.manager.MCPServerManager``."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.exceptions import MCPConnectionError
-from philharmonica.adk.mcp.manager import MCPServerManager
+from augments.adk.mcp.exceptions import MCPConnectionError
+from augments.adk.mcp.manager import MCPServerManager
 
 
 def _server(name: str) -> MagicMock:

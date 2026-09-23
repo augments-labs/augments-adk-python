@@ -1,15 +1,15 @@
 # Built-in Guardrail Hub
 
-The `philharmonica.adk.guardrails` package ships a small, non-overlapping set of
+The `augments.adk.guardrails` package ships a small, non-overlapping set of
 ready-to-use guardrails for the most common safety concerns: PII in agent
 output, prompt-injection in user input, and wrong-language output. All of them
 are built on the same framework-owned verdict types as hand-written guardrails,
 so they register on an agent exactly like any other guardrail.
 
 ```python
-from philharmonica.adk.agents import Agent, AgentGuardrails
-from philharmonica.adk.guardrails import injection_scan_guardrail, pii_guardrail
-from philharmonica.adk.types.guardrails.action import GuardrailAction
+from augments.adk.agents import Agent, AgentGuardrails
+from augments.adk.guardrails import injection_scan_guardrail, pii_guardrail
+from augments.adk.types.guardrails.action import GuardrailAction
 
 agent = Agent(
     name="Support",
@@ -28,9 +28,9 @@ extra dependencies are needed. The wrong-language guardrail requires the
 optional `lingua` package:
 
 ```bash
-pip install 'philharmonica-adk[guardrails-lingua]'
+pip install 'augments-adk[guardrails-lingua]'
 # or the umbrella extra:
-pip install 'philharmonica-adk[guardrails]'
+pip install 'augments-adk[guardrails]'
 ```
 
 A missing install raises a clear `ImportError` that names the extra when the
@@ -43,7 +43,7 @@ every guardrail verdict maps onto. The framework defines a small enum,
 `GuardrailAction`, that expresses what the runner does with any verdict:
 
 ```python
-from philharmonica.adk.types.guardrails.action import GuardrailAction, GuardrailSpan
+from augments.adk.types.guardrails.action import GuardrailAction, GuardrailSpan
 ```
 
 | Action | Meaning |
@@ -87,7 +87,7 @@ and spans ride along in the audit record.
 guardrails. You can reuse it in your own guardrails:
 
 ```python
-from philharmonica.adk.guardrails import PatternScanner
+from augments.adk.guardrails import PatternScanner
 import re
 
 scanner = PatternScanner(patterns={
@@ -110,8 +110,8 @@ default patterns cover email addresses, URLs, and phone numbers. Provide a
 `patterns` dict to override them.
 
 ```python
-from philharmonica.adk.guardrails import pii_guardrail
-from philharmonica.adk.types.guardrails.action import GuardrailAction
+from augments.adk.guardrails import pii_guardrail
+from augments.adk.types.guardrails.action import GuardrailAction
 
 # Default: halt the run when PII is found (cost-conservative)
 output_guardrail = pii_guardrail()
@@ -141,7 +141,7 @@ pii_guardrail(
 | `name` | `"pii"` | Guardrail name in results and tracing. |
 | `severity` | `None` | Applied only in `RAISE` mode (e.g. `WARNING` to detect-and-log without halting). |
 
-**Default patterns** (`philharmonica.adk.guardrails.DEFAULT_PII_PATTERNS`):
+**Default patterns** (`augments.adk.guardrails.DEFAULT_PII_PATTERNS`):
 
 | Label | Matches |
 |---|---|
@@ -195,7 +195,7 @@ pii_guardrail(
 The helper `mask_pii_spans` is also exported directly:
 
 ```python
-from philharmonica.adk.guardrails import mask_pii_spans
+from augments.adk.guardrails import mask_pii_spans
 masked = mask_pii_spans(text, spans, mask="[REDACTED]")
 ```
 
@@ -206,7 +206,7 @@ an input guardrail. Only `on_fail=RAISE` is supported — the prompt is not a
 replaceable artifact, so there is nothing to substitute.
 
 ```python
-from philharmonica.adk.guardrails import injection_scan_guardrail
+from augments.adk.guardrails import injection_scan_guardrail
 
 guardrail = injection_scan_guardrail()
 ```
@@ -232,7 +232,7 @@ injection_scan_guardrail(
 | `severity` | `None` | e.g. `WARNING` to detect-and-log without halting. |
 | `run_in_parallel` | `False` | Defaults to blocking mode so a trip saves the LLM call. |
 
-**Default patterns** (`philharmonica.adk.guardrails.DEFAULT_INJECTION_PATTERNS`):
+**Default patterns** (`augments.adk.guardrails.DEFAULT_INJECTION_PATTERNS`):
 
 | Label | Matches |
 |---|---|
@@ -272,8 +272,8 @@ embedding cost. `threshold` has no default either — it is a required keyword
 argument on both `semantic_scan_guardrail` and `SemanticScanner`.
 
 ```python
-from philharmonica.adk.guardrails import semantic_scan_guardrail
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.guardrails import semantic_scan_guardrail
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
 
 guardrail = semantic_scan_guardrail(
     embedder=LiteLLMEmbedder(model="text-embedding-3-small"),
@@ -355,7 +355,7 @@ unforgeable from inside the source. It is not a guardrail verdict — it produce
 a string, not an `AgentGuardrailFunctionOutput`.
 
 ```python
-from philharmonica.adk.guardrails import fence_untrusted_text
+from augments.adk.guardrails import fence_untrusted_text
 
 user_document = "... untrusted content from an external source ..."
 safe_prompt = f"Summarize this document:\n\n{fence_untrusted_text(user_document)}"
@@ -382,12 +382,12 @@ expected. Useful for translation agents and multilingual deployments where
 untranslated or hijacked output is a failure mode.
 
 Requires the `guardrails-lingua` extra (`pip install
-'philharmonica-adk[guardrails-lingua]'`).
+'augments-adk[guardrails-lingua]'`).
 
 Only `on_fail=RAISE` is supported — a mistranslation cannot be masked away.
 
 ```python
-from philharmonica.adk.guardrails import wrong_language_guardrail
+from augments.adk.guardrails import wrong_language_guardrail
 
 guardrail = wrong_language_guardrail(target_language="french")
 ```
@@ -413,7 +413,7 @@ wrong_language_guardrail(
 | `severity` | e.g. `WARNING` to detect-and-log without halting. |
 | `language_codes` | Override the default name → ISO 639-1 code map. |
 
-**Default language codes** (`philharmonica.adk.guardrails.DEFAULT_LANGUAGE_CODES`):
+**Default language codes** (`augments.adk.guardrails.DEFAULT_LANGUAGE_CODES`):
 maps 75 language names (plus a handful of common alternate names such as
 `mandarin` and `farsi`) to their ISO 639-1 code, spanning every language the
 `lingua` detector recognises — including `english`, `french`, `german`,
@@ -425,7 +425,7 @@ map are skipped silently.
 `detect_wrong_language` is also exported for use in custom guardrails:
 
 ```python
-from philharmonica.adk.guardrails import detect_wrong_language
+from augments.adk.guardrails import detect_wrong_language
 
 reason = detect_wrong_language(text, "french")
 # Returns "expected fr, detected en" or None when the output is acceptable
@@ -434,7 +434,7 @@ reason = detect_wrong_language(text, "french")
 Dynamic target language (resolved per-run from typed context):
 
 ```python
-from philharmonica.adk.agents.agent_guardrails import AgentOutputGuardrailData
+from augments.adk.agents.agent_guardrails import AgentOutputGuardrailData
 
 def resolve_language(data: AgentOutputGuardrailData) -> str:
     ctx = data.context.context
@@ -464,7 +464,7 @@ payloads, so the audit log cannot become a secondary sink for the very PII a
 guardrail is meant to catch.
 
 ```python
-from philharmonica.adk.types.run.guardrail_audit import GuardrailAuditRecord, GuardrailAuditLevel
+from augments.adk.types.run.guardrail_audit import GuardrailAuditRecord, GuardrailAuditLevel
 ```
 
 `GuardrailAuditRecord` fields:

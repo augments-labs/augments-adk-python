@@ -86,9 +86,9 @@ priced ones so hosted bridges are preferred only when you explicitly price
 them lower.
 
 ```python
-from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-from philharmonica.adk.sandbox.clients.hosted.e2b import E2bSandboxClient, E2bSandboxClientOptions
-from philharmonica.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
+from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+from augments.adk.sandbox.clients.hosted.e2b import E2bSandboxClient, E2bSandboxClientOptions
+from augments.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
 
 selector = CheapestFirstSelector()
 candidates = [
@@ -106,8 +106,8 @@ candidates = [
 Wire the selector into `SandboxRunConfig`:
 
 ```python
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.types.sandbox.cost import SandboxRequirements
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.types.sandbox.cost import SandboxRequirements
 
 config = SandboxRunConfig(
     selector=selector,
@@ -130,8 +130,8 @@ then drives workloads with `docker exec`. The container is removed when the
 session closes.
 
 ```python
-from philharmonica.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
+from augments.adk.sandbox.config import SandboxRunConfig
 
 client = DockerSandboxClient()
 config = SandboxRunConfig(
@@ -153,7 +153,7 @@ Key options:
 - `network_policy` — `NetworkPolicy` translated to Docker network arguments.
 - `environment` — environment variables injected at container start.
 
-Install the optional extra: `pip install 'philharmonica-adk[sandbox-docker]'`.
+Install the optional extra: `pip install 'augments-adk[sandbox-docker]'`.
 
 **When to use**: local development, CI pipelines, single-machine deployments.
 `DockerSandboxClient` is the recommended local backend for production
@@ -166,8 +166,8 @@ to Kubernetes `NetworkPolicy` custom resources; resource limits become
 `ResourceQuota` constraints.
 
 ```python
-from philharmonica.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.clients.k8s import K8sPodSandboxClient, K8sSandboxClientOptions
+from augments.adk.sandbox.config import SandboxRunConfig
 
 client = K8sPodSandboxClient()
 config = SandboxRunConfig(
@@ -187,7 +187,7 @@ Key options:
 - `service_account` — `serviceAccountName` for the pod; `None` uses the
   namespace default.
 
-Install the optional extra: `pip install 'philharmonica-adk[sandbox-k8s]'`.
+Install the optional extra: `pip install 'augments-adk[sandbox-k8s]'`.
 
 **When to use**: multi-tenant workloads where you need Kubernetes scheduling,
 autoscaling, and namespace-scoped RBAC. K8s PodSecurity admission labels are
@@ -206,11 +206,11 @@ temporary working directory.
 > use `DockerSandboxClient`, `K8sPodSandboxClient`, or a hosted bridge.
 
 ```python
-from philharmonica.adk.sandbox.clients.local import (
+from augments.adk.sandbox.clients.local import (
     LocalSubprocessSandboxClient,
     LocalSandboxClientOptions,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.config import SandboxRunConfig
 
 client = LocalSubprocessSandboxClient()
 config = SandboxRunConfig(
@@ -255,7 +255,7 @@ which provides `base_url`, `max_retries`, and `request_timeout`. Each bridge
 then adds provider-specific fields:
 
 ```python
-from philharmonica.adk.sandbox.clients.hosted.e2b import E2bSandboxClient, E2bSandboxClientOptions
+from augments.adk.sandbox.clients.hosted.e2b import E2bSandboxClient, E2bSandboxClientOptions
 
 # E2B — template selects the sandbox environment image
 options = E2bSandboxClientOptions(
@@ -264,7 +264,7 @@ options = E2bSandboxClientOptions(
     region="us-east-1",      # optional
 )
 
-from philharmonica.adk.sandbox.clients.hosted.modal import ModalSandboxClient, ModalSandboxClientOptions
+from augments.adk.sandbox.clients.hosted.modal import ModalSandboxClient, ModalSandboxClientOptions
 
 # Modal — app_name + environment_name scope the sandbox
 options = ModalSandboxClientOptions(
@@ -274,7 +274,7 @@ options = ModalSandboxClientOptions(
     image="python:3.12-slim",
 )
 
-from philharmonica.adk.sandbox.clients.hosted.cloudflare import (
+from augments.adk.sandbox.clients.hosted.cloudflare import (
     CloudflareSandboxClient,
     CloudflareSandboxClientOptions,
 )
@@ -285,7 +285,7 @@ options = CloudflareSandboxClientOptions(
     account_id="abc123",
 )
 
-from philharmonica.adk.sandbox.clients.hosted.runloop import RunloopSandboxClient, RunloopSandboxClientOptions
+from augments.adk.sandbox.clients.hosted.runloop import RunloopSandboxClient, RunloopSandboxClientOptions
 
 # Runloop — blueprint_id selects the sandbox image
 options = RunloopSandboxClientOptions(
@@ -340,11 +340,11 @@ Three concrete implementations ship out of the box:
 Wire the store via `SandboxRunConfig`:
 
 ```python
-from philharmonica.adk.sandbox.snapshot import LocalSnapshotStore
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.types.sandbox.snapshot import SnapshotSpec
+from augments.adk.sandbox.snapshot import LocalSnapshotStore
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.types.sandbox.snapshot import SnapshotSpec
 
-store = LocalSnapshotStore(base_dir="/var/philharmonica/snapshots")
+store = LocalSnapshotStore(base_dir="/var/augments/snapshots")
 config = SandboxRunConfig(
     client=client,
     options=options,
@@ -363,10 +363,10 @@ See [Sandbox Snapshots](../sandbox/snapshots.md) for the full snapshot documenta
 sandboxed run. Subclass `RunHooks` and override only the callbacks you need:
 
 ```python
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.sandbox.usage import SandboxUsage
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.types.sandbox.usage import SandboxUsage
+from augments.adk.types.sandbox.exec_result import ExecResult
 
 class MySandboxHooks(RunHooks):
     async def on_sandbox_start(self, context, agent, session) -> None:
@@ -391,7 +391,7 @@ class MySandboxHooks(RunHooks):
 Pass the hooks instance to `Runner`:
 
 ```python
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 runner = Runner(agent=agent, hooks=MySandboxHooks())
 ```
@@ -447,9 +447,9 @@ Attach a sandbox to every run via `RunConfig.sandbox` and let agents that
 do not need isolation opt out by omitting the sandbox field:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
+from augments.adk.run.config import RunConfig
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.clients.docker import DockerSandboxClient, DockerSandboxClientOptions
 
 sandboxed_config = RunConfig(
     sandbox=SandboxRunConfig(
@@ -493,7 +493,7 @@ this automatically when you supply a mixed candidate list and a
 `SandboxRequirements` that matches only what each job needs:
 
 ```python
-from philharmonica.adk.types.sandbox.cost import SandboxRequirements
+from augments.adk.types.sandbox.cost import SandboxRequirements
 
 # Triage run — no network, any backend
 triage_config = SandboxRunConfig(

@@ -2,14 +2,14 @@
 
 import pytest
 
-from philharmonica.adk.skills import (
+from augments.adk.skills import (
     Skill,
     SkillActivation,
     SkillGovernance,
     SkillMetadata,
     SkillSet,
 )
-from philharmonica.adk.tools import FunctionTool
+from augments.adk.tools import FunctionTool
 
 
 class TestSkill:

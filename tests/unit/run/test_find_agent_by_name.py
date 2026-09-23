@@ -1,8 +1,8 @@
 """Tests for find_agent_by_name recursive search."""
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.run.llm_calls import find_agent_by_name
+from augments.adk.agents.agent import Agent
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.run.llm_calls import find_agent_by_name
 
 
 def _agent(name: str, handoffs=None) -> Agent:

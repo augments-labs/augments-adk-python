@@ -23,9 +23,9 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.tasks import Task, TaskGroup, TaskGroupResult
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.tasks import Task, TaskGroup, TaskGroupResult
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
 )
@@ -85,13 +85,13 @@ class TestParallelExecution:
                     return _text_response(f"answered-{msg.get('content')}")
             return _text_response("unknown")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             result = await Runner.arun_task_group(TaskGroup(tasks=tasks))
 
@@ -126,13 +126,13 @@ class TestErrorPolicyCollectAll:
                     return _text_response(f"answered-{content}")
             return _text_response("unknown")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             result = await Runner.arun_task_group(
                 TaskGroup(tasks=tasks, error_policy="collect_all"),
@@ -170,13 +170,13 @@ class TestErrorPolicyHaltOnFirst:
                     return _text_response(f"answered-{content}")
             return _text_response("unknown")
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             result = await Runner.arun_task_group(
                 TaskGroup(tasks=tasks, error_policy="halt_on_first"),
@@ -221,13 +221,13 @@ class TestMaxConcurrentSemaphore:
                 async with lock:
                     in_flight -= 1
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         ):
             result = await Runner.arun_task_group(
                 TaskGroup(tasks=tasks, max_concurrent=2),

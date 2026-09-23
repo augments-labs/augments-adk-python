@@ -6,9 +6,9 @@ client sends send_human_reply signal, workflow resumes and completes.
 
 Covered:
     - HumanReply dataclass round-trips through Temporal serialization
-    - PhilharmonicaWorkflow.send_human_reply signal enqueues to _pending_replies
-    - PhilharmonicaWorkflow.consume_replies() drains the queue exactly once
-    - PhilharmonicaWorkflow.get_state() query reflects state set by update_state()
+    - AugmentsWorkflow.send_human_reply signal enqueues to _pending_replies
+    - AugmentsWorkflow.consume_replies() drains the queue exactly once
+    - AugmentsWorkflow.get_state() query reflects state set by update_state()
     - Graph HITL interrupt + signal + resume via Temporal workflow (scaffolded)
 """
 
@@ -25,8 +25,8 @@ from temporalio import workflow
 from temporalio.testing import WorkflowEnvironment
 from temporalio.worker import Worker
 
-from philharmonica.adk.workflows.temporal import HumanReply, PhilharmonicaWorkflow
-from philharmonica.adk.workflows.temporal.activity import invoke_model_activity
+from augments.adk.workflows.temporal import AugmentsWorkflow, HumanReply
+from augments.adk.workflows.temporal.activity import invoke_model_activity
 
 # ---------------------------------------------------------------------------
 # Helper workflow: echoes a human reply received via signal
@@ -34,7 +34,7 @@ from philharmonica.adk.workflows.temporal.activity import invoke_model_activity
 
 
 @workflow.defn
-class _SignalEchoWorkflow(PhilharmonicaWorkflow):
+class _SignalEchoWorkflow(AugmentsWorkflow):
     """Workflow that waits for one HumanReply signal and returns its value."""
 
     @override
@@ -71,7 +71,7 @@ def test_human_reply_default_metadata() -> None:
 @pytest.mark.integration
 def test_opus_ai_workflow_send_and_consume_replies() -> None:
     """send_human_reply enqueues; consume_replies drains exactly once."""
-    wf = PhilharmonicaWorkflow.__new__(PhilharmonicaWorkflow)
+    wf = AugmentsWorkflow.__new__(AugmentsWorkflow)
     wf.__init__()
 
     r1 = HumanReply(node_id="n1", value="val-1")
@@ -92,7 +92,7 @@ def test_opus_ai_workflow_send_and_consume_replies() -> None:
 @pytest.mark.integration
 def test_opus_ai_workflow_update_and_get_state() -> None:
     """update_state merges; get_state returns current snapshot."""
-    wf = PhilharmonicaWorkflow.__new__(PhilharmonicaWorkflow)
+    wf = AugmentsWorkflow.__new__(AugmentsWorkflow)
     wf.__init__()
 
     wf.update_state({"phase": "init"})
@@ -107,7 +107,7 @@ def test_opus_ai_workflow_update_and_get_state() -> None:
 @pytest.mark.integration
 def test_opus_ai_workflow_consume_approval_returns_none_when_absent() -> None:
     """consume_approval returns None when no decision for call_id is recorded."""
-    wf = PhilharmonicaWorkflow.__new__(PhilharmonicaWorkflow)
+    wf = AugmentsWorkflow.__new__(AugmentsWorkflow)
     wf.__init__()
 
     decision = wf.consume_approval("nonexistent-call-id")
@@ -132,13 +132,13 @@ async def test_signal_resume_cycle_via_workflow_environment() -> None:
     4. Workflow wakes, consumes the reply, and returns the value.
     5. Test asserts the returned value matches the sent reply.
 
-    Why skipped: Temporal's sandbox may restrict imports of PhilharmonicaWorkflow
-    internals; enabling requires adding philharmonica.adk.workflows.temporal to the
-    passthrough module list via PhilharmonicaTemporalPlugin.extra_passthrough_modules.
+    Why skipped: Temporal's sandbox may restrict imports of AugmentsWorkflow
+    internals; enabling requires adding augments.adk.workflows.temporal to the
+    passthrough module list via AugmentsTemporalPlugin.extra_passthrough_modules.
     """
-    from philharmonica.adk.workflows.temporal import PhilharmonicaTemporalPlugin
+    from augments.adk.workflows.temporal import AugmentsTemporalPlugin
 
-    plugin = PhilharmonicaTemporalPlugin()
+    plugin = AugmentsTemporalPlugin()
 
     async with (
         await WorkflowEnvironment.start_time_skipping() as env,
@@ -180,7 +180,7 @@ async def test_graph_hitl_workflow_via_temporal() -> None:
     path inside a Temporal workflow:
 
     1. A Graph with one HITL-interrupting node is compiled.
-    2. A concrete PhilharmonicaWorkflow subclass runs Runner.arun_graph(), detects
+    2. A concrete AugmentsWorkflow subclass runs Runner.arun_graph(), detects
        INTERRUPTED status, enters wait_condition, and drives a resume loop.
     3. The test sends a send_human_reply signal from the client.
     4. The workflow resumes, the graph node receives the reply, and the run
@@ -203,11 +203,11 @@ async def test_graph_hitl_workflow_via_temporal() -> None:
         )
 
         @workflow.defn
-        class TestHitlWorkflow(PhilharmonicaWorkflow):
+        class TestHitlWorkflow(AugmentsWorkflow):
             @workflow.run
             async def run(self, prompt: str) -> str:
                 cp = InMemoryCheckpointer()
-                from philharmonica.adk.graphs.interrupt import GraphResume
+                from augments.adk.graphs.interrupt import GraphResume
                 result = await Runner.arun_graph(graph, prompt, hooks=[cp], thread_id="t1")
                 if result.status == GraphRunStatus.INTERRUPTED:
                     await workflow.wait_condition(lambda: len(self._pending_replies) > 0)

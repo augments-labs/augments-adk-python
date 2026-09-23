@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.tracing.flush_traces``.
+"""Tests for ``augments.adk.tracing.flush_traces``.
 
 Verifies that:
 - ``flush_traces()`` is a no-op when the installed tracer is not Flushable.
@@ -14,14 +14,14 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.tracing import (
+from augments.adk.tracing import (
     Flushable,
     MultiTracer,
     NoOpTracer,
     flush_traces,
     set_tracer,
 )
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.types.tracing.span_data import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -188,8 +188,8 @@ class TestOTelTracerFlush:
             InMemorySpanExporter,
         )
 
-        from philharmonica.adk.tracing import custom_span
-        from philharmonica.adk.tracing.otel import OTelTracer
+        from augments.adk.tracing import custom_span
+        from augments.adk.tracing.otel import OTelTracer
 
         exporter = InMemorySpanExporter()
         provider = TracerProvider()
@@ -212,7 +212,7 @@ class TestOTelTracerFlush:
         """``OTelTracer`` satisfies the ``Flushable`` protocol."""
         from opentelemetry.sdk.trace import TracerProvider
 
-        from philharmonica.adk.tracing.otel import OTelTracer
+        from augments.adk.tracing.otel import OTelTracer
 
         tracer = OTelTracer(provider=TracerProvider(), service_name="proto-check")
         assert isinstance(tracer, Flushable)

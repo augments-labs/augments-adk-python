@@ -1,4 +1,4 @@
-from philharmonica.adk.types.output import FunctionToolCallResult
+from augments.adk.types.output import FunctionToolCallResult
 
 
 class TestFunctionToolCallResult:

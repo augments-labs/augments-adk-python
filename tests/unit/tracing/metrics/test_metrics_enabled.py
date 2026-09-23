@@ -19,14 +19,14 @@ import pytest
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.metrics.instruments import Instruments
-from philharmonica.adk.tracing.metrics.tracer import MetricsTracer
-from philharmonica.adk.tracing.spans import generation_span
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.metrics.instruments import Instruments
+from augments.adk.tracing.metrics.tracer import MetricsTracer
+from augments.adk.tracing.spans import generation_span
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -70,8 +70,8 @@ def test_metrics_enabled_records_without_span_export():
         span.data = dataclasses.replace(span.data, usage={"input_tokens": 6, "output_tokens": 1})
 
     names = _metric_names(reader)
-    assert "philharmonica.llm.tokens.prompt" in names, f"expected prompt instrument, got {names}"
-    assert "philharmonica.llm.tokens.completion" in names, f"expected completion instrument, got {names}"
+    assert "augments.llm.tokens.prompt" in names, f"expected prompt instrument, got {names}"
+    assert "augments.llm.tokens.completion" in names, f"expected completion instrument, got {names}"
 
 
 def test_both_disabled_is_noop():
@@ -107,7 +107,7 @@ def test_tracing_enabled_alone_records():
         span.data = dataclasses.replace(span.data, usage={"prompt_tokens": 3, "completion_tokens": 1})
 
     names = _metric_names(reader)
-    assert "philharmonica.llm.tokens.prompt" in names
+    assert "augments.llm.tokens.prompt" in names
 
 
 # ── (B) Integration test — Runner seams honour metrics_enabled ───────────────
@@ -135,23 +135,23 @@ async def test_runner_metrics_enabled_fires_generation_instrument():
 
     config = RunConfig(metrics_enabled=True, tracing_enabled=False)
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -161,6 +161,6 @@ async def test_runner_metrics_enabled_fires_generation_instrument():
 
     names = _metric_names(reader)
     # The generation seam in loop.py was widened — tokens must be recorded.
-    assert "philharmonica.llm.tokens.prompt" in names, f"expected prompt instrument, got {names}"
+    assert "augments.llm.tokens.prompt" in names, f"expected prompt instrument, got {names}"
     # The agent-turn seam in runner.py was widened — agent duration must fire.
-    assert "philharmonica.agent.turn.duration_ms" in names, f"expected agent-turn instrument, got {names}"
+    assert "augments.agent.turn.duration_ms" in names, f"expected agent-turn instrument, got {names}"

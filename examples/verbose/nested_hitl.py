@@ -6,7 +6,7 @@ requirement, the approval bubbles up through the outer agent and the
 panel shows the full path ``outer_agent → delegate_tool → inner_tool``.
 
 CrewAI cannot render this because the framework itself does not model
-agents-as-tools with approval propagation. In Philharmonica ADK it is
+agents-as-tools with approval propagation. In Augments ADK it is
 first-class: ``DeferredToolCall`` carries
 ``metadata.nested_agent=True`` at the as_tool() boundary, and the
 renderer uses it to build the breadcrumb header.
@@ -28,8 +28,8 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.tools.function_tool import function_tool
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.tools.function_tool import function_tool
 
 logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ every run. These tests use a minimal ``Toolset`` subclass to prove
 ``adispose`` is invoked across both success and exception paths.
 
 LLM mocking pattern adapted from ``tests/unit/run/test_runner_tracing.py``
-— patch ``philharmonica.adk.run.loop.call_llm`` plus the three guardrail
+— patch ``augments.adk.run.loop.call_llm`` plus the three guardrail
 runners so the agent loop completes with a deterministic final-text
 response and no real provider call.
 """
@@ -20,11 +20,11 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.toolsets.abstract import Toolset
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.toolsets.abstract import Toolset
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
 
 class _RecordingToolset(Toolset):
@@ -57,17 +57,17 @@ def _patches_for_quiet_run(call_llm_mock: AsyncMock) -> Any:
     a real LLM provider or any guardrails.
     """
     return (
-        patch("philharmonica.adk.run.loop.call_llm", new=call_llm_mock),
+        patch("augments.adk.run.loop.call_llm", new=call_llm_mock),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     )
@@ -123,7 +123,7 @@ async def test_arun_continues_disposal_after_one_toolset_raises(
         patches[1],
         patches[2],
         patches[3],
-        caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.runner"),
+        caplog.at_level(logging.WARNING, logger="augments.adk.run.runner"),
     ):
         await Runner.arun(agent, "hi")
 

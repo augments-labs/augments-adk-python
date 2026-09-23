@@ -30,9 +30,9 @@ from unittest.mock import AsyncMock, patch
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, arun_flow_agent, flow_start
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
+from augments.adk.flows import Flow, arun_flow_agent, flow_start
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +79,7 @@ def _completed_run_result() -> Any:
 
 async def main() -> None:
     # First run: agent defers → flow halts.
-    with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=_deferred_run_result())):
+    with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=_deferred_run_result())):
         flow = CartFlow(CartState)
         initial = await Runner.arun_flow(flow)
     if initial.checkpoint is None:
@@ -102,7 +102,7 @@ async def main() -> None:
     logger.info("Approved out-of-band; resuming.")
 
     # Resume: bridge consumes the resolved state, agent completes.
-    with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=_completed_run_result())):
+    with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=_completed_run_result())):
         resumed_flow = CartFlow(CartState)
         if ds.defer_key is None:
             raise RuntimeError("Deferred step is missing its defer_key")

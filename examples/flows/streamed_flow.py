@@ -31,8 +31,8 @@ import logging
 
 from pydantic import BaseModel
 
-from philharmonica.adk import Flow, FlowConfig, Runner, flow_listen, flow_router, flow_start
-from philharmonica.adk.flows.events import (
+from augments.adk import Flow, FlowConfig, Runner, flow_listen, flow_router, flow_start
+from augments.adk.flows.events import (
     FlowEndEvent,
     FlowRouteEvaluatedEvent,
     FlowStepEndEvent,

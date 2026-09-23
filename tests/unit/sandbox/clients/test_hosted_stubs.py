@@ -21,7 +21,7 @@ class TestHostedStub:
         import importlib
 
         module = importlib.import_module(
-            f"philharmonica.adk.sandbox.clients.hosted.{provider}",
+            f"augments.adk.sandbox.clients.hosted.{provider}",
         )
         opts_cls = getattr(module, options_name)
         opts = opts_cls()
@@ -31,7 +31,7 @@ class TestHostedStub:
         import importlib
 
         module = importlib.import_module(
-            f"philharmonica.adk.sandbox.clients.hosted.{provider}",
+            f"augments.adk.sandbox.clients.hosted.{provider}",
         )
         client_cls = getattr(module, client_name)
         assert client_cls.backend_id == provider

@@ -16,8 +16,8 @@
 
 - [ ] `ruff check src tests examples`
 - [ ] `ruff format --check src tests examples`
-- [ ] `mypy -p philharmonica.adk`
-- [ ] `pyright src/philharmonica/adk/`
+- [ ] `mypy -p augments.adk`
+- [ ] `pyright src/augments/adk/`
 - [ ] IDE diagnostics clean on touched files
 
 ### Checklist

@@ -7,7 +7,7 @@ Demonstrates the two parallel observability surfaces a graph run exposes:
   hooks=[...])`` to react in-process to graph / superstep / node events.
 - **OpenTelemetry spans** — when an ``OTelTracer`` is installed, the BSP
   loop opens a span tree shaped ``graph.<id>`` → ``graph.superstep.<n>``
-  → ``graph.node.<name>``. Attributes live under the ``philharmonica.graph.*``
+  → ``graph.node.<name>``. Attributes live under the ``augments.graph.*``
   namespace (id, entry, status, supersteps_total, node.name, node.status,
   node.attempts, ...).
 
@@ -35,18 +35,18 @@ import asyncio
 import logging
 from typing import Any, override
 
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.hooks import GraphHooks
-from philharmonica.adk.graphs.interrupt import Interrupt
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.types.items.items import RunItem
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.graphs import Graph
+from augments.adk.graphs.hooks import GraphHooks
+from augments.adk.graphs.interrupt import Interrupt
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.run import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.tracing import set_tracer
+from augments.adk.types.items.items import RunItem
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ try:
     from opentelemetry.sdk.trace import TracerProvider
     from opentelemetry.sdk.trace.export import ConsoleSpanExporter, SimpleSpanProcessor
 
-    from philharmonica.adk.tracing.otel import OTelTracer
+    from augments.adk.tracing.otel import OTelTracer
 
     _OTEL_AVAILABLE = True
 except ImportError:

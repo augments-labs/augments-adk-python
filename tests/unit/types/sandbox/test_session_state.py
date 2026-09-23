@@ -1,9 +1,9 @@
-"""Tests for ``philharmonica.adk.types.sandbox.session_state``."""
+"""Tests for ``augments.adk.types.sandbox.session_state``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
-from philharmonica.adk.types.sandbox.snapshot import SnapshotRef
+from augments.adk.types.sandbox.session_state import SandboxSessionState
+from augments.adk.types.sandbox.snapshot import SnapshotRef
 
 
 class TestSandboxSessionState:

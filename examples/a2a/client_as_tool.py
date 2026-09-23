@@ -7,7 +7,7 @@ list with a snake-cased name derived from the agent name.
 
 Usage::
 
-    pip install 'philharmonica-adk[a2a]'
+    pip install 'augments-adk[a2a]'
     python examples/a2a/client_as_tool.py [REMOTE_URL]
 """
 
@@ -24,11 +24,11 @@ import asyncio
 import logging
 import sys
 
-from philharmonica.adk.a2a import A2AAgent
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.a2a import A2AAgent
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

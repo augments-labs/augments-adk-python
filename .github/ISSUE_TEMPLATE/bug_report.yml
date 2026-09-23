@@ -1,5 +1,5 @@
 name: 🐛 Bug report
-description: Report a defect in the Philharmonica ADK
+description: Report a defect in the Augments ADK
 labels: ["bug"]
 body:
   - type: markdown
@@ -27,7 +27,7 @@ body:
     id: adk-version
     attributes:
       label: ADK version
-      description: 'Output of `python -c "import philharmonica.adk as a; print(a.__version__)"`'
+      description: 'Output of `python -c "import augments.adk as a; print(a.__version__)"`'
       placeholder: "0.1.0"
     validations:
       required: true

@@ -3,8 +3,8 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from typing import Literal
 
-from philharmonica.adk.audit.event import AuditEvent
-from philharmonica.adk.audit.sink import AuditSink, InMemoryAuditSink
+from augments.adk.audit.event import AuditEvent
+from augments.adk.audit.sink import AuditSink, InMemoryAuditSink
 
 
 def _event(outcome: Literal["ok", "denied", "error"] = "ok") -> AuditEvent:

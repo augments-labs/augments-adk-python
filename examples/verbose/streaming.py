@@ -40,7 +40,7 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
 
 logger = logging.getLogger(__name__)
 

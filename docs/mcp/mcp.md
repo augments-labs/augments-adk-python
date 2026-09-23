@@ -2,7 +2,7 @@
 
 Model Context Protocol is Anthropic's JSON-RPC standard for letting
 LLM agents discover and call tools, prompts, and resources hosted by
-external servers. The `philharmonica.adk.mcp` package wraps the upstream
+external servers. The `augments.adk.mcp` package wraps the upstream
 `mcp` Python SDK and exposes one Toolset adapter so MCP servers slot
 into agents like any other tool collection.
 
@@ -21,10 +21,10 @@ This page covers the full MCP surface:
 ## Install
 
 ```bash
-pip install 'philharmonica-adk[mcp]'
+pip install 'augments-adk[mcp]'
 ```
 
-Without the `mcp` extra, every `philharmonica.adk.mcp.*` export is bound to
+Without the `mcp` extra, every `augments.adk.mcp.*` export is bound to
 `None`; callers can compare against `None` to detect availability.
 
 ## Quick start — stdio
@@ -32,10 +32,10 @@ Without the `mcp` extra, every `philharmonica.adk.mcp.*` export is bound to
 ```python
 import asyncio
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.toolsets import MCPToolset
+from augments.adk.agents.agent import Agent
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.run.runner import Runner
+from augments.adk.tools.toolsets import MCPToolset
 
 
 async def main() -> None:
@@ -65,7 +65,7 @@ to terminate the subprocess.
 ## Quick start — streamable HTTP
 
 ```python
-from philharmonica.adk.mcp import MCPServerStreamableHttp, MCPServerStreamableHttpParams
+from augments.adk.mcp import MCPServerStreamableHttp, MCPServerStreamableHttpParams
 
 server = MCPServerStreamableHttp(
     name="github",
@@ -113,7 +113,7 @@ toolset exposes — the converted server tools and, when enabled, the
 server hides all of them.
 
 ```python
-from philharmonica.adk.mcp import ToolFilter, ToolFilterContext
+from augments.adk.mcp import ToolFilter, ToolFilterContext
 
 
 def only_read_tools(ctx: ToolFilterContext, tool: FunctionTool) -> bool:
@@ -220,7 +220,7 @@ Three modes:
 | `MCPToolNotFoundError` | Tool requested by the LLM no longer exists on the server. |
 | `MCPSchemaConversionError` | Malformed `inputSchema`. |
 
-All inherit from `MCPError`, which inherits from `PhilharmonicaError`.
+All inherit from `MCPError`, which inherits from `AugmentsError`.
 
 ## Observability
 
@@ -257,7 +257,7 @@ All work on MCP-derived tools without further configuration.
 ### Hosted MCP (OpenAI Responses)
 
 ```python
-from philharmonica.adk.tools.hosted import HostedMCPTool
+from augments.adk.tools.hosted import HostedMCPTool
 
 agent = Agent(
     name="x",

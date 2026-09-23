@@ -1,6 +1,6 @@
 # Tools System
 
-The tools system in Philharmonica Agents wraps Python functions as agent capabilities.
+The tools system in Augments Agents wraps Python functions as agent capabilities.
 
 ## Tool Types
 
@@ -9,7 +9,7 @@ The tools system in Philharmonica Agents wraps Python functions as agent capabil
 Regular Python functions exposed to the LLM via `@function_tool` decorator or direct `FunctionTool` construction.
 
 ```python
-from philharmonica.adk.tools import function_tool
+from augments.adk.tools import function_tool
 
 @function_tool(name="search", description="Search the database")
 def search(query: str) -> str:
@@ -28,7 +28,7 @@ implemented inside this codebase rather than dispatched to the provider:
 - `MemoryTool` (and sub-tools) — local memory management
 
 ```python
-from philharmonica.adk.tools import JITContextAwareTool, function_tool
+from augments.adk.tools import JITContextAwareTool, function_tool
 
 @function_tool(name="search", description="Search the database")
 def search(query: str) -> str: ...

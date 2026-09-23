@@ -8,7 +8,7 @@ Demonstrates:
 - MultiTracer composing an OTelTracer (OpenInference) with a MetricsTracer
 
 Prerequisites:
-    pip install "philharmonica-adk[otel]"
+    pip install "augments-adk[otel]"
     export OPENAI_API_KEY="sk-..."   # or any LiteLLM-supported model key
 
 Run with:
@@ -34,16 +34,16 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 try:
-    from philharmonica.adk.tracing import MetricsTracer, setup_metrics, setup_otel
+    from augments.adk.tracing import MetricsTracer, setup_metrics, setup_otel
 except ImportError as _exc:
-    raise SystemExit("opentelemetry not installed. Run: pip install 'philharmonica-adk[otel]'") from _exc
+    raise SystemExit("opentelemetry not installed. Run: pip install 'augments-adk[otel]'") from _exc
 
 # ---------------------------------------------------------------------------
 # Step 2 — define the agent
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
 
 _llm = LiteLLM(model="gpt-4o-mini")
 _agent = Agent(
@@ -56,15 +56,15 @@ _agent = Agent(
 # Step 3 — compose OTel span tracer + MetricsTracer in a MultiTracer
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.tracing import MultiTracer, TracingConvention, set_tracer
+from augments.adk.tracing import MultiTracer, TracingConvention, set_tracer
 
 _otel_tracer = setup_otel(
-    service_name="philharmonica-tenant-demo",
+    service_name="augments-tenant-demo",
     convention=TracingConvention.OPENINFERENCE,
     console=True,
 )
 
-_metrics_tracer: MetricsTracer = setup_metrics(service_name="philharmonica-tenant-demo")
+_metrics_tracer: MetricsTracer = setup_metrics(service_name="augments-tenant-demo")
 
 # Both tracers receive every span; the OTel tracer ships spans to the
 # configured collector and the MetricsTracer records OTel instruments.
@@ -76,7 +76,7 @@ logger.info("Tracer configured: OTel(OpenInference) + Metrics in MultiTracer")
 # Step 4 — set up status tracking (records each run in SQLite, per-tenant)
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.status import AgentStatusStore, StatusTrackingHooks
+from augments.adk.status import AgentStatusStore, StatusTrackingHooks
 
 _store = AgentStatusStore(path=":memory:")
 _hooks: StatusTrackingHooks = StatusTrackingHooks(store=_store)
@@ -85,9 +85,9 @@ _hooks: StatusTrackingHooks = StatusTrackingHooks(store=_store)
 # Step 5 — run the agent with tenant_id set and read back per-tenant cost
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 
 async def _run() -> None:

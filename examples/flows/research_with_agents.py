@@ -57,7 +57,7 @@ import sys
 
 from pydantic import BaseModel
 
-from philharmonica.adk import (
+from augments.adk import (
     Agent,
     Flow,
     FlowConfig,
@@ -68,7 +68,7 @@ from philharmonica.adk import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.events import (
+from augments.adk.flows.events import (
     FlowRouteEvaluatedEvent,
     FlowStepEndEvent,
     FlowStepErrorEvent,

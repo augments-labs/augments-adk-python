@@ -1,17 +1,17 @@
-"""Tests for ``philharmonica.adk.types.sandbox.manifest``."""
+"""Tests for ``augments.adk.types.sandbox.manifest``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.entries import Dir, File
-from philharmonica.adk.types.sandbox.manifest import (
+from augments.adk.types.sandbox.entries import Dir, File
+from augments.adk.types.sandbox.manifest import (
     Environment,
     Manifest,
     StrEnvValue,
 )
-from philharmonica.adk.types.sandbox.permissions import Group, User
-from philharmonica.adk.types.sandbox.workspace_paths import SandboxPathGrant
+from augments.adk.types.sandbox.permissions import Group, User
+from augments.adk.types.sandbox.workspace_paths import SandboxPathGrant
 
 
 class TestManifestDefaults:
@@ -184,7 +184,7 @@ class TestEnvironmentResolveDispatch:
     async def test_custom_env_entry_resolve_is_called(self) -> None:
         from typing import Literal, override
 
-        from philharmonica.adk.types.sandbox.manifest import EnvEntry
+        from augments.adk.types.sandbox.manifest import EnvEntry
 
         class SecretEnvValue(EnvEntry):
             type: Literal["secret"] = "secret"
@@ -207,7 +207,7 @@ class TestEnvironmentResolveDispatch:
     async def test_unimplemented_env_entry_raises(self) -> None:
         from typing import Literal
 
-        from philharmonica.adk.types.sandbox.manifest import EnvEntry
+        from augments.adk.types.sandbox.manifest import EnvEntry
 
         class NoResolve(EnvEntry):
             type: Literal["noresolve"] = "noresolve"

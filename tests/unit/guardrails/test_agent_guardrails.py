@@ -14,8 +14,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentGuardrailSeverity,
@@ -28,19 +28,19 @@ from philharmonica.adk.agents.agent_guardrails import (
     AgentOutputGuardrailResult,
     AgentTimeoutPolicy,
 )
-from philharmonica.adk.exceptions import (
+from augments.adk.exceptions import (
     AgentInputGuardrailTripwireTriggered,
     AgentOutputGuardrailTripwireTriggered,
 )
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.guardrails_executor import (
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.run.guardrails_executor import (
     run_blocking_input_guardrails,
     run_input_guardrails,
     run_output_guardrails,
     run_parallel_input_guardrails,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 # ── Helpers ──────────────────────────────────────────────────
 
@@ -404,7 +404,7 @@ class TestGuardrailLogging:
         guard = _passing_input_guardrail("logged_guard", parallel=False)
         agent = _make_agent(input_guardrails=[guard])
 
-        with caplog.at_level(logging.DEBUG, logger="philharmonica.adk.run.guardrails_executor"):
+        with caplog.at_level(logging.DEBUG, logger="augments.adk.run.guardrails_executor"):
             await run_blocking_input_guardrails(agent, "hello", _make_context(), _make_hooks())
 
         messages = [r.message for r in caplog.records]
@@ -418,7 +418,7 @@ class TestGuardrailLogging:
         agent = _make_agent(input_guardrails=[guard])
 
         with (
-            caplog.at_level(logging.DEBUG, logger="philharmonica.adk.run.guardrails_executor"),
+            caplog.at_level(logging.DEBUG, logger="augments.adk.run.guardrails_executor"),
             pytest.raises(AgentInputGuardrailTripwireTriggered),
         ):
             await run_blocking_input_guardrails(agent, "hello", _make_context(), _make_hooks())
@@ -435,7 +435,7 @@ class TestResultFields:
 
     def test_run_result_defaults_empty(self) -> None:
         """RunResult guardrail fields default to empty tuples."""
-        from philharmonica.adk.types.run import RunResult
+        from augments.adk.types.run import RunResult
 
         result = RunResult(final_output="test", user_prompt="hello")
         assert result.guardrail_results.input == ()
@@ -447,7 +447,7 @@ class TestResultFields:
         """RunResultStreaming has guardrail result fields with correct defaults."""
         import dataclasses
 
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.run.stream import RunResultStreaming
 
         fields = {f.name: f for f in dataclasses.fields(RunResultStreaming)}
         assert "guardrail_results" in fields
@@ -461,7 +461,7 @@ class TestRunConfigGuardrails:
 
     def test_defaults_to_empty(self) -> None:
         """RunConfig guardrails default to empty AgentGuardrails."""
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         config = RunConfig()
         assert config.guardrails.input == []
@@ -469,7 +469,7 @@ class TestRunConfigGuardrails:
 
     def test_set_guardrails(self) -> None:
         """RunConfig accepts guardrail lists via the AgentGuardrails config object."""
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         ig = _passing_input_guardrail("config_in")
         og = _passing_output_guardrail("config_out")
@@ -515,7 +515,7 @@ class TestResultImmutability:
 
     def test_run_result_input_results_are_tuple(self) -> None:
         """input_guardrail_results on RunResult is a tuple."""
-        from philharmonica.adk.types.run import RunResult
+        from augments.adk.types.run import RunResult
 
         result = RunResult(final_output="test", user_prompt="hello")
         assert isinstance(result.guardrail_results.input, tuple)
@@ -526,7 +526,7 @@ class TestResultImmutability:
 
     def test_run_result_output_results_are_tuple(self) -> None:
         """output_guardrail_results on RunResult is a tuple."""
-        from philharmonica.adk.types.run import RunResult
+        from augments.adk.types.run import RunResult
 
         result = RunResult(final_output="test", user_prompt="hello")
         assert isinstance(result.guardrail_results.output, tuple)
@@ -782,7 +782,7 @@ class TestGuardrailSeverity:
         guard = AgentInputGuardrail(guardrail_function=_fn, name="warn_guard", run_in_parallel=False)
         agent = _make_agent(input_guardrails=[guard])
 
-        with caplog.at_level(logging.DEBUG, logger="philharmonica.adk.run.guardrails_executor"):
+        with caplog.at_level(logging.DEBUG, logger="augments.adk.run.guardrails_executor"):
             await run_blocking_input_guardrails(agent, "hello", _make_context(), _make_hooks())
 
         warning_msgs = [r.message for r in caplog.records if r.levelno == logging.WARNING]
@@ -977,7 +977,7 @@ class TestGuardrailTimeout:
         )
         agent = _make_agent(input_guardrails=[guard])
 
-        with caplog.at_level(logging.DEBUG, logger="philharmonica.adk.run.guardrails_executor"):
+        with caplog.at_level(logging.DEBUG, logger="augments.adk.run.guardrails_executor"):
             await run_blocking_input_guardrails(agent, "hello", _make_context(), _make_hooks())
 
         warning_msgs = [r.message for r in caplog.records if r.levelno == logging.WARNING]
@@ -1225,7 +1225,7 @@ class TestOutputGuardrailRemediation:
         async def on_remediate(_msg: str) -> str:
             return "fixed"
 
-        with caplog.at_level(logging.DEBUG, logger="philharmonica.adk.run.guardrails_executor"):
+        with caplog.at_level(logging.DEBUG, logger="augments.adk.run.guardrails_executor"):
             await run_output_guardrails(
                 agent,
                 "bad",
@@ -1274,7 +1274,7 @@ class TestOutputGuardrailRemediation:
     @pytest.mark.asyncio
     async def test_remediation_via_decorator(self) -> None:
         """@agent_output_guardrail decorator supports remediation and max_retries."""
-        from philharmonica.adk.agents.agent_guardrails import agent_output_guardrail
+        from augments.adk.agents.agent_guardrails import agent_output_guardrail
 
         call_count = 0
 
@@ -1325,7 +1325,7 @@ class TestSyncGuardrailFunctions:
     @pytest.mark.asyncio
     async def test_sync_input_guardrail_via_decorator(self) -> None:
         """@agent_input_guardrail decorator works with sync function."""
-        from philharmonica.adk.agents.agent_guardrails import agent_input_guardrail
+        from augments.adk.agents.agent_guardrails import agent_input_guardrail
 
         @agent_input_guardrail
         def check_sync(_data: AgentInputGuardrailData) -> AgentGuardrailFunctionOutput:
@@ -1336,7 +1336,7 @@ class TestSyncGuardrailFunctions:
     @pytest.mark.asyncio
     async def test_sync_output_guardrail_via_decorator(self) -> None:
         """@agent_output_guardrail decorator works with sync function."""
-        from philharmonica.adk.agents.agent_guardrails import agent_output_guardrail
+        from augments.adk.agents.agent_guardrails import agent_output_guardrail
 
         @agent_output_guardrail
         def check_sync_out(_data: AgentOutputGuardrailData) -> AgentGuardrailFunctionOutput:
@@ -1542,7 +1542,7 @@ class TestDecoratorNewParams:
 
     def test_input_decorator_timeout_params(self) -> None:
         """@agent_input_guardrail passes timeout params correctly."""
-        from philharmonica.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_input_guardrail
+        from augments.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_input_guardrail
 
         @agent_input_guardrail(timeout=3.0, timeout_policy=AgentTimeoutPolicy.PASS)
         async def timed(_data: AgentInputGuardrailData) -> AgentGuardrailFunctionOutput:
@@ -1554,7 +1554,7 @@ class TestDecoratorNewParams:
 
     def test_output_decorator_all_params(self) -> None:
         """@agent_output_guardrail passes all new params correctly."""
-        from philharmonica.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_output_guardrail
+        from augments.adk.agents.agent_guardrails import AgentTimeoutPolicy, agent_output_guardrail
 
         async def _cb(_info) -> None:
             pass
@@ -1573,7 +1573,7 @@ class TestDecoratorNewParams:
 
     def test_input_decorator_with_on_timeout_callback(self) -> None:
         """@agent_input_guardrail passes on_timeout callback."""
-        from philharmonica.adk.agents.agent_guardrails import agent_input_guardrail
+        from augments.adk.agents.agent_guardrails import agent_input_guardrail
 
         async def _my_cb(_info) -> None:
             pass

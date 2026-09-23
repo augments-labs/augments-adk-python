@@ -33,13 +33,13 @@ class TestModelRefusalError:
 
     def test_model_refusal_error_exists(self) -> None:
         """ModelRefusalError must be importable from the exceptions module."""
-        from philharmonica.adk.exceptions import ModelRefusalError
+        from augments.adk.exceptions import ModelRefusalError
 
         assert issubclass(ModelRefusalError, Exception)
 
     def test_model_refusal_error_carries_refusal_text(self) -> None:
         """ModelRefusalError must expose the refusal text."""
-        from philharmonica.adk.exceptions import ModelRefusalError
+        from augments.adk.exceptions import ModelRefusalError
 
         err = ModelRefusalError("I cannot help with that.")
         assert err.refusal == "I cannot help with that."
@@ -48,8 +48,8 @@ class TestModelRefusalError:
     def test_refusal_only_triggers_model_refusal_path(self) -> None:
         """Verify that an LLMResponse with only a refusal part has the right properties
         that would trigger ModelRefusalError in the loop."""
-        from philharmonica.adk.exceptions import ModelRefusalError
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseRefusal
+        from augments.adk.exceptions import ModelRefusalError
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseRefusal
 
         refusal_response = LLMResponse(
             response_id="r1",
@@ -85,9 +85,9 @@ class TestParallelGatherReturnExceptions:
         With return_exceptions=True, gather waits for ALL coroutines
         before re-raising the first exception — no ghost background tasks.
         """
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
         completed_tools: list[str] = []
 
@@ -114,10 +114,10 @@ class TestParallelGatherReturnExceptions:
 
         from types import SimpleNamespace
 
-        from philharmonica.adk.agents.middleware import Middleware
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.agents.middleware import Middleware
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
 
         agent = SimpleNamespace(
             name="test",
@@ -164,12 +164,12 @@ class TestOutputSchemaAgentDefersTool:
         when response has tool calls but no text content."""
         from pydantic import BaseModel
 
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.turn_resolution import resolve_structured_output_step
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.agents.agent import Agent
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.turn_resolution import resolve_structured_output_step
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseFunctionToolCall,
         )
@@ -211,7 +211,7 @@ class TestGetDefaultLlmFunctoolsCache:
 
     def test_cache_clear_is_callable(self) -> None:
         """functools.cache exposes cache_clear(); bare dict does not."""
-        from philharmonica.adk.run.llm_calls import get_default_llm
+        from augments.adk.run.llm_calls import get_default_llm
 
         assert callable(getattr(get_default_llm, "cache_clear", None)), (
             "get_default_llm must expose .cache_clear() via functools.cache"
@@ -219,7 +219,7 @@ class TestGetDefaultLlmFunctoolsCache:
 
     def test_same_model_returns_same_instance(self) -> None:
         """Two calls with the same model string return the identical object."""
-        from philharmonica.adk.run.llm_calls import get_default_llm
+        from augments.adk.run.llm_calls import get_default_llm
 
         get_default_llm.cache_clear()
         inst1 = get_default_llm("gpt-4o-mini")
@@ -228,7 +228,7 @@ class TestGetDefaultLlmFunctoolsCache:
 
     def test_different_model_returns_different_instance(self) -> None:
         """Two calls with different model strings return different objects."""
-        from philharmonica.adk.run.llm_calls import get_default_llm
+        from augments.adk.run.llm_calls import get_default_llm
 
         get_default_llm.cache_clear()
         inst_a = get_default_llm("model-alpha")
@@ -247,7 +247,7 @@ class TestOnLlmEndAlwaysCalled:
         on_llm_end is called even when an exception is raised."""
         import inspect
 
-        from philharmonica.adk.run import loop as loop_module
+        from augments.adk.run import loop as loop_module
 
         source = inspect.getsource(loop_module)
         # The non-streaming path must initialize 'response = None' before the try block
@@ -273,7 +273,7 @@ class TestGuardrailExceptionLogging:
         in both run_parallel_input_guardrails and _run_output_guardrails_once."""
         import inspect
 
-        from philharmonica.adk.run import guardrails_executor
+        from augments.adk.run import guardrails_executor
 
         source = inspect.getsource(guardrails_executor)
 
@@ -298,7 +298,7 @@ class TestApplyResultLimitsBinarySearch:
         """CJK text (1 char ~ 1 token) must not be 4x over the token budget."""
         from unittest.mock import MagicMock, patch
 
-        from philharmonica.adk.run.cost import apply_result_limits
+        from augments.adk.run.cost import apply_result_limits
 
         tool = MagicMock()
         tool.name = "t"
@@ -316,7 +316,7 @@ class TestApplyResultLimitsBinarySearch:
             call_count[0] += 1
             return len(text)
 
-        with patch("philharmonica.adk.context.token_counter.TokenCounter.count_text", side_effect=_mock_count):
+        with patch("augments.adk.context.token_counter.TokenCounter.count_text", side_effect=_mock_count):
             result = apply_result_limits(cjk_text, tool, "gpt-4o")
 
         # The result body (excluding the suffix) must not exceed max_result_tokens
@@ -339,7 +339,7 @@ class TestApplyResultLimitsBinarySearch:
         """
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.run.cost import apply_result_limits
+        from augments.adk.run.cost import apply_result_limits
 
         tool = MagicMock()
         tool.name = "tool_name"
@@ -351,7 +351,7 @@ class TestApplyResultLimitsBinarySearch:
         def _mock_count(text, model):
             return len(text)
 
-        with patch("philharmonica.adk.context.token_counter.TokenCounter.count_text", side_effect=_mock_count):
+        with patch("augments.adk.context.token_counter.TokenCounter.count_text", side_effect=_mock_count):
             result = apply_result_limits(long_text, tool, "gpt-4o")
 
         assert "[Result truncated:" in result, "Result should be truncated"
@@ -386,13 +386,13 @@ class TestOnToolEndAfterOutputGuardrails:
         rejection message, not the original tool output."""
         from types import SimpleNamespace
 
-        from philharmonica.adk.agents.middleware import Middleware
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.agents.middleware import Middleware
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
         raw_output = "SENSITIVE_DATA_HERE"
         rejection_msg = "Content blocked by policy."
@@ -409,7 +409,7 @@ class TestOnToolEndAfterOutputGuardrails:
             def get_name(self):
                 return "masking"
 
-        from philharmonica.adk.tools.tool_guardrails import ToolGuardrails
+        from augments.adk.tools.tool_guardrails import ToolGuardrails
 
         tool = FunctionTool(
             name="sensitive_tool",
@@ -464,13 +464,13 @@ class TestCanUseToolCallbackError:
         not the same tool_permission_denied message as a deliberate refusal."""
         from types import SimpleNamespace
 
-        from philharmonica.adk.agents.middleware import Middleware
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import RunConfig
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.agents.middleware import Middleware
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import RunConfig
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
         async def _handler(ctx, _raw):
             return "result"
@@ -528,7 +528,7 @@ class TestStreamingMessageOutputCreated:
 
     def test_content_property_returns_none_for_tool_call_only(self) -> None:
         """Verify LLMResponse.content is None when only tool calls present."""
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseFunctionToolCall
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseFunctionToolCall
 
         response = LLMResponse(
             response_id="r1",
@@ -548,8 +548,8 @@ class TestPrepareExceptionSkipsTool:
 
     async def test_prepare_exception_excludes_tool(self) -> None:
         """A prepare function that raises must result in the tool being excluded."""
-        from philharmonica.adk.run.llm_calls import build_tools
-        from philharmonica.adk.tools.function_tool import FunctionTool
+        from augments.adk.run.llm_calls import build_tools
+        from augments.adk.tools.function_tool import FunctionTool
 
         async def _handler(ctx, _raw):
             return "ok"
@@ -567,8 +567,8 @@ class TestPrepareExceptionSkipsTool:
 
         from types import SimpleNamespace
 
-        from philharmonica.adk.agents.middleware import Middleware
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.agents.middleware import Middleware
+        from augments.adk.run.context import RunContext
 
         agent = SimpleNamespace(
             name="test",
@@ -598,8 +598,8 @@ class TestDropOrphanRunItemsEmptyCallId:
 
     def test_empty_call_id_pair_is_kept(self) -> None:
         """A ToolCallItem / ToolCallOutputItem pair with call_id='' must not be dropped."""
-        from philharmonica.adk.handoffs.handoff_filters import _drop_orphan_run_items
-        from philharmonica.adk.types.items.items import ToolCallItem, ToolCallOutputItem
+        from augments.adk.handoffs.handoff_filters import _drop_orphan_run_items
+        from augments.adk.types.items.items import ToolCallItem, ToolCallOutputItem
 
         # Build minimal raw mocks with empty call_id
         tc_raw = MagicMock()
@@ -628,7 +628,7 @@ class TestLastNWindowNoDeadFallback:
         """Verify the source code no longer contains the `or 5` dead fallback."""
         import inspect
 
-        from philharmonica.adk.run import handoffs_executor
+        from augments.adk.run import handoffs_executor
 
         source = inspect.getsource(handoffs_executor)
         # The `or 5` pattern should be gone

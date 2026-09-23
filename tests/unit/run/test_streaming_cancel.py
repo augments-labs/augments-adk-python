@@ -23,18 +23,18 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.stream import (
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.stream import (
     CancelMode,
     QueueCompleteSentinel,
     RawResponseStreamEvent,
     RunResultStreaming,
 )
-from philharmonica.adk.run.tools_executor import execute_tool_calls_streamed
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.run.tools_executor import execute_tool_calls_streamed
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -184,7 +184,7 @@ async def test_cancel_after_turn_sets_flag_and_leaves_task_alone() -> None:
 
 
 def _make_executor_agent(tools: list[FunctionTool]) -> Any:
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name="cancel-victim",

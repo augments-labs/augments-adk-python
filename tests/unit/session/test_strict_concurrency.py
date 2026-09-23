@@ -12,11 +12,11 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import SessionAppendConflictError
-from philharmonica.adk.session import SQLiteMultiSessions
-from philharmonica.adk.session.session_event import create_session_event
-from philharmonica.adk.session.sqlite_session import SQLiteSession, get_session_updated_at
-from philharmonica.adk.session.state import State
+from augments.adk.exceptions import SessionAppendConflictError
+from augments.adk.session import SQLiteMultiSessions
+from augments.adk.session.session_event import create_session_event
+from augments.adk.session.sqlite_session import SQLiteSession, get_session_updated_at
+from augments.adk.session.state import State
 
 
 def _event(text: str = "hello"):

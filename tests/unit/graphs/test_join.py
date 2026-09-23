@@ -5,9 +5,9 @@ No I/O or LLM calls — the barrier is a pure in-memory data structure.
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.join import JoinBarrier, JoinSemantics
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.join import JoinBarrier, JoinSemantics
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Helpers

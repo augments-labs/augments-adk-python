@@ -8,12 +8,12 @@ from io import BytesIO
 
 import pytest
 
-from philharmonica.adk.sandbox.capabilities.filesystem import FilesystemCapability
-from philharmonica.adk.sandbox.clients.local import (
+from augments.adk.sandbox.capabilities.filesystem import FilesystemCapability
+from augments.adk.sandbox.clients.local import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.sandbox.tools.view_image_tool import (
+from augments.adk.sandbox.tools.view_image_tool import (
     ViewImageArgs,
     _infer_mime,
     make_view_image_tool,

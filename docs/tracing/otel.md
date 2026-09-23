@@ -2,7 +2,7 @@
 
 The OTel bridge emits every framework span through the OpenTelemetry
 API, so any collector that speaks OTLP — Jaeger, Honeycomb, Datadog,
-Phoenix, Langwatch, Grafana Tempo, New Relic — ingests Philharmonica agent
+Phoenix, Langwatch, Grafana Tempo, New Relic — ingests Augments agent
 traces without a vendor-specific SDK.
 
 ## Installation
@@ -11,7 +11,7 @@ OTel is an **optional** extra. The core framework has zero runtime
 dependency on `opentelemetry`.
 
 ```bash
-pip install 'philharmonica-adk[otel]'
+pip install 'augments-adk[otel]'
 ```
 
 If the extra is missing and application code tries to construct an
@@ -20,22 +20,22 @@ If the extra is missing and application code tries to construct an
 low-level `ImportError`.
 
 ```python
-from philharmonica.adk.exceptions import TracingDependencyError
-from philharmonica.adk.tracing.otel import OTelTracer
+from augments.adk.exceptions import TracingDependencyError
+from augments.adk.tracing.otel import OTelTracer
 
 try:
     OTelTracer()
 except TracingDependencyError as e:
     # e.missing == "opentelemetry"
-    # str(e) contains the "pip install 'philharmonica-adk[otel]'" command
+    # str(e) contains the "pip install 'augments-adk[otel]'" command
     ...
 ```
 
 ## `setup_otel` — fluent installer
 
 ```python
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 tracer = setup_otel(
     endpoint="http://localhost:4317",   # optional; reads OTEL_EXPORTER_OTLP_ENDPOINT when None
@@ -109,20 +109,20 @@ into LLM-dashboard views automatically — no adapter required.
 
 | Span kind | OTel name | Key attributes |
 |-----------|-----------|----------------|
-| `agent_span` | `agent.<agent_name>` | `philharmonica.agent.name`, `philharmonica.agent.handoffs`, `philharmonica.agent.tools`, `philharmonica.agent.output_type`, `philharmonica.metadata.<key>` |
-| `function_span` (tool) | `tool.<tool_name>` | `philharmonica.tool.name`, `philharmonica.tool.input`, `philharmonica.tool.output` |
-| `function_span` (MCP) | `mcp.<tool_name>` | `philharmonica.mcp.server_name`, `philharmonica.mcp.tool_name`, plus the `tool.*` set above |
-| `generation_span` | `llm.generation` | `gen_ai.system="philharmonica"`, `gen_ai.request.model`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`, `gen_ai.request.<k>` (from `model_config`) |
-| `response_span` | `llm.response` | `gen_ai.system="philharmonica"`, `gen_ai.response.id` |
-| `handoff_span` | `agent.handoff` | `philharmonica.handoff.from`, `philharmonica.handoff.to` |
-| `guardrail_span` | `guardrail.<name>` | `philharmonica.guardrail.name`, `philharmonica.guardrail.triggered` |
-| `custom_span` | caller-provided name | `philharmonica.span.name`, `philharmonica.custom.<k>` (from `data`) |
+| `agent_span` | `agent.<agent_name>` | `augments.agent.name`, `augments.agent.handoffs`, `augments.agent.tools`, `augments.agent.output_type`, `augments.metadata.<key>` |
+| `function_span` (tool) | `tool.<tool_name>` | `augments.tool.name`, `augments.tool.input`, `augments.tool.output` |
+| `function_span` (MCP) | `mcp.<tool_name>` | `augments.mcp.server_name`, `augments.mcp.tool_name`, plus the `tool.*` set above |
+| `generation_span` | `llm.generation` | `gen_ai.system="augments"`, `gen_ai.request.model`, `gen_ai.usage.input_tokens`, `gen_ai.usage.output_tokens`, `gen_ai.request.<k>` (from `model_config`) |
+| `response_span` | `llm.response` | `gen_ai.system="augments"`, `gen_ai.response.id` |
+| `handoff_span` | `agent.handoff` | `augments.handoff.from`, `augments.handoff.to` |
+| `guardrail_span` | `guardrail.<name>` | `augments.guardrail.name`, `augments.guardrail.triggered` |
+| `custom_span` | caller-provided name | `augments.span.name`, `augments.custom.<k>` (from `data`) |
 
 **GenAI semconv** keys follow the [OpenTelemetry GenAI
 semantic-convention](https://opentelemetry.io/docs/specs/semconv/gen-ai/)
 draft, so spans are ingestable by Phoenix / Langwatch / Honeycomb LLM
 dashboards without an adapter. Framework-specific fields use the
-`philharmonica.*` namespace.
+`augments.*` namespace.
 
 ### Nested values
 
@@ -147,7 +147,7 @@ The bridge relies on OTel's own context propagation
 while an outer span is the current span is automatically attached as
 its child — no framework bookkeeping. This means `OTelSpan` does **not**
 register itself on the framework `_current_span` ContextVar (see
-`src/philharmonica/adk/tracing/otel/otel_span.py` for the rationale).
+`src/augments/adk/tracing/otel/otel_span.py` for the rationale).
 
 ## Using an existing `TracerProvider`
 
@@ -157,8 +157,8 @@ If the host application already configures its own `TracerProvider`
 
 ```python
 from opentelemetry import trace as otel_trace
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import OTelTracer
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import OTelTracer
 
 provider = otel_trace.get_tracer_provider()  # installed elsewhere
 set_tracer(OTelTracer(provider=provider, service_name="my-agent"))

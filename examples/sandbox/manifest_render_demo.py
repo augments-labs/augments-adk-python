@@ -21,12 +21,12 @@ except ImportError:
 import logging
 from pathlib import Path
 
-from philharmonica.adk.sandbox.manifest_render import (
+from augments.adk.sandbox.manifest_render import (
     coerce_rel_path,
     render_manifest_description,
 )
-from philharmonica.adk.types.sandbox.entries import BaseEntry, Dir, File
-from philharmonica.adk.types.sandbox.permissions import Permissions
+from augments.adk.types.sandbox.entries import BaseEntry, Dir, File
+from augments.adk.types.sandbox.permissions import Permissions
 
 logger = logging.getLogger(__name__)
 

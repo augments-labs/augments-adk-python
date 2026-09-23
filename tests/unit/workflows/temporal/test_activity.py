@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.activity``.
+"""Tests for ``augments.adk.workflows.temporal.activity``.
 
 Covers:
 - ``ModelActivityInput`` serialization and roundtrip via ``dataclasses.asdict``.
@@ -14,8 +14,8 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.workflows.temporal.activity import (
+from augments.adk.llms.llm import LLM
+from augments.adk.workflows.temporal.activity import (
     ModelActivityInput,
     get_model,
     register_model,
@@ -72,7 +72,7 @@ class TestRegisterAndGetModel:
         """Re-registering the same name replaces the previous LLM."""
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
+        from augments.adk.llms.llm import LLM
 
         first_llm = MagicMock(spec=LLM)
         second_llm = MagicMock(spec=LLM)
@@ -111,9 +111,9 @@ class TestInvokeModelActivityTimestampNullification:
         pytest.importorskip("temporalio")
         from temporalio import activity
 
-        from philharmonica.adk.llms.llm import LLM
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-        from philharmonica.adk.workflows.temporal.activity import (
+        from augments.adk.llms.llm import LLM
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+        from augments.adk.workflows.temporal.activity import (
             ModelActivityInput,
             invoke_model_activity,
             register_model,
@@ -181,7 +181,7 @@ class TestActivityImportErrorNarrowing:
         """
         import inspect
 
-        import philharmonica.adk.workflows.temporal.activity as activity_mod
+        import augments.adk.workflows.temporal.activity as activity_mod
 
         source = inspect.getsource(activity_mod)
         # The narrowed guard must be present.
@@ -205,7 +205,7 @@ class TestGetModelMissingRaisesKeyError:
         """The ``KeyError`` message names the missing key and lists available models."""
         from unittest.mock import MagicMock
 
-        from philharmonica.adk.llms.llm import LLM
+        from augments.adk.llms.llm import LLM
 
         register_model("available-model-a", MagicMock(spec=LLM))
 

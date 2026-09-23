@@ -9,12 +9,12 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.resumption import resume_from_state
-from philharmonica.adk.tools.deferred_tool import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.resumption import resume_from_state
+from augments.adk.tools.deferred_tool import (
     DeferredToolCall,
 )
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.function_tool import FunctionTool
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -22,8 +22,8 @@ from philharmonica.adk.tools.function_tool import FunctionTool
 def _make_agent(tools, name="test_agent"):
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.agent_guardrails import AgentGuardrails
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name=name,
@@ -55,9 +55,9 @@ def _make_deferred_tool(tool_name="admin_delete", call_id="tc_1"):
 
 def _make_state(approved_tools, context=None):
     """Create a minimal RunState with approved tools."""
-    from philharmonica.adk.run.state import RunState
-    from philharmonica.adk.tools.deferred_tool import DeferredToolRequests
-    from philharmonica.adk.types.items import ItemHelpers
+    from augments.adk.run.state import RunState
+    from augments.adk.tools.deferred_tool import DeferredToolRequests
+    from augments.adk.types.items import ItemHelpers
 
     raw_messages = [
         {"role": "user", "content": "test"},
@@ -116,10 +116,10 @@ class TestResumptionPermissionCheck:
         config = RunConfig(can_use_tool=deny_all, fail_on_tool_error=False)
 
         # Patch run_agent_loop to avoid needing a real LLM
-        with patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop:
+        with patch("augments.adk.run.loop.run_agent_loop") as mock_loop:
             # Make the loop return a minimal result
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.run.context import RunContext
+            from augments.adk.types.run import RunResult
 
             mock_loop.return_value = RunResult(
                 final_output="done",
@@ -161,9 +161,9 @@ class TestResumptionEnabledCheck:
 
         config = RunConfig(fail_on_tool_error=False)
 
-        with patch("philharmonica.adk.run.loop.run_agent_loop") as mock_loop:
-            from philharmonica.adk.run.context import RunContext
-            from philharmonica.adk.types.run import RunResult
+        with patch("augments.adk.run.loop.run_agent_loop") as mock_loop:
+            from augments.adk.run.context import RunContext
+            from augments.adk.types.run import RunResult
 
             mock_loop.return_value = RunResult(
                 final_output="done",

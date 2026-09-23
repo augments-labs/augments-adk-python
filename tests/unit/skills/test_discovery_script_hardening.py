@@ -26,11 +26,11 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.skills import Skill, SkillDiscoveryToolset
-from philharmonica.adk.skills.discovery import build_script_env
-from philharmonica.adk.skills.sources.directory import collect_resources
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.skills import Skill, SkillDiscoveryToolset
+from augments.adk.skills.discovery import build_script_env
+from augments.adk.skills.sources.directory import collect_resources
+from augments.adk.tools import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
 
 
 def _dummy_ctx(tool_name: str, raw_args: str) -> ToolContext[Any]:
@@ -422,7 +422,7 @@ class TestDirectorySourcePopulatesResourceRoot:
     def test_loaded_skill_has_resolved_resource_root(self, tmp_path: Path) -> None:
         """The skill carries its canonical (resolved) root so that
         execute-time containment has something to check against."""
-        from philharmonica.adk.skills.sources.directory import DirectorySkillSource
+        from augments.adk.skills.sources.directory import DirectorySkillSource
 
         skill_dir = tmp_path / "my-skill"
         skill_dir.mkdir()

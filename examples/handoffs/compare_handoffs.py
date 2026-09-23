@@ -37,13 +37,13 @@ from typing import Literal, Union
 from litellm.cost_calculator import cost_per_token
 from pydantic import Field
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import HandoffRoute
-from philharmonica.adk.llms.llm_usage import LLMUsage
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.run.config import DEFAULT_MODEL
-from philharmonica.adk.types.intents import Intent, Respond
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.handoffs import HandoffRoute
+from augments.adk.llms.llm_usage import LLMUsage
+from augments.adk.run import RunConfig, Runner
+from augments.adk.run.config import DEFAULT_MODEL
+from augments.adk.types.intents import Intent, Respond
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

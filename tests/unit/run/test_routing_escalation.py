@@ -1,9 +1,9 @@
 """Tests for call_llm_with_routing escalation driver.
 
 Proves:
-(a) escalation to next candidate on a retryable (non-PhilharmonicaError) exception.
+(a) escalation to next candidate on a retryable (non-AugmentsError) exception.
 (b) NoRoutingCandidateError raised when all candidates fail, chaining the last error.
-(c) PhilharmonicaError (framework error) is NOT retried and propagates immediately.
+(c) AugmentsError (framework error) is NOT retried and propagates immediately.
 (d) should_escalate predicate drives escalation to the next candidate.
 
 Fake-LLM pattern mirrors test_budget_enforcement.py: minimal ``LLM``
@@ -19,16 +19,16 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import NoRoutingCandidateError, UserError
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.llms.cost import CostEstimate
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.llm_calls import call_llm_with_routing
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import NoRoutingCandidateError, UserError
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.llms.cost import CostEstimate
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.run.config import RunConfig
+from augments.adk.run.llm_calls import call_llm_with_routing
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Fake LLM helpers
@@ -87,7 +87,7 @@ class GoodFakeLLM(LLM):
 
 
 class RaisingFakeLLM(LLM):
-    """Always raises a RuntimeError (non-PhilharmonicaError — routing-retryable)."""
+    """Always raises a RuntimeError (non-AugmentsError — routing-retryable)."""
 
     @override
     async def acomplete(  # type: ignore[override]
@@ -124,7 +124,7 @@ class RaisingFakeLLM(LLM):
 
 
 class FrameworkErrorFakeLLM(LLM):
-    """Always raises a UserError (PhilharmonicaError subclass — NOT retryable)."""
+    """Always raises a UserError (AugmentsError subclass — NOT retryable)."""
 
     @override
     async def acomplete(  # type: ignore[override]
@@ -216,13 +216,13 @@ def _noop_patches() -> Any:
     from unittest.mock import AsyncMock
 
     return patch(
-        "philharmonica.adk.run.llm_calls.build_tools",
+        "augments.adk.run.llm_calls.build_tools",
         new=AsyncMock(return_value=None),
     )
 
 
 # ---------------------------------------------------------------------------
-# Test 1 — escalate to next candidate on non-PhilharmonicaError exception
+# Test 1 — escalate to next candidate on non-AugmentsError exception
 # ---------------------------------------------------------------------------
 
 
@@ -278,12 +278,12 @@ async def test_all_fail_raises_no_candidate() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Test 3 — PhilharmonicaError is NOT retried; propagates immediately
+# Test 3 — AugmentsError is NOT retried; propagates immediately
 # ---------------------------------------------------------------------------
 
 
 async def test_framework_error_not_retried() -> None:
-    """A UserError (PhilharmonicaError) from the first candidate propagates immediately.
+    """A UserError (AugmentsError) from the first candidate propagates immediately.
 
     The second (good) candidate must never be reached.
     """

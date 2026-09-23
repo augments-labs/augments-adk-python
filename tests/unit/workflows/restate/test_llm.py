@@ -13,9 +13,9 @@ import pytest
 
 restate = pytest.importorskip("restate")
 # isort: split
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.restate.llm import RestateLLM
+from augments.adk.llms.llm import LLM
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.restate.llm import RestateLLM
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -67,7 +67,7 @@ class TestRestateLLMDelegatesOutsideContext:
         )
 
         with patch(
-            "philharmonica.adk.workflows.restate.llm.get_restate_context",
+            "augments.adk.workflows.restate.llm.get_restate_context",
             return_value=None,
         ):
             result = await llm.acomplete("hello", stream=False)
@@ -77,7 +77,7 @@ class TestRestateLLMDelegatesOutsideContext:
 
     async def test_restate_llm_delegates_outside_context_with_config(self) -> None:
         """``acomplete`` passes llm_config through to wrapped when context is None."""
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         inner = _make_mock_llm()
         llm = RestateLLM(
@@ -87,7 +87,7 @@ class TestRestateLLMDelegatesOutsideContext:
         cfg = LLMConfig(temperature=0.5)
 
         with patch(
-            "philharmonica.adk.workflows.restate.llm.get_restate_context",
+            "augments.adk.workflows.restate.llm.get_restate_context",
             return_value=None,
         ):
             result = await llm.acomplete("hi", llm_config=cfg, stream=False)
@@ -104,7 +104,7 @@ class TestRestateLLMDelegatesOutsideContext:
         )
 
         with patch(
-            "philharmonica.adk.workflows.restate.llm.get_restate_context",
+            "augments.adk.workflows.restate.llm.get_restate_context",
             return_value=None,
         ):
             await llm.acomplete("stream test", stream=True)
@@ -132,7 +132,7 @@ class TestRestateLLMStreamInsideHandler:
 
         with (
             patch(
-                "philharmonica.adk.workflows.restate.llm.get_restate_context",
+                "augments.adk.workflows.restate.llm.get_restate_context",
                 return_value=ctx,
             ),
             pytest.raises(NotImplementedError, match="stream=True"),

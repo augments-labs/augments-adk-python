@@ -23,7 +23,7 @@ shortest path.
 ## Quick start
 
 ```python
-from philharmonica.adk import Agent, Task, Runner
+from augments.adk import Agent, Task, Runner
 
 summariser = Agent(name="Summariser", system_prompt="...")
 
@@ -88,7 +88,7 @@ Frozen result of one `Task` execution.
 ### `TaskPipeline` + `TaskPipelineResult`
 
 ```python
-from philharmonica.adk import Task, TaskPipeline, Runner
+from augments.adk import Task, TaskPipeline, Runner
 
 classify = Task(description="Detect language.", agent=classifier)
 translate = Task(
@@ -143,7 +143,7 @@ Validation happens at `TaskPipeline` construction:
 - No cycles. The validator reports the involved IDs.
 
 Invalid pipelines raise `TaskPipelineDefinitionError`
-(a `UserError` subclass, importable from `philharmonica.adk`) at
+(a `UserError` subclass, importable from `augments.adk`) at
 construction — before any task runs.
 
 `TaskPipeline.topological_levels()` exposes the depth-grouped tasks
@@ -159,8 +159,8 @@ a downstream input, wrap that upstream in a `TaskDependency` and
 attach an `input_filter`:
 
 ```python
-from philharmonica.adk import Task, TaskDependency
-from philharmonica.adk.tasks.task_filters import forward_final_output
+from augments.adk import Task, TaskDependency
+from augments.adk.tasks.task_filters import forward_final_output
 
 synthesise = Task(
     description="Combine the reviewer feedback above.",
@@ -205,7 +205,7 @@ description.
 
 #### Built-in filters
 
-`philharmonica.adk.tasks.task_filters` provides common patterns:
+`augments.adk.tasks.task_filters` provides common patterns:
 
 - `forward_final_output` — forward only the upstream's
   `final_output` as one user message.

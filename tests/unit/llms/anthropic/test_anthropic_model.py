@@ -39,10 +39,10 @@ from anthropic.types import (
 from anthropic.types.raw_message_delta_event import Delta as RawMessageDeltaEventDelta
 from pydantic import BaseModel
 
-from philharmonica.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.schemas import AgentOutputSchema
-from philharmonica.adk.types.llms import LLMRetryPolicy
+from augments.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.schemas import AgentOutputSchema
+from augments.adk.types.llms import LLMRetryPolicy
 
 
 def _make_message(
@@ -330,7 +330,7 @@ class TestAnthropicConfigPropagation:
         create_mock = _install_mock_client(llm, msg)
         cfg = AnthropicConfig(auto_cache_control=True)
 
-        from philharmonica.adk.types.input import LLMInputEasyMessage
+        from augments.adk.types.input import LLMInputEasyMessage
 
         sys_msg: LLMInputEasyMessage = {"role": "system", "content": "Be very helpful."}
         user_msg: LLMInputEasyMessage = {"role": "user", "content": "hi"}
@@ -493,7 +493,7 @@ class _FakeAsyncStream:
 @pytest.fixture
 def _patch_async_stream(monkeypatch: pytest.MonkeyPatch) -> Generator[None, None, None]:
     """Point ``anthropic_model.AsyncStream`` at the test stand-in."""
-    from philharmonica.adk.llms.anthropic import anthropic_model
+    from augments.adk.llms.anthropic import anthropic_model
 
     monkeypatch.setattr(anthropic_model, "AsyncStream", _FakeAsyncStream)
     yield

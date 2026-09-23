@@ -26,10 +26,10 @@ import logging
 import tempfile
 from pathlib import Path
 
-from philharmonica.adk import Agent, RunConfig, Runner
-from philharmonica.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
-from philharmonica.adk.tools import TXTSearchTool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk import Agent, RunConfig, Runner
+from augments.adk.llms.litellm.litellm_embedder import LiteLLMEmbedder
+from augments.adk.tools import TXTSearchTool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

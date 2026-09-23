@@ -34,12 +34,12 @@ import logging
 from collections.abc import Sequence
 from typing import override
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
-from philharmonica.adk.run import Runner
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.run import Runner
+from augments.adk.run.config import RunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

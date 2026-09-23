@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.audit.event import AuditEvent
-from philharmonica.adk.audit.sink import AuditSink, JsonlFileAuditSink
+from augments.adk.audit.event import AuditEvent
+from augments.adk.audit.sink import AuditSink, JsonlFileAuditSink
 
 
 def _event(tool: str) -> AuditEvent:
@@ -50,7 +50,7 @@ async def test_write_failure_logs_path_before_reraising(tmp_path: Path, caplog) 
     bad_path = tmp_path / "missing_dir" / "audit.jsonl"
     sink = JsonlFileAuditSink(bad_path)
     with (
-        caplog.at_level(logging.ERROR, logger="philharmonica.adk.audit.sink"),
+        caplog.at_level(logging.ERROR, logger="augments.adk.audit.sink"),
         pytest.raises(FileNotFoundError),
     ):
         await sink.record(_event("x"))

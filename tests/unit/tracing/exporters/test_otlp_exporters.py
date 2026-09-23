@@ -2,10 +2,10 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.tracing.exporters.langsmith import langsmith_headers, setup_langsmith
-from philharmonica.adk.tracing.exporters.logfire import logfire_headers, setup_logfire
-from philharmonica.adk.tracing.exporters.phoenix import setup_phoenix
-from philharmonica.adk.types.tracing.convention import TracingConvention
+from augments.adk.tracing.exporters.langsmith import langsmith_headers, setup_langsmith
+from augments.adk.tracing.exporters.logfire import logfire_headers, setup_logfire
+from augments.adk.tracing.exporters.phoenix import setup_phoenix
+from augments.adk.types.tracing.convention import TracingConvention
 
 
 def test_langsmith_headers_include_api_key_and_project():
@@ -33,7 +33,7 @@ def test_langsmith_headers_omits_project_when_none():
 
 def test_setup_phoenix_forwards_to_setup_otel_without_live_provider():
     # patch setup_otel so no real provider is installed (no network/global state)
-    with patch("philharmonica.adk.tracing.exporters.phoenix.setup_otel") as mock_setup:
+    with patch("augments.adk.tracing.exporters.phoenix.setup_otel") as mock_setup:
         setup_phoenix(endpoint="http://localhost:6006/v1/traces")
         mock_setup.assert_called_once()
         _, kwargs = mock_setup.call_args
@@ -41,7 +41,7 @@ def test_setup_phoenix_forwards_to_setup_otel_without_live_provider():
 
 
 def test_setup_langsmith_forwards_headers_without_live_provider():
-    with patch("philharmonica.adk.tracing.exporters.langsmith.setup_otel") as mock_setup:
+    with patch("augments.adk.tracing.exporters.langsmith.setup_otel") as mock_setup:
         setup_langsmith(api_key="ls-secret", project="p")
         mock_setup.assert_called_once()
         _, kwargs = mock_setup.call_args
@@ -49,7 +49,7 @@ def test_setup_langsmith_forwards_headers_without_live_provider():
 
 
 def test_setup_logfire_forwards_headers_without_live_provider():
-    with patch("philharmonica.adk.tracing.exporters.logfire.setup_otel") as mock_setup:
+    with patch("augments.adk.tracing.exporters.logfire.setup_otel") as mock_setup:
         setup_logfire(token="tok")
         mock_setup.assert_called_once()
         _, kwargs = mock_setup.call_args

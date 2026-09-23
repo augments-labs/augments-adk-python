@@ -4,19 +4,19 @@ Covers the human-readable ``__repr__`` one-liners on ``Task``,
 ``TaskDependency``, ``TaskPipeline`` / ``TaskPipelineResult``,
 ``TaskGroup`` / ``TaskGroupResult``, ``TaskOutput``, and
 ``TaskPipelineState``, plus the package-level export contract of
-``philharmonica.adk.tasks``. Reprs are one-liners: full descriptions,
+``augments.adk.tasks``. Reprs are one-liners: full descriptions,
 prompts, and item trails never leak into them; previews are capped at
 60 chars with newlines stripped and a ``…`` ellipsis.
 """
 
 from __future__ import annotations
 
-import philharmonica.adk.tasks as tasks_pkg
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tasks import (
+import augments.adk.tasks as tasks_pkg
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tasks import (
     ErrorPolicy,
     Task,
     TaskDependency,
@@ -28,7 +28,7 @@ from philharmonica.adk.tasks import (
     TaskPipelineResult,
     TaskPipelineState,
 )
-from philharmonica.adk.tasks.task_filters import forward_final_output
+from augments.adk.tasks.task_filters import forward_final_output
 
 
 def _agent(name: str = "researcher") -> Agent:
@@ -63,8 +63,8 @@ class TestPackageExports:
             assert getattr(tasks_pkg, name) is not None
 
     def test_top_level_parity_exports(self) -> None:
-        """``ErrorPolicy`` / ``TaskPipelineDefinitionError`` are importable from ``philharmonica.adk``."""
-        import philharmonica.adk as adk
+        """``ErrorPolicy`` / ``TaskPipelineDefinitionError`` are importable from ``augments.adk``."""
+        import augments.adk as adk
 
         assert adk.ErrorPolicy is ErrorPolicy
         assert adk.TaskPipelineDefinitionError is TaskPipelineDefinitionError
@@ -72,7 +72,7 @@ class TestPackageExports:
         assert "TaskPipelineDefinitionError" in adk.__all__
 
     def test_definition_error_is_user_error(self) -> None:
-        from philharmonica.adk.exceptions.exceptions import UserError
+        from augments.adk.exceptions.exceptions import UserError
 
         assert issubclass(TaskPipelineDefinitionError, UserError)
 

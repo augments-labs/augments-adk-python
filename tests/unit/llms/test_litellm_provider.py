@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.llms.litellm.litellm_provider import max_output_tokens
+from augments.adk.llms.litellm.litellm_provider import max_output_tokens
 
 
 class TestMaxOutputTokens:

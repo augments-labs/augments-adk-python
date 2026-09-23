@@ -16,11 +16,11 @@ pytest.importorskip("httpx")
 from starlette.applications import Starlette
 from starlette.testclient import TestClient
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import HookEventKind, HookLifecycleEvent
-from philharmonica.adk.serving import build_app
-from philharmonica.adk.serving.rest import _event_source, _sse_dump, rest_routes
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import HookEventKind, HookLifecycleEvent
+from augments.adk.serving import build_app
+from augments.adk.serving.rest import _event_source, _sse_dump, rest_routes
 
 
 class FakeSession:

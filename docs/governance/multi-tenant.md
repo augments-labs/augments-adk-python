@@ -14,7 +14,7 @@ Restrict which tools each tenant may call. The policy is a map from
 `tenant_id` to the set of allowed tool names, set on `RunConfig`:
 
 ```python
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.run.config import RunConfig
 
 config = RunConfig(
     tenant_id="free",
@@ -56,8 +56,8 @@ See `examples/governance/tenant_tool_allowlist.py`.
 Record every tool-call resolution to a pluggable, append-only sink:
 
 ```python
-from philharmonica.adk.audit import JsonlFileAuditSink
-from philharmonica.adk.run.config import RunConfig
+from augments.adk.audit import JsonlFileAuditSink
+from augments.adk.run.config import RunConfig
 
 config = RunConfig(tenant_id="acme", audit_sink=JsonlFileAuditSink("audit.jsonl"))
 ```
@@ -75,8 +75,8 @@ Built-in sinks:
 |---|---|
 | `InMemoryAuditSink` | tests / single process |
 | `JsonlFileAuditSink` | append-only JSON-Lines file |
-| `S3AuditSink` | one object per event (`pip install 'philharmonica-adk[audit-s3]'`) |
-| `PostgresAuditSink` | append-only `audit_events` table (`pip install 'philharmonica-adk[audit-postgres]'`) |
+| `S3AuditSink` | one object per event (`pip install 'augments-adk[audit-s3]'`) |
+| `PostgresAuditSink` | append-only `audit_events` table (`pip install 'augments-adk[audit-postgres]'`) |
 
 The `AuditSink` Protocol is `@runtime_checkable` — a custom sink (Kafka,
 etc.) just needs `async def record(self, event: AuditEvent) -> None`.
@@ -96,14 +96,14 @@ isolates the whole run — premium tenants get a dedicated worker pool that
 can't be starved by others.
 
 ```python
-from philharmonica.adk.workflows.temporal.routing import (
+from augments.adk.workflows.temporal.routing import (
     MappingTaskQueueRouter,
     start_tenant_workflow,
 )
 
 router = MappingTaskQueueRouter(
-    mapping={"premium-tenant": "philharmonica-premium"},
-    default="philharmonica-shared",
+    mapping={"premium-tenant": "augments-premium"},
+    default="augments-shared",
 )
 
 handle = await start_tenant_workflow(

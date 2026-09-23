@@ -1,6 +1,6 @@
 # Sandbox Types (Layer 1)
 
-All Layer-1 sandbox types live in `philharmonica.adk.types.sandbox`. They
+All Layer-1 sandbox types live in `augments.adk.types.sandbox`. They
 have **no provider SDK imports** and serialize to JSON without
 conversion hops.
 
@@ -33,7 +33,7 @@ escapes raise at validation time. `Mount.read_only` defaults to True.
 - `DockerVolumeMountStrategy(driver, driver_options)` — Docker volume
   driver attaches the storage before container start.
 
-`philharmonica.adk.sandbox.policy.mounts` translates these to each backend's
+`augments.adk.sandbox.policy.mounts` translates these to each backend's
 wire format (Docker volumes, K8s CSI volumes, hosted-bridge create-
 body fields).
 
@@ -70,4 +70,4 @@ body fields).
 - `SandboxPathGrant(path, read_only, description)` +
   `WorkspacePathPolicy` — explicit grants outside the manifest.
 
-See `src/philharmonica/adk/types/sandbox/` for source.
+See `src/augments/adk/types/sandbox/` for source.

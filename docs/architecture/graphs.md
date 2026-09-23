@@ -36,7 +36,7 @@ include `GraphStartEvent`, `SuperstepStartEvent`, `NodeStartEvent`,
 ## Checkpointers
 
 Graphs persist their state via the `Checkpointer` Protocol. Backends
-shipped today, all under `src/philharmonica/adk/graphs/checkpointers/`:
+shipped today, all under `src/augments/adk/graphs/checkpointers/`:
 
 | Backend       | Module          | Use for                              |
 | ------------- | --------------- | ------------------------------------ |
@@ -48,7 +48,7 @@ shipped today, all under `src/philharmonica/adk/graphs/checkpointers/`:
 | Tiered        | `tiered.py`     | Composite hot/warm/cold (Redis → Postgres → S3). |
 
 All Postgres / Redis / S3 backends use optimistic locking with a
-`CheckpointConflictError` (in `philharmonica.adk.exceptions`) on contention.
+`CheckpointConflictError` (in `augments.adk.exceptions`) on contention.
 
 ## HITL (Human-In-The-Loop)
 

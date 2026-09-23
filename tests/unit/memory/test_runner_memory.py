@@ -4,11 +4,11 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.memory.extractor import ExtractionResult
-from philharmonica.adk.memory.in_memory import TemporaryMemory
-from philharmonica.adk.memory.memory_config import MemoryConfig, MemoryInjectionPosition
-from philharmonica.adk.memory.memory_types import MemorySource
-from philharmonica.adk.run.runner import _extract_query, _inject_memories
+from augments.adk.memory.extractor import ExtractionResult
+from augments.adk.memory.in_memory import TemporaryMemory
+from augments.adk.memory.memory_config import MemoryConfig, MemoryInjectionPosition
+from augments.adk.memory.memory_types import MemorySource
+from augments.adk.run.runner import _extract_query, _inject_memories
 
 
 class TestExtractQuery:
@@ -128,8 +128,8 @@ class TestRunnerMemoryIntegration:
     @pytest.mark.asyncio
     async def test_memory_injection_in_arun(self):
         """Verify that memory injection modifies input before agent loop."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         memory = TemporaryMemory()
         await memory.add("User prefers concise answers", namespace="user:1")
@@ -150,7 +150,7 @@ class TestRunnerMemoryIntegration:
             nonlocal captured_input
             captured_input = user_prompt
             # Return a minimal result
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.types.run import RunResult
 
             return RunResult(
                 final_output="Done",
@@ -161,10 +161,10 @@ class TestRunnerMemoryIntegration:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
         ):
             _ = await Runner.arun(
                 agent,
@@ -182,8 +182,8 @@ class TestRunnerMemoryIntegration:
     @pytest.mark.asyncio
     async def test_memory_extraction_after_run(self):
         """Verify that memory extraction happens after session save."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         memory = TemporaryMemory()
 
@@ -209,7 +209,7 @@ class TestRunnerMemoryIntegration:
         )
 
         async def mock_run_agent_loop(*, agent, user_prompt, **kwargs):
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.types.run import RunResult
 
             return RunResult(
                 final_output="Done",
@@ -220,10 +220,10 @@ class TestRunnerMemoryIntegration:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
         ):
             await Runner.arun(
                 agent,

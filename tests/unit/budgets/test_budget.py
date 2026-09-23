@@ -4,7 +4,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from philharmonica.adk.budgets import BudgetPeriod, TenantBudget, period_key
+from augments.adk.budgets import BudgetPeriod, TenantBudget, period_key
 
 
 def test_period_key_calendar_buckets() -> None:

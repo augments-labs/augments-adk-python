@@ -18,12 +18,12 @@ from anthropic.types import (
     Usage,
 )
 
-from philharmonica.adk.llms.anthropic.anthropic_converter import (
+from augments.adk.llms.anthropic.anthropic_converter import (
     STRUCTURED_OUTPUT_TOOL_NAME,
     AnthropicConverter,
 )
-from philharmonica.adk.schemas import AgentOutputSchema
-from philharmonica.adk.tools import function_tool
+from augments.adk.schemas import AgentOutputSchema
+from augments.adk.tools import function_tool
 
 
 class TestItemsToMessages:
@@ -156,7 +156,7 @@ class TestItemsToMessages:
         # ``reasoning_text`` content part with the signature in ``encrypted_content``;
         # the converter must read that — NOT replay an empty thinking block (which
         # Anthropic rejects because the signature no longer matches empty content).
-        from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+        from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
         param = LLMResponseReasoning(thinking="Let me think step by step.", signature="sig-abc", id="r1").to_param()
         # A valid Anthropic history opens with a user turn; the reasoning
@@ -179,7 +179,7 @@ class TestItemsToMessages:
         # block, NOT a plain thinking block: its opaque data is not a valid
         # signature for empty thinking content, so Anthropic rejects the replay
         # on multi-turn extended-thinking tool use if it is mis-typed.
-        from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+        from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
         param = LLMResponseReasoning(thinking="", encrypted_content="REDACTED_BLOB", is_redacted=True).to_param()
         assert param["content"] == [{"type": "redacted_thinking", "data": "REDACTED_BLOB"}]
@@ -559,7 +559,7 @@ class TestServerToolBlockSurfacing:
         # via the provider-item channel, not silently dropped.
         from anthropic.types import ServerToolUseBlock
 
-        from philharmonica.adk.types.responses.llm_response import LLMResponseProviderItem
+        from augments.adk.types.responses.llm_response import LLMResponseProviderItem
 
         message = Message(
             id="msg_srv",

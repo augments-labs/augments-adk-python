@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import patch
 
-from philharmonica.adk.llms.cost import CostEstimate
-from philharmonica.adk.llms.litellm import LiteLLM
+from augments.adk.llms.cost import CostEstimate
+from augments.adk.llms.litellm import LiteLLM
 
 
 def test_estimate_cost_input_only_when_no_output_bound() -> None:

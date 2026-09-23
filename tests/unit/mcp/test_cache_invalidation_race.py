@@ -16,8 +16,8 @@ from types import SimpleNamespace
 from typing import Any
 from unittest.mock import MagicMock
 
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
-from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
 
 class _InvalidatingSession:

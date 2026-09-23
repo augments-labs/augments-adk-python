@@ -12,12 +12,12 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task
-from philharmonica.adk.tasks.task_output import TaskOutput
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task
+from augments.adk.tasks.task_output import TaskOutput
+from augments.adk.types.run.run_result import RunResult
 
 
 class CapturingHooks(RunHooks[Any]):
@@ -63,7 +63,7 @@ async def test_hooks_fire_on_success() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         output = await Runner.arun_task(task, hooks=hooks)
@@ -86,7 +86,7 @@ async def test_hooks_fire_on_exception() -> None:
     async def fake_arun(*_a: Any, **_kw: Any) -> RunResult:
         raise RuntimeError("boom")
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with (
         patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)),
@@ -117,7 +117,7 @@ async def test_explicit_task_id_flows_to_hooks() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         output = await Runner.arun_task(task, hooks=hooks)

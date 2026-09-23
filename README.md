@@ -1,18 +1,13 @@
 <div align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)"
-            srcset="https://raw.githubusercontent.com/augments-labs/philharmonica-adk-python/main/docs/images/logo-dark.png">
-    <img src="https://raw.githubusercontent.com/augments-labs/philharmonica-adk-python/main/docs/images/logo-light.png"
-         alt="Philharmonica" width="256">
+            srcset="https://raw.githubusercontent.com/augments-labs/augments-adk-python/main/docs/images/logo-dark.png">
+    <img src="https://raw.githubusercontent.com/augments-labs/augments-adk-python/main/docs/images/logo-light.png"
+         alt="Augments" width="256">
   </picture>
 </div>
 
-# Philharmonica Agent Development Kit (ADK)
-
-> **This project is being renamed.** 0.2.3 is the last release published as
-> `philharmonica-adk`; later releases ship under the new name. The
-> [repository](https://github.com/augments-labs/philharmonica-adk-python)
-> will announce it and keep working at this address.
+# Augments Agent Development Kit (ADK)
 
 A provider-agnostic Python framework to orchestrate complex
 systems of agents that perform real-world actions, across 100+ LLMs via litellm.
@@ -23,22 +18,21 @@ An agent is a model that stopped talking and started doing: it calls tools,
 changes state, and leaves side effects in the world. One agent is useful. A
 set of specialists that cannot coordinate is a liability.
 
-A philharmonic is not a crowd of capable musicians. It is a score, sections
-that know their part, and a conductor holding the tempo. This ADK gives you
-the same three things for agents:
+Augmenting a model means adding capability without giving up control. This
+ADK adds three things, and each one is explicit and yours to configure:
 
-- **The score** — explicit orchestration. Graphs for state machines, flows
+- **Structure** — explicit orchestration. Graphs for state machines, flows
   for pipelines, swarms for open-ended exploration, handoffs for delegation.
   You write the structure; nothing is inferred behind your back.
-- **The sections** — agents scoped to one job, each carrying its own tools,
+- **Specialists** — agents scoped to one job, each carrying its own tools,
   guardrails, and budget. An `Agent` is configuration, never a hidden runtime.
-- **The conductor** — the `Runner`. Every run travels one execution path,
-  where turns, retries, token budgets, and interrupts are *enforced* rather
-  than suggested.
+- **Control** — the `Runner`. Every run travels one execution path, where
+  turns, retries, token budgets, and interrupts are *enforced* rather than
+  suggested.
 
 The framework never injects a prompt, a tool, or a token you did not ask for,
 and every cost-bearing default starts bounded. Decisions, tool I/O, and token
-spend come back as structured traces, so what the ensemble actually did is
+spend come back as structured traces, so what the agents actually did is
 readable after the fact.
 
 ## Design tenets
@@ -66,18 +60,18 @@ readable after the fact.
 ### Use it in your own project
 
 ```bash
-uv add philharmonica-adk          # or: pip install philharmonica-adk
+uv add augments-adk          # or: pip install augments-adk
 ```
 
 The core install is deliberately lean — `litellm`, `pydantic`, `griffe`, `aiosqlite`, `typing-extensions` — and every optional provider / exporter / UI enhancement is gated behind its own extra:
 
 ```bash
-pip install 'philharmonica-adk[anthropic]'   # native Anthropic SDK path
-pip install 'philharmonica-adk[otel]'        # OpenTelemetry tracing bridge
-pip install 'philharmonica-adk[mcp]'         # Model Context Protocol client
-pip install 'philharmonica-adk[viz]'         # Agent graph visualization (graphviz)
-pip install 'philharmonica-adk[verbose]'     # Rich-backed panel/line verbose renderer (ANSI fallback without it)
-pip install 'philharmonica-adk[all]'         # all of the above
+pip install 'augments-adk[anthropic]'   # native Anthropic SDK path
+pip install 'augments-adk[otel]'        # OpenTelemetry tracing bridge
+pip install 'augments-adk[mcp]'         # Model Context Protocol client
+pip install 'augments-adk[viz]'         # Agent graph visualization (graphviz)
+pip install 'augments-adk[verbose]'     # Rich-backed panel/line verbose renderer (ANSI fallback without it)
+pip install 'augments-adk[all]'         # all of the above
 ```
 
 ### Work on the ADK itself
@@ -86,14 +80,14 @@ Prerequisites: Python 3.12+ and [uv](https://docs.astral.sh/uv/) (uv installs th
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/augments-labs/philharmonica-adk-python.git
-cd philharmonica-adk-python
+git clone https://github.com/augments-labs/augments-adk-python.git
+cd augments-adk-python
 
 # 2. Build .venv from the committed lockfile — everything + test + lint + typecheck
 uv sync --extra dev
 
 # 3. Run anything inside it
-uv run philharmonica --help
+uv run augments --help
 uv run pytest
 ```
 
@@ -103,10 +97,10 @@ Conda works too, if you prefer it:
 
 ```bash
 conda env create -f environment.yaml   # also runs `pip install -e '.[dev]'`
-conda activate philharmonica-adk-python
+conda activate augments-adk-python
 ```
 
-Either way the install is editable: `philharmonica.adk` is importable from the `src/` layout defined in `pyproject.toml`, and source changes take effect immediately without reinstalling.
+Either way the install is editable: `augments.adk` is importable from the `src/` layout defined in `pyproject.toml`, and source changes take effect immediately without reinstalling.
 
 ### API Keys
 
@@ -121,7 +115,7 @@ export GEMINI_API_KEY="your-key"
 ### Verify Installation
 
 ```bash
-python -c "from philharmonica.adk import Agent, Runner; print('OK')"
+python -c "from augments.adk import Agent, Runner; print('OK')"
 ```
 
 ## Quick Start
@@ -130,7 +124,7 @@ python -c "from philharmonica.adk import Agent, Runner; print('OK')"
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, Runner
+from augments.adk import Agent, Runner
 
 logger = logging.getLogger(__name__)
 
@@ -145,15 +139,15 @@ logger.info(result.final_output)
 
 ## Command-Line Interface
 
-The `philharmonica` console script drives agents from the terminal — scaffold a
+The `augments` console script drives agents from the terminal — scaffold a
 project, validate its config without spending a token, then run or chat:
 
 ```bash
-philharmonica new my_agent                       # scaffold config + tools + schema
-philharmonica validate my_agent/agent.json       # strict schema check, no tokens
-philharmonica run my_agent/agent.json "hello"    # one-shot run (config or --agent module:var)
-philharmonica chat my_agent/agent.json           # interactive REPL, optional --session-db
-philharmonica serve my_agent/agent.json                    # REST + health over HTTP ([serve] extra)
+augments new my_agent                       # scaffold config + tools + schema
+augments validate my_agent/agent.json       # strict schema check, no tokens
+augments run my_agent/agent.json "hello"    # one-shot run (config or --agent module:var)
+augments chat my_agent/agent.json           # interactive REPL, optional --session-db
+augments serve my_agent/agent.json                    # REST + health over HTTP ([serve] extra)
 ```
 
 `run` auto-dispatches agents, swarms, graphs, and topologies; every
@@ -168,34 +162,34 @@ framework imports no server runtime and no cloud SDK — every piece is
 opt-in, and you keep control of the runtime.
 
 ```bash
-pip install 'philharmonica-adk[serve]'
+pip install 'augments-adk[serve]'
 
 # Serve locally: REST (POST /run, POST /run_sse) + health (/healthz, /readyz).
-philharmonica serve --agent my_agent.app:agent --host 0.0.0.0 --port 8000
+augments serve --agent my_agent.app:agent --host 0.0.0.0 --port 8000
 
 # Generate the deployment artifacts you own (Dockerfile + manifests):
-philharmonica deploy init --target k8s --agent my_agent.app:agent --image my-agent:latest
+augments deploy init --target k8s --agent my_agent.app:agent --image my-agent:latest
 
 # Or build and ship to a target via your installed CLIs:
-philharmonica deploy build      --agent my_agent.app:agent --image my-agent:latest --push
-philharmonica deploy cloud-run  --agent my_agent.app:agent --image gcr.io/PROJECT/my-agent --project PROJECT --region REGION
-philharmonica deploy gke        --agent my_agent.app:agent --image IMAGE --project P --region R --cluster C
-philharmonica deploy ecs        --agent my_agent.app:agent --image ACCT.dkr.ecr.R.amazonaws.com/my-agent --region R --execution-role-arn ARN
+augments deploy build      --agent my_agent.app:agent --image my-agent:latest --push
+augments deploy cloud-run  --agent my_agent.app:agent --image gcr.io/PROJECT/my-agent --project PROJECT --region REGION
+augments deploy gke        --agent my_agent.app:agent --image IMAGE --project P --region R --cluster C
+augments deploy ecs        --agent my_agent.app:agent --image ACCT.dkr.ecr.R.amazonaws.com/my-agent --region R --execution-role-arn ARN
 ```
 
-`philharmonica deploy` targets `docker`, `k8s`, `gke`, `helm`, `cloudrun`,
+`augments deploy` targets `docker`, `k8s`, `gke`, `helm`, `cloudrun`,
 `ecs`, `app-runner`, and `lambda`. The generated image satisfies the
 universal container contract (binds `0.0.0.0:$PORT`, config from env,
 non-root, `/healthz` + `/readyz` probes), so the same image runs
-everywhere. The generated `requirements.txt` installs `philharmonica-adk`
+everywhere. The generated `requirements.txt` installs `augments-adk`
 from PyPI; edit it if you need a pin, a vendored wheel, or a VCS URL
 instead.
 
 A single replica works out of the box on the default per-pod SQLite
 stores. For multi-replica (horizontally-scaled) deployments, back A2A
 tasks and REST sessions with Postgres so state is shared across pods —
-`philharmonica serve --task-dsn "$PG_DSN" --session-dsn "$PG_DSN"` (install
-`philharmonica-adk[a2a-postgres,session-postgres]`). The AWS deploy commands
+`augments serve --task-dsn "$PG_DSN" --session-dsn "$PG_DSN"` (install
+`augments-adk[a2a-postgres,session-postgres]`). The AWS deploy commands
 also accept `--push` to log in to ECR and build/push the image for you.
 See [`docs/deploy/`](docs/deploy/) for the full guide.
 
@@ -212,7 +206,7 @@ python examples/tools/tool_guardrails.py
 ## Project Structure
 
 ```
-src/philharmonica/adk/       # Source code (namespace package)
+src/augments/adk/       # Source code (namespace package)
 tests/                 # Unit and integration tests
 examples/              # Single-file runnable examples (one concept each)
 docs/                  # Usage documentation

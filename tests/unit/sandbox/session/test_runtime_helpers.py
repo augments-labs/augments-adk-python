@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.runtime_helpers``.
+"""Tests for ``augments.adk.sandbox.session.runtime_helpers``.
 
 These execute the embedded POSIX-shell scripts directly with the
 host ``sh`` so the actual workspace-escape / fingerprint logic is
@@ -13,14 +13,14 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxStartFailed
-from philharmonica.adk.sandbox.session import (
+from augments.adk.exceptions.exceptions import SandboxStartFailed
+from augments.adk.sandbox.session import (
     RESOLVE_WORKSPACE_PATH_HELPER,
     WORKSPACE_FINGERPRINT_HELPER,
     RuntimeHelperScript,
     install_runtime_helpers,
 )
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.types.sandbox.exec_result import ExecResult
 
 
 def _write_script(tmp_path: Path, helper: RuntimeHelperScript) -> Path:
@@ -44,9 +44,9 @@ class TestRuntimeHelperScript:
         b = RuntimeHelperScript.from_content(name="x", content="b")
         assert a.install_path != b.install_path
 
-    def test_install_path_under_philharmonica_root(self) -> None:
+    def test_install_path_under_augments_root(self) -> None:
         helper = RuntimeHelperScript.from_content(name="x", content="a")
-        assert str(helper.install_path).startswith("/tmp/philharmonica-adk/bin/")
+        assert str(helper.install_path).startswith("/tmp/augments-adk/bin/")
 
     def test_present_command_shape(self) -> None:
         helper = RuntimeHelperScript.from_content(name="x", content="a")
@@ -59,7 +59,7 @@ class TestRuntimeHelperScript:
         # Construct the helper with a tmp-rooted install_path so the
         # content-addressed temp file ("<install_path>.tmp.$$") and the
         # destination share a directory (the production invariant —
-        # ``from_content`` would root both under /tmp/philharmonica-adk/bin).
+        # ``from_content`` would root both under /tmp/augments-adk/bin).
         install_path = tmp_path / "bin" / "echo-helper-deadbeef0000"
         helper = RuntimeHelperScript(
             name="echo-helper",

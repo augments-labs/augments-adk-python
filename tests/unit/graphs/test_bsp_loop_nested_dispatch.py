@@ -14,25 +14,25 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.adapters import AgentExecutable
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.adapters import AgentExecutable
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import (
     GraphResume,
     GraphResumeError,
     NestedAgentApproval,
     NestedAgentInterrupt,
     NestedAgentReply,
 )
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _deferred_call(call_id: str) -> DeferredToolCall:

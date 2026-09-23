@@ -7,16 +7,16 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.deploy.aws_manifests import (
+from augments.adk.deploy.aws_manifests import (
     render_apprunner_create_service,
     render_ecs_task_definition,
     render_lambda_dockerfile,
 )
-from philharmonica.adk.deploy.commands import CommandResult, RecordingRunner
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.targets.apprunner import AppRunnerTarget
-from philharmonica.adk.deploy.targets.aws_lambda import LambdaTarget
-from philharmonica.adk.deploy.targets.ecs import ECSTarget
+from augments.adk.deploy.commands import CommandResult, RecordingRunner
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.targets.apprunner import AppRunnerTarget
+from augments.adk.deploy.targets.aws_lambda import LambdaTarget
+from augments.adk.deploy.targets.ecs import ECSTarget
 
 
 def _ctx(env_keys: tuple[str, ...] = ()) -> DeployContext:

@@ -20,13 +20,13 @@ logger = logging.getLogger(__name__)
 
 
 async def main() -> None:
-    from philharmonica.adk.run.config import RunConfig
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.sandbox.agent import SandboxAgent
-    from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-    from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
-    from philharmonica.adk.sandbox.config import SandboxRunConfig
-    from philharmonica.adk.verbose import VerboseConfig
+    from augments.adk.run.config import RunConfig
+    from augments.adk.run.runner import Runner
+    from augments.adk.sandbox.agent import SandboxAgent
+    from augments.adk.sandbox.capabilities.shell import ShellCapability
+    from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+    from augments.adk.sandbox.config import SandboxRunConfig
+    from augments.adk.verbose import VerboseConfig
 
     agent = SandboxAgent(
         name="coder",

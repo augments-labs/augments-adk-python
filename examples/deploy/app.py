@@ -1,12 +1,12 @@
-"""A deployable agent for the ``philharmonica deploy`` walkthrough (see README.md).
+"""A deployable agent for the ``augments deploy`` walkthrough (see README.md).
 
 Exposes ``agent`` so a container can serve it with
-``philharmonica serve --agent app:agent``. There is no ``__main__`` guard on
+``augments serve --agent app:agent``. There is no ``__main__`` guard on
 purpose: the deployment workflow runs this module through the CLI / the
 generated image, not by executing the file directly.
 """
 
-from philharmonica.adk.agents.agent import Agent
+from augments.adk.agents.agent import Agent
 
 agent = Agent(
     name="support",

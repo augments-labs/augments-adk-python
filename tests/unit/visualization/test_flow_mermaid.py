@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, flow_listen, flow_router, flow_start
-from philharmonica.adk.visualization import flow_to_mermaid
+from augments.adk.flows import Flow, flow_listen, flow_router, flow_start
+from augments.adk.visualization import flow_to_mermaid
 
 
 class _S(BaseModel):

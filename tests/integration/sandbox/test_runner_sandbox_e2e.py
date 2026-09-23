@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.config import SandboxRunConfig
 
 
 @pytest.mark.integration
@@ -19,7 +19,7 @@ class TestSandboxRunnerEndToEnd:
         the agent loop's actual model invocation is mocked elsewhere.
         Here we just verify the bracket itself works end-to-end.
         """
-        from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+        from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
 
         client = LocalSubprocessSandboxClient(warn_banner=False)
         sandbox_config = SandboxRunConfig(client=client)
@@ -29,8 +29,8 @@ class TestSandboxRunnerEndToEnd:
         # integration with capability tools lands in a follow-up.
         import contextlib
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_open_sandbox_bracket
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_open_sandbox_bracket
 
         rc: RunContext[None] = RunContext.make(None)
         async with contextlib.AsyncExitStack() as stack:

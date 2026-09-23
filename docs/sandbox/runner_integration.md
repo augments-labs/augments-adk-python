@@ -61,5 +61,5 @@ so the private attribute stays encapsulated. Re-entry by a concurrent
 `AgentHooks` mirrors at per-agent scope. `CompositeRunHooks` fans out
 preserving error-collection semantics.
 
-See `src/philharmonica/adk/sandbox/runner_integration/` for the
+See `src/augments/adk/sandbox/runner_integration/` for the
 implementation modules.

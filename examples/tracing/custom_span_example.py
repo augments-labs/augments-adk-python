@@ -21,13 +21,13 @@ from __future__ import annotations
 import logging
 from typing import Any, override
 
-from philharmonica.adk.tracing import (
+from augments.adk.tracing import (
     NoOpSpan,
     Span,
     custom_span,
     set_tracer,
 )
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.types.tracing.span_data import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

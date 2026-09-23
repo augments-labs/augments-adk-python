@@ -8,21 +8,21 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.sandbox.clients import (
+from augments.adk.sandbox.clients import (
     BaseSandboxClient,
     BaseSandboxClientOptions,
     BaseSandboxSession,
     FileEntry,
     MaterializationResult,
 )
-from philharmonica.adk.types.sandbox.cost import SandboxBackendCapabilities
-from philharmonica.adk.types.sandbox.exec_result import (
+from augments.adk.types.sandbox.cost import SandboxBackendCapabilities
+from augments.adk.types.sandbox.exec_result import (
     ExecResult,
     ExposedPortEndpoint,
     PtyHandle,
 )
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.session_state import SandboxSessionState
 
 # --- Fake concrete subclasses for testing ABC behavior -----------------------
 
@@ -232,8 +232,8 @@ class TestMaterializationResult:
         assert r.skipped_mounts == []
 
     def test_iteration_yields_files(self) -> None:
-        from philharmonica.adk.types.sandbox.entries import MaterializedFile
-        from philharmonica.adk.types.sandbox.permissions import Permissions
+        from augments.adk.types.sandbox.entries import MaterializedFile
+        from augments.adk.types.sandbox.permissions import Permissions
 
         mf = MaterializedFile(
             path="foo.txt",

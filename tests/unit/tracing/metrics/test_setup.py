@@ -1,7 +1,7 @@
 import pytest
 
-from philharmonica.adk.tracing.metrics import MetricsTracer
-from philharmonica.adk.tracing.metrics.setup import setup_metrics
+from augments.adk.tracing.metrics import MetricsTracer
+from augments.adk.tracing.metrics.setup import setup_metrics
 
 
 def test_setup_metrics_returns_tracer():

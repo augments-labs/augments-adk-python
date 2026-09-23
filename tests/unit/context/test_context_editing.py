@@ -7,7 +7,7 @@ subscript; the values are plain dicts at runtime.
 
 from typing import Any
 
-from philharmonica.adk.context.context_editing import (
+from augments.adk.context.context_editing import (
     _CLEARED_THINKING_PLACEHOLDER,
     _CLEARED_TOOL_PLACEHOLDER,
     ContextEditor,

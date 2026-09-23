@@ -2,10 +2,10 @@
 
 import pytest
 
-from philharmonica.adk.exceptions import ToolRetry
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.exceptions import ToolRetry
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -15,7 +15,7 @@ _call_count = 0
 def _make_agent(tools):
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name="test_agent",
@@ -33,19 +33,19 @@ def _make_tool_call(call_id, name, args="{}"):
 
 
 def _make_ctx():
-    from philharmonica.adk.run.context import RunContext
+    from augments.adk.run.context import RunContext
 
     return RunContext(context=None)
 
 
 def _make_hooks():
-    from philharmonica.adk.hooks.hooks import RunHooks
+    from augments.adk.hooks.hooks import RunHooks
 
     return RunHooks()
 
 
 def _make_config():
-    from philharmonica.adk.run.config import RunConfig
+    from augments.adk.run.config import RunConfig
 
     return RunConfig(fail_on_tool_error=False)
 

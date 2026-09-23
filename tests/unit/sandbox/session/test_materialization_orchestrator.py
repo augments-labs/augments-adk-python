@@ -18,11 +18,11 @@ from typing import Any, Literal
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import ExecNonZeroError, UnsupportedManifestEntryError
-from philharmonica.adk.sandbox.session.materialization import materialize_manifest
-from philharmonica.adk.types.sandbox.entries import BaseEntry, Dir, File, LocalFile
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.exceptions.exceptions import ExecNonZeroError, UnsupportedManifestEntryError
+from augments.adk.sandbox.session.materialization import materialize_manifest
+from augments.adk.types.sandbox.entries import BaseEntry, Dir, File, LocalFile
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.mounts import (
     InContainerMountStrategy,
     RcloneMountPattern,
     S3Mount,

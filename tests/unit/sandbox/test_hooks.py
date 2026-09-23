@@ -7,10 +7,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from philharmonica.adk.hooks.hooks import CompositeRunHooks, RunHooks, compose_run_hooks
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
-from philharmonica.adk.types.sandbox.snapshot import SnapshotMetadata, SnapshotRef
-from philharmonica.adk.types.sandbox.usage import SandboxUsage
+from augments.adk.hooks.hooks import CompositeRunHooks, RunHooks, compose_run_hooks
+from augments.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.types.sandbox.snapshot import SnapshotMetadata, SnapshotRef
+from augments.adk.types.sandbox.usage import SandboxUsage
 
 
 def _ref() -> SnapshotRef:

@@ -28,7 +28,7 @@ import asyncio
 import logging
 import time
 
-from philharmonica.adk.tools import ToolRateLimit, function_tool
+from augments.adk.tools import ToolRateLimit, function_tool
 
 logger = logging.getLogger(__name__)
 

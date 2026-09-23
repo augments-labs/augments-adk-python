@@ -10,8 +10,8 @@ import dataclasses
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.tasks import Task
+from augments.adk.agents.agent import Agent
+from augments.adk.tasks import Task
 
 
 def _make_agent() -> Agent:

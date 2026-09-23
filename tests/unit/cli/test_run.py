@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica run`` (network-free via the scripted stub agent)."""
+"""Tests for ``augments run`` (network-free via the scripted stub agent)."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from pathlib import Path
 
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 STUB = "cli_stub_agents"
 
@@ -100,7 +100,7 @@ def test_session_persists_across_invocations(stub_agent_dir: Path) -> None:
         assert result.exit_code == 0, result.output
 
     async def count_events() -> int:
-        from philharmonica.adk.session.sqlite_multi_sessions import SQLiteMultiSessions
+        from augments.adk.session.sqlite_multi_sessions import SQLiteMultiSessions
 
         manager = SQLiteMultiSessions(path=db, app_name="support")
         session = await manager.get("default", user_id="default")

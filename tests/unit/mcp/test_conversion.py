@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.mcp.conversion``.
+"""Tests for ``augments.adk.mcp.conversion``.
 
 Covers:
 - ``mcp_tool_to_function_tool`` produces a ``FunctionTool`` with the
@@ -20,13 +20,13 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from mcp.types import CallToolResult, ImageContent, TextContent
 
-from philharmonica.adk.mcp.conversion import (
+from augments.adk.mcp.conversion import (
     call_tool_result_to_artifact,
     call_tool_result_to_str,
     mcp_tool_to_function_tool,
 )
-from philharmonica.adk.mcp.exceptions import MCPToolCallError
-from philharmonica.adk.schemas import SchemaEnforcement
+from augments.adk.mcp.exceptions import MCPToolCallError
+from augments.adk.schemas import SchemaEnforcement
 
 
 def _make_mcp_tool(name: str = "lookup", schema: dict[str, Any] | None = None) -> Any:

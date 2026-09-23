@@ -14,7 +14,7 @@ import logging
 
 from pydantic import BaseModel
 
-from philharmonica.adk import Flow, Runner, flow_listen, flow_router, flow_start
+from augments.adk import Flow, Runner, flow_listen, flow_router, flow_start
 
 logger = logging.getLogger(__name__)
 

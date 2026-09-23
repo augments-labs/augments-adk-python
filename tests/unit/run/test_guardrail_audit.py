@@ -4,21 +4,21 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentGuardrailSeverity,
     AgentOutputGuardrail,
     AgentOutputGuardrailData,
 )
-from philharmonica.adk.audit.event import hash_payload
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.governance import emit_guardrail_audit
-from philharmonica.adk.run.guardrails_executor import run_output_guardrails
-from philharmonica.adk.types.guardrails import GuardrailAction, GuardrailSpan
-from philharmonica.adk.types.run.guardrail_audit import GuardrailAuditRecord
+from augments.adk.audit.event import hash_payload
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.run.governance import emit_guardrail_audit
+from augments.adk.run.guardrails_executor import run_output_guardrails
+from augments.adk.types.guardrails import GuardrailAction, GuardrailSpan
+from augments.adk.types.run.guardrail_audit import GuardrailAuditRecord
 
 
 def _record(**overrides: object) -> GuardrailAuditRecord:

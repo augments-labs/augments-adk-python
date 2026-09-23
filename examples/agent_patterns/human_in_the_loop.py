@@ -25,11 +25,11 @@ import logging
 import sys
 from pathlib import Path
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools.function_tool import function_tool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools.function_tool import function_tool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.verbose import VerboseConfig
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from auto_mode import confirm_with_fallback

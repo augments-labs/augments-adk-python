@@ -34,18 +34,18 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents import Agent
+from augments.adk.graphs import Graph
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
     RoundRobinPolicy,
     Swarm,
     prompt_with_swarm_instructions,
 )
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

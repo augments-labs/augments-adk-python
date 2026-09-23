@@ -26,7 +26,7 @@ the common case; construct `FunctionTool` directly when you need to share an
 ### Decorator form
 
 ```python
-from philharmonica.adk.tools import function_tool
+from augments.adk.tools import function_tool
 
 @function_tool
 def get_weather(city: str, unit: str = "celsius") -> str:
@@ -60,8 +60,8 @@ For advanced cases — dynamic dispatch, shared invocation callbacks — pass
 an explicit `on_invoke`:
 
 ```python
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.tools import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
 import json
 
 async def _invoke(ctx: ToolContext, raw_args: str) -> str:
@@ -158,7 +158,7 @@ each tool's inputs before `on_invoke` and outputs after — the rest of the
 agent pipeline is unaffected.
 
 ```python
-from philharmonica.adk.tools.tool_guardrails import (
+from augments.adk.tools.tool_guardrails import (
     ToolGuardrails,
     ToolInputGuardrail,
     ToolOutputGuardrail,
@@ -228,13 +228,13 @@ forbidden.
 | `ComputerTool` | Anthropic (computer use) | Desktop computer control |
 | `HostedMCPTool` | Anthropic | Anthropic-hosted MCP server |
 
-Import from `philharmonica.adk.tools`:
+Import from `augments.adk.tools`:
 
 ```python
-from philharmonica.adk.tools import WebSearchTool, CodeExecutionTool, FileSearchTool
+from augments.adk.tools import WebSearchTool, CodeExecutionTool, FileSearchTool
 
-from philharmonica.adk.llms import AnthropicLLM
-from philharmonica.adk.agents import Agent
+from augments.adk.llms import AnthropicLLM
+from augments.adk.agents import Agent
 
 agent = Agent(
     llm=AnthropicLLM(model="claude-sonnet-4-5"),
@@ -292,8 +292,8 @@ instances alongside your own.
 Add an `MCPToolset` to `Agent.tools`:
 
 ```python
-from philharmonica.adk.tools.toolsets.mcp_toolset import MCPToolset
-from philharmonica.adk.mcp.stdio import MCPServerStdio
+from augments.adk.tools.toolsets.mcp_toolset import MCPToolset
+from augments.adk.mcp.stdio import MCPServerStdio
 
 agent = Agent(
     name="ResearchAgent",
@@ -333,7 +333,7 @@ to invoke the sub-agent and the sub-agent runs independently, returning its
 final output as a tool result.
 
 ```python
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 
 researcher = Agent(name="Researcher", system_prompt="...")
 writer = Agent(name="Writer", system_prompt="...")

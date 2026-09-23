@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, cast
 
-from philharmonica.adk.llms.litellm.litellm_converter import ChatCompletionConverter
+from augments.adk.llms.litellm.litellm_converter import ChatCompletionConverter
 
 # ---------------------------------------------------------------------------
 # Pending content parts must not be flushed ahead of an open assistant

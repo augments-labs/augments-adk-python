@@ -10,7 +10,7 @@ Two non-negotiable contracts per example file.
 ## 1. Load `.env` First
 
 Any example reading env vars MUST `load_dotenv()` at the top BEFORE any
-import that captures env at module-load time (litellm, `philharmonica.adk.llms`).
+import that captures env at module-load time (litellm, `augments.adk.llms`).
 Imports above `load_dotenv()` read empty values silently.
 
 ```python

@@ -62,27 +62,27 @@ jobs:
           uvx twine check dist/*
       - name: Install built wheel smoke test
         run: |
-          uv venv /tmp/philharmonica-wheel-smoke
-          uv pip install --python /tmp/philharmonica-wheel-smoke/bin/python dist/*.whl
-          /tmp/philharmonica-wheel-smoke/bin/python - <<'PY'
+          uv venv /tmp/augments-wheel-smoke
+          uv pip install --python /tmp/augments-wheel-smoke/bin/python dist/*.whl
+          /tmp/augments-wheel-smoke/bin/python - <<'PY'
           import importlib.metadata
           from pathlib import Path
 
-          import philharmonica.adk
-          from philharmonica.adk import Agent, FunctionTool, Runner
-          from philharmonica.adk.tools import function_tool
+          import augments.adk
+          from augments.adk import Agent, FunctionTool, Runner
+          from augments.adk.tools import function_tool
 
           expected_version = "${{ steps.ver.outputs.version }}"
-          dist = importlib.metadata.distribution("philharmonica-adk")
+          dist = importlib.metadata.distribution("augments-adk")
           assert dist.version == expected_version
-          assert philharmonica.adk.__version__ == expected_version
-          assert Path(dist.locate_file("philharmonica/adk/py.typed")).is_file()
+          assert augments.adk.__version__ == expected_version
+          assert Path(dist.locate_file("augments/adk/py.typed")).is_file()
           assert Agent is not None
           assert Runner is not None
           assert FunctionTool is not None
           assert function_tool is not None
           PY
-          /tmp/philharmonica-wheel-smoke/bin/philharmonica --help >/dev/null
+          /tmp/augments-wheel-smoke/bin/augments --help >/dev/null
       - name: Tag + create GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -110,7 +110,7 @@ jobs:
             fi
           else
             gh release create "$tag" dist/* \
-              --title "Philharmonica ADK ${tag}" \
+              --title "Augments ADK ${tag}" \
               --notes "See CHANGELOG.md for details. Build artifacts attached (wheel + sdist)."
           fi
       # Hand the exact artifacts that were verified above (twine check +

@@ -16,9 +16,9 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.memory import MemoryConfig, TemporaryMemory
-from philharmonica.adk.tools.builtin.memory_tool import ForgetMemoryTool, RecallMemoryTool, RememberMemoryTool
+from augments.adk import Agent, RunConfig, Runner, VerboseConfig
+from augments.adk.memory import MemoryConfig, TemporaryMemory
+from augments.adk.tools.builtin.memory_tool import ForgetMemoryTool, RecallMemoryTool, RememberMemoryTool
 
 logger = logging.getLogger(__name__)
 

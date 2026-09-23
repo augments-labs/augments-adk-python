@@ -9,7 +9,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowAgentDeferred,
     FlowApprovalPolicy,
@@ -17,8 +17,8 @@ from philharmonica.adk.flows import (
     arun_flow_agent,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.state import RunState
+from augments.adk.run.runner import Runner
+from augments.adk.run.state import RunState
 
 
 class _State(BaseModel):
@@ -73,7 +73,7 @@ def _deferred_run_result(state: RunState) -> Any:
 class TestAgentBridgeCompletes:
     async def test_agent_run_returning_normally_yields_result(self) -> None:
         completed = _completed_run_result()
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed)):
             flow = _Bridge(_State)
             result = await Runner.arun_flow(flow)
         assert result.status == "completed"
@@ -85,7 +85,7 @@ class TestAgentBridgeDefers:
         run_state = RunState(original_user_prompt="ping", current_agent_name="agent_a")
         deferred = _deferred_run_result(run_state)
 
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
             flow = _Bridge(_State)
             result = await Runner.arun_flow(flow)
 
@@ -110,7 +110,7 @@ class TestAgentBridgeDefers:
         run_state = RunState(original_user_prompt="ping", current_agent_name="agent_a")
         deferred = _deferred_run_result(run_state)
 
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
             result = await Runner.arun_flow(_PolicyBridge(_State))
 
         assert result.status == "deferred"
@@ -120,7 +120,7 @@ class TestAgentBridgeDefers:
         run_state = RunState(original_user_prompt="ping", current_agent_name="agent_a")
         deferred = _deferred_run_result(run_state)
 
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
             flow = _Bridge(_State)
             initial = await Runner.arun_flow(flow)
         assert initial.checkpoint is not None
@@ -136,7 +136,7 @@ class TestAgentBridgeDefers:
         # and assert it was called with the RunState argument.
         completed = _completed_run_result()
         resume_mock = AsyncMock(return_value=completed)
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=resume_mock):
+        with patch("augments.adk.run.runner.Runner.arun", new=resume_mock):
             resumed_flow = _Bridge(_State)
             resumed = await Runner.arun_flow_from_checkpoint(
                 resumed_flow,
@@ -165,7 +165,7 @@ class TestFlowAgentDeferredExceptionShape:
 
 class TestRoundTripAgentRunStateOnCheckpoint:
     def test_checkpoint_json_round_trips_agent_run_state(self) -> None:
-        from philharmonica.adk.flows import FlowDeferredStep
+        from augments.adk.flows import FlowDeferredStep
 
         deferred = FlowDeferredStep(
             step_name="go",
@@ -197,7 +197,7 @@ async def test_arun_flow_from_checkpoint_accepts_empty_agent_resolutions(
     """Plain step-level deferrals resume without an ``agent_resolutions`` mapping."""
     flow = _Bridge(_State)
     completed = _completed_run_result()
-    with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed)):
+    with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=completed)):
         # Build a trivial checkpoint with no deferred steps; resume should be a no-op completion.
         empty_cp = FlowCheckpoint(
             flow_id=flow.flow_id,

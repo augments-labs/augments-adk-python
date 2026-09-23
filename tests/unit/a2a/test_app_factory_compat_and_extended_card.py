@@ -19,8 +19,8 @@ pytest.importorskip("starlette")
 
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.agents import Agent
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -94,7 +94,7 @@ class TestCompatEarlierProtocolPassthrough:
         basic_card: AgentCard,
     ) -> None:
         server = A2AServer(agent=basic_agent, agent_card=basic_card, compat_earlier_protocol=False)
-        with patch("philharmonica.adk.a2a.app_factory.create_jsonrpc_routes") as mock_routes:
+        with patch("augments.adk.a2a.app_factory.create_jsonrpc_routes") as mock_routes:
             mock_routes.return_value = []
             build_starlette_app(server)
         mock_routes.assert_called_once()
@@ -107,7 +107,7 @@ class TestCompatEarlierProtocolPassthrough:
         basic_card: AgentCard,
     ) -> None:
         server = A2AServer(agent=basic_agent, agent_card=basic_card, compat_earlier_protocol=True)
-        with patch("philharmonica.adk.a2a.app_factory.create_jsonrpc_routes") as mock_routes:
+        with patch("augments.adk.a2a.app_factory.create_jsonrpc_routes") as mock_routes:
             mock_routes.return_value = []
             build_starlette_app(server)
         mock_routes.assert_called_once()
@@ -151,7 +151,7 @@ class TestExtendedCardPassthrough:
             agent_card=basic_card,
             extended_agent_card=extended_card,
         )
-        with patch("philharmonica.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
+        with patch("augments.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
             mock_handler.return_value = MagicMock()
             build_starlette_app(server)
         mock_handler.assert_called_once()
@@ -171,7 +171,7 @@ class TestExtendedCardPassthrough:
             agent_card=basic_card,
             extended_card_modifier=my_modifier,
         )
-        with patch("philharmonica.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
+        with patch("augments.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
             mock_handler.return_value = MagicMock()
             build_starlette_app(server)
         mock_handler.assert_called_once()
@@ -184,7 +184,7 @@ class TestExtendedCardPassthrough:
         basic_card: AgentCard,
     ) -> None:
         server = A2AServer(agent=basic_agent, agent_card=basic_card)
-        with patch("philharmonica.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
+        with patch("augments.adk.a2a.app_factory.DefaultRequestHandler") as mock_handler:
             mock_handler.return_value = MagicMock()
             build_starlette_app(server)
         mock_handler.assert_called_once()
@@ -205,7 +205,7 @@ class TestExtendedCardPassthrough:
             agent_card=basic_card,
             card_modifier=my_card_modifier,
         )
-        with patch("philharmonica.adk.a2a.app_factory.create_agent_card_routes") as mock_card_routes:
+        with patch("augments.adk.a2a.app_factory.create_agent_card_routes") as mock_card_routes:
             mock_card_routes.return_value = []
             build_starlette_app(server)
         mock_card_routes.assert_called_once()
@@ -218,7 +218,7 @@ class TestExtendedCardPassthrough:
         basic_card: AgentCard,
     ) -> None:
         server = A2AServer(agent=basic_agent, agent_card=basic_card)
-        with patch("philharmonica.adk.a2a.app_factory.create_agent_card_routes") as mock_card_routes:
+        with patch("augments.adk.a2a.app_factory.create_agent_card_routes") as mock_card_routes:
             mock_card_routes.return_value = []
             build_starlette_app(server)
         mock_card_routes.assert_called_once()

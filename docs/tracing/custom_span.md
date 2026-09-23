@@ -10,7 +10,7 @@ Tracing is opt-in. Until an application calls `set_tracer(...)`, every span
 factory returns a `NoOpSpan` — zero cost on the hot path.
 
 ```python
-from philharmonica.adk.tracing import set_tracer, get_tracer
+from augments.adk.tracing import set_tracer, get_tracer
 
 class MyBackendTracer:
     def agent_span(self, data): ...
@@ -30,7 +30,7 @@ every factory, so swapping tracers at runtime is a single call.
 The only tracing factory the ADK exposes for application code.
 
 ```python
-from philharmonica.adk.tracing import custom_span
+from augments.adk.tracing import custom_span
 
 with custom_span("rank_search_results", data={"n": len(results)}) as span:
     ranked = rank(results)
@@ -48,7 +48,7 @@ and any exception is recorded via `set_error()` before re-raising.
 ## Typed span-data classes
 
 Each built-in span kind has a frozen dataclass payload in
-`philharmonica.adk.types.tracing.span_data`. This is the "G4" layer — typed
+`augments.adk.types.tracing.span_data`. This is the "G4" layer — typed
 observability instead of untyped dict attributes:
 
 | Factory | Data class | Fields |
@@ -84,8 +84,8 @@ the captured `exc_val`).
 
 ## See also
 
-- `src/philharmonica/adk/tracing/tracer.py` — `Tracer` protocol + registry
-- `src/philharmonica/adk/tracing/spans.py` — `Span`, `NoOpSpan`, factory functions
-- `src/philharmonica/adk/types/tracing/span_data.py` — typed payload dataclasses
+- `src/augments/adk/tracing/tracer.py` — `Tracer` protocol + registry
+- `src/augments/adk/tracing/spans.py` — `Span`, `NoOpSpan`, factory functions
+- `src/augments/adk/types/tracing/span_data.py` — typed payload dataclasses
 - `examples/tracing/custom_span_example.py` — runnable example
 - `tests/unit/tracing/` — tracer, span, and span-data tests

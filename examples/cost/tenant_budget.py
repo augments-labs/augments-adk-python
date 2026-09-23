@@ -27,12 +27,12 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.exceptions import TenantBudgetExceeded
-from philharmonica.adk.run import Runner
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.budgets import TenantBudget
+from augments.adk.exceptions import TenantBudgetExceeded
+from augments.adk.run import Runner
+from augments.adk.run.config import RunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.config.dump import dump_agent
-from philharmonica.adk.prompts.system_prompt import SystemPrompt
-from philharmonica.adk.schemas.agent_output_schema import AgentOutputSchema
-from philharmonica.adk.types.config.agent_config import AgentConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.config.dump import dump_agent
+from augments.adk.prompts.system_prompt import SystemPrompt
+from augments.adk.schemas.agent_output_schema import AgentOutputSchema
+from augments.adk.types.config.agent_config import AgentConfig
 
 from .sample_symbols import SampleOutput
 
@@ -40,7 +40,7 @@ class TestDumpScalars:
 
 class TestDumpLLM:
     def test_string_llm_with_llm_config(self) -> None:
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         d = dump_agent(Agent(name="a", system_prompt="p", llm="gpt-4o", llm_config=LLMConfig(temperature=0.5)))
         assert d["llm"] == "gpt-4o"
@@ -52,8 +52,8 @@ class TestDumpLLM:
         assert "llm_config" not in d
 
     def test_provider_instance_dumps_block_without_api_key(self) -> None:
-        from philharmonica.adk.llms.anthropic.anthropic_config import AnthropicConfig
-        from philharmonica.adk.llms.anthropic.anthropic_model import AnthropicLLM
+        from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
+        from augments.adk.llms.anthropic.anthropic_model import AnthropicLLM
 
         llm = AnthropicLLM(model="claude-sonnet-4-5", api_key="secret")
         config = AnthropicConfig(temperature=0.5, auto_cache_control=True)
@@ -68,7 +68,7 @@ class TestDumpLLM:
 
 class TestDumpToolsAndRoundTrip:
     def test_hosted_tool_dumped(self) -> None:
-        from philharmonica.adk.tools.hosted.web_search_tool import WebSearchTool
+        from augments.adk.tools.hosted.web_search_tool import WebSearchTool
 
         d = dump_agent(Agent(name="a", system_prompt="p", tools=[WebSearchTool(max_uses=3)]))
         assert d["tools"] == [{"type": "web_search", "args": {"max_uses": 3}}]
@@ -80,12 +80,12 @@ class TestDumpToolsAndRoundTrip:
         assert "tools" not in d
 
     def test_dump_exported_from_config(self) -> None:
-        from philharmonica.adk.config import dump_agent as exported
+        from augments.adk.config import dump_agent as exported
 
         assert exported is dump_agent
 
     def test_round_trip_via_build(self) -> None:
-        from philharmonica.adk.config import build_agent
+        from augments.adk.config import build_agent
 
         original = {
             "name": "support",
@@ -105,21 +105,21 @@ class TestDumpToolsAndRoundTrip:
 
 class TestDumpReviewFixes:
     def test_compact_enforcement_preserved(self) -> None:
-        from philharmonica.adk.schemas import SchemaEnforcement
+        from augments.adk.schemas import SchemaEnforcement
 
         schema = AgentOutputSchema(SampleOutput, schema_enforcement=SchemaEnforcement.COMPACT)
         d = dump_agent(Agent(name="a", system_prompt="p", output_schema=schema))
         assert d["output_schema"]["enforcement"] == "compact"
 
     def test_none_enforcement_preserved(self) -> None:
-        from philharmonica.adk.schemas import SchemaEnforcement
+        from augments.adk.schemas import SchemaEnforcement
 
         schema = AgentOutputSchema(SampleOutput, schema_enforcement=SchemaEnforcement.NONE)
         d = dump_agent(Agent(name="a", system_prompt="p", output_schema=schema))
         assert d["output_schema"]["enforcement"] == "none"
 
     def test_default_factory_field_omitted(self) -> None:
-        from philharmonica.adk.tools.hosted.file_search_tool import FileSearchTool
+        from augments.adk.tools.hosted.file_search_tool import FileSearchTool
 
         d = dump_agent(Agent(name="a", system_prompt="p", tools=[FileSearchTool()]))
         assert d["tools"] == [{"type": "file_search", "args": {}}]
@@ -129,20 +129,20 @@ class TestDumpReviewFixes:
         assert d["tool_use_behavior"] == "stop_on_first_tool"
 
     def test_stop_at_tools_dumped_and_revalidates(self) -> None:
-        from philharmonica.adk.types.tools.tool_use_behavior import StopAtTools
+        from augments.adk.types.tools.tool_use_behavior import StopAtTools
 
         d = dump_agent(Agent(name="a", system_prompt="p", tool_use_behavior=StopAtTools(stop_at_tool_names=["done"])))
         assert d["tool_use_behavior"] == {"stop_at_tool_names": ["done"]}
         AgentConfig.model_validate(d)
 
     def test_eager_skill_activation_dumped(self) -> None:
-        from philharmonica.adk.skills.activation import SkillActivation
+        from augments.adk.skills.activation import SkillActivation
 
         d = dump_agent(Agent(name="a", system_prompt="p", skill_activation=SkillActivation.EAGER))
         assert d["skill_activation"] == "eager"
 
     def test_provider_instance_no_config_omits_config(self) -> None:
-        from philharmonica.adk.llms.anthropic.anthropic_model import AnthropicLLM
+        from augments.adk.llms.anthropic.anthropic_model import AnthropicLLM
 
         d = dump_agent(Agent(name="a", system_prompt="p", llm=AnthropicLLM(model="claude-sonnet-4-5", api_key="s")))
         assert d["llm"] == {"provider": "anthropic", "model": "claude-sonnet-4-5"}
@@ -151,7 +151,7 @@ class TestDumpReviewFixes:
 
 class TestDumpSecretOmission:
     def test_hosted_mcp_secrets_omitted(self) -> None:
-        from philharmonica.adk.tools.hosted.mcp_tool import HostedMCPTool
+        from augments.adk.tools.hosted.mcp_tool import HostedMCPTool
 
         tool = HostedMCPTool(
             server_label="docs",
@@ -167,7 +167,7 @@ class TestDumpSecretOmission:
         assert "headers" not in args
 
     def test_llm_config_extra_maps_omitted(self) -> None:
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         config = LLMConfig(temperature=0.5, extra_headers={"Authorization": "Bearer sk"}, extra_body={"api_key": "sk"})
         d = dump_agent(Agent(name="a", system_prompt="p", llm="gpt-4o", llm_config=config))

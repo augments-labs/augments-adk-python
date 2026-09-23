@@ -2,7 +2,7 @@
 
 import pytest
 
-from philharmonica.adk.memory.memory_types import (
+from augments.adk.memory.memory_types import (
     MemoryEntry,
     MemoryKind,
     MemoryMetadata,

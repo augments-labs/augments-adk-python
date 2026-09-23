@@ -30,10 +30,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run.config import DEFAULT_MODEL
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents import Agent
+from augments.adk.run.config import DEFAULT_MODEL
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
     SharedContextConfig,

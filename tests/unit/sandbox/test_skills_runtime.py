@@ -7,13 +7,13 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SkillsConfigError
-from philharmonica.adk.sandbox.capabilities.skills import (
+from augments.adk.exceptions.exceptions import SkillsConfigError
+from augments.adk.sandbox.capabilities.skills import (
     LocalDirLazySkillSource,
     Skill,
     SkillsCapability,
 )
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.manifest import Manifest
 
 
 @pytest.fixture
@@ -77,7 +77,7 @@ class TestSkillsProcessManifest:
         result = cap.process_manifest(Manifest())
         assert ".agents" in result.entries
         skills_dir = result.entries[".agents"]
-        from philharmonica.adk.types.sandbox.entries import Dir
+        from augments.adk.types.sandbox.entries import Dir
 
         assert isinstance(skills_dir, Dir)
         assert "lint" in skills_dir.children
@@ -93,7 +93,7 @@ class TestSkillsProcessManifest:
             lazy_from=LocalDirLazySkillSource(source_path=str(skill_dir)),
         )
         result = cap.process_manifest(Manifest())
-        from philharmonica.adk.types.sandbox.entries import Dir
+        from augments.adk.types.sandbox.entries import Dir
 
         assert ".agents" in result.entries
         # Lazy: empty Dir reservation.
@@ -108,7 +108,7 @@ class TestSkillsProcessManifest:
         ``SkillsCapability(from_=entry)`` silently wrote an EMPTY ``.agents``
         directory instead of the source's skills.
         """
-        from philharmonica.adk.types.sandbox.entries import Dir, File
+        from augments.adk.types.sandbox.entries import Dir, File
 
         source = Dir(
             children={
@@ -127,7 +127,7 @@ class TestSkillsProcessManifest:
 
     def test_from_source_non_dir_raises(self) -> None:
         """A non-Dir ``from_`` cannot supply skill children — raise, don't no-op."""
-        from philharmonica.adk.types.sandbox.entries import File
+        from augments.adk.types.sandbox.entries import File
 
         cap = SkillsCapability(from_=File(content=b"not a dir"))
         with pytest.raises(SkillsConfigError, match="must be a Dir"):
@@ -143,13 +143,13 @@ class TestSkillsProcessManifest:
         """
         from pydantic import ValidationError
 
-        from philharmonica.adk.types.sandbox.entries import Dir
+        from augments.adk.types.sandbox.entries import Dir
 
         with pytest.raises(ValidationError):
             SkillsCapability.model_validate({"from": Dir(children={})})
 
     def test_overlap_raises(self) -> None:
-        from philharmonica.adk.types.sandbox.entries import Dir
+        from augments.adk.types.sandbox.entries import Dir
 
         cap = SkillsCapability(
             skills=[Skill(name="lint", description="x", content="x")],

@@ -7,10 +7,10 @@ from unittest.mock import MagicMock
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.handoffs.handoff import Handoff, handoff
-from philharmonica.adk.handoffs.handoff_input_data import HandoffInputData
-from philharmonica.adk.handoffs.handoff_route import handoff_route
-from philharmonica.adk.schemas.utils import SchemaEnforcement
+from augments.adk.handoffs.handoff import Handoff, handoff
+from augments.adk.handoffs.handoff_input_data import HandoffInputData
+from augments.adk.handoffs.handoff_route import handoff_route
+from augments.adk.schemas.utils import SchemaEnforcement
 
 
 def _mock_agent(name: str = "test_agent") -> MagicMock:
@@ -412,8 +412,8 @@ class TestHandoffRouteFactory:
 
     def test_handoff_route_factory(self) -> None:
         """handoff_route() builds a HandoffRoute from tuples."""
-        from philharmonica.adk.handoffs.handoff_route import HandoffRoute
-        from philharmonica.adk.types.intents import Intent
+        from augments.adk.handoffs.handoff_route import HandoffRoute
+        from augments.adk.types.intents import Intent
 
         class TestIntent(Intent):
             kind: str = "test"
@@ -497,7 +497,7 @@ class TestHandoffFilters:
 
     def test_filter_uses_messages_property(self) -> None:
         """remove_tool_calls operates on messages (context + output)."""
-        from philharmonica.adk.handoffs.handoff_filters import remove_tool_calls
+        from augments.adk.handoffs.handoff_filters import remove_tool_calls
 
         data = HandoffInputData(
             intent="test",
@@ -527,7 +527,7 @@ class TestHandoffFilters:
 
     def test_filter_sets_forwarded(self) -> None:
         """keep_last_n sets forwarded to decouple from audit trail."""
-        from philharmonica.adk.handoffs.handoff_filters import keep_last_n
+        from augments.adk.handoffs.handoff_filters import keep_last_n
 
         data = HandoffInputData(
             intent="test",
@@ -555,7 +555,7 @@ class TestHandoffFilters:
         ``items[0:]`` == ALL items — so ``keep_last_n(0)`` forwarded the
         entire history (cost + privacy blowout) instead of keeping zero.
         """
-        from philharmonica.adk.handoffs.handoff_filters import keep_last_n
+        from augments.adk.handoffs.handoff_filters import keep_last_n
 
         data = HandoffInputData(
             intent="test",
@@ -567,14 +567,14 @@ class TestHandoffFilters:
 
     def test_keep_last_n_negative_raises(self) -> None:
         """Negative n is invalid — rejected at factory time (matches the tasks twin)."""
-        from philharmonica.adk.handoffs.handoff_filters import keep_last_n
+        from augments.adk.handoffs.handoff_filters import keep_last_n
 
         with pytest.raises(ValueError, match="keep_last_n"):
             keep_last_n(-1)
 
     def test_compose_chains_forwarded(self) -> None:
         """compose() passes forwarded through the chain."""
-        from philharmonica.adk.handoffs.handoff_filters import (
+        from augments.adk.handoffs.handoff_filters import (
             compose,
             keep_last_n,
             remove_tool_calls,
@@ -603,7 +603,7 @@ class TestHandoffFilters:
 
     def test_intent_only_sets_empty_forwarded(self) -> None:
         """intent_only sets forwarded to empty tuple."""
-        from philharmonica.adk.handoffs.handoff_filters import intent_only
+        from augments.adk.handoffs.handoff_filters import intent_only
 
         data = HandoffInputData(
             intent="classify_refund",
@@ -621,10 +621,10 @@ class TestPrepareUsesForwarded:
     @pytest.mark.asyncio
     async def test_prepare_uses_forwarded_when_set(self) -> None:
         """prepare_handoff_input uses forwarded instead of messages."""
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
-        from philharmonica.adk.run.handoffs_executor import prepare_handoff_input
-        from philharmonica.adk.types.items import MessageOutputItem, SystemItem, UserItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.run.handoffs_executor import prepare_handoff_input
+        from augments.adk.types.items import MessageOutputItem, SystemItem, UserItem
+        from augments.adk.types.responses.llm_response import LLMResponseText
 
         agent = _mock_agent()
         target = HandoffTarget(target=agent)
@@ -647,10 +647,10 @@ class TestPrepareUsesForwarded:
     @pytest.mark.asyncio
     async def test_prepare_falls_back_to_messages(self) -> None:
         """prepare_handoff_input uses messages when forwarded is None."""
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
-        from philharmonica.adk.run.handoffs_executor import prepare_handoff_input
-        from philharmonica.adk.types.items import MessageOutputItem, SystemItem, UserItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.run.handoffs_executor import prepare_handoff_input
+        from augments.adk.types.items import MessageOutputItem, SystemItem, UserItem
+        from augments.adk.types.responses.llm_response import LLMResponseText
 
         agent = _mock_agent()
         target = HandoffTarget(target=agent)

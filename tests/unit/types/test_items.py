@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.items import (
+from augments.adk.types.items import (
     CompactionItem,
     HandoffCallItem,
     HandoffOutputItem,
@@ -38,7 +38,7 @@ def _easy_msg(role: str = "system", content: str = "") -> dict:
 
 
 def _make_message(text: str = "Hi there!", **kwargs: object) -> MessageOutputItem:
-    from philharmonica.adk.types.responses.llm_response import LLMResponseRefusal, LLMResponseText
+    from augments.adk.types.responses.llm_response import LLMResponseRefusal, LLMResponseText
 
     parts: list = []
     if text is not None:
@@ -56,7 +56,7 @@ def _make_message(text: str = "Hi there!", **kwargs: object) -> MessageOutputIte
 
 
 def _make_tool_call(**kwargs: object) -> ToolCallItem:
-    from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+    from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
     return ToolCallItem(
         raw=LLMResponseFunctionToolCall(
@@ -70,13 +70,13 @@ def _make_tool_call(**kwargs: object) -> ToolCallItem:
 
 
 def _make_tool_result(call_id: str = "call_1", output: str = "42") -> ToolCallOutputItem:
-    from philharmonica.adk.types.output import FunctionToolCallResult
+    from augments.adk.types.output import FunctionToolCallResult
 
     return ToolCallOutputItem(raw=FunctionToolCallResult(call_id=call_id, output=output))
 
 
 def _make_reasoning(**kwargs: object) -> ReasoningItem:
-    from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+    from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
     summary_texts = kwargs.get("summary_texts") or [""]
     content_texts = kwargs.get("content_texts") or []
@@ -192,7 +192,7 @@ class TestReasoningItem:
 
 class TestHandoffCallItem:
     def test_raw_access(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
         item = HandoffCallItem(
             raw=LLMResponseFunctionToolCall(
@@ -205,7 +205,7 @@ class TestHandoffCallItem:
         assert item.target_agent == "billing"
 
     def test_type_discriminator(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+        from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
         assert (
             HandoffCallItem(
@@ -217,7 +217,7 @@ class TestHandoffCallItem:
 
 class TestHandoffOutputItem:
     def test_source_and_target(self) -> None:
-        from philharmonica.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
+        from augments.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
 
         item = HandoffOutputItem(
             raw=FunctionToolCallResultParam(type="function_call_output", call_id="c1", output="Transferred."),
@@ -229,7 +229,7 @@ class TestHandoffOutputItem:
         assert item.raw["call_id"] == "c1"
 
     def test_type_discriminator(self) -> None:
-        from philharmonica.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
+        from augments.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
 
         assert (
             HandoffOutputItem(
@@ -241,7 +241,7 @@ class TestHandoffOutputItem:
 
 class TestMCPListToolsItem:
     def test_raw_access(self) -> None:
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
+        from augments.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
 
         item = MCPListToolsItem(
             raw=MCPListTools(server="srv", tools=[MCPListToolsTool(name="a"), MCPListToolsTool(name="b")])
@@ -259,7 +259,7 @@ class TestMCPListToolsItem:
         """
         from typing import Any, cast
 
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
+        from augments.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
 
         # Tool with no optional fields set
         item_no_opts = MCPListToolsItem(raw=MCPListTools(server="srv", tools=[MCPListToolsTool(name="only_name")]))
@@ -294,7 +294,7 @@ class TestMCPListToolsItem:
 
 class TestMCPApprovalRequestItem:
     def test_raw_access(self) -> None:
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPApprovalRequest
+        from augments.adk.types.tools.builtin_tool_types import MCPApprovalRequest
 
         item = MCPApprovalRequestItem(raw=MCPApprovalRequest(id="c1", server="srv", name="tool1"))
         assert item.raw.server == "srv"
@@ -304,7 +304,7 @@ class TestMCPApprovalRequestItem:
 
 class TestMCPApprovalResponseItem:
     def test_raw_access(self) -> None:
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPApprovalResponse
+        from augments.adk.types.tools.builtin_tool_types import MCPApprovalResponse
 
         item = MCPApprovalResponseItem(raw=MCPApprovalResponse(approval_request_id="c1", approved=False, reason="No"))
         assert item.raw.approved is False
@@ -313,7 +313,7 @@ class TestMCPApprovalResponseItem:
     def test_to_param(self) -> None:
         from typing import Any, cast
 
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPApprovalResponse
+        from augments.adk.types.tools.builtin_tool_types import MCPApprovalResponse
 
         item = MCPApprovalResponseItem(raw=MCPApprovalResponse(approval_request_id="c1", approved=True))
         # Approval responses now round-trip via the provider_item
@@ -330,7 +330,7 @@ class TestMCPApprovalResponseItem:
 
 class TestToolApprovalItem:
     def _make_deferred(self, **kwargs: object) -> object:
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCall
+        from augments.adk.tools.deferred_tool import DeferredToolCall
 
         return DeferredToolCall(
             tool_call_id=str(kwargs.get("call_id", "c1")),
@@ -479,7 +479,7 @@ class TestItemHelpers:
         assert ItemHelpers.text_message_output(_make_message("Hello!")) == "Hello!"
 
     def test_text_message_output_multi_part(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.types.responses.llm_response import LLMResponseText
 
         item = MessageOutputItem(
             raw=[LLMResponseText(text="Hello "), LLMResponseText(text="world!")],
@@ -487,7 +487,7 @@ class TestItemHelpers:
         assert ItemHelpers.text_message_output(item) == "Hello world!"
 
     def test_text_message_output_empty(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseRefusal
+        from augments.adk.types.responses.llm_response import LLMResponseRefusal
 
         item = MessageOutputItem(
             raw=[LLMResponseRefusal(refusal="No")],
@@ -510,7 +510,7 @@ class TestItemHelpers:
         assert ItemHelpers.extract_last_text([UserItem(raw=_easy_msg("user"))]) is None
 
     def test_refusal_message_output(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseRefusal
+        from augments.adk.types.responses.llm_response import LLMResponseRefusal
 
         item = MessageOutputItem(
             raw=[LLMResponseRefusal(refusal="I can't.")],
@@ -549,15 +549,15 @@ class TestItemHelpers:
 
 class TestTypeDiscriminators:
     def test_all_items_have_unique_type(self) -> None:
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCall
-        from philharmonica.adk.types.output import FunctionToolCallResult
-        from philharmonica.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.tools.deferred_tool import DeferredToolCall
+        from augments.adk.types.output import FunctionToolCallResult
+        from augments.adk.types.output.function_tool_call_result_param import FunctionToolCallResultParam
+        from augments.adk.types.responses.llm_response import (
             LLMResponseFunctionToolCall,
             LLMResponseReasoning,
             LLMResponseText,
         )
-        from philharmonica.adk.types.tools.builtin_tool_types import (
+        from augments.adk.types.tools.builtin_tool_types import (
             MCPApprovalRequest,
             MCPApprovalResponse,
             MCPListTools,
@@ -721,7 +721,7 @@ class TestRoundTripMixed:
 
     def test_state_round_trip(self) -> None:
         """Simulate RunState.to_dict() → RunState.from_dict() round-trip."""
-        from philharmonica.adk.run.state import RunState
+        from augments.adk.run.state import RunState
 
         original_items = [
             UserItem(raw=_easy_msg("user", "Delete user bob")),
@@ -760,7 +760,7 @@ class TestRoundTripPreservesData:
     """
 
     def test_multimodal_tool_output_survives_roundtrip(self) -> None:
-        from philharmonica.adk.types.output import FunctionToolCallResult
+        from augments.adk.types.output import FunctionToolCallResult
 
         multimodal_output = [
             {"type": "input_text", "text": "Here is the screenshot:"},
@@ -777,8 +777,8 @@ class TestRoundTripPreservesData:
         assert back[0].raw.call_id == "c1"
 
     def test_generic_provider_item_survives_roundtrip(self) -> None:
-        from philharmonica.adk.types.items import ProviderItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponseProviderItem
+        from augments.adk.types.items import ProviderItem
+        from augments.adk.types.responses.llm_response import LLMResponseProviderItem
 
         item = ProviderItem(
             raw=LLMResponseProviderItem(
@@ -796,7 +796,7 @@ class TestRoundTripPreservesData:
         assert back[0].raw.raw["id"] == "ws_1"
 
     def test_mcp_list_tools_survives_roundtrip(self) -> None:
-        from philharmonica.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
+        from augments.adk.types.tools.builtin_tool_types import MCPListTools, MCPListToolsTool
 
         item = MCPListToolsItem(
             raw=MCPListTools(
@@ -815,7 +815,7 @@ class TestRoundTripPreservesData:
         assert back[0].raw.server == "prod-api"
 
     def test_text_annotations_survive_roundtrip(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponseAnnotation, LLMResponseText
+        from augments.adk.types.responses.llm_response import LLMResponseAnnotation, LLMResponseText
 
         annotation = LLMResponseAnnotation(url="https://example.com", title="Example", start_index=0, end_index=4)
         item = MessageOutputItem(raw=[LLMResponseText(text="docs", annotations=[annotation])], status="completed")

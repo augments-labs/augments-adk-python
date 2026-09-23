@@ -19,11 +19,11 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.merge import Merge
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.merge import Merge
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.run.runner import Runner
 
 # ---------------------------------------------------------------------------
 # Callable node helpers (all async, single str arg)

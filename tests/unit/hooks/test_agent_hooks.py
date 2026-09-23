@@ -23,13 +23,13 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import AgentHooks, RunHooks
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import AgentHooks, RunHooks
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
@@ -119,22 +119,22 @@ def _mock_runner_stack(fake_call_llm) -> ExitStack:
     - Stubs out the three Runner guardrail entry points
     """
     stack = ExitStack()
-    stack.enter_context(patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)))
+    stack.enter_context(patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)))
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )
@@ -143,7 +143,7 @@ def _mock_runner_stack(fake_call_llm) -> ExitStack:
 
 async def _runner_arun(agent, prompt, **kwargs):
     """Lazy-import Runner so the test module imports cleanly in isolation."""
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     return await Runner.arun(agent, prompt, **kwargs)
 
@@ -343,7 +343,7 @@ class TestOnHandoff:
 
     @pytest.mark.asyncio
     async def test_on_handoff_fires_on_incoming_agent_with_source(self) -> None:
-        from philharmonica.adk.run.handoffs_executor import execute_deterministic_handoff
+        from augments.adk.run.handoffs_executor import execute_deterministic_handoff
 
         from_hooks = RecordingAgentHooks()
         to_hooks = RecordingAgentHooks()

@@ -11,8 +11,8 @@ from __future__ import annotations
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from philharmonica.adk.types.config import AgentConfig
-from philharmonica.adk.types.config.llm_config import (
+from augments.adk.types.config import AgentConfig
+from augments.adk.types.config.llm_config import (
     AnthropicConfigBlock,
     AnthropicProviderBlock,
     GeminiConfigBlock,
@@ -25,7 +25,7 @@ from philharmonica.adk.types.config.llm_config import (
     OpenAIResponsesConfigBlock,
     OpenAIResponsesProviderBlock,
 )
-from philharmonica.adk.types.tools import ToolExecutionMode
+from augments.adk.types.tools import ToolExecutionMode
 
 _PROVIDER_ADAPTER: TypeAdapter[object] = TypeAdapter(LLMProviderConfig)
 

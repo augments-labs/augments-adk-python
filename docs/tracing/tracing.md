@@ -22,9 +22,9 @@ forgot to install a tracer, nothing measurable is recorded.
 ## Quick start with the OpenTelemetry bridge
 
 ```python
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 tracer = setup_otel(service_name="my-agent", console=True)
 set_tracer(tracer)
@@ -93,8 +93,8 @@ For test assertions or bespoke backends, implement the `Tracer`
 protocol (seven typed factory methods) and install it:
 
 ```python
-from philharmonica.adk.tracing import Span, set_tracer
-from philharmonica.adk.types.tracing import AgentSpanData, SpanData
+from augments.adk.tracing import Span, set_tracer
+from augments.adk.types.tracing import AgentSpanData, SpanData
 
 class Recorder:
     def __init__(self) -> None:
@@ -103,7 +103,7 @@ class Recorder:
     def agent_span(self, data: AgentSpanData) -> Span[AgentSpanData]:
         self.spans.append(data)
         return Span(data)
-    # ... one method per span kind; see src/philharmonica/adk/tracing/tracer.py
+    # ... one method per span kind; see src/augments/adk/tracing/tracer.py
 
 recorder = Recorder()
 set_tracer(recorder)
@@ -127,7 +127,7 @@ config = RunConfig(
 )
 ```
 
-The OTel bridge flattens metadata into `philharmonica.metadata.<key>`
+The OTel bridge flattens metadata into `augments.metadata.<key>`
 attributes; the MultiTracer fans the same metadata to every wrapped
 tracer.
 
@@ -140,8 +140,8 @@ to a collector and another capturing spans in-memory for test
 assertions:
 
 ```python
-from philharmonica.adk.tracing import MultiTracer, set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
+from augments.adk.tracing import MultiTracer, set_tracer
+from augments.adk.tracing.otel import setup_otel
 
 otel = setup_otel(service_name="prod")
 recorder = Recorder()

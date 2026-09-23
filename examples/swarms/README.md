@@ -32,4 +32,4 @@ provider) before running.
   tokens, easiest to reason about.
 - Want classic AutoGen/Strands semantics? `llm_handoff_swarm.py`.
 - Building a typed triage ↔ specialist flow? `structured_routing_swarm.py`
-  — the Philharmonica differentiator.
+  — the Augments differentiator.

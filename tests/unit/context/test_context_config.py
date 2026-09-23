@@ -10,7 +10,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.context.context_config import (
+from augments.adk.context.context_config import (
     CompactionConfig,
     ContextEditingConfig,
     ContextManagementConfig,

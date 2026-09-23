@@ -12,14 +12,14 @@ from typing import Any, cast
 import pytest
 from pytest_postgresql.factories import postgresql, postgresql_proc
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import CheckpointConflictError
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState, SwarmStateDict
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import CheckpointConflictError
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState, SwarmStateDict
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 pytestmark = pytest.mark.postgres
 

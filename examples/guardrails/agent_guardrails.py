@@ -39,7 +39,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from philharmonica.adk import (
+from augments.adk import (
     Agent,
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
@@ -55,7 +55,7 @@ from philharmonica.adk import (
     agent_input_guardrail,
     agent_output_guardrail,
 )
-from philharmonica.adk.agents.agent_guardrails import AgentInputGuardrailData, AgentOutputGuardrailData
+from augments.adk.agents.agent_guardrails import AgentInputGuardrailData, AgentOutputGuardrailData
 
 logger = logging.getLogger(__name__)
 

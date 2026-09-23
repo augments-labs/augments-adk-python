@@ -7,6 +7,60 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **BREAKING:** the project is renamed to Augments, and the package is now
+  published as `augments-adk` (the 0.2.3 entry below names the previous
+  package). Everything that carried the previous name now carries `augments`,
+  with no aliases left behind. To upgrade:
+  - **Install and import.** `pip install augments-adk`, then `import augments.adk`.
+    Extras keep their names (`augments-adk[otel]`, …).
+  - **CLI.** The command is `augments` (`augments run`, `augments serve`, …).
+    Regenerate Dockerfiles, Helm charts and AWS manifests produced by
+    `augments deploy`, or edit their `CMD`, requirements line and image name
+    (`augments-agent:latest`).
+  - **Public classes.** The exception base is `AugmentsError`, and the Temporal
+    and Restate integrations are `AugmentsWorkflow`,
+    `AugmentsTemporalPlugin`, `AugmentsRestateService` and
+    `build_augments_data_converter`; the `AugmentsWorkflow` class attribute
+    that lists a subclass's agents is `__augments_agents__`. Update `except`
+    clauses, imports, and workflow subclasses; a subclass that still sets the
+    previous attribute name raises no error, so search for it explicitly.
+  - **Temporal.** The workflow type is registered as `AugmentsWorkflow`.
+    Drain or finish in-flight workflows started under the previous type name
+    before deploying workers on this release; they will not resume on it.
+  - **Telemetry.** The default OTel service, tracer and meter name is
+    `augments-adk`; metric names and span attribute keys use the `augments.`
+    prefix, and `gen_ai.system` / `llm.system` report `augments`. Update
+    dashboards, alerts and queries that filter on the previous names.
+  - **Logging.** Loggers live under `augments.adk`, and the default log file
+    is `augments_adk.*.log`. Update logging configs that name the previous
+    logger.
+  - **Declarative config.** `module:attr` references and `$schema` paths that
+    point into the package now start with `augments.adk` / `src/augments/`.
+  - **Sandboxes.** Docker volumes are named `augments-{slug}-{digest}`, the
+    local snapshot directory is `augments-adk/sandbox/snapshots` under the
+    platform state directory, and Kubernetes resources carry
+    `app.kubernetes.io/managed-by: augments-adk` plus `augments.adk.io/*` and
+    `augments.sandbox/*` labels and annotations. Volumes, snapshots and pods
+    created by earlier releases are no longer found or cleaned up; remove
+    them by their previous names once no run needs them. Temporary paths
+    follow the same pattern (`/tmp/augments-adk/bin`, `.augments_patch.diff`,
+    and `augments-git-`, `augments-skills-`, `augments-sandbox-` and
+    `augments-mem-` prefixes).
+  - **Web loader.** The RAG website loader sends
+    `User-Agent: augments-adk-document-search/1.0`.
+  - **Contributors.** The repository is `augments-labs/augments-adk-python`
+    (the previous URL redirects; point an existing clone at it with
+    `git remote set-url origin https://github.com/augments-labs/augments-adk-python.git`),
+    the conda environment is
+    `augments-adk-python`, and the test and example variables are
+    `AUGMENTS_TEST_PG_DSN`, `AUGMENTS_TEST_REDIS_URL` and
+    `AUGMENTS_EXAMPLES_INTERACTIVE_MODE`; the integration test database is
+    `augments_test`.
+
 ## [0.2.3] - 2026-09-23
 
 ### Changed

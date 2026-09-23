@@ -1,4 +1,4 @@
-from philharmonica.adk.types.tracing import TracingConvention
+from augments.adk.types.tracing import TracingConvention
 
 
 def test_convention_members_and_values():

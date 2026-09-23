@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.mcp.extras`` (resource + prompt builders)."""
+"""Tests for ``augments.adk.mcp.extras`` (resource + prompt builders)."""
 
 from __future__ import annotations
 
@@ -7,8 +7,8 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.exceptions import MCPToolCallError
-from philharmonica.adk.mcp.extras import build_prompt_tools, build_resource_tool
+from augments.adk.mcp.exceptions import MCPToolCallError
+from augments.adk.mcp.extras import build_prompt_tools, build_resource_tool
 
 
 def _server(name: str = "svc") -> Any:
@@ -130,7 +130,7 @@ async def test_prompt_tool_invokes_get_prompt() -> None:
 
 def _concrete_server(llm: Any = None, elicitation_callback: Any = None) -> Any:
     """Return a concrete MCPServerWithClientSession subclass for testing."""
-    from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+    from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
     class _Concrete(MCPServerWithClientSession):
         async def connect(self) -> None:

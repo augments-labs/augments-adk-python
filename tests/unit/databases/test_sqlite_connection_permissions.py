@@ -18,7 +18,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.databases import SQLiteDatabaseConnection
+from augments.adk.databases import SQLiteDatabaseConnection
 
 pytestmark = pytest.mark.skipif(
     sys.platform == "win32",
@@ -100,7 +100,7 @@ class TestPrecreateClosesRace:
 
         # Manually drive the pre-create, independent of aiosqlite, so
         # we can observe the mode without racing the event loop.
-        from philharmonica.adk.databases.connections.sqlite.sqlite_database_connection import (
+        from augments.adk.databases.connections.sqlite.sqlite_database_connection import (
             precreate_restricted_file,
         )
 
@@ -127,7 +127,7 @@ class TestPrecreateClosesRace:
         db_path.write_bytes(b"")
         os.chmod(db_path, 0o644)
 
-        from philharmonica.adk.databases.connections.sqlite.sqlite_database_connection import (
+        from augments.adk.databases.connections.sqlite.sqlite_database_connection import (
             precreate_restricted_file,
         )
 
@@ -146,7 +146,7 @@ class TestPrecreateClosesRace:
         the link and tighten the target, not the symlink itself. We
         refuse to pre-create (since the file "exists") and emit a
         warning so the operator sees the unusual shape."""
-        from philharmonica.adk.databases.connections.sqlite.sqlite_database_connection import (
+        from augments.adk.databases.connections.sqlite.sqlite_database_connection import (
             precreate_restricted_file,
         )
 
@@ -170,7 +170,7 @@ class TestPrecreateClosesRace:
         """When the parent directory does not exist, let aiosqlite
         surface the real error rather than eating it inside the
         pre-create helper."""
-        from philharmonica.adk.databases.connections.sqlite.sqlite_database_connection import (
+        from augments.adk.databases.connections.sqlite.sqlite_database_connection import (
             precreate_restricted_file,
         )
 

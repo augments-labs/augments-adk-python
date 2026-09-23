@@ -8,19 +8,19 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.context.directives import (
+from augments.adk.context.directives import (
     CompactDirective,
     ContextDirective,
     DirectiveStore,
     DropDirective,
     apply_directives,
 )
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import Tool
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
     LLMStreamEvent,

@@ -32,20 +32,20 @@ import asyncio
 import logging
 from typing import Any
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import (
+from augments.adk.agents import Agent
+from augments.adk.handoffs import (
     Handoff,
     HandoffInputData,
 )
-from philharmonica.adk.handoffs.handoff_filters import (
+from augments.adk.handoffs.handoff_filters import (
     compose,
     remove_tool_calls,
     source_messages,
 )
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.run.context import RunContext
+from augments.adk.tools import function_tool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -82,7 +82,7 @@ def audit_handoff(ctx: RunContext[Any], data: HandoffInputData) -> None:
     Items in data.context / data.output are typed RunItem instances.
     Use ``isinstance`` checks for type-safe dispatch.
     """
-    from philharmonica.adk.types.items import (
+    from augments.adk.types.items import (
         MessageOutputItem,
         ToolCallItem,
         ToolCallOutputItem,
@@ -98,7 +98,7 @@ def audit_handoff(ctx: RunContext[Any], data: HandoffInputData) -> None:
     # Log what the agent produced during its turn using typed checks
     for item in data.output:
         if isinstance(item, MessageOutputItem):
-            from philharmonica.adk.types.items.items import ItemHelpers
+            from augments.adk.types.items.items import ItemHelpers
 
             text = ItemHelpers.text_message_output(item)
             logger.info("  Output: MessageOutputItem (content=%s)", text[:40] if text else None)

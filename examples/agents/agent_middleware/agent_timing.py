@@ -33,28 +33,28 @@ import time
 from collections.abc import AsyncIterator
 from typing import Any
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.run.agent_middleware import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.middleware import Middleware
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.run.agent_middleware import (
     AgentBlockOutcome,
     AgentLoggingMiddleware,
     AgentMiddlewareNext,
 )
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import Tool
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
     LLMStreamEvent,
 )
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

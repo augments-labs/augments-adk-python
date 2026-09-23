@@ -8,14 +8,14 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.context.compaction import CompactionResult, ContextCompactor
-from philharmonica.adk.context.context_config import CompactionConfig
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import Tool
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.context.compaction import CompactionResult, ContextCompactor
+from augments.adk.context.context_config import CompactionConfig
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import Tool
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
     LLMStreamEvent,
@@ -63,7 +63,7 @@ def _make_conversation(n_turns: int) -> list[LLMInputContentItem]:
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_produces_summary(_mock_count):
     llm = _StubLLM(text="Summary of conversation")
     msgs = _make_conversation(5)  # system + 10 messages
@@ -83,7 +83,7 @@ async def test_compact_produces_summary(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=50)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=50)
 async def test_compact_short_conversation_returns_empty_summary(_mock_count):
     llm = _StubLLM()
     msgs = _make_conversation(1)  # system + 2 messages
@@ -141,7 +141,7 @@ def test_build_compacted_messages_empty_summary():
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_uses_custom_instructions(_mock_count):
     llm = _StubLLM()
     msgs = _make_conversation(5)
@@ -167,7 +167,7 @@ async def test_compact_uses_custom_instructions(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_routes_through_llm_abc(_mock_count):
     """The compactor must invoke llm.acomplete (no direct litellm call)."""
     llm = _StubLLM()
@@ -188,7 +188,7 @@ async def test_compact_routes_through_llm_abc(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_empty_summary_returns_no_op_result(_mock_count):
     """When the LLM returns an empty summary, compaction must return a
     no-op CompactionResult (items_compacted=0, token counts unchanged).
@@ -239,7 +239,7 @@ async def test_compact_empty_summary_returns_no_op_result(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_preserve_zero_compacts_entire_body(_mock_count):
     """preserve_recent_items=0 means "preserve no recent turns" — the whole
     body must be summarised, not silently skipped.
@@ -270,7 +270,7 @@ async def test_compact_preserve_zero_compacts_entire_body(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_transcript_includes_tool_call_and_result(_mock_count):
     """Tool calls / results are Layer-1 items with no role/content. They must
     be formatted into meaningful transcript lines, not collapsed to blank
@@ -309,7 +309,7 @@ async def test_compact_transcript_includes_tool_call_and_result(_mock_count):
 
 
 @pytest.mark.asyncio
-@patch("philharmonica.adk.context.compaction.TokenCounter.count_messages", return_value=100)
+@patch("augments.adk.context.compaction.TokenCounter.count_messages", return_value=100)
 async def test_compact_preserve_zero_summary_transcript_covers_whole_body(_mock_count):
     """With preserve==0 the summarizer transcript must include every body
     message (none held back as "recent"), and the system message stays out

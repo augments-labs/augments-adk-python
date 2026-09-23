@@ -20,7 +20,7 @@ not choose. See [Parity Guarantee](#parity-guarantee).
 
 ## `per_node_timeout` and `NodeRetryPolicy`
 
-Both live in `philharmonica.adk.graphs.config`:
+Both live in `augments.adk.graphs.config`:
 
 ```python
 from dataclasses import dataclass
@@ -117,9 +117,9 @@ used by `examples/graphs/node_reliability.py`:
 import asyncio
 import dataclasses
 import logging
-from philharmonica.adk.graphs import Graph, GraphConfig
-from philharmonica.adk.graphs.config import NodeRetryPolicy
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs import Graph, GraphConfig
+from augments.adk.graphs.config import NodeRetryPolicy
+from augments.adk.run.runner import Runner
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -191,7 +191,7 @@ interaction):
 ### `GraphNodeTimeoutError`
 
 ```python
-class GraphNodeTimeoutError(PhilharmonicaError):
+class GraphNodeTimeoutError(AugmentsError):
     node_id: str    # id of the node that timed out
     timeout: float  # per-attempt timeout that was configured
     attempts: int   # number of attempts made before giving up
@@ -203,7 +203,7 @@ attempt hits the per-attempt timeout — regardless of the retry configuration.
 ### `NodeRetriesExhaustedError`
 
 ```python
-class NodeRetriesExhaustedError(PhilharmonicaError):
+class NodeRetriesExhaustedError(AugmentsError):
     node_id: str        # id of the node that exhausted its budget
     attempts: int       # == policy.max_attempts
     last_error: Exception  # the exception from the final attempt
@@ -272,8 +272,8 @@ For `fail_fast` basics and the full error-handling model, see
   decision tree.
 - `docs/graphs/checkpointing.md` — crash recovery, selective re-fire, cumulative
   budgets.
-- `src/philharmonica/adk/run/node_reliability.py` — `resolve_node_reliability`,
+- `src/augments/adk/run/node_reliability.py` — `resolve_node_reliability`,
   `run_node_with_reliability`.
-- `src/philharmonica/adk/graphs/config.py` — `NodeRetryPolicy`, `GraphConfig`.
-- `src/philharmonica/adk/exceptions/exceptions.py` — `GraphNodeTimeoutError`,
+- `src/augments/adk/graphs/config.py` — `NodeRetryPolicy`, `GraphConfig`.
+- `src/augments/adk/exceptions/exceptions.py` — `GraphNodeTimeoutError`,
   `NodeRetriesExhaustedError`.

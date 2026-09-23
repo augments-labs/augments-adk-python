@@ -39,10 +39,10 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, Runner, Task, TaskDependency, TaskPipeline
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.tasks.task_filters import forward_final_output
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk import Agent, Runner, Task, TaskDependency, TaskPipeline
+from augments.adk.run import RunConfig
+from augments.adk.tasks.task_filters import forward_final_output
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

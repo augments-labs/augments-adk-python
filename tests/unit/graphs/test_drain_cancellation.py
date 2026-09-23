@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.run.stream import CancelMode
+from augments.adk.run.stream import CancelMode
 
 
 class TestCancelModeDrain:
@@ -32,7 +32,7 @@ class TestGraphRunResultStreamingDrainCancel:
     draining the queue or cancelling tasks."""
 
     async def test_cancel_drain_sets_mode(self) -> None:
-        from philharmonica.adk.graphs.result import GraphRunResultStreaming
+        from augments.adk.graphs.result import GraphRunResultStreaming
 
         r: GraphRunResultStreaming = GraphRunResultStreaming()
         assert r.cancel_mode == CancelMode.NONE
@@ -43,7 +43,7 @@ class TestGraphRunResultStreamingDrainCancel:
         """drain mode must not cancel the driver task (unlike immediate)."""
         import asyncio
 
-        from philharmonica.adk.graphs.result import GraphRunResultStreaming
+        from augments.adk.graphs.result import GraphRunResultStreaming
 
         r: GraphRunResultStreaming = GraphRunResultStreaming()
 
@@ -60,7 +60,7 @@ class TestGraphRunResultStreamingDrainCancel:
 
     async def test_cancel_drain_does_not_drain_queue(self) -> None:
         """Drain mode must NOT empty the event queue (unlike immediate)."""
-        from philharmonica.adk.graphs.result import GraphRunResultStreaming
+        from augments.adk.graphs.result import GraphRunResultStreaming
 
         r: GraphRunResultStreaming = GraphRunResultStreaming()
         await r.put_event({"type": "ev"})
@@ -90,13 +90,13 @@ class TestDrainPredicateInLoop:
         spinning up a real LLM.
         """
 
-        from philharmonica.adk.graphs.graph import Graph
-        from philharmonica.adk.graphs.hooks import HookRegistry
-        from philharmonica.adk.graphs.join import JoinBarrier
-        from philharmonica.adk.graphs.result import GraphRunStatus
-        from philharmonica.adk.graphs.state import GraphState
-        from philharmonica.adk.orchestration.executable import NodeResult
-        from philharmonica.adk.run.graph_loop import _run_bsp_loop
+        from augments.adk.graphs.graph import Graph
+        from augments.adk.graphs.hooks import HookRegistry
+        from augments.adk.graphs.join import JoinBarrier
+        from augments.adk.graphs.result import GraphRunStatus
+        from augments.adk.graphs.state import GraphState
+        from augments.adk.orchestration.executable import NodeResult
+        from augments.adk.run.graph_loop import _run_bsp_loop
 
         async def noop_emit(_: object) -> None:
             return None

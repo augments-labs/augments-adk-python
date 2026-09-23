@@ -2,7 +2,7 @@
 
 All provider traffic flows through a framework-owned `LLM` abstract
 base class. The Runner never imports a provider SDK directly. Provider
-code lives in `src/philharmonica/adk/llms/<provider>/` and is the only place
+code lives in `src/augments/adk/llms/<provider>/` and is the only place
 allowed to import `litellm`, `anthropic`, `openai`, `google.genai`, etc.
 
 ## Shape
@@ -40,11 +40,11 @@ non-OpenAI provider implementation. The framework-owned ABC means
 
 | Provider                  | Module                                  | Config class                     |
 | ------------------------- | --------------------------------------- | -------------------------------- |
-| LiteLLM (any)             | `src/philharmonica/adk/llms/litellm/`          | `LiteLLMConfig`                  |
-| Anthropic native          | `src/philharmonica/adk/llms/anthropic/`        | `AnthropicConfig`                |
-| OpenAI Responses native   | `src/philharmonica/adk/llms/openai/`           | `OpenAIResponsesConfig`          |
-| OpenAI Chat Completions   | `src/philharmonica/adk/llms/openai/`           | `OpenAIChatCompletionsConfig`    |
-| Gemini native             | `src/philharmonica/adk/llms/gemini/`           | `GeminiConfig`                   |
+| LiteLLM (any)             | `src/augments/adk/llms/litellm/`          | `LiteLLMConfig`                  |
+| Anthropic native          | `src/augments/adk/llms/anthropic/`        | `AnthropicConfig`                |
+| OpenAI Responses native   | `src/augments/adk/llms/openai/`           | `OpenAIResponsesConfig`          |
+| OpenAI Chat Completions   | `src/augments/adk/llms/openai/`           | `OpenAIChatCompletionsConfig`    |
+| Gemini native             | `src/augments/adk/llms/gemini/`           | `GeminiConfig`                   |
 
 Each provider implementation owns its own wire layer (`ChatCompletion*`,
 `Anthropic*`, etc.) and converts in/out on the boundary.

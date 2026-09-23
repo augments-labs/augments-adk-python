@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.skills import Skill
-from philharmonica.adk.skills.sources.directory import (
+from augments.adk.skills import Skill
+from augments.adk.skills.sources.directory import (
     DirectorySkillSource,
     parse_skill_md,
 )
@@ -34,7 +34,7 @@ Do something useful.
 name: code-review
 description: Expert code review
 version: 1.0.0
-author: Philharmonica
+author: Augments
 tags: python, security, review
 license: MIT
 ---
@@ -44,7 +44,7 @@ Review code carefully.
         frontmatter, body = parse_skill_md(content)
         assert frontmatter["name"] == "code-review"
         assert frontmatter["version"] == "1.0.0"
-        assert frontmatter["author"] == "Philharmonica"
+        assert frontmatter["author"] == "Augments"
         assert frontmatter["tags"] == "python, security, review"
         assert frontmatter["license"] == "MIT"
         assert "Review code carefully" in body
@@ -116,7 +116,7 @@ class TestDirectorySkillSource:
 name: code-review
 description: Expert code review with security focus
 version: 1.0.0
-author: Philharmonica
+author: Augments
 tags: python, security
 license: MIT
 ---
@@ -142,7 +142,7 @@ When reviewing code:
         assert "security vulnerabilities" in skill.instructions
         assert skill.metadata is not None
         assert skill.metadata.version == "1.0.0"
-        assert skill.metadata.author == "Philharmonica"
+        assert skill.metadata.author == "Augments"
         assert "python" in skill.metadata.tags
         assert "security" in skill.metadata.tags
         assert skill.metadata.license == "MIT"

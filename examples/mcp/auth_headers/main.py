@@ -32,16 +32,16 @@ import itertools
 import logging
 import os
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.mcp import (
+from augments.adk.agents.agent import Agent
+from augments.adk.mcp import (
     HeaderProvider,
     MCPConnectionError,
     MCPServerStreamableHttp,
     MCPServerStreamableHttpParams,
 )
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools.toolsets import MCPToolset
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools.toolsets import MCPToolset
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

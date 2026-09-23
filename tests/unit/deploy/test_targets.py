@@ -6,17 +6,17 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.deploy.commands import (
+from augments.adk.deploy.commands import (
     CommandResult,
     DeployCommandFailed,
     DeployToolMissing,
     RecordingRunner,
 )
-from philharmonica.adk.deploy.context import DeployContext
-from philharmonica.adk.deploy.targets.docker import DockerTarget
-from philharmonica.adk.deploy.targets.gke import GKETarget
-from philharmonica.adk.deploy.targets.helm import HelmTarget
-from philharmonica.adk.deploy.targets.k8s import K8sTarget
+from augments.adk.deploy.context import DeployContext
+from augments.adk.deploy.targets.docker import DockerTarget
+from augments.adk.deploy.targets.gke import GKETarget
+from augments.adk.deploy.targets.helm import HelmTarget
+from augments.adk.deploy.targets.k8s import K8sTarget
 
 
 def _ctx() -> DeployContext:

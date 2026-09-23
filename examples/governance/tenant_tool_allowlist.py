@@ -18,12 +18,12 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import ToolNotPermittedForTenant
-from philharmonica.adk.run import Runner
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.exceptions import ToolNotPermittedForTenant
+from augments.adk.run import Runner
+from augments.adk.run.config import RunConfig
+from augments.adk.tools import function_tool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

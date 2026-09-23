@@ -1,12 +1,12 @@
 """Unit tests for built-in tool types.
 
 Tests for WebSearch, FileSearch, and Computer use type definitions
-in ``philharmonica.adk.types.tools.builtin_tool_types``.
+in ``augments.adk.types.tools.builtin_tool_types``.
 """
 
 import pytest
 
-from philharmonica.adk.types.tools.builtin_tool_types import (
+from augments.adk.types.tools.builtin_tool_types import (
     ComputerAction,
     ComputerToolCall,
     ComputerToolCallResult,

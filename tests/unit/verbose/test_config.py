@@ -10,7 +10,7 @@ import io
 
 import pytest
 
-from philharmonica.adk.verbose.config import (
+from augments.adk.verbose.config import (
     EVENT_AGENT_START,
     EVENT_TOOL_START,
     EventStyle,

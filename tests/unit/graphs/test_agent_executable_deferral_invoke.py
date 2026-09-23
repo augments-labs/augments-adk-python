@@ -14,15 +14,15 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import AgentToolDeferral
-from philharmonica.adk.graphs.adapters import AgentExecutable
-from philharmonica.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import AgentToolDeferral
+from augments.adk.graphs.adapters import AgentExecutable
+from augments.adk.graphs.interrupt import InterruptException, NestedAgentInterrupt
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 async def test_invoke_translates_deferral_to_nested_interrupt(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -39,7 +39,7 @@ async def test_invoke_translates_deferral_to_nested_interrupt(monkeypatch: pytes
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         raise defer
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -88,7 +88,7 @@ async def test_invoke_raises_when_node_id_key_missing(monkeypatch: pytest.Monkey
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         raise defer
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -121,7 +121,7 @@ async def test_invoke_raises_when_snapshots_key_missing(monkeypatch: pytest.Monk
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         raise defer
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 
@@ -160,7 +160,7 @@ async def test_invoke_deposits_snapshot_with_full_run_state(monkeypatch: pytest.
     async def fake_arun(cls: Any, *args: Any, **kwargs: Any) -> Any:
         raise defer
 
-    from philharmonica.adk.run import runner as runner_mod
+    from augments.adk.run import runner as runner_mod
 
     monkeypatch.setattr(runner_mod.Runner, "arun", classmethod(fake_arun))
 

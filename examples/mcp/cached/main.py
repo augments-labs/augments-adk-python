@@ -22,7 +22,7 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
+from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
 
 logger = logging.getLogger(__name__)
 

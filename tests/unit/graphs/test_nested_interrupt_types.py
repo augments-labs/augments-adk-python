@@ -6,9 +6,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import AgentToolDeferral
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.exceptions import AgentToolDeferral
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import (
     Interrupt,
     NestedAgentApproval,
     NestedAgentDecision,
@@ -16,9 +16,9 @@ from philharmonica.adk.graphs.interrupt import (
     NestedAgentRejection,
     NestedAgentReply,
 )
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.graphs.state import GraphState
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
 
 
 def _make_deferred_call(call_id: str) -> DeferredToolCall:

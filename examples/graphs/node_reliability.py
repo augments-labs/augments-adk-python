@@ -33,11 +33,11 @@ import asyncio
 import dataclasses
 import logging
 
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.graphs import Graph
+from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

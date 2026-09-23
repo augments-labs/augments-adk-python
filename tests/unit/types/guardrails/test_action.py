@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import dataclasses
 
-from philharmonica.adk.types.guardrails import GuardrailAction, GuardrailSpan
+from augments.adk.types.guardrails import GuardrailAction, GuardrailSpan
 
 
 class TestGuardrailAction:

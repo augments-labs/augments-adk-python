@@ -7,7 +7,7 @@ Verifies the changes to ``FunctionSpanData`` and the OTel bridge:
 * When OTel is installed, ``OTelTracer.function_span`` switches the
   span name prefix to ``a2a.`` when ``a2a_data`` is set, falls back
   to ``mcp.`` for ``mcp_data`` only, and to ``tool.`` otherwise.
-* ``a2a_data`` keys are flattened under the ``philharmonica.a2a`` attribute
+* ``a2a_data`` keys are flattened under the ``augments.a2a`` attribute
   prefix on emitted OTel attributes.
 
 The OTel-specific tests are skipped if the optional ``otel`` extra
@@ -18,8 +18,8 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.tracing import function_span
-from philharmonica.adk.types.tracing.span_data import FunctionSpanData
+from augments.adk.tracing import function_span
+from augments.adk.types.tracing.span_data import FunctionSpanData
 
 
 class TestFunctionSpanDataExport:
@@ -82,7 +82,7 @@ class TestOTelPrefixSwitching:
         pytest.importorskip("opentelemetry")
 
     def test_a2a_prefix_when_a2a_data_set(self) -> None:
-        from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
+        from augments.adk.tracing.otel.otel_tracer import OTelTracer
 
         tracer = OTelTracer()
         data = FunctionSpanData(name="my_call", a2a_data={"task_id": "t1"})
@@ -93,7 +93,7 @@ class TestOTelPrefixSwitching:
         assert _get_otel_span_name(span) == "a2a.my_call"
 
     def test_mcp_prefix_when_only_mcp_data_set(self) -> None:
-        from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
+        from augments.adk.tracing.otel.otel_tracer import OTelTracer
 
         tracer = OTelTracer()
         data = FunctionSpanData(name="my_call", mcp_data={"server_name": "x"})
@@ -101,7 +101,7 @@ class TestOTelPrefixSwitching:
         assert _get_otel_span_name(span) == "mcp.my_call"
 
     def test_tool_prefix_when_neither_set(self) -> None:
-        from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
+        from augments.adk.tracing.otel.otel_tracer import OTelTracer
 
         tracer = OTelTracer()
         data = FunctionSpanData(name="my_call")
@@ -109,7 +109,7 @@ class TestOTelPrefixSwitching:
         assert _get_otel_span_name(span) == "tool.my_call"
 
     def test_a2a_takes_precedence_over_mcp(self) -> None:
-        from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
+        from augments.adk.tracing.otel.otel_tracer import OTelTracer
 
         tracer = OTelTracer()
         data = FunctionSpanData(
@@ -121,17 +121,17 @@ class TestOTelPrefixSwitching:
         # A2A is the wider boundary; MCP-via-A2A still surfaces as a2a.
         assert _get_otel_span_name(span) == "a2a.my_call"
 
-    def test_a2a_attributes_use_philharmonica_a2a_prefix(self) -> None:
-        from philharmonica.adk.tracing.otel.otel_tracer import _function_attrs
+    def test_a2a_attributes_use_augments_a2a_prefix(self) -> None:
+        from augments.adk.tracing.otel.otel_tracer import _function_attrs
 
         data = FunctionSpanData(
             name="t",
             a2a_data={"task_id": "abc", "remote_url": "http://x"},
         )
         attrs = _function_attrs(data, record_full=True, max_chars=10_000)
-        # Attribute keys flattened under philharmonica.a2a.<key>.
-        assert attrs["philharmonica.a2a.task_id"] == "abc"
-        assert attrs["philharmonica.a2a.remote_url"] == "http://x"
+        # Attribute keys flattened under augments.a2a.<key>.
+        assert attrs["augments.a2a.task_id"] == "abc"
+        assert attrs["augments.a2a.remote_url"] == "http://x"
 
 
 def _get_otel_span_name(span: Any) -> str:
@@ -155,7 +155,7 @@ class TestA2ASpanNamesNotDoublePrefix:
     def test_a2a_client_span_names_do_not_start_with_a2a_dot(self) -> None:
         import inspect
 
-        import philharmonica.adk.a2a.a2a_client as mod
+        import augments.adk.a2a.a2a_client as mod
 
         src = inspect.getsource(mod)
         # Find all function_span(name=...) calls; collect the name strings.
@@ -172,7 +172,7 @@ class TestA2ASpanNamesNotDoublePrefix:
         import inspect
         import re
 
-        import philharmonica.adk.a2a.executor as mod
+        import augments.adk.a2a.executor as mod
 
         src = inspect.getsource(mod)
         names = re.findall(r'function_span\s*\(\s*\n?\s*name=f?"([^"]+)"', src)

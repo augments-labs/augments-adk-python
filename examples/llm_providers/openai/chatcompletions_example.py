@@ -26,10 +26,10 @@ import logging
 
 from pydantic import BaseModel
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.openai import OpenAIChatCompletionsLLM
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms.openai import OpenAIChatCompletionsLLM
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

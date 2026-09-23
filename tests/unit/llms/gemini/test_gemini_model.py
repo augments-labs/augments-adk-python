@@ -31,10 +31,10 @@ from google.genai.types import (
 )
 from pydantic import BaseModel
 
-from philharmonica.adk.llms.gemini.gemini_model import GeminiLLM, _clean_schema_for_gemini
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.schemas import AgentOutputSchema
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.gemini.gemini_model import GeminiLLM, _clean_schema_for_gemini
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.schemas import AgentOutputSchema
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseReasoning,

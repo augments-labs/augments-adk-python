@@ -12,7 +12,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 if TYPE_CHECKING:
-    from philharmonica.adk.types.input import LLMInputContentItem
+    from augments.adk.types.input import LLMInputContentItem
 
 # ── Finding 1 regression: _summarize_for_handoff logs at ERROR ──────────────
 
@@ -24,7 +24,7 @@ class TestSummarizeForHandoffLogging:
         """Auth/rate-limit errors in _summarize_for_handoff must log at ERROR level."""
         import logging as _logging
 
-        from philharmonica.adk.run.handoffs_executor import _summarize_for_handoff
+        from augments.adk.run.handoffs_executor import _summarize_for_handoff
 
         captured: list[logging.LogRecord] = []
 
@@ -33,7 +33,7 @@ class TestSummarizeForHandoffLogging:
             def emit(self, record: _logging.LogRecord) -> None:
                 captured.append(record)
 
-        logger = _logging.getLogger("philharmonica.adk.run.handoffs_executor")
+        logger = _logging.getLogger("augments.adk.run.handoffs_executor")
         handler = _Handler()
         logger.addHandler(handler)
         original_level = logger.level
@@ -41,7 +41,7 @@ class TestSummarizeForHandoffLogging:
         try:
             err = RuntimeError("401 Unauthorized")
             with patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new_callable=AsyncMock,
                 side_effect=err,
             ):
@@ -67,7 +67,7 @@ class TestSummarizeForHandoffLogging:
         """Verify logger.warning alone is NOT emitted (must be logger.exception / ERROR)."""
         import logging as _logging
 
-        from philharmonica.adk.run.handoffs_executor import _summarize_for_handoff
+        from augments.adk.run.handoffs_executor import _summarize_for_handoff
 
         captured: list[logging.LogRecord] = []
 
@@ -76,14 +76,14 @@ class TestSummarizeForHandoffLogging:
             def emit(self, record: _logging.LogRecord) -> None:
                 captured.append(record)
 
-        logger = _logging.getLogger("philharmonica.adk.run.handoffs_executor")
+        logger = _logging.getLogger("augments.adk.run.handoffs_executor")
         handler = _Handler()
         logger.addHandler(handler)
         original_level = logger.level
         logger.setLevel(_logging.DEBUG)
         try:
             with patch(
-                "philharmonica.adk.context.compaction.ContextCompactor.compact",
+                "augments.adk.context.compaction.ContextCompactor.compact",
                 new_callable=AsyncMock,
                 side_effect=ValueError("rate limit"),
             ):
@@ -116,16 +116,16 @@ class TestStreamedResumeContextPropagation:
         """resume_from_state_streamed must accept context= kwarg."""
         import inspect
 
-        from philharmonica.adk.run.resumption import resume_from_state_streamed
+        from augments.adk.run.resumption import resume_from_state_streamed
 
         sig = inspect.signature(resume_from_state_streamed)
         assert "context" in sig.parameters, "context param must be present in resume_from_state_streamed"
 
     async def test_streamed_resume_uses_caller_context(self) -> None:
         """Caller-supplied context must be used in run_context, not state.context."""
-        from philharmonica.adk.run.resumption import resume_from_state_streamed
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.tools.deferred_tool import DeferredToolRequests
+        from augments.adk.run.resumption import resume_from_state_streamed
+        from augments.adk.run.state import RunState
+        from augments.adk.tools.deferred_tool import DeferredToolRequests
 
         class _CallerCtx:
             pass
@@ -169,10 +169,10 @@ class TestOnTaskStartInTryBlock:
 
     async def test_on_task_end_fires_when_on_task_start_raises(self) -> None:
         """If on_task_start raises, on_task_end must still be called."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.runner import Runner
-        from philharmonica.adk.tasks.task import Task
+        from augments.adk.agents.agent import Agent
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.runner import Runner
+        from augments.adk.tasks.task import Task
 
         end_called = []
 
@@ -202,11 +202,11 @@ class TestExecuteApprovedToolContextTypes:
 
     async def test_execution_aware_tool_gets_execution_context(self) -> None:
         """An execution_aware tool must receive ExecutionAwareToolContext."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_approved_tool
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCall
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.tools.tool_context import ExecutionAwareToolContext
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_approved_tool
+        from augments.adk.tools.deferred_tool import DeferredToolCall
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.tools.tool_context import ExecutionAwareToolContext
 
         received_ctx: list[Any] = []
 
@@ -240,18 +240,18 @@ class TestExecuteApprovedToolContextTypes:
             raw_arguments="{}",
         )
 
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         config = RunConfig()
 
         with (
-            patch("philharmonica.adk.run.llm_calls.resolve_function_tool", return_value=tool),
+            patch("augments.adk.run.llm_calls.resolve_function_tool", return_value=tool),
             patch(
-                "philharmonica.adk.run.tools_executor.enforce_tenant_allowlist",
+                "augments.adk.run.tools_executor.enforce_tenant_allowlist",
                 new_callable=AsyncMock,
                 return_value=None,
             ),
-            patch("philharmonica.adk.run.tools_executor.emit_audit", new_callable=AsyncMock),
+            patch("augments.adk.run.tools_executor.emit_audit", new_callable=AsyncMock),
         ):
             _content, success = await execute_approved_tool(
                 agent=agent,
@@ -271,11 +271,11 @@ class TestExecuteApprovedToolContextTypes:
 
     async def test_plain_tool_gets_plain_context(self) -> None:
         """A plain (non-execution-aware) tool must receive plain ToolContext."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_approved_tool
-        from philharmonica.adk.tools.deferred_tool import DeferredToolCall
-        from philharmonica.adk.tools.function_tool import FunctionTool
-        from philharmonica.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_approved_tool
+        from augments.adk.tools.deferred_tool import DeferredToolCall
+        from augments.adk.tools.function_tool import FunctionTool
+        from augments.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
 
         received_ctx: list[Any] = []
 
@@ -308,18 +308,18 @@ class TestExecuteApprovedToolContextTypes:
             raw_arguments="{}",
         )
 
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         config = RunConfig()
 
         with (
-            patch("philharmonica.adk.run.llm_calls.resolve_function_tool", return_value=tool),
+            patch("augments.adk.run.llm_calls.resolve_function_tool", return_value=tool),
             patch(
-                "philharmonica.adk.run.tools_executor.enforce_tenant_allowlist",
+                "augments.adk.run.tools_executor.enforce_tenant_allowlist",
                 new_callable=AsyncMock,
                 return_value=None,
             ),
-            patch("philharmonica.adk.run.tools_executor.emit_audit", new_callable=AsyncMock),
+            patch("augments.adk.run.tools_executor.emit_audit", new_callable=AsyncMock),
         ):
             _content2, success = await execute_approved_tool(
                 agent=agent,
@@ -344,10 +344,10 @@ class TestNestedDeferralToolCallId:
 
     async def test_nested_deferral_tool_call_id_is_opaque(self) -> None:
         """AgentToolDeferral catch must produce an opaque tool_call_id."""
-        from philharmonica.adk.exceptions import AgentToolDeferral
-        from philharmonica.adk.run.resumption import resume_from_state
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.tools.deferred_tool import DeferredToolRequests
+        from augments.adk.exceptions import AgentToolDeferral
+        from augments.adk.run.resumption import resume_from_state
+        from augments.adk.run.state import RunState
+        from augments.adk.tools.deferred_tool import DeferredToolRequests
 
         # Build a state that has an approved nested-agent tool
         state = RunState(
@@ -378,14 +378,14 @@ class TestNestedDeferralToolCallId:
         agent.hooks = None
 
         with (
-            patch("philharmonica.adk.run.loop.run_agent_loop", side_effect=deferral),
-            patch("philharmonica.adk.run.runner.wrap_hooks_with_verbose") as mock_hooks,
+            patch("augments.adk.run.loop.run_agent_loop", side_effect=deferral),
+            patch("augments.adk.run.runner.wrap_hooks_with_verbose") as mock_hooks,
         ):
             mock_hooks_obj = AsyncMock()
             mock_hooks_obj.on_agent_start = AsyncMock()
             mock_hooks_obj.on_agent_end = AsyncMock()
             mock_hooks.return_value = mock_hooks_obj
-            from philharmonica.adk.run.config import RunConfig
+            from augments.adk.run.config import RunConfig
 
             result = await resume_from_state(agent=agent, state=state, config=RunConfig())
 
@@ -408,10 +408,10 @@ class TestMaxTurnsGuardOnResume:
 
     async def test_resume_from_state_rejects_exhausted_turns(self) -> None:
         """Resume with turn_count >= max_turns raises MaxTurnsExceeded."""
-        from philharmonica.adk.exceptions import MaxTurnsExceeded
-        from philharmonica.adk.run.resumption import resume_from_state
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.tools.deferred_tool import DeferredToolRequests
+        from augments.adk.exceptions import MaxTurnsExceeded
+        from augments.adk.run.resumption import resume_from_state
+        from augments.adk.run.state import RunState
+        from augments.adk.tools.deferred_tool import DeferredToolRequests
 
         state = RunState(
             conversation_history=[],
@@ -430,10 +430,10 @@ class TestMaxTurnsGuardOnResume:
 
     def test_streamed_resume_rejects_exhausted_turns(self) -> None:
         """Streamed resume with turn_count >= max_turns returns error result."""
-        from philharmonica.adk.exceptions import MaxTurnsExceeded
-        from philharmonica.adk.run.resumption import resume_from_state_streamed
-        from philharmonica.adk.run.state import RunState
-        from philharmonica.adk.tools.deferred_tool import DeferredToolRequests
+        from augments.adk.exceptions import MaxTurnsExceeded
+        from augments.adk.run.resumption import resume_from_state_streamed
+        from augments.adk.run.state import RunState
+        from augments.adk.tools.deferred_tool import DeferredToolRequests
 
         state = RunState(
             conversation_history=[],
@@ -462,7 +462,7 @@ class TestLoopTypeAnnotations:
 
     def test_run_agent_block_type_annotations(self) -> None:
         """run_agent_block ctx_mgr and jit_directives must not be annotated as Any."""
-        from philharmonica.adk.run.loop import run_agent_block
+        from augments.adk.run.loop import run_agent_block
 
         hints = {}
         try:
@@ -484,7 +484,7 @@ class TestLoopTypeAnnotations:
         """run_agent_block_streamed ctx_mgr and jit_directives must not be Any."""
         import typing
 
-        from philharmonica.adk.run.loop import run_agent_block_streamed
+        from augments.adk.run.loop import run_agent_block_streamed
 
         try:
             hints = typing.get_type_hints(run_agent_block_streamed, include_extras=True)
@@ -505,12 +505,12 @@ class TestSequentialResumeIndexGuard:
 
     async def test_bad_resume_index_raises_value_error(self) -> None:
         """Resuming with resume_index < len(slots) raises ValueError."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
-        from philharmonica.adk.tasks.task import Task
-        from philharmonica.adk.tasks.task_output import TaskOutput
-        from philharmonica.adk.tasks.task_pipeline import TaskPipeline
-        from philharmonica.adk.tasks.task_pipeline_state import TaskPipelineState
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
+        from augments.adk.tasks.task import Task
+        from augments.adk.tasks.task_output import TaskOutput
+        from augments.adk.tasks.task_pipeline import TaskPipeline
+        from augments.adk.tasks.task_pipeline_state import TaskPipelineState
 
         agent = Agent(name="a", system_prompt="s")
         task1 = Task(agent=agent, description="t1", task_id="t1")
@@ -544,7 +544,7 @@ class TestSwarmTurnSpanFlag:
 
     async def test_no_error_stamp_on_clean_turn_exit(self) -> None:
         """When step 7 completes without exception, the finally must NOT call _stamp_turn_span_end."""
-        from philharmonica.adk.run import swarm_loop_streamed as sls
+        from augments.adk.run import swarm_loop_streamed as sls
 
         stamp_calls: list[str] = []
         orig_stamp = sls._stamp_turn_span_end
@@ -581,7 +581,7 @@ class TestDeferredRunImplType:
 
     def test_set_deferred_run_impl_annotation(self) -> None:
         """set_deferred_run_impl parameter must accept Callable, not bare Any."""
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.run.stream import RunResultStreaming
 
         # Check annotations directly to avoid get_type_hints resolution issues
         ann = RunResultStreaming.set_deferred_run_impl.__annotations__
@@ -597,7 +597,7 @@ class TestDeferredRunImplType:
         """_deferred_run_impl field must mention Callable in its annotation."""
         import dataclasses
 
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.run.stream import RunResultStreaming
 
         field_ann = ""
         for f in dataclasses.fields(RunResultStreaming):

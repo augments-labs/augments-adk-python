@@ -6,7 +6,7 @@ The ``StructuredRoutingPolicy`` wraps an existing
 the parsed intent off ``SwarmState.last_structured_output`` and
 dispatches via the ``.when(IntentType).to(agent)`` DSL.
 
-This is **the Philharmonica differentiator**:
+This is **the Augments differentiator**:
 
 - **Zero LLM routing tokens.** The routing signal is the structured
   output itself, not a ``transfer_to_<name>`` tool call. Same
@@ -38,18 +38,18 @@ from typing import Literal, Union
 
 from pydantic import Field
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import HandoffRoute
-from philharmonica.adk.run.config import DEFAULT_MODEL
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents import Agent
+from augments.adk.handoffs import HandoffRoute
+from augments.adk.run.config import DEFAULT_MODEL
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     ExplicitDoneTermination,
     MaxTurnsTermination,
     Swarm,
     SwarmConfig,
     prompt_with_swarm_instructions,
 )
-from philharmonica.adk.types.intents import Intent, Respond
+from augments.adk.types.intents import Intent, Respond
 
 logger = logging.getLogger(__name__)
 

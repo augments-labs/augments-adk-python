@@ -15,13 +15,13 @@ from __future__ import annotations
 
 from typing import Any
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tracing import Span, set_tracer
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.runner import Runner
+from augments.adk.tracing import Span, set_tracer
+from augments.adk.types.tracing.span_data import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -336,7 +336,7 @@ async def test_node_span_records_attempts_one_on_clean_first_try() -> None:
 
 async def test_node_span_records_attempts_after_retry_then_success() -> None:
     """A flaky node that succeeds on the second attempt records attempts=2."""
-    from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
+    from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
 
     recorder = _Recorder()
     set_tracer(recorder)
@@ -370,7 +370,7 @@ async def test_node_span_records_attempts_after_retry_then_success() -> None:
 
 async def test_node_span_records_attempts_after_retries_exhausted() -> None:
     """An always-failing node with retry policy records attempts=max_attempts."""
-    from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
+    from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
 
     recorder = _Recorder()
     set_tracer(recorder)
@@ -402,8 +402,8 @@ async def test_node_span_records_attempts_after_retries_exhausted() -> None:
 
 async def test_node_span_records_resume_attempt_after_hitl_resume() -> None:
     """A node that suspended and then resumed records resume_attempt=1 on the resumed span."""
-    from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-    from philharmonica.adk.graphs.interrupt import GraphResume
+    from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+    from augments.adk.graphs.interrupt import GraphResume
 
     recorder = _Recorder()
     set_tracer(recorder)

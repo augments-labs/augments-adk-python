@@ -9,7 +9,7 @@ Demonstrates:
     - Sending a HumanReply signal from the client side
 
 Prerequisites:
-    pip install "philharmonica-adk[temporal]"
+    pip install "augments-adk[temporal]"
     temporal server start-dev
 
 Run with:
@@ -29,18 +29,18 @@ try:
     from temporalio.client import Client
     from temporalio.worker import Worker
 except ImportError as _exc:
-    raise SystemExit("temporalio not installed. Run: pip install 'philharmonica-adk[temporal]'") from _exc
+    raise SystemExit("temporalio not installed. Run: pip install 'augments-adk[temporal]'") from _exc
 
 # ---------------------------------------------------------------------------
 # Graph definition
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.interrupt import request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.interrupt import request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.llms import LiteLLM
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.runner import Runner
 
 _llm = LiteLLM(model="gpt-4o-mini")
 
@@ -84,13 +84,13 @@ _graph = (
 
 from typing import override
 
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.workflows.temporal import (
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.workflows.temporal import (
+    AugmentsTemporalPlugin,
+    AugmentsWorkflow,
     HumanReply,
-    PhilharmonicaTemporalPlugin,
-    PhilharmonicaWorkflow,
 )
-from philharmonica.adk.workflows.temporal.activity import invoke_model_activity
+from augments.adk.workflows.temporal.activity import invoke_model_activity
 
 # ---------------------------------------------------------------------------
 # Temporal workflow with HITL signal/resume loop
@@ -100,7 +100,7 @@ TASK_QUEUE = "hitl-graph-queue"
 
 
 @workflow.defn
-class HitlGraphWorkflow(PhilharmonicaWorkflow):
+class HitlGraphWorkflow(AugmentsWorkflow):
     """Temporal workflow: run a graph that may be interrupted for human input.
 
     HITL lifecycle:
@@ -141,7 +141,7 @@ class HitlGraphWorkflow(PhilharmonicaWorkflow):
         workflow.logger.info("Initial graph run status: %s", result.status)
 
         # HITL loop: keep waiting and resuming until the graph completes
-        from philharmonica.adk.graphs.interrupt import GraphResume
+        from augments.adk.graphs.interrupt import GraphResume
 
         while result.status == GraphRunStatus.INTERRUPTED:
             self.update_state({"status": "waiting_for_human", "thread_id": self._thread_id})
@@ -180,7 +180,7 @@ class HitlGraphWorkflow(PhilharmonicaWorkflow):
 
 async def _run() -> None:
     """Start the worker and run the HITL graph workflow end-to-end."""
-    plugin = PhilharmonicaTemporalPlugin()
+    plugin = AugmentsTemporalPlugin()
     # No LLM-based agents in this example — register if your graph uses agents:
     # plugin.register_model(str(_llm), _llm)
 

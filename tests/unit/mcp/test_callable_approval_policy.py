@@ -20,8 +20,8 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
-from philharmonica.adk.mcp.conversion import mcp_tool_to_function_tool
-from philharmonica.adk.tools.toolsets.mcp_toolset import MCPToolset
+from augments.adk.mcp.conversion import mcp_tool_to_function_tool
+from augments.adk.tools.toolsets.mcp_toolset import MCPToolset
 
 # --------------------------------------------------------------- helpers
 

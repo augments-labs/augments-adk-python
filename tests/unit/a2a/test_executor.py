@@ -29,16 +29,16 @@ pytest.importorskip("a2a.server.agent_execution")
 
 from a2a.types import Message, Part, Role
 
-from philharmonica.adk.a2a.executor import A2AExecutor
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import (
+from augments.adk.a2a.executor import A2AExecutor
+from augments.adk.agents import Agent
+from augments.adk.exceptions import (
     AgentInputGuardrailTripwireTriggered,
     AgentOutputGuardrailTripwireTriggered,
     MaxTurnsExceeded,
     UsageLimitExceeded,
 )
-from philharmonica.adk.types.run import RunResult
-from philharmonica.adk.types.tracing.span_data import FunctionSpanData
+from augments.adk.types.run import RunResult
+from augments.adk.types.tracing.span_data import FunctionSpanData
 
 # ---------------------------------------------------------------------------
 # Test fixtures
@@ -91,7 +91,7 @@ class TestHappyPath:
         ctx = _make_request_context(prompt="What is 2+2?")
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(return_value=_make_run_result("4")),
         ) as mock_arun:
             await executor.execute(ctx, queue)
@@ -104,7 +104,7 @@ class TestHappyPath:
         ctx = _make_request_context()
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(return_value=_make_run_result("done")),
         ) as mock_arun:
             await executor.execute(ctx, queue)
@@ -126,7 +126,7 @@ class TestEmptyInput:
         ctx.message = Message(role=Role.ROLE_USER, parts=[])  # empty parts list
         queue = _make_event_queue()
         # Runner should NEVER be called when the input is empty.
-        with patch("philharmonica.adk.a2a.executor.Runner.arun", AsyncMock()) as mock_arun:
+        with patch("augments.adk.a2a.executor.Runner.arun", AsyncMock()) as mock_arun:
             await executor.execute(ctx, queue)
         mock_arun.assert_not_awaited()
 
@@ -169,7 +169,7 @@ class TestStateMapping:
     ) -> None:
         ctx = _make_request_context()
         queue = _make_event_queue()
-        with patch("philharmonica.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
+        with patch("augments.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
             mock_updater = MagicMock()
             mock_updater.update_status = AsyncMock()
             mock_updater.add_artifact = AsyncMock()
@@ -179,7 +179,7 @@ class TestStateMapping:
             mock_updater.cancel = AsyncMock()
             mock_updater_cls.return_value = mock_updater
             with patch(
-                "philharmonica.adk.a2a.executor.Runner.arun",
+                "augments.adk.a2a.executor.Runner.arun",
                 AsyncMock(side_effect=exception_factory()),  # type: ignore[operator]
             ):
                 await executor.execute(ctx, queue)
@@ -201,14 +201,14 @@ class TestUnexpectedException:
         """
         ctx = _make_request_context()
         queue = _make_event_queue()
-        with patch("philharmonica.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
+        with patch("augments.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
             mock_updater = MagicMock()
             mock_updater.update_status = AsyncMock()
             mock_updater.failed = AsyncMock()
             mock_updater_cls.return_value = mock_updater
             with (
                 patch(
-                    "philharmonica.adk.a2a.executor.Runner.arun",
+                    "augments.adk.a2a.executor.Runner.arun",
                     AsyncMock(side_effect=RuntimeError("provider blew up")),
                 ),
                 pytest.raises(RuntimeError, match="provider blew up"),
@@ -224,14 +224,14 @@ class TestCancellation:
     async def test_cancelled_error_publishes_cancel_then_reraises(self, executor: A2AExecutor) -> None:
         ctx = _make_request_context()
         queue = _make_event_queue()
-        with patch("philharmonica.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
+        with patch("augments.adk.a2a.executor.TaskUpdater") as mock_updater_cls:
             mock_updater = MagicMock()
             mock_updater.update_status = AsyncMock()
             mock_updater.cancel = AsyncMock()
             mock_updater_cls.return_value = mock_updater
             with (
                 patch(
-                    "philharmonica.adk.a2a.executor.Runner.arun",
+                    "augments.adk.a2a.executor.Runner.arun",
                     AsyncMock(side_effect=asyncio.CancelledError()),
                 ),
                 pytest.raises(asyncio.CancelledError),
@@ -292,7 +292,7 @@ class TestRunningTasksLifecycle:
         ctx = _make_request_context()
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(return_value=_make_run_result("done")),
         ):
             await executor.execute(ctx, queue)
@@ -302,7 +302,7 @@ class TestRunningTasksLifecycle:
         ctx = _make_request_context()
         queue = _make_event_queue()
         with patch(
-            "philharmonica.adk.a2a.executor.Runner.arun",
+            "augments.adk.a2a.executor.Runner.arun",
             AsyncMock(side_effect=MaxTurnsExceeded("oops")),
         ):
             await executor.execute(ctx, queue)
@@ -318,7 +318,7 @@ class TestTracing:
     async def test_function_span_opened_with_a2a_data(self, executor: A2AExecutor) -> None:
         ctx = _make_request_context(task_id="t-abc", context_id="c-xyz")
         queue = _make_event_queue()
-        with patch("philharmonica.adk.a2a.executor.function_span") as mock_span_factory:
+        with patch("augments.adk.a2a.executor.function_span") as mock_span_factory:
             mock_span = MagicMock()
             mock_span.__enter__ = MagicMock(return_value=mock_span)
             mock_span.__exit__ = MagicMock(return_value=False)
@@ -327,7 +327,7 @@ class TestTracing:
             mock_span.data = FunctionSpanData(name="a2a.task.t-abc", input="hi")
             mock_span_factory.return_value = mock_span
             with patch(
-                "philharmonica.adk.a2a.executor.Runner.arun",
+                "augments.adk.a2a.executor.Runner.arun",
                 AsyncMock(return_value=_make_run_result("ok")),
             ):
                 await executor.execute(ctx, queue)
@@ -376,12 +376,12 @@ class TestCurrentTaskNoneWarning:
         ctx = _make_request_context()
         queue = _make_event_queue()
         with (
-            patch("philharmonica.adk.a2a.executor.asyncio.current_task", return_value=None),
+            patch("augments.adk.a2a.executor.asyncio.current_task", return_value=None),
             patch(
-                "philharmonica.adk.a2a.executor.Runner.arun",
+                "augments.adk.a2a.executor.Runner.arun",
                 AsyncMock(return_value=_make_run_result("done")),
             ),
-            caplog.at_level("WARNING", logger="philharmonica.adk.a2a.executor"),
+            caplog.at_level("WARNING", logger="augments.adk.a2a.executor"),
         ):
             await executor.execute(ctx, queue)
         warning_msgs = [r.getMessage() for r in caplog.records if r.levelname == "WARNING"]

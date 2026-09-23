@@ -15,7 +15,7 @@ from unittest.mock import AsyncMock
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.sandbox.tools.load_skill_tool import (
+from augments.adk.sandbox.tools.load_skill_tool import (
     LoadSkillArgs,
     make_load_skill_tool,
 )

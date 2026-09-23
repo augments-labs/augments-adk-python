@@ -38,8 +38,8 @@ class TestStreamedCancelledErrorPropagation:
         — we verify that path by simulating it here and asserting the result
         has the stored exception.
         """
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.stream import RunResultStreaming
 
         agent = Agent(name="test_agent", system_prompt="test")
         result = RunResultStreaming(current_agent=agent, max_turns=1)  # type: ignore[call-arg]
@@ -85,7 +85,7 @@ class TestStreamedCancelledErrorPropagation:
         """
         import inspect
 
-        from philharmonica.adk.run import runner as runner_module
+        from augments.adk.run import runner as runner_module
 
         source = inspect.getsource(runner_module)
         # The CancelledError clause must appear before the Exception clause in
@@ -103,8 +103,8 @@ class TestStreamedCancelledErrorPropagation:
     @pytest.mark.asyncio
     async def test_cancelled_error_propagates_through_stream_events(self) -> None:
         """stream_events() must re-raise CancelledError, not return normally."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.stream import RunResultStreaming
 
         agent = Agent(name="t", system_prompt="s")
         rrs = RunResultStreaming(current_agent=agent, max_turns=1)  # type: ignore[call-arg]
@@ -131,8 +131,8 @@ class TestStreamedSandboxBracket:
         the fix the bracket helper is called so a SandboxAgent's session
         is opened before the agent loop.
         """
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         agent = Agent(name="test_agent", system_prompt="test")
 
@@ -145,9 +145,9 @@ class TestStreamedSandboxBracket:
             pass  # Return immediately so the run completes
 
         with (
-            patch("philharmonica.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_bracket),
-            patch("philharmonica.adk.run.runner.Runner._run_streamed_impl", new=AsyncMock(side_effect=_noop_impl)),
-            patch("philharmonica.adk.run.runner.wrap_hooks_with_verbose") as mock_wrap,
+            patch("augments.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_bracket),
+            patch("augments.adk.run.runner.Runner._run_streamed_impl", new=AsyncMock(side_effect=_noop_impl)),
+            patch("augments.adk.run.runner.wrap_hooks_with_verbose") as mock_wrap,
         ):
             mock_hooks = AsyncMock()
             mock_hooks.on_session_load = AsyncMock()
@@ -168,9 +168,9 @@ class TestStreamedSandboxBracket:
     @pytest.mark.asyncio
     async def test_sandbox_bracket_called_in_arun_task_streamed(self) -> None:
         """_maybe_open_sandbox_bracket must also fire in arun_task_streamed."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
-        from philharmonica.adk.tasks.task import Task
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
+        from augments.adk.tasks.task import Task
 
         agent = Agent(name="test_agent", system_prompt="test")
         task = Task(agent=agent, description="do something")
@@ -184,8 +184,8 @@ class TestStreamedSandboxBracket:
             pass
 
         with (
-            patch("philharmonica.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_bracket),
-            patch("philharmonica.adk.run.runner.Runner._run_streamed_impl", new=AsyncMock(side_effect=_noop_impl)),
+            patch("augments.adk.run.runner._maybe_open_sandbox_bracket", new=_fake_bracket),
+            patch("augments.adk.run.runner.Runner._run_streamed_impl", new=AsyncMock(side_effect=_noop_impl)),
         ):
             result = await Runner.arun_task_streamed(task)
 

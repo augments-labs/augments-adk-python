@@ -98,9 +98,9 @@ The `candidates` list must be non-empty when a `selector` is provided —
 `__post_init__` raises `ValueError` if it is empty.
 
 ```python
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-from philharmonica.adk.types.sandbox.cost import SandboxRequirements
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+from augments.adk.types.sandbox.cost import SandboxRequirements
 
 sandbox_config = SandboxRunConfig(
     selector=CheapestFirstSelector(),
@@ -125,15 +125,15 @@ Set only one of `client=` or `selector=`/`candidates=` per config.
 ## Example
 
 ```python
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
-from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-from philharmonica.adk.types.sandbox.cost import SandboxRequirements
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.hosted.e2b.e2b_client import E2bSandboxClient
+from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+from augments.adk.types.sandbox.cost import SandboxRequirements
 
 local_client = LocalSubprocessSandboxClient()
 e2b_client = E2bSandboxClient()
@@ -177,9 +177,9 @@ Subclass `SandboxSelector` and implement `select`. A selector that prefers
 a specific region, for example:
 
 ```python
-from philharmonica.adk.sandbox.selector import SandboxCandidate, SandboxSelector
-from philharmonica.adk.types.sandbox.cost import SandboxRequirements
-from philharmonica.adk.exceptions.exceptions import SandboxSelectionError
+from augments.adk.sandbox.selector import SandboxCandidate, SandboxSelector
+from augments.adk.types.sandbox.cost import SandboxRequirements
+from augments.adk.exceptions.exceptions import SandboxSelectionError
 
 class RegionPreferenceSelector(SandboxSelector):
     def __init__(self, preferred_region: str) -> None:

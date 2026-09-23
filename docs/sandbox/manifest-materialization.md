@@ -101,5 +101,5 @@ attach.
 
 See `examples/sandbox/manifest_materialization.py` for a runnable
 end-to-end demonstration on the local backend. See
-`src/philharmonica/adk/sandbox/session/materialization/` for the
+`src/augments/adk/sandbox/session/materialization/` for the
 implementation modules.

@@ -26,7 +26,7 @@ Before each LLM call the runner can predict its cost. Every `LLM`
 subclass exposes `estimate_cost`:
 
 ```python
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.llms import LiteLLM
 
 llm = LiteLLM(model="gpt-4o-mini")
 estimate = llm.estimate_cost(messages, model="gpt-4o-mini", max_output_tokens=512)
@@ -72,7 +72,7 @@ Every completed LLM call appends its actual cost to a *ledger*. The
 ledger is a `@runtime_checkable` Protocol (`budgets/ledger.py`):
 
 ```python
-from philharmonica.adk.budgets import CostLedger  # the Protocol
+from augments.adk.budgets import CostLedger  # the Protocol
 
 class CostLedger(Protocol):
     async def spend(self, tenant_id: str, period_key: str) -> float: ...
@@ -94,7 +94,7 @@ without inheriting from it — structural typing, not nominal.
 for single-process deployments and tests:
 
 ```python
-from philharmonica.adk.budgets import InMemoryCostLedger
+from augments.adk.budgets import InMemoryCostLedger
 
 ledger = InMemoryCostLedger()
 ```
@@ -104,14 +104,14 @@ UPDATE` so concurrent runners for the same tenant are safe. Requires
 PostgreSQL 9.5+ and the `cost-ledger-postgres` extra:
 
 ```python
-from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
 ledger = PostgresCostLedger(conninfo="postgresql://user:pass@host/db")
 # Call ledger.close() at shutdown.
 ```
 
 ```
-pip install 'philharmonica-adk[cost-ledger-postgres]'
+pip install 'augments-adk[cost-ledger-postgres]'
 ```
 
 **`RedisCostLedger`** — uses `INCRBYFLOAT` for lock-free atomic
@@ -120,7 +120,7 @@ self-evict (requires Redis 7.0+ for `EXPIRE … NX`). Requires the
 `cost-ledger-redis` extra:
 
 ```python
-from philharmonica.adk.budgets.ledgers.redis import RedisCostLedger
+from augments.adk.budgets.ledgers.redis import RedisCostLedger
 
 ledger = RedisCostLedger(url="redis://localhost:6379/0", ttl_seconds=90000)
 # Or from a pre-configured client (caller owns lifecycle):
@@ -128,7 +128,7 @@ ledger = RedisCostLedger(client=my_redis_client)
 ```
 
 ```
-pip install 'philharmonica-adk[cost-ledger-redis]'
+pip install 'augments-adk[cost-ledger-redis]'
 ```
 
 The Protocol pattern mirrors the checkpointer idiom used by graph and
@@ -145,7 +145,7 @@ in turn, escalating to the next on failure. The `LLMRouter` ABC lives
 in `llms/routing/router.py`:
 
 ```python
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
 
 class LLMRouter(ABC):
     def candidates(self, ctx: RoutingContext) -> Sequence[RoutedModel]: ...
@@ -164,8 +164,8 @@ cost table is absent sort last, so priced models are tried before
 unpriced ones:
 
 ```python
-from philharmonica.adk.llms.routing import CheapestFirstRouter, RoutedModel
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.llms.routing import CheapestFirstRouter, RoutedModel
+from augments.adk.llms import LiteLLM
 
 router = CheapestFirstRouter(models=[
     RoutedModel(llm=LiteLLM(model="gpt-4o-mini"), model="gpt-4o-mini"),
@@ -181,11 +181,11 @@ keep the candidate list small on hot paths.
 
 Orders candidates by a developer-supplied latency map
 (`model_name → observed_latency_ms`). Models absent from the map sort
-last. The `philharmonica.agent.turn.duration_ms` OTel histogram is a natural
+last. The `augments.agent.turn.duration_ms` OTel histogram is a natural
 data source:
 
 ```python
-from philharmonica.adk.llms.routing import LatencyFirstRouter
+from augments.adk.llms.routing import LatencyFirstRouter
 
 router = LatencyFirstRouter(
     models=[...],
@@ -201,7 +201,7 @@ The runner escalates to the next candidate on:
 2. An output-schema validation failure.
 3. `should_escalate(response)` returning `True` (custom content check).
 
-`PhilharmonicaError` subclasses — including `TenantBudgetExceeded` and
+`AugmentsError` subclasses — including `TenantBudgetExceeded` and
 guardrail rejections — propagate directly to the caller and do **not**
 trigger escalation. When all candidates are exhausted,
 `NoRoutingCandidateError` is raised.
@@ -213,7 +213,7 @@ current candidate.
 Wire the router via `RunConfig` or a runner profile:
 
 ```python
-from philharmonica.adk.run import RunConfig
+from augments.adk.run import RunConfig
 
 config = RunConfig(router=router)
 # or
@@ -228,9 +228,9 @@ result = await Runner.configure().router(router).agent(agent).arun(prompt)
 run's accumulated spend and on cross-run period spend.
 
 ```python
-from philharmonica.adk.budgets import TenantBudget, BudgetPeriod
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.context import RunContext
+from augments.adk.budgets import TenantBudget, BudgetPeriod
+from augments.adk.run import RunConfig
+from augments.adk.run.context import RunContext
 
 budget = TenantBudget(
     dollars_per_run=0.10,        # cap on a single run
@@ -255,7 +255,7 @@ result = await Runner.arun(agent, prompt, context=ctx, run_config=config)
 **What happens on exhaustion.** The gate runs pre-call using
 `estimate_cost`. When the projected total exceeds the cap and
 `kill_on_exceed=True`, the runner raises `TenantBudgetExceeded` (a
-subclass of `PhilharmonicaError`). This exception propagates unchanged — the
+subclass of `AugmentsError`). This exception propagates unchanged — the
 router does not escalate on it, and the runner short-circuits without
 further LLM calls.
 
@@ -283,9 +283,9 @@ the dominant cost driver. Setting `cost_aware=True` on
 approaches its per-run budget:
 
 ```python
-from philharmonica.adk.context import ContextManagementConfig, CompactionConfig
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.run import RunConfig
+from augments.adk.context import ContextManagementConfig, CompactionConfig
+from augments.adk.budgets import TenantBudget
+from augments.adk.run import RunConfig
 
 config = RunConfig(
     tenant_budget=TenantBudget(dollars_per_run=0.10),
@@ -327,7 +327,7 @@ The runner threads `tenant_id` to:
 
 - `CostLedger.record` and `CostLedger.spend` (keyed per tenant)
 - `TenantBudget` gate checks
-- OTel span attribute `philharmonica.tenant.id`
+- OTel span attribute `augments.tenant.id`
 - The `tenant` metric dimension on histograms and counters
 
 When `tenant_id` is `None`, all cost features still operate on the
@@ -368,8 +368,8 @@ For cross-run period spend, query the ledger directly:
 
 ```python
 from datetime import datetime, timezone
-from philharmonica.adk.budgets import BudgetPeriod
-from philharmonica.adk.budgets.budget import period_key
+from augments.adk.budgets import BudgetPeriod
+from augments.adk.budgets.budget import period_key
 
 month_key = period_key(BudgetPeriod.MONTH, datetime.now(timezone.utc))
 month_spend = await ledger.spend("tenant-abc", month_key)
@@ -398,8 +398,8 @@ Use `RoutingContext.run_cost` to escalate from a cheap model to an
 expensive one only when the response warrants it:
 
 ```python
-from philharmonica.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
-from philharmonica.adk.types.responses.llm_response import LLMResponse
+from augments.adk.llms.routing import LLMRouter, RoutedModel, RoutingContext
+from augments.adk.types.responses.llm_response import LLMResponse
 
 class BudgetThenPremiumRouter(LLMRouter):
     def __init__(self, cheap: RoutedModel, premium: RoutedModel) -> None:

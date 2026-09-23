@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     And,
     FlowDefinitionError,
     FlowStepRegistry,

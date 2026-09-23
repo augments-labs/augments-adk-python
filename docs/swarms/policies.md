@@ -17,7 +17,7 @@ speaker get a `transfer_to_<name>` tool, plus every speaker gets
 `swarm_done(reason=...)`.
 
 ```python
-from philharmonica.adk.swarms import LLMHandoffPolicy, Swarm, ExplicitDoneTermination, MaxTurnsTermination
+from augments.adk.swarms import LLMHandoffPolicy, Swarm, ExplicitDoneTermination, MaxTurnsTermination
 
 swarm = Swarm(
     members=(author, reviewer, auditor),
@@ -66,7 +66,7 @@ Deterministic rotation. Ships zero LLM routing tokens. `swarm_done`
 is still available, so any agent can stop the swarm explicitly.
 
 ```python
-from philharmonica.adk.swarms import RoundRobinPolicy
+from augments.adk.swarms import RoundRobinPolicy
 
 # Rotate in the declaration order of members:
 policy = RoundRobinPolicy()
@@ -91,9 +91,9 @@ must have an `output_schema` that yields an `Intent` (or `Respond`, meaning
 existing `HandoffRoute.when(IntentType).to(agent)` DSL.
 
 ```python
-from philharmonica.adk.handoffs import HandoffRoute
-from philharmonica.adk.swarms import StructuredRoutingPolicy
-from philharmonica.adk.types.intents import Intent
+from augments.adk.handoffs import HandoffRoute
+from augments.adk.swarms import StructuredRoutingPolicy
+from augments.adk.types.intents import Intent
 from typing import Literal
 
 class RefundIntent(Intent):
@@ -129,7 +129,7 @@ Plain escape hatch. You supply a selector; you optionally supply a
 function that contributes tools per turn.
 
 ```python
-from philharmonica.adk.swarms import CustomPolicy, SwarmState
+from augments.adk.swarms import CustomPolicy, SwarmState
 
 def pick(state: SwarmState) -> str:
     # e.g. pick based on state.total_turns, last yield, or your own context
@@ -163,9 +163,9 @@ selector, you probably want `LLMHandoffPolicy` or
 Subclass `SwarmPolicy`:
 
 ```python
-from philharmonica.adk.swarms import SwarmPolicy, SwarmState, SwarmYieldSignal
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.agents.agent import Agent
+from augments.adk.swarms import SwarmPolicy, SwarmState, SwarmYieldSignal
+from augments.adk.tools import FunctionTool
+from augments.adk.agents.agent import Agent
 
 class MyPolicy(SwarmPolicy[None]):
     async def select_next(self, state: SwarmState, context: object) -> Agent:

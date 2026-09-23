@@ -19,12 +19,12 @@ from unittest.mock import MagicMock
 import pytest
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.exceptions import HandoffRejection
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-from philharmonica.adk.handoffs.handoff_input_data import HandoffInputData
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.intents import Intent
+from augments.adk.exceptions import HandoffRejection
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.handoffs.handoff_input_data import HandoffInputData
+from augments.adk.run.context import RunContext
+from augments.adk.types.intents import Intent
 
 
 class _DummyIntent(Intent):
@@ -320,14 +320,14 @@ class TestHandoffTargetErrorPolicy:
     """
 
     async def test_halt_propagates_raw(self) -> None:
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.handoffs.handoff_target import HandoffTarget
 
         target = HandoffTarget(target=_mock_agent("billing"), input_filter=_raising_filter)
         with pytest.raises(RuntimeError, match="filter blew up"):
             await target.invoke(_DummyIntent(), (), (), _run_context())
 
     async def test_reject_with_message_filter(self) -> None:
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.handoffs.handoff_target import HandoffTarget
 
         target = HandoffTarget(
             target=_mock_agent("billing"),
@@ -342,7 +342,7 @@ class TestHandoffTargetErrorPolicy:
         assert isinstance(exc_info.value.cause, RuntimeError)
 
     async def test_reject_with_message_on_handoff(self) -> None:
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.handoffs.handoff_target import HandoffTarget
 
         target = HandoffTarget(
             target=_mock_agent("billing"),
@@ -354,7 +354,7 @@ class TestHandoffTargetErrorPolicy:
         assert "callback blew up" in exc_info.value.tool_message
 
     async def test_success_path_unaffected(self) -> None:
-        from philharmonica.adk.handoffs.handoff_target import HandoffTarget
+        from augments.adk.handoffs.handoff_target import HandoffTarget
 
         calls: list[Any] = []
 

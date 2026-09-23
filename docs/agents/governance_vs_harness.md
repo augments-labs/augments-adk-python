@@ -42,7 +42,7 @@ The key insight: K8s `ResourceQuota` doesn't catch overspending — it makes ove
 
 ## How the ADK Provides Both
 
-The Philharmonica Agents ADK supports both harness and governance. Both are needed — governance is the primary mechanism, harness is the safety net. Like Kubernetes has both admission controllers (proactive) and liveness probes (reactive).
+The Augments Agents ADK supports both harness and governance. Both are needed — governance is the primary mechanism, harness is the safety net. Like Kubernetes has both admission controllers (proactive) and liveness probes (reactive).
 
 ### Governance Features (Proactive)
 

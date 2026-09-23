@@ -8,8 +8,8 @@ from collections.abc import AsyncIterator
 
 import pytest
 
-from philharmonica.adk.llms.stream_error import stream_with_error_contract
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMStreamEvent
+from augments.adk.llms.stream_error import stream_with_error_contract
+from augments.adk.types.responses.llm_response import LLMResponse, LLMStreamEvent
 
 _LOG = logging.getLogger("test_stream_error")
 

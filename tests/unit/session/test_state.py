@@ -2,7 +2,7 @@
 
 import pytest
 
-from philharmonica.adk.session.state import State
+from augments.adk.session.state import State
 
 
 class TestBasicAccess:

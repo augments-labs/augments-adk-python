@@ -1,6 +1,6 @@
 """Direct usage of the V4A diff engine — no agent loop, no sandbox session.
 
-Demonstrates the ``philharmonica.adk.sandbox.apply_diff.apply_diff`` pure
+Demonstrates the ``augments.adk.sandbox.apply_diff.apply_diff`` pure
 function: feed it the current contents of a file and a V4A patch
 body, get back the rewritten contents.
 
@@ -23,7 +23,7 @@ except ImportError:
 
 import logging
 
-from philharmonica.adk.sandbox.apply_diff import apply_diff
+from augments.adk.sandbox.apply_diff import apply_diff
 
 logger = logging.getLogger(__name__)
 

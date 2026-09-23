@@ -15,12 +15,12 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
-from philharmonica.adk.sandbox.clients.base import (
+from augments.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
+from augments.adk.sandbox.clients.base import (
     reject_unsupported_snapshot_store,
     warn_discarded_snapshot,
 )
-from philharmonica.adk.types.sandbox.snapshot import LocalSnapshotSpec
+from augments.adk.types.sandbox.snapshot import LocalSnapshotSpec
 
 
 class TestRejectUnsupportedSnapshotStore:
@@ -57,7 +57,7 @@ class TestLocalBackendWarnWiring:
         # The local backend's create() does real (no-network) tempdir
         # setup AFTER the guards, so this exercises the warn wiring
         # end-to-end (snapshot is discarded, session still created).
-        from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+        from augments.adk.sandbox.clients.local.subprocess_client import (
             LocalSandboxClientOptions,
             LocalSubprocessSandboxClient,
         )
@@ -66,7 +66,7 @@ class TestLocalBackendWarnWiring:
         with caplog.at_level(logging.WARNING):
             session = await client.create(
                 # Real spec; the local backend warns then discards it.
-                snapshot=LocalSnapshotSpec(base_path=Path("/tmp/philharmonica-test-snap")),
+                snapshot=LocalSnapshotSpec(base_path=Path("/tmp/augments-test-snap")),
                 options=LocalSandboxClientOptions(),
             )
         try:
@@ -79,7 +79,7 @@ class TestLocalBackendWarnWiring:
         # Both set: reject(snapshot_store) MUST fire FIRST — it raises
         # before warn(snapshot) is reached, so NO discard warning is
         # emitted. Fences the reject→warn call order in create().
-        from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+        from augments.adk.sandbox.clients.local.subprocess_client import (
             LocalSandboxClientOptions,
             LocalSubprocessSandboxClient,
         )
@@ -87,7 +87,7 @@ class TestLocalBackendWarnWiring:
         client = LocalSubprocessSandboxClient(warn_banner=False)
         with caplog.at_level(logging.WARNING), pytest.raises(UnsupportedSnapshotFeatureError):
             await client.create(
-                snapshot=LocalSnapshotSpec(base_path=Path("/tmp/philharmonica-test-snap")),
+                snapshot=LocalSnapshotSpec(base_path=Path("/tmp/augments-test-snap")),
                 snapshot_store=object(),
                 options=LocalSandboxClientOptions(),
             )

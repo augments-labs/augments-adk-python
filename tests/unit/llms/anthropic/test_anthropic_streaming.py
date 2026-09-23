@@ -38,8 +38,8 @@ from anthropic.types import (
 )
 from anthropic.types.raw_message_delta_event import Delta as RawMessageDeltaEventDelta
 
-from philharmonica.adk.llms.anthropic import AnthropicLLM
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.anthropic import AnthropicLLM
+from augments.adk.types.responses.llm_response import (
     LLMResponseReasoning,
     LLMResponseText,
     LLMStreamEvent,
@@ -85,7 +85,7 @@ def _patch_async_stream(monkeypatch: pytest.MonkeyPatch) -> Generator[None, None
     ``anthropic.AsyncStream``. ``monkeypatch`` restores the
     original symbol after the test, preventing cross-test bleed.
     """
-    from philharmonica.adk.llms.anthropic import anthropic_model
+    from augments.adk.llms.anthropic import anthropic_model
 
     monkeypatch.setattr(anthropic_model, "AsyncStream", _FakeAsyncStream)
     yield
@@ -264,7 +264,7 @@ class TestStreamClosesUnderlyingStream:
         # shared streaming-error contract, which does not itself forward
         # aclose to sub-iterators — that is a separate concern; here we pin
         # that ``_stream`` releases the stream when it is closed.)
-        from philharmonica.adk.llms.llm_config import LLMConfig
+        from augments.adk.llms.llm_config import LLMConfig
 
         llm = AnthropicLLM(model="claude-sonnet-4-20250514", api_key="test")
         fake_stream = _FakeAsyncStream(self._text_events())

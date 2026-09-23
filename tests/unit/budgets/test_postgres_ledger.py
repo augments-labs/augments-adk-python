@@ -8,7 +8,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 pytest.importorskip("psycopg_pool")
-PG_DSN = os.environ.get("PHILHARMONICA_TEST_PG_DSN")
+PG_DSN = os.environ.get("AUGMENTS_TEST_PG_DSN")
 
 # ---------------------------------------------------------------------------
 # Unit tests that do NOT require a live Postgres server
@@ -25,7 +25,7 @@ async def test_close_holds_init_lock_preventing_pool_leak() -> None:
     We verify the fix by asserting that close() actually acquires _init_lock:
     when a task already holds _init_lock, close() must block until released.
     """
-    from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+    from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
     ledger = PostgresCostLedger("host=localhost dbname=test")
 
@@ -59,7 +59,7 @@ async def test_close_holds_init_lock_preventing_pool_leak() -> None:
 
 async def test_close_is_idempotent_when_pool_is_none() -> None:
     """close() on a never-opened ledger (pool is None) must not raise."""
-    from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+    from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
     ledger = PostgresCostLedger("host=localhost dbname=test")
     assert ledger._pool is None
@@ -74,7 +74,7 @@ async def test_record_rejects_negative_cost_usd() -> None:
     silently corrupting the running total. The guard must be explicit and
     must fire before any DB round-trip (no pool needed for this test).
     """
-    from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+    from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
     ledger = PostgresCostLedger("host=localhost dbname=test")
     with pytest.raises(ValueError, match="non-negative"):
@@ -87,7 +87,7 @@ async def test_record_accepts_zero_cost_usd_without_pool() -> None:
     We expect it to eventually fail when it tries to open the pool (no live
     DB), but the non-negative guard must NOT have raised first.
     """
-    from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+    from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
     ledger = PostgresCostLedger("host=localhost dbname=test")
     # Should NOT raise ValueError("non-negative") — any other error (e.g.
@@ -98,16 +98,16 @@ async def test_record_accepts_zero_cost_usd_without_pool() -> None:
 
 
 # ---------------------------------------------------------------------------
-# Live integration tests (require PHILHARMONICA_TEST_PG_DSN)
+# Live integration tests (require AUGMENTS_TEST_PG_DSN)
 # ---------------------------------------------------------------------------
 
-pytestmark_live = pytest.mark.skipif(PG_DSN is None, reason="set PHILHARMONICA_TEST_PG_DSN to run")
+pytestmark_live = pytest.mark.skipif(PG_DSN is None, reason="set AUGMENTS_TEST_PG_DSN to run")
 
 
 @pytest.mark.postgres
 @pytestmark_live  # type: ignore[misc]  # dynamic mark application
 async def test_postgres_record_and_spend() -> None:
-    from philharmonica.adk.budgets.ledgers.postgres import PostgresCostLedger
+    from augments.adk.budgets.ledgers.postgres import PostgresCostLedger
 
     assert PG_DSN is not None
     ledger = PostgresCostLedger(PG_DSN)

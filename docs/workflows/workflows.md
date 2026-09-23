@@ -1,6 +1,6 @@
 # Durable Workflows
 
-The `workflows` package makes any Philharmonica `Agent`, `Swarm`, `Graph`, or `Flow`
+The `workflows` package makes any Augments `Agent`, `Swarm`, `Graph`, or `Flow`
 run durably inside **Temporal** or **Restate**.  The bridge intercepts LLM calls
 and tool calls at their boundaries; everything else — the runner, agent loop,
 tools — stays unchanged.
@@ -8,8 +8,8 @@ tools — stays unchanged.
 Install the matching optional extra:
 
 ```bash
-pip install "philharmonica-adk[temporal]"   # Temporal backend
-pip install "philharmonica-adk[restate]"    # Restate backend
+pip install "augments-adk[temporal]"   # Temporal backend
+pip install "augments-adk[restate]"    # Restate backend
 ```
 
 ---
@@ -20,13 +20,13 @@ pip install "philharmonica-adk[restate]"    # Restate backend
 from temporalio.client import Client
 from temporalio.worker import Worker
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.run import Runner
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.temporal import (
-    PhilharmonicaTemporalPlugin,
-    PhilharmonicaWorkflow,
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
+from augments.adk.run import Runner
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.temporal import (
+    AugmentsTemporalPlugin,
+    AugmentsWorkflow,
     TemporalLLM,
 )
 
@@ -45,7 +45,7 @@ from temporalio import workflow
 
 
 @workflow.defn
-class AssistantWorkflow(PhilharmonicaWorkflow):
+class AssistantWorkflow(AugmentsWorkflow):
     @workflow.run
     async def run(self, prompt: str) -> str:
         runner = Runner()
@@ -54,7 +54,7 @@ class AssistantWorkflow(PhilharmonicaWorkflow):
 
 
 # 3. Wire the worker
-plugin = PhilharmonicaTemporalPlugin()
+plugin = AugmentsTemporalPlugin()
 plugin.register_model("gpt-4o", base_llm)
 
 client = await Client.connect("localhost:7233")
@@ -87,11 +87,11 @@ TemporalLLM.install(agent, activity_config=ModelActivityConfig())
 
 ```python
 import restate
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
-from philharmonica.adk.run import Runner
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.restate import PhilharmonicaRestateService, RestateLLM
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
+from augments.adk.run import Runner
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.restate import AugmentsRestateService, RestateLLM
 
 
 base_llm = LiteLLM(model="gpt-4o")
@@ -103,7 +103,7 @@ agent = Agent(
 
 
 @restate.service
-class AgentService(PhilharmonicaRestateService):
+class AgentService(AugmentsRestateService):
     @restate.handler
     async def run(self, ctx: restate.Context, prompt: str) -> str:
         runner = Runner()
@@ -128,7 +128,7 @@ a workflow:
 ```python
 from datetime import timedelta
 from temporalio import activity
-from philharmonica.adk.workflows.temporal import activity_tool
+from augments.adk.workflows.temporal import activity_tool
 
 
 @activity.defn
@@ -155,8 +155,8 @@ Outside a workflow (tests, CLI) the tool calls `fetch_weather` directly.
 or opt specific tools out of activity wrapping entirely:
 
 ```python
-from philharmonica.adk.workflows.temporal import TemporalToolWrapper
-from philharmonica.adk.workflows.engine import ToolActivityConfig
+from augments.adk.workflows.temporal import TemporalToolWrapper
+from augments.adk.workflows.engine import ToolActivityConfig
 
 wrapper = TemporalToolWrapper(
     tool_configs={
@@ -177,7 +177,7 @@ for tool in agent.tools:
 ### `restate_tool()` — Restate equivalent
 
 ```python
-from philharmonica.adk.workflows.restate import restate_tool
+from augments.adk.workflows.restate import restate_tool
 
 async def fetch_weather(city: str) -> str:
     return f"Sunny in {city}"
@@ -191,7 +191,7 @@ durable_weather = restate_tool(fetch_weather, name="fetch_weather")
 
 ### Temporal signals, queries, and updates
 
-`PhilharmonicaWorkflow` pre-wires three HITL primitives:
+`AugmentsWorkflow` pre-wires three HITL primitives:
 
 | Primitive | Method | Use |
 |---|---|---|
@@ -203,14 +203,14 @@ durable_weather = restate_tool(fetch_weather, name="fetch_weather")
 
 ```python
 from temporalio import workflow
-from philharmonica.adk.workflows.temporal import (
+from augments.adk.workflows.temporal import (
     HumanReply,
-    PhilharmonicaWorkflow,
+    AugmentsWorkflow,
 )
 
 
 @workflow.defn
-class ReviewWorkflow(PhilharmonicaWorkflow):
+class ReviewWorkflow(AugmentsWorkflow):
     @workflow.run
     async def run(self, prompt: str) -> str:
         self.update_state({"status": "awaiting_human"})
@@ -238,7 +238,7 @@ await handle.signal(
 Approve or reject a deferred tool call:
 
 ```python
-from philharmonica.adk.workflows.temporal import ToolApprovalDecision
+from augments.adk.workflows.temporal import ToolApprovalDecision
 
 await handle.execute_update(
     ReviewWorkflow.approve_tool_call,
@@ -248,12 +248,12 @@ await handle.execute_update(
 
 ### Restate HITL via durable promises
 
-`PhilharmonicaRestateService.wait_for_human_reply` blocks durably until an external
+`AugmentsRestateService.wait_for_human_reply` blocks durably until an external
 actor resolves the named promise:
 
 ```python
 @restate.service
-class ReviewService(PhilharmonicaRestateService):
+class ReviewService(AugmentsRestateService):
     @restate.handler
     async def run(self, ctx: restate.Context, prompt: str) -> str:
         reply = await self.wait_for_human_reply(ctx, promise_name="approval")
@@ -272,7 +272,7 @@ path.  Inside a workflow the activity executes non-streaming and surfaces the
 complete response as a single `"done"` event:
 
 ```python
-from philharmonica.adk.workflows.temporal import TemporalStreamingLLM
+from augments.adk.workflows.temporal import TemporalStreamingLLM
 
 llm = TemporalStreamingLLM(
     wrapped=LiteLLM(model="gpt-4o"),
@@ -293,7 +293,7 @@ named Temporal activities, making MCP I/O durable and tracked in the event
 history:
 
 ```python
-from philharmonica.adk.workflows.temporal import TemporalMCPToolSet
+from augments.adk.workflows.temporal import TemporalMCPToolSet
 
 toolset = TemporalMCPToolSet(
     name="search-server",
@@ -329,7 +329,7 @@ trigger the `on_graph_end` hook more than once.
 ## Replay-safe tracing helpers
 
 ```python
-from philharmonica.adk.workflows.temporal import (
+from augments.adk.workflows.temporal import (
     deterministic_timestamp,
     deterministic_uuid,
     should_emit_span,

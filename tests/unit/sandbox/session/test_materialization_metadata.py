@@ -7,10 +7,10 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import ExecNonZeroError
-from philharmonica.adk.sandbox.session.materialization.metadata import apply_entry_metadata
-from philharmonica.adk.types.sandbox.entries import File
-from philharmonica.adk.types.sandbox.permissions import Group, User
+from augments.adk.exceptions.exceptions import ExecNonZeroError
+from augments.adk.sandbox.session.materialization.metadata import apply_entry_metadata
+from augments.adk.types.sandbox.entries import File
+from augments.adk.types.sandbox.permissions import Group, User
 
 
 def _recording_session(*, run_exits: dict[str, int] | None = None) -> Any:

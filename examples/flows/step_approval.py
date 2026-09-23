@@ -29,7 +29,7 @@ import logging
 
 from pydantic import BaseModel, Field
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     FLOW_ERROR_TRIGGER,
     Flow,
     FlowApprovalPolicy,
@@ -38,7 +38,7 @@ from philharmonica.adk.flows import (
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 logger = logging.getLogger(__name__)
 

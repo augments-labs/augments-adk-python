@@ -24,9 +24,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.llm_middleware import (
+from augments.adk.agents.agent import Agent
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_middleware import (
     LLMLoggingMiddleware,
     LLMMetricsMiddleware,
     LLMMetricsRecorder,
@@ -34,11 +34,11 @@ from philharmonica.adk.llms.llm_middleware import (
     LLMMiddlewareTermination,
     compose_llm_middleware,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import call_llm_streamed
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
-from philharmonica.adk.types.tokens import LLMUsage
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import call_llm_streamed
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+from augments.adk.types.tokens import LLMUsage
 
 
 def _agent(name: str = "X", llm: str = "gpt-4o-mini") -> Agent:
@@ -183,7 +183,7 @@ class TestStreamingPathSkip:
         monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         # Configure an agent with non-empty llms middleware list.
-        from philharmonica.adk.agents.middleware import Middleware
+        from augments.adk.agents.middleware import Middleware
 
         called_count: list[int] = []
 
@@ -212,29 +212,29 @@ class TestStreamingPathSkip:
         fake_llm = MagicMock()
         fake_llm.acomplete = fake_acomplete
         monkeypatch.setattr(
-            "philharmonica.adk.run.llm_calls.resolve_llm",
+            "augments.adk.run.llm_calls.resolve_llm",
             lambda agent, config: fake_llm,
         )
         monkeypatch.setattr(
-            "philharmonica.adk.run.llm_calls.build_tools",
+            "augments.adk.run.llm_calls.build_tools",
             AsyncMock(return_value=None),
         )
         monkeypatch.setattr(
-            "philharmonica.adk.run.llm_calls.resolve_output_schema",
+            "augments.adk.run.llm_calls.resolve_output_schema",
             lambda agent: None,
         )
         monkeypatch.setattr(
-            "philharmonica.adk.run.llm_calls.resolve_llm_config",
+            "augments.adk.run.llm_calls.resolve_llm_config",
             lambda agent, tool_choice_override=None: None,
         )
 
-        from philharmonica.adk.run.config import RunConfig
-        from philharmonica.adk.run.stream import RunResultStreaming
+        from augments.adk.run.config import RunConfig
+        from augments.adk.run.stream import RunResultStreaming
 
         result = MagicMock(spec=RunResultStreaming)
 
         with (
-            caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.llm_calls"),
+            caplog.at_level(logging.WARNING, logger="augments.adk.run.llm_calls"),
             pytest.raises(RuntimeError, match="stop test"),
         ):
             await call_llm_streamed(
@@ -258,7 +258,7 @@ class TestLLMLoggingMiddleware:
         async def terminal(msgs, cfg):  # type: ignore[no-untyped-def]
             return _response()
 
-        with caplog.at_level(logging.INFO, logger="philharmonica.adk.llms.llm_middleware"):
+        with caplog.at_level(logging.INFO, logger="augments.adk.llms.llm_middleware"):
             chain = compose_llm_middleware([LLMLoggingMiddleware()], terminal, agent=_agent("L"), context=_ctx())
             await chain([], None)
 

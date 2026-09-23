@@ -1,7 +1,7 @@
 """Enforce the soft-import contract for ``rich``.
 
-The ``philharmonica.adk.verbose`` module declares ``rich`` as **optional**
-(installed via ``pip install 'philharmonica-adk[verbose]'``). If any future
+The ``augments.adk.verbose`` module declares ``rich`` as **optional**
+(installed via ``pip install 'augments-adk[verbose]'``). If any future
 change accidentally promotes ``rich`` to a hard dependency — by adding
 a top-level ``from rich import ...`` anywhere on the import path of
 ``VerboseHooks`` / ``VerboseRenderer`` / ``PanelRenderer`` — these
@@ -24,7 +24,7 @@ class _RichBlocker:
 
     Installed ahead of the real finders so an attempt to import ``rich``
     fails even if the wheel is present in ``site-packages``. Simulates
-    the consumer who ran ``pip install philharmonica-adk`` without the
+    the consumer who ran ``pip install augments-adk`` without the
     ``[verbose]`` extra.
     """
 
@@ -39,12 +39,12 @@ class _RichBlocker:
 def block_rich(monkeypatch: pytest.MonkeyPatch) -> None:
     """Prevent ``rich`` from being imported for the duration of the test.
 
-    Also purges any already-cached ``rich`` / ``philharmonica.adk.verbose.*``
+    Also purges any already-cached ``rich`` / ``augments.adk.verbose.*``
     modules from ``sys.modules`` so the next import executes module
     top-level against the blocked finder.
     """
     # Evict any cached verbose + rich modules — guarantees re-execution.
-    to_drop = [name for name in list(sys.modules) if name.startswith(("rich", "philharmonica.adk.verbose"))]
+    to_drop = [name for name in list(sys.modules) if name.startswith(("rich", "augments.adk.verbose"))]
     for name in to_drop:
         monkeypatch.delitem(sys.modules, name, raising=False)
 
@@ -77,14 +77,14 @@ class TestRichSoftImport:
     def test_core_package_imports_without_rich(self, block_rich: None) -> None:
         del block_rich
         # The flagship surface — ``Agent`` and ``Runner`` — must load.
-        mod = importlib.import_module("philharmonica.adk")
+        mod = importlib.import_module("augments.adk")
         assert hasattr(mod, "Agent")
         assert hasattr(mod, "Runner")
-        assert "rich" not in sys.modules, "importing philharmonica.adk pulled in rich"
+        assert "rich" not in sys.modules, "importing augments.adk pulled in rich"
 
     def test_verbose_hooks_imports_without_rich(self, block_rich: None) -> None:
         del block_rich
-        mod = importlib.import_module("philharmonica.adk.verbose")
+        mod = importlib.import_module("augments.adk.verbose")
         # VerboseHooks must be constructible — exercises hooks.py top-level.
         # ``run_config_verbose=None`` keeps the hook in a pass-through mode
         # where no renderer is ever instantiated, exactly what a consumer
@@ -92,17 +92,17 @@ class TestRichSoftImport:
         hooks_cls = mod.VerboseHooks
         hooks = hooks_cls(run_config_verbose=None)
         assert hooks is not None
-        assert "rich" not in sys.modules, "importing philharmonica.adk.verbose pulled in rich"
+        assert "rich" not in sys.modules, "importing augments.adk.verbose pulled in rich"
 
     def test_is_rich_available_returns_false(self, block_rich: None) -> None:
         del block_rich
-        mode = importlib.import_module("philharmonica.adk.verbose.mode")
+        mode = importlib.import_module("augments.adk.verbose.mode")
         assert mode.is_rich_available() is False
 
     def test_resolve_mode_falls_back_to_line(self, block_rich: None) -> None:
         del block_rich
-        mode = importlib.import_module("philharmonica.adk.verbose.mode")
-        cfg_mod = importlib.import_module("philharmonica.adk.verbose.config")
+        mode = importlib.import_module("augments.adk.verbose.mode")
+        cfg_mod = importlib.import_module("augments.adk.verbose.config")
 
         cfg = cfg_mod.VerboseConfig(enabled=True, mode="panel")
         resolved = mode.resolve_mode(cfg)
@@ -114,8 +114,8 @@ class TestRichAvailableHappyPath:
     """Sanity: when rich IS available, the panel backend is selected."""
 
     def test_resolve_mode_selects_panel_when_rich_present(self) -> None:
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.mode import is_rich_available, resolve_mode
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.mode import is_rich_available, resolve_mode
 
         # Only meaningful when the test environment has rich installed
         # (which it does via the ``[dev]`` extra).

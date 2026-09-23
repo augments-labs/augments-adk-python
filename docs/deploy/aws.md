@@ -29,7 +29,7 @@ to ECR, builds the image, and pushes it — all before the register/create/updat
 step:
 
 ```bash
-philharmonica deploy ecs \
+augments deploy ecs \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:1 \
   --region us-east-1 \
@@ -58,8 +58,8 @@ aws ecr get-login-password --region us-east-1 | \
   docker login --username AWS --password-stdin \
   123456789.dkr.ecr.us-east-1.amazonaws.com
 
-# Build and push via philharmonica deploy build
-philharmonica deploy build \
+# Build and push via augments deploy build
+augments deploy build \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --push
@@ -69,7 +69,7 @@ Then run the deploy subcommand without `--push`.
 
 ---
 
-## `philharmonica deploy ecs`
+## `augments deploy ecs`
 
 Registers a Fargate task definition and optionally forces a new deployment on
 an existing ECS service.
@@ -77,7 +77,7 @@ an existing ECS service.
 ### Step 1 — generate artifacts
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target ecs \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
@@ -102,7 +102,7 @@ Use `--push` to have the command log in to ECR, build, and push the image
 before registering the task definition:
 
 ```bash
-philharmonica deploy ecs \
+augments deploy ecs \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -113,7 +113,7 @@ philharmonica deploy ecs \
 Or, if you already pushed the image manually, omit `--push`:
 
 ```bash
-philharmonica deploy ecs \
+augments deploy ecs \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -133,7 +133,7 @@ To also force a new deployment on an existing service, pass `--cluster` and
 `--service`:
 
 ```bash
-philharmonica deploy ecs \
+augments deploy ecs \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -157,7 +157,7 @@ philharmonica deploy ecs \
 
 ---
 
-## `philharmonica deploy app-runner`
+## `augments deploy app-runner`
 
 Creates an App Runner service from an ECR image. App Runner manages the
 load balancer, TLS, and scaling automatically.
@@ -165,7 +165,7 @@ load balancer, TLS, and scaling automatically.
 ### Step 1 — generate artifacts
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target apprunner \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest
@@ -186,7 +186,7 @@ Pass `--push` to log in to ECR, build, and push the image, then create the
 service in one step:
 
 ```bash
-philharmonica deploy app-runner \
+augments deploy app-runner \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -194,11 +194,11 @@ philharmonica deploy app-runner \
   --push
 ```
 
-Or push the image first with `philharmonica deploy build --push`, then create the
+Or push the image first with `augments deploy build --push`, then create the
 service without `--push`:
 
 ```bash
-philharmonica deploy app-runner \
+augments deploy app-runner \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -228,7 +228,7 @@ The access role must grant App Runner permission to pull images from ECR.
 
 ---
 
-## `philharmonica deploy lambda`
+## `augments deploy lambda`
 
 Packages the agent as a Lambda function image using the
 [Lambda Web Adapter](https://github.com/awslabs/aws-lambda-web-adapter) and
@@ -242,7 +242,7 @@ updates an existing function's image URI.
 ### Step 1 — generate artifacts
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target lambda \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest
@@ -251,7 +251,7 @@ philharmonica deploy init \
 This writes a Lambda Web Adapter Dockerfile under `deploy/aws-lambda/`:
 
 ```dockerfile
-# Lambda Web Adapter: forward HTTP requests to philharmonica serve
+# Lambda Web Adapter: forward HTTP requests to augments serve
 FROM public.ecr.aws/awsguru/aws-lambda-adapter:0.8.1 AS adapter
 FROM python:3.12-slim
 
@@ -261,7 +261,7 @@ COPY --from=adapter /lambda-adapter /opt/extensions/lambda-adapter
 ```
 
 The Web Adapter intercepts Lambda invocations and forwards them as HTTP
-requests to the `philharmonica serve` process running on port 8080.
+requests to the `augments serve` process running on port 8080.
 
 ### Step 2 — push to ECR and update the function
 
@@ -269,7 +269,7 @@ Pass `--push` to log in to ECR, build, and push the Lambda image, then update
 the function in one step:
 
 ```bash
-philharmonica deploy lambda \
+augments deploy lambda \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1 \
@@ -280,13 +280,13 @@ Or push first and then update separately:
 
 ```bash
 # Build and push the Lambda image manually
-philharmonica deploy build \
+augments deploy build \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --push
 
 # Update the function's image
-philharmonica deploy lambda \
+augments deploy lambda \
   --agent my_pkg.agents:assistant \
   --image 123456789.dkr.ecr.us-east-1.amazonaws.com/my-agent:latest \
   --region us-east-1

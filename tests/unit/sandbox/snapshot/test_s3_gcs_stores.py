@@ -11,12 +11,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     SnapshotError,
     SnapshotPersistError,
     SnapshotRestoreError,
 )
-from philharmonica.adk.types.sandbox.snapshot import SnapshotRef
+from augments.adk.types.sandbox.snapshot import SnapshotRef
 
 
 class _FakeClientError(Exception):
@@ -50,7 +50,7 @@ def _mock_s3_client() -> MagicMock:
 class TestS3Store:
     @pytest.mark.asyncio
     async def test_save_uploads_object_and_metadata(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         store = S3SnapshotStore(bucket="b", prefix="snaps/", client=s3)
@@ -67,7 +67,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_save_failure_raises_persist_error(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.put_object.side_effect = RuntimeError("S3 down")
@@ -77,7 +77,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_load_returns_payload(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         store = S3SnapshotStore(bucket="b", client=s3)
@@ -87,7 +87,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_load_failure_raises_restore_error(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.get_object.side_effect = RuntimeError("not found")
@@ -97,7 +97,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_exists_returns_true_when_head_ok(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         store = S3SnapshotStore(bucket="b", client=s3)
@@ -105,7 +105,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_exists_returns_false_on_404(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.head_object.side_effect = _FakeClientError("404")
@@ -115,7 +115,7 @@ class TestS3Store:
     @pytest.mark.asyncio
     async def test_exists_raises_on_non_404(self) -> None:
         # 403 / expired creds / 5xx must NOT masquerade as "snapshot absent".
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.head_object.side_effect = _FakeClientError("403")
@@ -127,7 +127,7 @@ class TestS3Store:
     async def test_save_metadata_failure_raises_and_cleans_orphan(self) -> None:
         # Object write succeeds, metadata write fails: must raise (not lie that
         # the snapshot is durable) AND delete the orphaned object.
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         # First put_object (object) succeeds; second (metadata) fails.
@@ -140,7 +140,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_delete_calls_remove_for_both_objects(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         store = S3SnapshotStore(bucket="b", client=s3)
@@ -152,7 +152,7 @@ class TestS3Store:
     async def test_delete_treats_not_found_as_success(self) -> None:
         # A genuine "not found" is the idempotent case (already gone): delete()
         # must return cleanly, NOT raise, even though delete_object errored.
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.delete_object.side_effect = _FakeClientError("404")
@@ -166,7 +166,7 @@ class TestS3Store:
         # 403 / expired creds / throttling / 5xx are real failures and MUST
         # surface — silently swallowing them would record the delete as done
         # while the (possibly sensitive) payload remains in the bucket.
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.delete_object.side_effect = _FakeClientError("403")
@@ -178,7 +178,7 @@ class TestS3Store:
     async def test_delete_raises_on_non_client_error(self) -> None:
         # A non-ClientError exception (no response.Error.Code) is unambiguously
         # a failure, not a not-found — it must propagate as a SnapshotError.
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         s3.delete_object.side_effect = RuntimeError("network reset")
@@ -188,7 +188,7 @@ class TestS3Store:
 
     @pytest.mark.asyncio
     async def test_sse_kms_forwarded(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.s3_store import S3SnapshotStore
+        from augments.adk.sandbox.snapshot.s3_store import S3SnapshotStore
 
         s3 = _mock_s3_client()
         store = S3SnapshotStore(
@@ -225,7 +225,7 @@ def _mock_gcs_client() -> tuple[MagicMock, MagicMock]:
 class TestGCSStore:
     @pytest.mark.asyncio
     async def test_save_uploads_object_and_metadata(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         store = GCSSnapshotStore(bucket="b", prefix="snaps/", client=gcs)
@@ -241,7 +241,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_save_failure_raises_persist_error(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         blob.upload_from_string.side_effect = RuntimeError("GCS down")
@@ -251,7 +251,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_load_returns_payload(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, _blob = _mock_gcs_client()
         store = GCSSnapshotStore(bucket="b", client=gcs)
@@ -260,7 +260,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_load_failure_raises_restore_error(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         blob.download_as_bytes.side_effect = RuntimeError("not found")
@@ -270,7 +270,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_exists_returns_true(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, _blob = _mock_gcs_client()
         store = GCSSnapshotStore(bucket="b", client=gcs)
@@ -279,7 +279,7 @@ class TestGCSStore:
     @pytest.mark.asyncio
     async def test_exists_returns_false_when_blob_absent(self) -> None:
         # blob.exists() returning False is the not-found signal (no exception).
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         blob.exists = MagicMock(return_value=False)
@@ -290,7 +290,7 @@ class TestGCSStore:
     async def test_exists_raises_on_error(self) -> None:
         # An exception from blob.exists() is a real failure (auth, network),
         # NOT a not-found — it must propagate, not silently report absent.
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         blob.exists.side_effect = RuntimeError("permission denied")
@@ -301,7 +301,7 @@ class TestGCSStore:
     @pytest.mark.asyncio
     async def test_save_metadata_failure_raises_and_cleans_orphan(self) -> None:
         # Object write succeeds, metadata write fails: raise + delete the orphan.
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         blob.upload_from_string.side_effect = [None, RuntimeError("metadata 500")]
@@ -312,7 +312,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_delete_calls_remove_for_both_objects(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         store = GCSSnapshotStore(bucket="b", client=gcs)
@@ -321,7 +321,7 @@ class TestGCSStore:
 
     @pytest.mark.asyncio
     async def test_cmek_key_forwarded(self) -> None:
-        from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+        from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
 
         gcs, blob = _mock_gcs_client()
         store = GCSSnapshotStore(bucket="b", kms_key_name="projects/p/keys/k", client=gcs)

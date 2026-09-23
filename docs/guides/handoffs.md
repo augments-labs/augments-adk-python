@@ -49,8 +49,8 @@ Set `Agent.output_schema` to a union of `Intent` types and assign a
 routing tokens are spent on the routing decision itself.
 
 ```python
-from philharmonica.adk.types.intents import Intent, Respond
-from philharmonica.adk.handoffs import HandoffRoute
+from augments.adk.types.intents import Intent, Respond
+from augments.adk.handoffs import HandoffRoute
 
 class RefundIntent(Intent):
     kind: Literal["refund"] = "refund"
@@ -81,7 +81,7 @@ The `handoff_route()` factory provides a more compact spelling when you do not
 need per-route callbacks or filters:
 
 ```python
-from philharmonica.adk.handoffs import handoff_route
+from augments.adk.handoffs import handoff_route
 
 triage = Agent(
     handoffs=handoff_route(
@@ -129,8 +129,8 @@ receives and what happens when callbacks fail.
 | `error_message_builder` | `Callable[[Exception], str] \| None` | `None` | Custom formatter for the rejection message when `on_error="reject_with_message"`. |
 
 ```python
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.handoffs import Handoff
+from augments.adk.handoffs.handoff_config import HandoffConfig
 
 Handoff(
     target=billing_agent,
@@ -171,8 +171,8 @@ Filters operate on the `forwarded` field: each filter reads from `forwarded`
 ### Example — sliding window
 
 ```python
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.handoffs.handoff_filters import keep_last_n
+from augments.adk.handoffs import Handoff
+from augments.adk.handoffs.handoff_filters import keep_last_n
 
 Handoff(
     target=specialist_agent,
@@ -184,7 +184,7 @@ Handoff(
 ### Example — composed pipeline
 
 ```python
-from philharmonica.adk.handoffs.handoff_filters import (
+from augments.adk.handoffs.handoff_filters import (
     compose,
     remove_tool_calls,
     keep_last_n,
@@ -291,7 +291,7 @@ alongside tool calls and LLM messages.
 You can inspect these in a post-run callback or in trajectory evaluations:
 
 ```python
-from philharmonica.adk.types.items import HandoffCallItem, HandoffOutputItem
+from augments.adk.types.items import HandoffCallItem, HandoffOutputItem
 
 result = await Runner.arun(triage_agent, "I need a refund for order #123.")
 
@@ -340,7 +340,7 @@ off to the next stage. Use `Handoff.input_filter` to strip noise between
 stages.
 
 ```python
-from philharmonica.adk.handoffs.handoff_filters import keep_last_n, remove_tool_calls, compose
+from augments.adk.handoffs.handoff_filters import keep_last_n, remove_tool_calls, compose
 
 collector = Agent(
     name="Collector",

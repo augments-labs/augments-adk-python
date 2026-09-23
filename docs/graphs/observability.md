@@ -32,7 +32,7 @@ methods you care about; unimplemented ones default to no-ops.
 ```python
 from typing import override
 
-from philharmonica.adk.graphs.hooks import GraphHooks
+from augments.adk.graphs.hooks import GraphHooks
 
 
 class AuditHooks(GraphHooks[Any]):
@@ -108,8 +108,8 @@ from opentelemetry.sdk.trace.export import (
     SimpleSpanProcessor,
 )
 
-from philharmonica.adk.tracing import set_tracer
-from philharmonica.adk.tracing.otel import OTelTracer
+from augments.adk.tracing import set_tracer
+from augments.adk.tracing.otel import OTelTracer
 
 provider = TracerProvider()
 provider.add_span_processor(SimpleSpanProcessor(ConsoleSpanExporter()))
@@ -130,34 +130,34 @@ For production exporters (OTLP, Jaeger, Honeycomb), swap
 
 ### Attribute Reference
 
-All graph-tracing attributes live under the `philharmonica.graph.*` namespace.
+All graph-tracing attributes live under the `augments.graph.*` namespace.
 
 **Graph-run span** (`graph.<id>`):
 
 | Attribute | Type | Set | Meaning |
 |---|---|---|---|
-| `philharmonica.graph.id` | str | always | The graph identifier. |
-| `philharmonica.graph.entry` | str | when set | Entry node id on the compiled graph. |
+| `augments.graph.id` | str | always | The graph identifier. |
+| `augments.graph.entry` | str | when set | Entry node id on the compiled graph. |
 
 **Superstep span** (`graph.superstep.<n>`):
 
 | Attribute | Type | Set | Meaning |
 |---|---|---|---|
-| `philharmonica.graph.id` | str | always | Parent graph identifier. |
-| `philharmonica.graph.superstep.index` | int | always | Zero-or-one-based index (matches `state.superstep`). |
-| `philharmonica.graph.superstep.ready_nodes` | list[str] | when non-empty | Nodes that were ready at superstep start. |
-| `philharmonica.graph.superstep.fired_nodes` | list[str] | when non-empty | Nodes that fired in this superstep (stamped at close). |
+| `augments.graph.id` | str | always | Parent graph identifier. |
+| `augments.graph.superstep.index` | int | always | Zero-or-one-based index (matches `state.superstep`). |
+| `augments.graph.superstep.ready_nodes` | list[str] | when non-empty | Nodes that were ready at superstep start. |
+| `augments.graph.superstep.fired_nodes` | list[str] | when non-empty | Nodes that fired in this superstep (stamped at close). |
 
 **Per-node span** (`graph.node.<name>`):
 
 | Attribute | Type | Set | Meaning |
 |---|---|---|---|
-| `philharmonica.graph.id` | str | always | Parent graph identifier. |
-| `philharmonica.graph.node.name` | str | always | Node id. |
-| `philharmonica.graph.node.status` | str | always (at close) | `success` / `failed` / `interrupted`. |
-| `philharmonica.graph.node.attempts` | int | always (at close) | Final attempt count including retries (1 if no retries). |
-| `philharmonica.graph.node.duration_ms` | int | optional | Wall-clock duration, set by the caller. |
-| `philharmonica.graph.node.resume_attempt` | int | when resumed | Resume sequence number for resumed nodes. |
+| `augments.graph.id` | str | always | Parent graph identifier. |
+| `augments.graph.node.name` | str | always | Node id. |
+| `augments.graph.node.status` | str | always (at close) | `success` / `failed` / `interrupted`. |
+| `augments.graph.node.attempts` | int | always (at close) | Final attempt count including retries (1 if no retries). |
+| `augments.graph.node.duration_ms` | int | optional | Wall-clock duration, set by the caller. |
+| `augments.graph.node.resume_attempt` | int | when resumed | Resume sequence number for resumed nodes. |
 
 When a node raises a non-`InterruptException`, the span's OTel status
 is also set to `ERROR` with the exception type and message recorded as
@@ -175,8 +175,8 @@ empty — the disabled path is zero-overhead.
 Building a backend that isn't OTel? Implement the `Tracer` protocol:
 
 ```python
-from philharmonica.adk.tracing import Span, Tracer
-from philharmonica.adk.types.tracing import (
+from augments.adk.tracing import Span, Tracer
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -217,13 +217,13 @@ python examples/graphs/observability.py
 
 For HITL suspend + resume coverage of the same observability surfaces,
 see `examples/graphs/hitl.py` — interrupt + resume cycles fire
-`on_node_interrupt` and stamp `philharmonica.graph.node.status="interrupted"`
+`on_node_interrupt` and stamp `augments.graph.node.status="interrupted"`
 on the per-node span at close.
 
 ## Known Limitations
 
 - The graph-run span (`graph.<id>`) currently records only
-  `philharmonica.graph.id` and `philharmonica.graph.entry`. Status and
+  `augments.graph.id` and `augments.graph.entry`. Status and
   `supersteps_total` are not stamped on the graph-run span itself
   today; they're available via the `on_graph_end` hook callback. A
   follow-up will extend the span surface to match.

@@ -15,9 +15,9 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.sandbox.snapshot import store as store_mod
-from philharmonica.adk.sandbox.snapshot.store import SnapshotStore
-from philharmonica.adk.types.sandbox.snapshot import SnapshotMetadata, SnapshotRef
+from augments.adk.sandbox.snapshot import store as store_mod
+from augments.adk.sandbox.snapshot.store import SnapshotStore
+from augments.adk.types.sandbox.snapshot import SnapshotMetadata, SnapshotRef
 
 
 class TestSnapshotStoreABC:

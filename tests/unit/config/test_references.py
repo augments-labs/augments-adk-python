@@ -10,13 +10,13 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from philharmonica.adk.config import build_agent
-from philharmonica.adk.config.resolver import resolve_function_tool, resolve_output_schema
-from philharmonica.adk.exceptions import ConfigResolutionError
-from philharmonica.adk.schemas import SchemaEnforcement
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.types.config import AgentConfig
-from philharmonica.adk.types.config.references import HandoffRef, OutputSchemaRef
+from augments.adk.config import build_agent
+from augments.adk.config.resolver import resolve_function_tool, resolve_output_schema
+from augments.adk.exceptions import ConfigResolutionError
+from augments.adk.schemas import SchemaEnforcement
+from augments.adk.tools import FunctionTool
+from augments.adk.types.config import AgentConfig
+from augments.adk.types.config.references import HandoffRef, OutputSchemaRef
 
 from .sample_symbols import SampleOutput, sample_tool
 

@@ -31,12 +31,12 @@ import sys
 from google.genai.types import ThinkingConfig
 from pydantic import BaseModel
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.gemini import GeminiConfig, GeminiLLM
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.tools.hosted import WebSearchTool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms.gemini import GeminiConfig, GeminiLLM
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools import function_tool
+from augments.adk.tools.hosted import WebSearchTool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

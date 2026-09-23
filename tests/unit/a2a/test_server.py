@@ -13,8 +13,8 @@ from a2a.server.tasks import InMemoryTaskStore
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 from starlette.applications import Starlette
 
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.agents import Agent
 
 
 @pytest.fixture
@@ -105,7 +105,7 @@ class TestBuildStarletteApp:
         # factory logs a WARNING when falling back to InMemoryTaskStore
         # so the choice is visible in deployment logs.
         server = A2AServer(agent=basic_agent, agent_card=basic_card)
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.a2a.app_factory"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.a2a.app_factory"):
             build_starlette_app(server)
         assert any("InMemoryTaskStore" in r.getMessage() for r in caplog.records)
 
@@ -117,6 +117,6 @@ class TestBuildStarletteApp:
     ) -> None:
         custom = InMemoryTaskStore()
         server = A2AServer(agent=basic_agent, agent_card=basic_card, task_store=custom)
-        with caplog.at_level(logging.WARNING, logger="philharmonica.adk.a2a.app_factory"):
+        with caplog.at_level(logging.WARNING, logger="augments.adk.a2a.app_factory"):
             build_starlette_app(server)
         assert not any("InMemoryTaskStore" in r.getMessage() for r in caplog.records)

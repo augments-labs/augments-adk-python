@@ -10,17 +10,17 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.graphs.config import GraphConfig, NodeRetryPolicy
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.join import JoinBarrier, JoinSemantics
-from philharmonica.adk.graphs.result import GraphRunResultStreaming
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.run.graph_loop import (
+from augments.adk.graphs.config import GraphConfig, NodeRetryPolicy
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.join import JoinBarrier, JoinSemantics
+from augments.adk.graphs.result import GraphRunResultStreaming
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.run.graph_loop import (
     _build_join_barriers,
     _seed_barriers_from_checkpoint,
 )
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Helpers

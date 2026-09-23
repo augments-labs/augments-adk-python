@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
-from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
 
 class _ConcreteServer(MCPServerWithClientSession):

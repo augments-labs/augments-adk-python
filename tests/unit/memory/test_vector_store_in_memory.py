@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.memory import (
+from augments.adk.memory import (
     MemoryKind,
     MemoryMetadata,
     MemorySearchFilter,
     MemorySource,
 )
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.memory.vector_store import VectorRecord
 
 
 def _rec(

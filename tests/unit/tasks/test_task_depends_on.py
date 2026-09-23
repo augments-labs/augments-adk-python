@@ -20,10 +20,10 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task, TaskOutput, TaskPipeline, TaskPipelineState
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task, TaskOutput, TaskPipeline, TaskPipelineState
+from augments.adk.types.run.run_result import RunResult
 
 
 def _agent() -> Agent:
@@ -85,7 +85,7 @@ class TestPipelineRunDAG:
         d = Task(description="d", agent=agent, task_id="d", depends_on=("b", "c"))
         pipeline = TaskPipeline(tasks=(a, b, c, d))
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         # AsyncMock(side_effect=...) treats the patched arun as unbound;
         # signature is (agent, prompt, **kwargs).
@@ -114,7 +114,7 @@ class TestPipelineRunDAG:
         final level is undefined when tasks are reordered. The definition error
         forces developers to always assign stable IDs in DAG pipelines.
         """
-        from philharmonica.adk.tasks.topology import TaskPipelineDefinitionError
+        from augments.adk.tasks.topology import TaskPipelineDefinitionError
 
         agent = _agent()
         a = Task(description="a", agent=agent, task_id="a")
@@ -141,7 +141,7 @@ class TestPipelineRunDAG:
         b2 = Task(description="b2", agent=agent, task_id="b2", depends_on=("a",))
         b3 = Task(description="b3", agent=agent, task_id="b3", depends_on=("a",))
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake)):
             await Runner.arun_task_pipeline(TaskPipeline(tasks=(a, b1, b2, b3)))
@@ -172,7 +172,7 @@ class TestDAGResume:
             completed_task_ids=("a",),
         )
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake)):
             result = await Runner.arun_task_pipeline_from_state(pipeline, state)

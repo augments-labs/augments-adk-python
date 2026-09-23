@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowCheckpoint,
     FlowWorkerBackend,
@@ -24,7 +24,7 @@ from philharmonica.adk.flows import (
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 
 class _ChainState(BaseModel):

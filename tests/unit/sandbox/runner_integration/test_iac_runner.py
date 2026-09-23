@@ -9,12 +9,12 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxConfigurationError
-from philharmonica.adk.sandbox.runner_integration.iac_runner import apply_iac, destroy_iac
-from philharmonica.adk.types.sandbox.iac import IaCBundle
+from augments.adk.exceptions.exceptions import SandboxConfigurationError
+from augments.adk.sandbox.runner_integration.iac_runner import apply_iac, destroy_iac
+from augments.adk.types.sandbox.iac import IaCBundle
 
-_PATCH = "philharmonica.adk.sandbox.runner_integration.iac_runner.asyncio.create_subprocess_exec"
-_WAIT_FOR = "philharmonica.adk.sandbox.runner_integration.iac_runner.asyncio.wait_for"
+_PATCH = "augments.adk.sandbox.runner_integration.iac_runner.asyncio.create_subprocess_exec"
+_WAIT_FOR = "augments.adk.sandbox.runner_integration.iac_runner.asyncio.wait_for"
 
 
 class TestIaCBundle:

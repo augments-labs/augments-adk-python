@@ -11,8 +11,8 @@ Inspired by Anthropic's [Just-in-Time context](https://www.anthropic.com/enginee
 ## Quick Start
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools import JITContextAwareTool
+from augments.adk.agents import Agent
+from augments.adk.tools import JITContextAwareTool
 
 agent = Agent(
     name="Research Assistant",

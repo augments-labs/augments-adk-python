@@ -6,8 +6,8 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.stream import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.stream import (
     AgentUpdatedStreamEvent,
     HookEventKind,
     HookLifecycleEvent,
@@ -15,18 +15,18 @@ from philharmonica.adk.run.stream import (
     RunItemStreamEvent,
     RunItemType,
 )
-from philharmonica.adk.serving.serializers import (
+from augments.adk.serving.serializers import (
     run_result_to_dict,
     stream_event_to_dict,
     usage_to_dict,
 )
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
     LLMStreamEvent,
 )
-from philharmonica.adk.types.run.run_result import RunResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.types.run.run_result import RunResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def test_usage_to_dict_projects_scalar_counters() -> None:

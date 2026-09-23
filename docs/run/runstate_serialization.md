@@ -6,8 +6,8 @@ structured audit metadata for human-in-the-loop approvals.
 ## TL;DR
 
 ```python
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.state import RunState
+from augments.adk.run.runner import Runner
 
 # First run — may halt for HITL approval
 result = await Runner.arun(agent, "Delete user u-1")

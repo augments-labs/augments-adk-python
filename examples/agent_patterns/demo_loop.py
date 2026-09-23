@@ -12,7 +12,7 @@ Ctrl-C (KeyboardInterrupt).
 Run:
     python examples/agent_patterns/demo_loop.py
 
-Under the batch runner (or with ``PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto``)
+Under the batch runner (or with ``AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto``)
 there is no human at the terminal, so the example runs a single scripted
 turn instead of the stdin REPL — still exercising a real agent turn.
 
@@ -34,10 +34,10 @@ try:
 except ImportError:
     pass
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.run.demo import run_demo_loop
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.run.demo import run_demo_loop
+from augments.adk.verbose import VerboseConfig
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from auto_mode import is_auto_mode

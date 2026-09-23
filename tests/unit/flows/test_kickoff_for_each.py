@@ -8,8 +8,8 @@ import time
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, FlowConfig, flow_listen, flow_start
-from philharmonica.adk.run.runner import Runner
+from augments.adk.flows import Flow, FlowConfig, flow_listen, flow_start
+from augments.adk.run.runner import Runner
 
 
 class _IntState(BaseModel):
@@ -110,8 +110,8 @@ class TestConcurrency:
 
 class TestErrorIsolation:
     async def test_factory_framework_error_captures_into_failed_result(self) -> None:
-        """``PhilharmonicaError`` subclasses from the factory land on per-item result."""
-        from philharmonica.adk.flows.exceptions import FlowDefinitionError
+        """``AugmentsError`` subclasses from the factory land on per-item result."""
+        from augments.adk.flows.exceptions import FlowDefinitionError
 
         def _bad_factory(state: _IntState) -> Flow[_IntState]:
             if state.value == 2:

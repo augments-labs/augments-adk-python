@@ -17,7 +17,7 @@ Usage:
 
 Install the voice extra for the realtime/streaming path and microphone
 helpers:
-    pip install 'philharmonica-adk[voice]'
+    pip install 'augments-adk[voice]'
 """
 
 try:
@@ -32,9 +32,9 @@ import io
 import logging
 import wave
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.openai import OpenAISTTModel, OpenAITTSModel
-from philharmonica.adk.voice import (
+from augments.adk.agents import Agent
+from augments.adk.llms.openai import OpenAISTTModel, OpenAITTSModel
+from augments.adk.voice import (
     DEFAULT_SAMPLE_RATE,
     AudioInput,
     SingleAgentVoiceWorkflow,

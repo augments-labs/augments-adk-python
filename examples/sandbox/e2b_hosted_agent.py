@@ -3,7 +3,7 @@
 Requires the [sandbox-e2b] extra and an E2B account.
 
 Prerequisites:
-- ``pip install 'philharmonica-adk[sandbox-e2b]'``
+- ``pip install 'augments-adk[sandbox-e2b]'``
 - ``E2B_API_KEY`` set in the environment.
 - ``ANTHROPIC_API_KEY`` (or your provider's key) set.
 """
@@ -21,16 +21,16 @@ import asyncio
 import logging
 import os
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.hosted.e2b import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.hosted.e2b import (
     E2bSandboxClient,
     E2bSandboxClientOptions,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

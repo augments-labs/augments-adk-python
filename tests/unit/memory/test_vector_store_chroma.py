@@ -8,9 +8,9 @@ import pytest
 
 pytest.importorskip("chromadb")
 
-from philharmonica.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
-from philharmonica.adk.memory.stores.chroma import ChromaVectorStore
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory import MemoryKind, MemoryMetadata, MemorySearchFilter, MemorySource
+from augments.adk.memory.stores.chroma import ChromaVectorStore
+from augments.adk.memory.vector_store import VectorRecord
 
 
 def _rec(rid: str, vector: tuple[float, ...], *, kind: MemoryKind = MemoryKind.EPISODIC) -> VectorRecord:
@@ -47,7 +47,7 @@ async def test_chroma_namespace_isolation() -> None:
 
 
 def test_chroma_build_where_shapes() -> None:
-    from philharmonica.adk.memory.stores.chroma import _build_where
+    from augments.adk.memory.stores.chroma import _build_where
 
     # single clause (namespace only) -> no $and wrapper
     assert _build_where("u1", None) == {"namespace": {"$eq": "u1"}}
@@ -63,7 +63,7 @@ def test_chroma_build_where_shapes() -> None:
 
 def test_chroma_from_chroma_raises_on_missing_required_fields() -> None:
     """_from_chroma must raise RuntimeError (not KeyError) on missing required fields."""
-    from philharmonica.adk.memory.stores.chroma import _from_chroma
+    from augments.adk.memory.stores.chroma import _from_chroma
 
     # Missing 'namespace'
     with pytest.raises(RuntimeError, match="namespace"):
@@ -77,9 +77,9 @@ def test_chroma_category_filter_emits_warning(caplog) -> None:
     """Category filter on Chroma must emit a WARNING (not just DEBUG)."""
     import logging
 
-    from philharmonica.adk.memory.stores.chroma import _build_where
+    from augments.adk.memory.stores.chroma import _build_where
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.memory.stores.chroma"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.memory.stores.chroma"):
         _build_where("u1", MemorySearchFilter(categories=("tag",)))
     assert any("category" in r.message.lower() for r in caplog.records if r.levelno >= logging.WARNING)
 

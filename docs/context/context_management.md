@@ -3,8 +3,8 @@
 ## Configuration
 
 ```python
-from philharmonica.adk.context import CacheStrategy, ContextManagementConfig, CompactionConfig
-from philharmonica.adk.run import RunConfig
+from augments.adk.context import CacheStrategy, ContextManagementConfig, CompactionConfig
+from augments.adk.run import RunConfig
 
 config = RunConfig(
     context_management=ContextManagementConfig(

@@ -6,10 +6,10 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.llms.llm_usage import LLMUsageLimits
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.agents import Agent
+from augments.adk.handoffs import Handoff
+from augments.adk.llms.llm_usage import LLMUsageLimits
+from augments.adk.tools.function_tool import FunctionTool
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -65,7 +65,7 @@ class TestAsToolTimeout:
             await asyncio.sleep(5.0)
             return _mock_result()
 
-        with patch("philharmonica.adk.run.Runner.arun", side_effect=slow_run):
+        with patch("augments.adk.run.Runner.arun", side_effect=slow_run):
             result = await _invoke(tool, '{"input": "do something"}')
 
         assert "timed out" in result
@@ -78,7 +78,7 @@ class TestAsToolTimeout:
         tool = agent.as_tool()
 
         with patch(
-            "philharmonica.adk.run.Runner.arun",
+            "augments.adk.run.Runner.arun",
             new_callable=AsyncMock,
             return_value=_mock_result("Quick result"),
         ):
@@ -93,7 +93,7 @@ class TestAsToolTimeout:
         tool = agent.as_tool(timeout=5.0)
 
         with patch(
-            "philharmonica.adk.run.Runner.arun",
+            "augments.adk.run.Runner.arun",
             new_callable=AsyncMock,
             return_value=_mock_result("Completed in time"),
         ):
@@ -125,7 +125,7 @@ class TestAsToolBudget:
             captured_kwargs.update(kwargs)
             return _mock_result()
 
-        with patch("philharmonica.adk.run.Runner.arun", side_effect=capture_arun):
+        with patch("augments.adk.run.Runner.arun", side_effect=capture_arun):
             await _invoke(tool, '{"input": "budgeted task"}')
 
         run_config = captured_kwargs.get("run_config")
@@ -135,7 +135,7 @@ class TestAsToolBudget:
     @pytest.mark.asyncio
     async def test_budget_overrides_inherited_config(self) -> None:
         """Budget takes precedence over inherited RunConfig.usage_limits."""
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         agent = _agent("BudgetAgent")
         inherited_limits = LLMUsageLimits(total_tokens_limit=100_000)
@@ -154,7 +154,7 @@ class TestAsToolBudget:
             captured_kwargs.update(kwargs)
             return _mock_result()
 
-        with patch("philharmonica.adk.run.Runner.arun", side_effect=capture_arun):
+        with patch("augments.adk.run.Runner.arun", side_effect=capture_arun):
             await _invoke_with_config(
                 tool,
                 '{"input": "task"}',
@@ -169,7 +169,7 @@ class TestAsToolBudget:
     @pytest.mark.asyncio
     async def test_no_budget_preserves_config(self) -> None:
         """Without budget param, RunConfig passes through unchanged."""
-        from philharmonica.adk.run.config import RunConfig
+        from augments.adk.run.config import RunConfig
 
         agent = _agent("NoBudgetAgent")
         original_config = RunConfig(verbose=True)
@@ -185,7 +185,7 @@ class TestAsToolBudget:
             captured_kwargs.update(kwargs)
             return _mock_result()
 
-        with patch("philharmonica.adk.run.Runner.arun", side_effect=capture_arun):
+        with patch("augments.adk.run.Runner.arun", side_effect=capture_arun):
             await _invoke(tool, '{"input": "task"}')
 
         run_config = captured_kwargs.get("run_config")
@@ -215,7 +215,7 @@ class TestAsToolTimeoutAndBudget:
             captured_kwargs.update(kwargs)
             return _mock_result("Governed result")
 
-        with patch("philharmonica.adk.run.Runner.arun", side_effect=capture_arun):
+        with patch("augments.adk.run.Runner.arun", side_effect=capture_arun):
             result = await _invoke(tool, '{"input": "task"}')
 
         assert result == "Governed result"

@@ -24,12 +24,12 @@ This index links to the per-topic documentation.
 ## Quickstart
 
 ```python
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.local import LocalSubprocessSandboxClient
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.local import LocalSubprocessSandboxClient
+from augments.adk.sandbox.config import SandboxRunConfig
 
 agent = SandboxAgent(
     name="coder",

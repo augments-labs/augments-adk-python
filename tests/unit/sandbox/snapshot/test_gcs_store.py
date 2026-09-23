@@ -13,9 +13,9 @@ from unittest.mock import MagicMock
 import pytest
 from google.api_core.exceptions import Forbidden, NotFound
 
-from philharmonica.adk.exceptions.exceptions import SnapshotError
-from philharmonica.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
-from philharmonica.adk.types.sandbox.snapshot import SnapshotRef
+from augments.adk.exceptions.exceptions import SnapshotError
+from augments.adk.sandbox.snapshot.gcs_store import GCSSnapshotStore
+from augments.adk.types.sandbox.snapshot import SnapshotRef
 
 
 def _mock_gcs_client() -> tuple[MagicMock, MagicMock]:

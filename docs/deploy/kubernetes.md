@@ -13,19 +13,19 @@ Both generate the same container artifacts (Dockerfile, `.dockerignore`,
 | `gke` | `gcloud`, `docker`, `kubectl` |
 | `helm` | `helm` |
 
-The CLIs must be installed by the operator; `philharmonica deploy` shells out to
+The CLIs must be installed by the operator; `augments deploy` shells out to
 them and imports no cloud SDK.
 
 ---
 
-## `philharmonica deploy k8s`
+## `augments deploy k8s`
 
 Generate Kustomize manifests and apply them to the current kubeconfig context.
 
 ### Step 1 — generate artifacts
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target k8s \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
@@ -50,7 +50,7 @@ before applying.
 ### Step 2 — build and push the image
 
 ```bash
-philharmonica deploy build \
+augments deploy build \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --push
@@ -59,7 +59,7 @@ philharmonica deploy build \
 ### Step 3 — apply
 
 ```bash
-philharmonica deploy k8s \
+augments deploy k8s \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --no-generate
@@ -71,7 +71,7 @@ disk. Omit it to regenerate and apply in one step.
 Pass `--context` to target a specific kubeconfig context:
 
 ```bash
-philharmonica deploy k8s \
+augments deploy k8s \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --context my-prod-cluster \
@@ -108,14 +108,14 @@ going to production.
 
 ---
 
-## `philharmonica deploy gke`
+## `augments deploy gke`
 
 GKE reuses the same Kubernetes manifests; the deploy action builds and pushes
 the image, fetches cluster credentials via `gcloud`, then applies the
 Kustomize set with `kubectl`.
 
 ```bash
-philharmonica deploy gke \
+augments deploy gke \
   --agent my_pkg.agents:assistant \
   --image gcr.io/my-project/my-agent:latest \
   --project my-gcp-project \
@@ -142,7 +142,7 @@ This runs in sequence:
 
 ---
 
-## `philharmonica deploy helm`
+## `augments deploy helm`
 
 Render a Helm chart and install or upgrade the release with
 `helm upgrade --install`.
@@ -150,7 +150,7 @@ Render a Helm chart and install or upgrade the release with
 ### Step 1 — generate the chart
 
 ```bash
-philharmonica deploy init \
+augments deploy init \
   --target helm \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
@@ -169,13 +169,13 @@ This writes a Helm chart under `deploy/helm/<app-name>/`:
 
 ```bash
 # Push the image first
-philharmonica deploy build \
+augments deploy build \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --push
 
 # Install or upgrade the release
-philharmonica deploy helm \
+augments deploy helm \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --no-generate
@@ -184,7 +184,7 @@ philharmonica deploy helm \
 Specify a namespace; the namespace is created if it does not exist:
 
 ```bash
-philharmonica deploy helm \
+augments deploy helm \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --namespace production \
@@ -203,15 +203,15 @@ philharmonica deploy helm \
 
 ## Shared flags
 
-All `philharmonica deploy` subcommands accept these flags:
+All `augments deploy` subcommands accept these flags:
 
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--agent MODULE:VAR` | — | `module:var` reference the container serves (required) |
-| `--image IMAGE[:TAG]` | `philharmonica-agent:latest` | Container image name with optional registry and tag |
+| `--image IMAGE[:TAG]` | `augments-agent:latest` | Container image name with optional registry and tag |
 | `--app-name TEXT` | derived from `--image` | Service / resource name (RFC 1123 label) |
 | `--port INTEGER` | `8080` | Container port |
-| `--extras TEXT` | `serve,a2a` | `philharmonica-adk` extras installed in the image |
+| `--extras TEXT` | `serve,a2a` | `augments-adk` extras installed in the image |
 | `--env-key TEXT` | — | Env var name to surface as a Secret reference (repeatable) |
 
 ## See also

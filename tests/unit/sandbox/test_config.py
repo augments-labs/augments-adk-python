@@ -6,15 +6,15 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.network import NetworkPolicy
-from philharmonica.adk.types.sandbox.resource_limits import SandboxResourceLimits
-from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
-from philharmonica.adk.types.sandbox.snapshot import LocalSnapshotSpec
+from augments.adk.run.config import RunConfig
+from augments.adk.sandbox.clients.local.subprocess_client import LocalSubprocessSandboxClient
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.selector import CheapestFirstSelector, SandboxCandidate
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.network import NetworkPolicy
+from augments.adk.types.sandbox.resource_limits import SandboxResourceLimits
+from augments.adk.types.sandbox.session_state import SandboxSessionState
+from augments.adk.types.sandbox.snapshot import LocalSnapshotSpec
 
 
 class _FakeBackendClient:

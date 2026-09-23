@@ -1,7 +1,7 @@
 """Tests for ``RunConfig.call_model_input_filter``.
 
 Covers the file-private helper ``_apply_call_model_input_filter`` in
-``philharmonica.adk.run.loop`` plus one end-to-end integration via
+``augments.adk.run.loop`` plus one end-to-end integration via
 ``Runner.arun`` with a stubbed ``call_llm`` that captures what the
 filter actually produced.
 
@@ -19,15 +19,15 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.run.config import (
+from augments.adk.run.config import (
     CallModelData,
     ModelInputData,
     RunConfig,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.loop import _apply_call_model_input_filter  # test-only import
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
+from augments.adk.run.context import RunContext
+from augments.adk.run.loop import _apply_call_model_input_filter  # test-only import
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
 
 # ── Helpers ──────────────────────────────────────────────────────────
 
@@ -220,9 +220,9 @@ class TestCallModelInputFilterIntegration:
     @pytest.mark.asyncio
     async def test_filter_output_reaches_call_llm(self) -> None:
         """With a filter set, ``call_llm`` receives the filtered messages."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
+        from augments.adk.types.responses.llm_response import (
             LLMResponse,
             LLMResponseText,
         )
@@ -250,17 +250,17 @@ class TestCallModelInputFilterIntegration:
         config = RunConfig(call_model_input_filter=injector)
 
         with (
-            patch("philharmonica.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
+            patch("augments.adk.run.loop.call_llm", new=AsyncMock(side_effect=fake_call_llm)),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):

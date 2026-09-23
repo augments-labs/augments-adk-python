@@ -31,13 +31,13 @@ import asyncio
 import logging
 from dataclasses import dataclass
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.context import CacheStrategy, ContextManagementConfig
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tools.function_tool import FunctionTool, function_tool
-from philharmonica.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.context import CacheStrategy, ContextManagementConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.run.context import RunContext
+from augments.adk.tools.function_tool import FunctionTool, function_tool
+from augments.adk.tools.tool_context import ExecutionAwareToolContext, ToolContext
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

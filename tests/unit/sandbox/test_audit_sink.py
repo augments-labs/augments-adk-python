@@ -6,7 +6,7 @@ import logging
 
 import pytest
 
-from philharmonica.adk.sandbox.observability import (
+from augments.adk.sandbox.observability import (
     AuditSink,
     LoggingAuditSink,
     NullAuditSink,

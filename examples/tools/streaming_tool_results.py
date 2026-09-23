@@ -29,13 +29,13 @@ import asyncio
 import logging
 from collections.abc import AsyncIterator
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import RunItemStreamEvent, RunItemType
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.tools import ToolStreamEvent
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import RunItemStreamEvent, RunItemType
+from augments.adk.tools import function_tool
+from augments.adk.types.tools import ToolStreamEvent
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

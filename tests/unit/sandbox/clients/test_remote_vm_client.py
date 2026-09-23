@@ -14,8 +14,8 @@ import base64
 import httpx
 import pytest
 
-from philharmonica.adk.sandbox.clients.hosted.remote_vm import RemoteVMSandboxClientOptions
-from philharmonica.adk.sandbox.clients.hosted.remote_vm.remote_vm_client import (
+from augments.adk.sandbox.clients.hosted.remote_vm import RemoteVMSandboxClientOptions
+from augments.adk.sandbox.clients.hosted.remote_vm.remote_vm_client import (
     parse_exec_result,
     retry_async_call,
 )

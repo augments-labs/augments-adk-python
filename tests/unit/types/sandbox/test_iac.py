@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.iac``."""
+"""Tests for ``augments.adk.types.sandbox.iac``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.iac import IaCBundle
+from augments.adk.types.sandbox.iac import IaCBundle
 
 
 class TestIaCBundleConstruction:

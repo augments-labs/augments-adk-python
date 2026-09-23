@@ -22,17 +22,17 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.graphs.config import GraphConfig
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import GraphHooks
-from philharmonica.adk.graphs.interrupt import request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.graph_loop import _dispatch_node, run_graph_loop
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.config import GraphConfig
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import GraphHooks
+from augments.adk.graphs.interrupt import request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.graph_loop import _dispatch_node, run_graph_loop
+from augments.adk.run.runner import Runner
 
 # ---------------------------------------------------------------------------
 # Finding 1 — CancelledError must not be swallowed by the node error handler.
@@ -108,7 +108,7 @@ class TestFailFastDrainsDoneBatch:
         # (fail-fast trigger), one parks on an interrupt. We force the
         # errored task to be visited FIRST so the buggy ``break`` would drop
         # the interrupt — deterministically reproducing the defect.
-        import philharmonica.adk.run.graph_loop as graph_loop
+        import augments.adk.run.graph_loop as graph_loop
 
         def _boom(_text: str) -> str:
             raise RuntimeError("boom")
@@ -188,7 +188,7 @@ class _TrackingTracer:
     """Tracer recording every span so we can assert each one was finished."""
 
     def __init__(self) -> None:
-        from philharmonica.adk.tracing.spans import Span
+        from augments.adk.tracing.spans import Span
 
         self._Span = Span
         self.spans: list[Any] = []
@@ -221,7 +221,7 @@ class _TrackingTracer:
 
 def _superstep_spans(tracer: _TrackingTracer) -> list[Any]:
     """Filter recorded spans to the per-superstep ones."""
-    from philharmonica.adk.types.tracing.span_data import CustomSpanData
+    from augments.adk.types.tracing.span_data import CustomSpanData
 
     return [
         s for s in tracer.spans if isinstance(s.data, CustomSpanData) and s.data.data.get("type") == "graph_superstep"
@@ -232,7 +232,7 @@ class TestSuperstepSpanClosedOnHookError:
     """A hook raising mid-superstep must not leak the open superstep span."""
 
     async def test_superstep_span_finished_when_hook_raises(self) -> None:
-        from philharmonica.adk.tracing import set_tracer
+        from augments.adk.tracing import set_tracer
 
         tracer = _TrackingTracer()
         set_tracer(tracer)

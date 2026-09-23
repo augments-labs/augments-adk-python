@@ -32,12 +32,12 @@ import logging
 import os
 from typing import Any
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tracing import MultiTracer, Span, set_tracer
-from philharmonica.adk.tracing.otel import setup_otel
-from philharmonica.adk.types.tracing import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tracing import MultiTracer, Span, set_tracer
+from augments.adk.tracing.otel import setup_otel
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -47,7 +47,7 @@ from philharmonica.adk.types.tracing import (
     ResponseSpanData,
     SpanData,
 )
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

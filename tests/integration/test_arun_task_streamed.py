@@ -35,13 +35,13 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tasks import Task
-from philharmonica.adk.tasks.task_output import TaskOutput
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.tasks import Task
+from augments.adk.tasks.task_output import TaskOutput
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
 )
@@ -95,16 +95,16 @@ def _patched_streamed_loop(fake_streamed: Any) -> Iterator[None]:
     """
     with ExitStack() as stack:
         stack.enter_context(
-            patch("philharmonica.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
+            patch("augments.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", new=AsyncMock(return_value=[])),
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", new=AsyncMock(return_value=[])),
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         )
         yield
 

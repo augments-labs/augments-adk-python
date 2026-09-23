@@ -25,9 +25,9 @@ except ImportError:
 
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.tools.function_tool import function_tool
-from philharmonica.adk.types.tools.tool_output_types import ToolOutputImage, ToolOutputText
+from augments.adk.agents import Agent
+from augments.adk.tools.function_tool import function_tool
+from augments.adk.types.tools.tool_output_types import ToolOutputImage, ToolOutputText
 
 logger = logging.getLogger(__name__)
 
@@ -101,8 +101,8 @@ def formatted_report(topic: str) -> str:
 
 from dataclasses import replace
 
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.run.context import RunContext
+from augments.adk.tools.function_tool import FunctionTool
 
 
 def prepare_api_search(ctx: RunContext, tool: FunctionTool):

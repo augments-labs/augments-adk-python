@@ -7,11 +7,11 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.llms import Embedder, Embedding
-from philharmonica.adk.memory.stores.in_memory import InMemoryVectorStore
-from philharmonica.adk.rag.chunking import TextChunker
-from philharmonica.adk.rag.document import LoadedDocument
-from philharmonica.adk.rag.index import DocumentIndex
+from augments.adk.llms import Embedder, Embedding
+from augments.adk.memory.stores.in_memory import InMemoryVectorStore
+from augments.adk.rag.chunking import TextChunker
+from augments.adk.rag.document import LoadedDocument
+from augments.adk.rag.index import DocumentIndex
 
 _DIM = 64
 

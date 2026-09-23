@@ -35,7 +35,7 @@
 
   <!-- Provider module -->
   <rect class="module" x="290" y="80" width="340" height="220"/>
-  <text class="small" x="460" y="100" text-anchor="middle">src/philharmonica/adk/llms/&lt;provider&gt;/</text>
+  <text class="small" x="460" y="100" text-anchor="middle">src/augments/adk/llms/&lt;provider&gt;/</text>
 
   <rect class="layer2" x="320" y="120" width="280" height="50"/>
   <text class="label" x="460" y="150" text-anchor="middle">Layer 2 (wire)</text>

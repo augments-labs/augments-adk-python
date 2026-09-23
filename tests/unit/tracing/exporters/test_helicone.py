@@ -1,6 +1,6 @@
 import pytest
 
-from philharmonica.adk.tracing.exporters.helicone import setup_helicone
+from augments.adk.tracing.exporters.helicone import setup_helicone
 
 
 def test_helicone_returns_base_url_and_auth_header():

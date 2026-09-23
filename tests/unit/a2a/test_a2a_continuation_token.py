@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from philharmonica.adk.a2a import A2AContinuationToken, A2ATaskStatus
+from augments.adk.a2a import A2AContinuationToken, A2ATaskStatus
 
 
 class TestA2AContinuationToken:

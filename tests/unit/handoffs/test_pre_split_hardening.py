@@ -18,17 +18,17 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import HandoffDefinitionError
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-from philharmonica.adk.handoffs.handoff_filters import keep_last_n
-from philharmonica.adk.handoffs.handoff_input_data import HandoffInputData
-from philharmonica.adk.handoffs.handoff_route import HandoffRoute, RouteSealedError
-from philharmonica.adk.handoffs.handoff_target import HandoffTarget
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.intents import Intent, Respond
-from philharmonica.adk.types.items import ToolCallItem, ToolCallOutputItem, UserItem
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.exceptions import HandoffDefinitionError
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.handoffs.handoff_filters import keep_last_n
+from augments.adk.handoffs.handoff_input_data import HandoffInputData
+from augments.adk.handoffs.handoff_route import HandoffRoute, RouteSealedError
+from augments.adk.handoffs.handoff_target import HandoffTarget
+from augments.adk.run.context import RunContext
+from augments.adk.types.intents import Intent, Respond
+from augments.adk.types.items import ToolCallItem, ToolCallOutputItem, UserItem
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 
 def _mock_agent(name: str = "destination") -> MagicMock:
@@ -47,13 +47,13 @@ def _tool_call_item(call_id: str) -> ToolCallItem:
 
 
 def _tool_call_output_item(call_id: str) -> ToolCallOutputItem:
-    from philharmonica.adk.types.output.function_tool_call_result import FunctionToolCallResult
+    from augments.adk.types.output.function_tool_call_result import FunctionToolCallResult
 
     return ToolCallOutputItem(raw=FunctionToolCallResult(call_id=call_id, output="ok"))
 
 
 def _user_item(content: str = "hello") -> UserItem:
-    from philharmonica.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
+    from augments.adk.types.input.llm_input_easy_message import LLMInputEasyMessage
 
     return UserItem(raw=LLMInputEasyMessage(role="user", content=content))
 
@@ -268,7 +268,7 @@ class TestGetTypeHintsNarrowExcept:
         """A callback with a forward-reference annotation (NameError on resolution)
         must fall back to the string-annotation check and dispatch correctly.
         """
-        from philharmonica.adk.handoffs.handoff_target import invoke_on_handoff
+        from augments.adk.handoffs.handoff_target import invoke_on_handoff
 
         dispatched: list[str] = []
 
@@ -282,7 +282,7 @@ class TestGetTypeHintsNarrowExcept:
 
     async def test_data_callback_annotation_resolves(self) -> None:
         """A callback annotated with HandoffInputData dispatches with the data arg."""
-        from philharmonica.adk.handoffs.handoff_target import invoke_on_handoff
+        from augments.adk.handoffs.handoff_target import invoke_on_handoff
 
         received_data: list[Any] = []
 
@@ -304,7 +304,7 @@ class TestEnabledNonBoolRejected:
     """Non-bool, non-callable ``enabled`` values must raise HandoffDefinitionError."""
 
     async def test_integer_enabled_raises(self) -> None:
-        from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled
+        from augments.adk.handoffs.handoff_helpers import evaluate_enabled
 
         with pytest.raises(HandoffDefinitionError, match="bool or callable"):
             await evaluate_enabled(
@@ -315,7 +315,7 @@ class TestEnabledNonBoolRejected:
             )
 
     async def test_string_enabled_raises(self) -> None:
-        from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled
+        from augments.adk.handoffs.handoff_helpers import evaluate_enabled
 
         with pytest.raises(HandoffDefinitionError, match="bool or callable"):
             await evaluate_enabled(
@@ -326,7 +326,7 @@ class TestEnabledNonBoolRejected:
             )
 
     async def test_none_enabled_raises(self) -> None:
-        from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled
+        from augments.adk.handoffs.handoff_helpers import evaluate_enabled
 
         with pytest.raises(HandoffDefinitionError, match="bool or callable"):
             await evaluate_enabled(
@@ -337,7 +337,7 @@ class TestEnabledNonBoolRejected:
             )
 
     async def test_true_passes(self) -> None:
-        from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled
+        from augments.adk.handoffs.handoff_helpers import evaluate_enabled
 
         result = await evaluate_enabled(
             True,
@@ -348,7 +348,7 @@ class TestEnabledNonBoolRejected:
         assert result is True
 
     async def test_false_passes(self) -> None:
-        from philharmonica.adk.handoffs.handoff_helpers import evaluate_enabled
+        from augments.adk.handoffs.handoff_helpers import evaluate_enabled
 
         result = await evaluate_enabled(
             False,
@@ -386,7 +386,7 @@ class TestHandleCallbackErrorNoReturn:
 
     async def test_reject_policy_raises_rejection(self) -> None:
         """Under reject_with_message policy, raises HandoffRejection."""
-        from philharmonica.adk.exceptions import HandoffRejection
+        from augments.adk.exceptions import HandoffRejection
 
         h = Handoff(
             target=_mock_agent(),

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.llms.openai.openai_boundary``.
+"""Tests for ``augments.adk.llms.openai.openai_boundary``.
 
 Focus: ``sanitize_for_log`` must neutralize every Unicode line terminator so a
 model name echoed back by the API cannot forge log lines (CWE-117). Parity with
@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.llms.openai.openai_boundary import sanitize_for_log
+from augments.adk.llms.openai.openai_boundary import sanitize_for_log
 
 
 class TestSanitizeForLog:

@@ -2,7 +2,7 @@
 
 Usage::
 
-    pip install 'philharmonica-adk[a2a]'
+    pip install 'augments-adk[a2a]'
     python examples/a2a/client_streaming.py [URL]
 """
 
@@ -19,7 +19,7 @@ import asyncio
 import logging
 import sys
 
-from philharmonica.adk.a2a import A2AAgent, A2ARunner
+from augments.adk.a2a import A2AAgent, A2ARunner
 
 logger = logging.getLogger(__name__)
 

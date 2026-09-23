@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.archive_extraction``.
+"""Tests for ``augments.adk.sandbox.session.archive_extraction``.
 
 Builds real in-memory tar / zip archives and runs them through the
 validators so the actual escape / bomb / descent logic is
@@ -15,7 +15,7 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.sandbox.session import (
+from augments.adk.sandbox.session import (
     ArchiveResourceLimitError,
     ArchiveStreamIntegrityError,
     SandboxArchiveLimits,
@@ -26,7 +26,7 @@ from philharmonica.adk.sandbox.session import (
     validate_zipfile,
     zipfile_compatible_stream,
 )
-from philharmonica.adk.sandbox.session.archive_extraction import _zip_member_is_dir
+from augments.adk.sandbox.session.archive_extraction import _zip_member_is_dir
 
 
 def _tar_bytes(entries: list[tuple[str, bytes | None, str]]) -> bytes:

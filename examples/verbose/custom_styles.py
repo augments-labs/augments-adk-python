@@ -22,9 +22,9 @@ import asyncio
 import json
 import logging
 
-from philharmonica.adk import Agent, EventStyle, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.verbose.config import (
+from augments.adk import Agent, EventStyle, RunConfig, Runner, VerboseConfig
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.verbose.config import (
     EVENT_AGENT_END,
     EVENT_AGENT_START,
     EVENT_LLM_END,

@@ -5,15 +5,15 @@ from typing import Any, cast
 
 import pytest
 
-from philharmonica.adk import RunnerProfile as PackageRunnerProfile
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.agents.agent_guardrails import AgentGuardrails
-from philharmonica.adk.audit import InMemoryAuditSink
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.context.context_config import CompactionConfig, ContextManagementConfig
-from philharmonica.adk.flows import Flow, FlowConfig, flow_start
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.run import (
+from augments.adk import RunnerProfile as PackageRunnerProfile
+from augments.adk.agents import Agent
+from augments.adk.agents.agent_guardrails import AgentGuardrails
+from augments.adk.audit import InMemoryAuditSink
+from augments.adk.budgets import TenantBudget
+from augments.adk.context.context_config import CompactionConfig, ContextManagementConfig
+from augments.adk.flows import Flow, FlowConfig, flow_start
+from augments.adk.graphs.graph import Graph
+from augments.adk.run import (
     AgentRunner,
     FlowRunner,
     GraphRunner,
@@ -25,18 +25,18 @@ from philharmonica.adk.run import (
     TaskPipelineRunner,
     TaskRunner,
 )
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG, ErrorHandler, RunConfig
-from philharmonica.adk.run.messages import RunMessages
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.sandbox.clients.docker.docker_client import DockerSandboxClientOptions
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.selector import SandboxCandidate
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tasks import Task, TaskGroup, TaskPipeline
-from philharmonica.adk.types.tokens.llm_usage import LLMUsageLimits
-from philharmonica.adk.verbose.config import EVENT_TOOL_START, EventStyle, VerboseConfig
+from augments.adk.run.config import DEFAULT_RUN_CONFIG, ErrorHandler, RunConfig
+from augments.adk.run.messages import RunMessages
+from augments.adk.run.state import RunState
+from augments.adk.sandbox.clients.docker.docker_client import DockerSandboxClientOptions
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.selector import SandboxCandidate
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tasks import Task, TaskGroup, TaskPipeline
+from augments.adk.types.tokens.llm_usage import LLMUsageLimits
+from augments.adk.verbose.config import EVENT_TOOL_START, EventStyle, VerboseConfig
 
 
 def _agent() -> Agent[Any]:
@@ -277,7 +277,7 @@ def test_run_config_snapshot_copies_sandbox_value_options_and_shares_handles() -
 
 
 async def test_runner_arun_uses_fresh_config_snapshot_for_each_execution(monkeypatch: pytest.MonkeyPatch) -> None:
-    from philharmonica.adk.run import runner as runner_module
+    from augments.adk.run import runner as runner_module
 
     seen: list[RunConfig] = []
 

@@ -6,10 +6,10 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.run.tools_executor import check_tool_use_behavior
-from philharmonica.adk.types.output import FunctionToolCallResult
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
-from philharmonica.adk.types.tools.tool_use_behavior import (
+from augments.adk.run.tools_executor import check_tool_use_behavior
+from augments.adk.types.output import FunctionToolCallResult
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.types.tools.tool_use_behavior import (
     StopAtTools,
     ToolsToFinalOutputResult,
 )

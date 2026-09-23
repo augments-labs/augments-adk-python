@@ -32,15 +32,15 @@ except ImportError:
 
 import logging
 
-from philharmonica.adk.exceptions import UnsupportedMountStrategyError
-from philharmonica.adk.sandbox.policy import (
+from augments.adk.exceptions import UnsupportedMountStrategyError
+from augments.adk.sandbox.policy import (
     apply_mounts_to_docker,
     apply_mounts_to_hosted_bridge,
     apply_mounts_to_k8s_pod,
     build_in_container_mount_spec,
     describe_mount_for_local,
 )
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.mounts import (
     DockerVolumeMountStrategy,
     InContainerMountStrategy,
     RcloneMountPattern,

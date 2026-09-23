@@ -5,14 +5,14 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from typing import override
 
-from philharmonica.adk.voice.audio import AudioInput, StreamedAudioInput
-from philharmonica.adk.voice.events import VoiceStreamEvent
-from philharmonica.adk.voice.exceptions import STTError
-from philharmonica.adk.voice.pipeline import VoicePipeline
-from philharmonica.adk.voice.result import StreamedAudioResult
-from philharmonica.adk.voice.stt import StreamedTranscriptionSession, STTModel, STTModelSettings
-from philharmonica.adk.voice.tts import TTSModel, TTSModelSettings
-from philharmonica.adk.voice.workflow import VoiceWorkflow
+from augments.adk.voice.audio import AudioInput, StreamedAudioInput
+from augments.adk.voice.events import VoiceStreamEvent
+from augments.adk.voice.exceptions import STTError
+from augments.adk.voice.pipeline import VoicePipeline
+from augments.adk.voice.result import StreamedAudioResult
+from augments.adk.voice.stt import StreamedTranscriptionSession, STTModel, STTModelSettings
+from augments.adk.voice.tts import TTSModel, TTSModelSettings
+from augments.adk.voice.workflow import VoiceWorkflow
 
 
 class FakeSession(StreamedTranscriptionSession):

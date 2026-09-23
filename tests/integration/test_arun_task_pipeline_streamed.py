@@ -28,10 +28,10 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tasks import Task, TaskPipeline
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.tasks import Task, TaskPipeline
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
 )
@@ -49,22 +49,22 @@ def _text_response(text: str) -> LLMResponse:
 def _patched_streamed_loop(fake_streamed: Any) -> Iterator[None]:
     with ExitStack() as stack:
         stack.enter_context(
-            patch("philharmonica.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
+            patch("augments.adk.run.loop.call_llm_streamed", new=AsyncMock(side_effect=fake_streamed)),
         )
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         )
         stack.enter_context(
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         )
         stack.enter_context(
-            patch("philharmonica.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
+            patch("augments.adk.run.runner.run_output_guardrails", new=AsyncMock(return_value=[])),
         )
         yield
 
@@ -162,7 +162,7 @@ async def test_skip_if_exception_halts_pipeline(
 
     yielded_indices: list[int] = []
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.runner"), _patched_streamed_loop(fake_streamed):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.run.runner"), _patched_streamed_loop(fake_streamed):
         async for index, task_stream in Runner.arun_task_pipeline_streamed(pipeline):
             yielded_indices.append(index)
             if task_stream is not None:

@@ -10,11 +10,11 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task, TaskPipeline
-from philharmonica.adk.types.run.run_result import RunResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task, TaskPipeline
+from augments.adk.types.run.run_result import RunResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 def _agent() -> Agent:
@@ -43,7 +43,7 @@ async def test_pipeline_usage_sums_across_tasks() -> None:
     async def fake_arun(*_args: Any, **_kwargs: Any) -> RunResult:
         return _run_result_with_usage("ok", next(sequence))
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         result = await Runner.arun_task_pipeline(TaskPipeline(tasks=(t1, t2, t3)))
@@ -68,7 +68,7 @@ async def test_skipped_task_contributes_zero_usage() -> None:
     async def fake_arun(*_args: Any, **_kwargs: Any) -> RunResult:
         return _run_result_with_usage("ok", next(sequence))
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         result = await Runner.arun_task_pipeline(TaskPipeline(tasks=(t1, t2, t3)))

@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.llms.litellm.litellm_converter import ChatCompletionConverter
-from philharmonica.adk.types.items import ItemHelpers, ToolCallItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.litellm.litellm_converter import ChatCompletionConverter
+from augments.adk.types.items import ItemHelpers, ToolCallItem
+from augments.adk.types.responses.llm_response import (
     LLMResponseFunctionToolCall,
     LLMResponseReasoning,
 )
@@ -116,7 +116,7 @@ class TestContentJoin:
     """
 
     def test_multiple_text_parts_join_without_newline(self) -> None:
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
         response = LLMResponse(
             response_id="r",
@@ -126,8 +126,8 @@ class TestContentJoin:
         assert response.content == '{"a":1}'
 
     def test_content_matches_text_message_output(self) -> None:
-        from philharmonica.adk.types.items import MessageOutputItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+        from augments.adk.types.items import MessageOutputItem
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
         parts = [LLMResponseText(text="foo"), LLMResponseText(text="bar")]
         response = LLMResponse(response_id="r", model="m", response=list(parts))

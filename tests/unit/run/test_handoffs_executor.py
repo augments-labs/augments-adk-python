@@ -20,18 +20,18 @@ TypedDict variant.
 
 from typing import Any
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.handoffs.handoff_collapse_mode import HandoffCollapseMode
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-from philharmonica.adk.handoffs.handoff_target import HandoffTarget
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.handoffs_executor import (  # test-only import
+from augments.adk.agents.agent import Agent
+from augments.adk.handoffs.handoff_collapse_mode import HandoffCollapseMode
+from augments.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.handoffs.handoff_target import HandoffTarget
+from augments.adk.run.context import RunContext
+from augments.adk.run.handoffs_executor import (  # test-only import
     _collapse_history,
     _content_to_str,
     apply_handoff_budget,
 )
-from philharmonica.adk.run.loop import inject_system_prompt
-from philharmonica.adk.tools.token_budget import TokenBudget
+from augments.adk.run.loop import inject_system_prompt
+from augments.adk.tools.token_budget import TokenBudget
 
 
 def test_collapse_history_renders_assistant_list_content_as_text() -> None:

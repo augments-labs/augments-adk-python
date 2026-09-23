@@ -20,9 +20,9 @@ from collections.abc import AsyncGenerator
 
 import pytest
 
-from philharmonica.adk.exceptions import GraphNodeTimeoutError
-from philharmonica.adk.graphs.config import NodeRetryPolicy
-from philharmonica.adk.run.node_reliability import run_node_with_reliability
+from augments.adk.exceptions import GraphNodeTimeoutError
+from augments.adk.graphs.config import NodeRetryPolicy
+from augments.adk.run.node_reliability import run_node_with_reliability
 
 
 @contextlib.asynccontextmanager
@@ -84,7 +84,7 @@ class TestTimeoutRetryability:
 
         monkeypatch.setattr("asyncio.timeout", fake_timeout_succeeds_on_third)
 
-        from philharmonica.adk.orchestration.executable import NodeResult
+        from augments.adk.orchestration.executable import NodeResult
 
         async def invoke() -> NodeResult:
             return NodeResult(output="ok")
@@ -174,7 +174,7 @@ class TestTimeoutRetryability:
             call_count += 1
             if call_count < 3:
                 raise ValueError("transient")
-            from philharmonica.adk.orchestration.executable import NodeResult
+            from augments.adk.orchestration.executable import NodeResult
 
             return NodeResult(output="ok")
 

@@ -27,7 +27,7 @@ prior context from the current agent's work. With temporal slicing:
 
 ### RunItem type
 
-Fields use `RunItem` (from `philharmonica.adk.types.items`) — a Union of typed
+Fields use `RunItem` (from `augments.adk.types.items`) — a Union of typed
 `@dataclass(frozen=True)` item classes that wrap Layer 1 (provider-agnostic)
 types. Each item provides `to_param()` for Layer 1 replay plus dict-like
 access (`.get()`, `[]`, `.items()`, `in`) for mapping-style consumers.
@@ -37,7 +37,7 @@ Item classes: `SystemItem`, `UserItem`, `MessageOutputItem`, `ToolCallItem`,
 
 Filters should use `isinstance` checks for type-safe dispatch:
 ```python
-from philharmonica.adk.types.items import ToolCallItem, ToolCallOutputItem
+from augments.adk.types.items import ToolCallItem, ToolCallOutputItem
 
 for item in data.output:
     if isinstance(item, ToolCallItem):
@@ -107,7 +107,7 @@ def keep_recent_context(n: int = 3):
 ### Composing filters
 
 ```python
-from philharmonica.adk.handoffs.handoff_filters import compose, remove_tool_calls
+from augments.adk.handoffs.handoff_filters import compose, remove_tool_calls
 
 pipeline = compose(remove_tool_calls, keep_recent_context(3))
 Handoff(target=agent, input_filter=pipeline)

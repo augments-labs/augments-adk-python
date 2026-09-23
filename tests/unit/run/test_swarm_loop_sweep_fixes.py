@@ -23,27 +23,27 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentInputGuardrail,
 )
-from philharmonica.adk.exceptions import AgentInputGuardrailTripwireTriggered
-from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.llms.llm_usage import LLMUsage
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.swarm_loop import run_swarm_loop
-from philharmonica.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.result import SwarmRunResultStreaming
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.exceptions import AgentInputGuardrailTripwireTriggered
+from augments.adk.graphs.interrupt import Interrupt, InterruptException
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.llms.llm_usage import LLMUsage
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.swarm_loop import run_swarm_loop
+from augments.adk.run.swarm_loop_streamed import run_swarm_loop_streamed
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.result import SwarmRunResultStreaming
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(member: Agent[Any] | None = None, *, max_turns: int = 1) -> Swarm[Any]:
@@ -83,9 +83,7 @@ class TestSyncGuardrails:
         # run_agent_loop is stubbed so that pre-fix (no guardrails run) the swarm
         # completes cleanly and the tripwire is never raised.
         with (
-            patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(return_value=_stub_result(member, ctx))
-            ),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(return_value=_stub_result(member, ctx))),
             pytest.raises(AgentInputGuardrailTripwireTriggered),
         ):
             await run_swarm_loop(
@@ -108,7 +106,7 @@ class TestInterruptUsageFold:
             ctx.usage = ctx.usage + LLMUsage(requests=1, input_tokens=10, output_tokens=5, total_tokens=15)
             raise InterruptException(Interrupt(node_id="m", question="?", kind="tool_approval"))
 
-        with patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_spend_then_interrupt)):
+        with patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(side_effect=_spend_then_interrupt)):
             result = await run_swarm_loop(
                 swarm=sw,
                 user_prompt="go",
@@ -134,7 +132,7 @@ class TestInterruptUsageFold:
             raise InterruptException(Interrupt(node_id="m", question="?", kind="tool_approval"))
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_spend_then_interrupt),
         ):
             await run_swarm_loop_streamed(
@@ -157,9 +155,7 @@ class TestSwarmStatus:
         sw = _make_swarm(member)
         ctx: RunContext[None] = RunContext.make(None)
 
-        with patch(
-            "philharmonica.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(return_value=_stub_result(member, ctx))
-        ):
+        with patch("augments.adk.run.swarm_loop.run_agent_loop", new=AsyncMock(return_value=_stub_result(member, ctx))):
             result = await run_swarm_loop(
                 swarm=sw,
                 user_prompt="go",
@@ -178,7 +174,7 @@ class TestSwarmStatus:
         result: SwarmRunResultStreaming[None] = SwarmRunResultStreaming(user_prompt="go")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(return_value=_stub_result(member, ctx)),
         ):
             await run_swarm_loop_streamed(
@@ -209,9 +205,9 @@ class TestFirstTurnResumeMessages:
         hitl_mock = AsyncMock(return_value=_stub_result(member, ctx))
 
         with (
-            patch("philharmonica.adk.run.swarm_loop.build_initial_messages", new=build_mock),
-            patch("philharmonica.adk.run.swarm_loop.prepare_turn_input", new=prepare_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
+            patch("augments.adk.run.swarm_loop.build_initial_messages", new=build_mock),
+            patch("augments.adk.run.swarm_loop.prepare_turn_input", new=prepare_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
         ):
             await run_swarm_loop(
                 swarm=sw,
@@ -254,10 +250,10 @@ class TestStreamedSpanNoLeak:
         span = MagicMock()
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+                "augments.adk.run.swarm_loop_streamed._stream_member_turn",
                 new=AsyncMock(return_value=_stub_result(member, ctx)),
             ),
-            patch("philharmonica.adk.run.swarm_loop_streamed.swarm_turn_span", return_value=span),
+            patch("augments.adk.run.swarm_loop_streamed.swarm_turn_span", return_value=span),
         ):
             await run_swarm_loop_streamed(
                 swarm=sw,
@@ -293,7 +289,7 @@ class TestStreamedSpanNoLeak:
         result: SwarmRunResultStreaming[None] = SwarmRunResultStreaming(user_prompt="go")
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(return_value=_stub_result(member, ctx)),
         ):
             await run_swarm_loop_streamed(

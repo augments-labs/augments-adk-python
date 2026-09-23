@@ -13,9 +13,9 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import GitArtifactError
-from philharmonica.adk.sandbox.session.materialization.git import materialize_git_repo
-from philharmonica.adk.types.sandbox.entries import GitRepo
+from augments.adk.exceptions.exceptions import GitArtifactError
+from augments.adk.sandbox.session.materialization.git import materialize_git_repo
+from augments.adk.types.sandbox.entries import GitRepo
 
 
 def _git_session(responder: Callable[[tuple[str, ...]], int] | None = None) -> Any:
@@ -65,7 +65,7 @@ class TestMaterializeGitRepo:
         assert clone[:3] == ("env", "GIT_TERMINAL_PROMPT=0", "GIT_ASKPASS=true")
         assert clone[3:9] == ("git", "clone", "--depth", "1", "--no-tags", "--single-branch")
         assert clone[9:12] == ("--branch", "main", "https://github.com/acme/widgets.git")
-        assert clone[12].startswith("/tmp/philharmonica-git-")
+        assert clone[12].startswith("/tmp/augments-git-")
         assert "dst" in session.mkdirs
         assert any(a[:3] == ("cp", "-R", "--") and a[3].endswith("/.") for a in session.runs)
         assert any(a[0] == "rm" and a[1] == "-rf" for a in session.runs)  # finally cleanup

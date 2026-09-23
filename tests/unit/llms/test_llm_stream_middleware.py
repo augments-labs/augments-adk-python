@@ -21,10 +21,10 @@ from typing import Any, cast
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.llm_middleware import LLMMiddleware
-from philharmonica.adk.llms.llm_stream_middleware import (
+from augments.adk.agents.agent import Agent
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_middleware import LLMMiddleware
+from augments.adk.llms.llm_stream_middleware import (
     LLMStreamLoggingMiddleware,
     LLMStreamMetricsMiddleware,
     LLMStreamMiddleware,
@@ -32,9 +32,9 @@ from philharmonica.adk.llms.llm_stream_middleware import (
     compose_llm_stream_middleware,
     make_logging_middlewares,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMStreamEvent
+from augments.adk.run.context import RunContext
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import LLMResponse, LLMStreamEvent
 
 
 def _agent(name: str = "X", llm: str = "gpt-4o-mini") -> Agent:
@@ -180,7 +180,7 @@ class TestLLMStreamLoggingMiddleware:
             return _scripted_terminal(events)
 
         mw = LLMStreamLoggingMiddleware()
-        with caplog.at_level(logging.INFO, logger="philharmonica.adk.llms.llm_stream_middleware"):
+        with caplog.at_level(logging.INFO, logger="augments.adk.llms.llm_stream_middleware"):
             chain = compose_llm_stream_middleware([mw], terminal, agent=_agent(), context=_ctx())
             result = await chain([], None)
             consumed = [event async for event in result]
@@ -212,7 +212,7 @@ class TestLLMStreamLoggingMiddleware:
             return gen()
 
         mw = LLMStreamLoggingMiddleware(log_delta_count=True)
-        with caplog.at_level(logging.INFO, logger="philharmonica.adk.llms.llm_stream_middleware"):
+        with caplog.at_level(logging.INFO, logger="augments.adk.llms.llm_stream_middleware"):
             chain = compose_llm_stream_middleware([mw], bad_terminal, agent=_agent(), context=_ctx())
             result = await chain([], None)
 

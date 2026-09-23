@@ -11,13 +11,13 @@ from typing import Any, cast
 import boto3
 from moto import mock_aws
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.s3 import S3SwarmCheckpointer
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState, SwarmStateDict
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.s3 import S3SwarmCheckpointer
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState, SwarmStateDict
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 # ---------------------------------------------------------------------------
 # Helpers

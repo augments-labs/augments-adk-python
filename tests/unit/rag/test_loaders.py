@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions import DocumentLoadError, UnsupportedDocumentSourceError
-from philharmonica.adk.rag.loaders import (
+from augments.adk.exceptions import DocumentLoadError, UnsupportedDocumentSourceError
+from augments.adk.rag.loaders import (
     CSVLoader,
     DirectoryLoader,
     DOCXLoader,
@@ -173,13 +173,13 @@ async def test_docx_loader_extracts_paragraphs(tmp_path: Path) -> None:
 def test_extract_video_id_handles_every_routed_url_shape(source: str, expected: str) -> None:
     # The registry routes every non-channel youtube.com/youtu.be URL to the
     # video loader, so /shorts/, /embed/, and /live/ forms must all parse.
-    from philharmonica.adk.rag.loaders.youtube import _extract_video_id
+    from augments.adk.rag.loaders.youtube import _extract_video_id
 
     assert _extract_video_id(source) == expected
 
 
 def test_extract_video_id_unparseable_url_raises() -> None:
-    from philharmonica.adk.rag.loaders.youtube import _extract_video_id
+    from augments.adk.rag.loaders.youtube import _extract_video_id
 
     with pytest.raises(DocumentLoadError):
         _extract_video_id("https://www.youtube.com/feed/subscriptions")

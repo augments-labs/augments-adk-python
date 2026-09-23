@@ -21,7 +21,7 @@ class Session(ABC):
 ## SQLiteMultiSessions (Manager)
 
 ```python
-from philharmonica.adk.session import SQLiteMultiSessions, SessionSettings
+from augments.adk.session import SQLiteMultiSessions, SessionSettings
 
 # Create a manager (one per app)
 sessions = SQLiteMultiSessions(path="sessions.db", app_name="myapp")

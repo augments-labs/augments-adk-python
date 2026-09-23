@@ -74,4 +74,4 @@ jobs:
       # mermaid resolves the one optional import pyright would otherwise flag.
       - run: uv sync --extra dev --extra mermaid
       - name: pyright (full package)
-        run: uv run pyright src/philharmonica/adk/
+        run: uv run pyright src/augments/adk/

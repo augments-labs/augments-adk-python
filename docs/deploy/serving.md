@@ -1,6 +1,6 @@
 # Serving Layer
 
-The `philharmonica.adk.serving` module turns a local `Agent` into an ASGI app that
+The `augments.adk.serving` module turns a local `Agent` into an ASGI app that
 any ASGI runtime can serve. Two surfaces are available: a plain-REST surface
 for generic HTTP clients and an A2A JSON-RPC surface for peer agents. Both are
 opt-in — the framework never serves a route the developer did not request.
@@ -8,24 +8,24 @@ opt-in — the framework never serves a route the developer did not request.
 ## Installation
 
 ```bash
-pip install 'philharmonica-adk[serve]'
+pip install 'augments-adk[serve]'
 ```
 
 This pulls in Starlette and sse-starlette. The A2A surface additionally
 requires the `a2a` extra:
 
 ```bash
-pip install 'philharmonica-adk[serve,a2a]'
+pip install 'augments-adk[serve,a2a]'
 ```
 
-## Quick start: `philharmonica serve`
+## Quick start: `augments serve`
 
-`philharmonica serve` is the fastest path from a local agent to a running HTTP
+`augments serve` is the fastest path from a local agent to a running HTTP
 endpoint. It exposes the REST surface and health routes by default:
 
 ```bash
 # Serve the agent defined at my_pkg.agents:assistant
-philharmonica serve --agent my_pkg.agents:assistant
+augments serve --agent my_pkg.agents:assistant
 ```
 
 By default this binds `127.0.0.1:8000` and serves:
@@ -59,7 +59,7 @@ Pass `--card` with a developer-authored AgentCard JSON to publish the A2A
 JSON-RPC and discovery surface alongside the REST surface:
 
 ```bash
-philharmonica serve --agent my_pkg.agents:assistant --card card.json
+augments serve --agent my_pkg.agents:assistant --card card.json
 ```
 
 The card is published at `GET /.well-known/agent-card.json`. The CLI never
@@ -76,10 +76,10 @@ synthesises a card; every field is intentional.
 Inside a container, bind all interfaces and read the platform port:
 
 ```bash
-philharmonica serve --agent app.agents:assistant --host 0.0.0.0 --port "$PORT"
+augments serve --agent app.agents:assistant --host 0.0.0.0 --port "$PORT"
 ```
 
-The `philharmonica deploy` tooling bakes this command into the generated
+The `augments deploy` tooling bakes this command into the generated
 Dockerfile automatically.
 
 ## REST request and response format
@@ -145,8 +145,8 @@ the lifecycle, use `build_app` directly instead of the CLI:
 
 ```python
 import uvicorn
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.serving import build_app
+from augments.adk.agents import Agent
+from augments.adk.serving import build_app
 
 agent = Agent(name="assistant", system_prompt="You are a helpful assistant.")
 
@@ -197,8 +197,8 @@ Wire a `SessionFactory` to persist conversation history across requests.
 For a single replica, `SQLiteMultiSessions` is sufficient:
 
 ```python
-from philharmonica.adk.session import SQLiteMultiSessions
-from philharmonica.adk.serving import build_app
+from augments.adk.session import SQLiteMultiSessions
+from augments.adk.serving import build_app
 
 sessions = SQLiteMultiSessions(app_name="assistant", path="sessions.sqlite")
 
@@ -211,7 +211,7 @@ app = build_app(
 ```
 
 For multiple replicas, use `PostgresMultiSessions` so every replica reads and
-writes the same conversation state, or pass `--session-dsn` to `philharmonica serve`
+writes the same conversation state, or pass `--session-dsn` to `augments serve`
 to have the CLI wire it automatically. See [Horizontal scaling](scaling.md) for
 the full multi-replica setup.
 

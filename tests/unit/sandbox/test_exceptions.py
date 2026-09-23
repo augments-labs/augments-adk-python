@@ -1,11 +1,12 @@
-"""Tests for the SandboxError hierarchy in ``philharmonica.adk.exceptions``."""
+"""Tests for the SandboxError hierarchy in ``augments.adk.exceptions``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import (
+from augments.adk.exceptions import (
     ApplyPatchError,
+    AugmentsError,
     ExecFailureError,
     ExecNonZeroError,
     ExecTimeoutError,
@@ -16,7 +17,6 @@ from philharmonica.adk.exceptions import (
     InvalidManifestPathError,
     LocalArtifactError,
     MountArtifactError,
-    PhilharmonicaError,
     PtySessionNotFoundError,
     SandboxArtifactError,
     SandboxCommandRejected,
@@ -43,8 +43,8 @@ from philharmonica.adk.exceptions import (
 
 
 class TestHierarchy:
-    def test_sandbox_error_is_philharmonica_error(self) -> None:
-        assert issubclass(SandboxError, PhilharmonicaError)
+    def test_sandbox_error_is_augments_error(self) -> None:
+        assert issubclass(SandboxError, AugmentsError)
 
     @pytest.mark.parametrize(
         "subclass",
@@ -177,8 +177,8 @@ class TestRaisability:
         with pytest.raises(SandboxError):
             raise SnapshotPersistError("disk full")
 
-    def test_can_raise_and_catch_via_philharmonica_error(self) -> None:
-        with pytest.raises(PhilharmonicaError):
+    def test_can_raise_and_catch_via_augments_error(self) -> None:
+        with pytest.raises(AugmentsError):
             raise SandboxNetworkPolicyViolation("egress to evil.com")
 
 
@@ -190,7 +190,7 @@ class TestSandboxSelectionError:
         assert str(SandboxSelectionError()) != ""
 
     def test_exported_from_package(self) -> None:
-        from philharmonica.adk.exceptions.exceptions import (
+        from augments.adk.exceptions.exceptions import (
             SandboxSelectionError as Canonical,
         )
 

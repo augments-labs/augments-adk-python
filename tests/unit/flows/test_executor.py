@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowConfig,
     FlowEndEvent,
@@ -20,8 +20,8 @@ from philharmonica.adk.flows import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.exceptions import FlowAgentDeferred
-from philharmonica.adk.flows.executor import FlowExecutor
+from augments.adk.flows.exceptions import FlowAgentDeferred
+from augments.adk.flows.executor import FlowExecutor
 
 
 class _State(BaseModel):

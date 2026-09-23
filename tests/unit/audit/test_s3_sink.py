@@ -7,9 +7,9 @@ import pytest
 
 pytest.importorskip("boto3")
 
-from philharmonica.adk.audit.event import AuditEvent
-from philharmonica.adk.audit.sink import AuditSink
-from philharmonica.adk.audit.sinks.s3 import S3AuditSink
+from augments.adk.audit.event import AuditEvent
+from augments.adk.audit.sink import AuditSink
+from augments.adk.audit.sinks.s3 import S3AuditSink
 
 
 class _RecordingS3:
@@ -113,7 +113,7 @@ async def test_put_failure_logs_bucket_and_key_before_reraising(caplog) -> None:
 
     sink = S3AuditSink(bucket="audit-bkt", client=_FailingS3())
     with (
-        caplog.at_level(logging.ERROR, logger="philharmonica.adk.audit.sinks.s3"),
+        caplog.at_level(logging.ERROR, logger="augments.adk.audit.sinks.s3"),
         pytest.raises(RuntimeError, match="s3 unavailable"),
     ):
         await sink.record(_event())

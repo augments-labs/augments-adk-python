@@ -20,7 +20,7 @@ from unittest.mock import AsyncMock, patch
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowConfig,
     FlowStepCachePolicy,
@@ -28,9 +28,9 @@ from philharmonica.adk.flows import (
     flow_listen,
     flow_start,
 )
-from philharmonica.adk.flows.executor import FlowExecutor, _snapshot_state, encode_state
-from philharmonica.adk.flows.triggers import FlowTriggerEvent
-from philharmonica.adk.run.runner import Runner
+from augments.adk.flows.executor import FlowExecutor, _snapshot_state, encode_state
+from augments.adk.flows.triggers import FlowTriggerEvent
+from augments.adk.run.runner import Runner
 
 
 class _State(BaseModel):
@@ -167,7 +167,7 @@ class TestAgentBridgeUnregisteredDeferKey:
                 await asyncio.gather(_sibling())
 
         flow = F(_State())
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
             result = await Runner.arun_flow(flow)
 
         assert result.status == "failed", f"unregistered defer_key silently deferred: {result.status}"
@@ -188,7 +188,7 @@ class TestAgentBridgeUnregisteredDeferKey:
                 await asyncio.gather(_sibling())
 
         flow = F(_State())
-        with patch("philharmonica.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
+        with patch("augments.adk.run.runner.Runner.arun", new=AsyncMock(return_value=deferred)):
             result = await Runner.arun_flow(flow)
 
         assert result.status == "deferred"
@@ -424,11 +424,11 @@ class TestFlowExecutableHaltedIsNonSuccess:
         'halted_max_tokens' fell through to a normal NodeResult, routing the
         graph downstream on partial mid-flow state.
         """
-        from philharmonica.adk.exceptions import UserError
-        from philharmonica.adk.flows.executable import FlowExecutable
-        from philharmonica.adk.orchestration.executable import ExecutableInput
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.exceptions import UserError
+        from augments.adk.flows.executable import FlowExecutable
+        from augments.adk.orchestration.executable import ExecutableInput
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
 
         class _TwoStep(Flow[_State]):
             @flow_start
@@ -462,8 +462,8 @@ class TestPerStepUsagePopulated:
         always an empty dict even though the executor computes per-step
         deltas for the FlowStepEndEvent.
         """
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.run.context import RunContext
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         class F(Flow[_State]):
             @flow_start

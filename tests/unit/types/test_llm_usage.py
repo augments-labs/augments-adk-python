@@ -9,8 +9,8 @@ Regression coverage for:
 
 from __future__ import annotations
 
-from philharmonica.adk.types.tokens.llm_usage import LLMSingleRequestUsage, LLMUsage
-from philharmonica.adk.types.tokens.tokens import InputTokensDetails, OutputTokensDetails
+from augments.adk.types.tokens.llm_usage import LLMSingleRequestUsage, LLMUsage
+from augments.adk.types.tokens.tokens import InputTokensDetails, OutputTokensDetails
 
 
 class TestLLMUsageDefaults:

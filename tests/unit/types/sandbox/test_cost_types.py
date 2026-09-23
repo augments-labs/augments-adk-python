@@ -1,7 +1,7 @@
 # tests/unit/sandbox/test_cost_types.py
 import pytest
 
-from philharmonica.adk.types.sandbox.cost import (
+from augments.adk.types.sandbox.cost import (
     SandboxBackendCapabilities,
     SandboxBillingRecord,
     SandboxCostDescriptor,

@@ -1,6 +1,6 @@
 ---
 name: add-llm-provider
-description: Step-by-step procedure to add a new native LLM provider to the Philharmonica ADK (a new src/philharmonica/adk/llms/<provider>/ package). Use when adding/wiring a provider's native SDK as an LLM implementation.
+description: Step-by-step procedure to add a new native LLM provider to the Augments ADK (a new src/augments/adk/llms/<provider>/ package). Use when adding/wiring a provider's native SDK as an LLM implementation.
 ---
 
 # Add a Native LLM Provider
@@ -17,7 +17,7 @@ Also read the upstream SDK's own typed client from site-packages
 (`uv run python -c "import <sdk>; print(<sdk>.__file__)"`) — do NOT infer the
 API from docs.
 
-## 1. Create `src/philharmonica/adk/llms/<provider>/`
+## 1. Create `src/augments/adk/llms/<provider>/`
 
 Mirror the sibling package's file set (see `llms/anthropic/`):
 

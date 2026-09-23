@@ -1,9 +1,9 @@
 """Minimal agent running as a Temporal workflow.
 
-Demonstrates: TemporalLLM, PhilharmonicaWorkflow, PhilharmonicaTemporalPlugin.
+Demonstrates: TemporalLLM, AugmentsWorkflow, AugmentsTemporalPlugin.
 
 Prerequisites:
-    pip install "philharmonica-adk[temporal]"
+    pip install "augments-adk[temporal]"
     temporal server start-dev
 
 Run with:
@@ -26,14 +26,14 @@ try:
     from temporalio.client import Client
     from temporalio.worker import Worker
 except ImportError as _exc:
-    raise SystemExit("temporalio not installed. Run: pip install 'philharmonica-adk[temporal]'") from _exc
+    raise SystemExit("temporalio not installed. Run: pip install 'augments-adk[temporal]'") from _exc
 
 # ---------------------------------------------------------------------------
 # Step 2 — define the agent (Agent = config, not execution)
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LiteLLM
+from augments.adk.agents import Agent
+from augments.adk.llms import LiteLLM
 
 _llm = LiteLLM(model="gpt-4o-mini")
 _agent = Agent(
@@ -46,10 +46,10 @@ _agent = Agent(
 # Step 3 — wrap the agent LLM so every LLM call runs as a Temporal activity
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.workflows.temporal import (
+from augments.adk.workflows.temporal import (
+    AugmentsTemporalPlugin,
+    AugmentsWorkflow,
     ModelActivityConfig,
-    PhilharmonicaTemporalPlugin,
-    PhilharmonicaWorkflow,
     TemporalLLM,
 )
 
@@ -65,19 +65,19 @@ TemporalLLM.install(
 )
 
 # ---------------------------------------------------------------------------
-# Step 4 — define the workflow (subclass PhilharmonicaWorkflow, override run())
+# Step 4 — define the workflow (subclass AugmentsWorkflow, override run())
 # ---------------------------------------------------------------------------
 
 from typing import override
 
-from philharmonica.adk.run.runner import Runner
+from augments.adk.run.runner import Runner
 
 
 @workflow.defn
-class SummariserWorkflow(PhilharmonicaWorkflow):
+class SummariserWorkflow(AugmentsWorkflow):
     """Temporal workflow: route a single user message through the summariser agent."""
 
-    __philharmonica_agents__ = (_agent,)
+    __augments_agents__ = (_agent,)
 
     @override
     @workflow.run
@@ -98,17 +98,17 @@ class SummariserWorkflow(PhilharmonicaWorkflow):
 
 
 # ---------------------------------------------------------------------------
-# Step 5 — configure the worker with PhilharmonicaTemporalPlugin
+# Step 5 — configure the worker with AugmentsTemporalPlugin
 # ---------------------------------------------------------------------------
 
-from philharmonica.adk.workflows.temporal.activity import invoke_model_activity
+from augments.adk.workflows.temporal.activity import invoke_model_activity
 
 TASK_QUEUE = "summariser-queue"
 
 
 async def _run() -> None:
     """Start the worker and execute one workflow run end-to-end."""
-    plugin = PhilharmonicaTemporalPlugin()
+    plugin = AugmentsTemporalPlugin()
     # Register the underlying LLM under the key TemporalLLM will look up.
     # The key defaults to str(llm) if not overridden in TemporalLLM.install().
     plugin.register_model(str(_llm), _llm)

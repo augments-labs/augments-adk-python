@@ -14,13 +14,13 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from philharmonica.adk.tools import (
+from augments.adk.tools import (
     ToolLoggingMiddleware,
     function_tool,
     wrap_tool_with_middleware,
 )
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.tools.tool_stream_event import ToolStreamEvent
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.tools.tool_stream_event import ToolStreamEvent
 
 
 def _ctx(args: dict[str, Any]) -> ToolContext:

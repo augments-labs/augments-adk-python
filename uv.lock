@@ -2308,7 +2308,7 @@ wheels = [
 ]
 
 [[package]]
-name = "philharmonica-adk"
+name = "augments-adk"
 version = "0.2.3"
 source = { editable = "." }
 dependencies = [
@@ -2630,19 +2630,19 @@ requires-dist = [
     { name = "opentelemetry-sdk", marker = "extra == 'otel'", specifier = ">=1.39.1" },
     { name = "parameterized", marker = "extra == 'test'", specifier = ">=0.9.0" },
     { name = "pgvector", marker = "extra == 'memory-pgvector'", specifier = ">=0.3" },
-    { name = "philharmonica-adk", extras = ["all", "test"], marker = "extra == 'dev'" },
-    { name = "philharmonica-adk", extras = ["anthropic", "openai", "voice", "gemini", "mcp", "otel", "viz", "verbose", "server", "serve", "checkpointer-postgres", "cost-ledger-postgres", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "a2a-postgres", "session-postgres", "temporal", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "rag", "guardrails"], marker = "extra == 'all'" },
-    { name = "philharmonica-adk", extras = ["guardrails-lingua"], marker = "extra == 'guardrails'" },
-    { name = "philharmonica-adk", extras = ["openai"], marker = "extra == 'voice'" },
-    { name = "philharmonica-adk", extras = ["rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube"], marker = "extra == 'rag'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-blaxel'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-cloudflare'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-daytona'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-e2b'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-modal'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-runloop'" },
-    { name = "philharmonica-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-vercel'" },
-    { name = "philharmonica-adk", extras = ["server", "a2a"], marker = "extra == 'serve'" },
+    { name = "augments-adk", extras = ["all", "test"], marker = "extra == 'dev'" },
+    { name = "augments-adk", extras = ["anthropic", "openai", "voice", "gemini", "mcp", "otel", "viz", "verbose", "server", "serve", "checkpointer-postgres", "cost-ledger-postgres", "cost-ledger-redis", "checkpointer-redis", "checkpointer-s3", "a2a-postgres", "session-postgres", "temporal", "memory-pgvector", "memory-chroma", "memory-pinecone", "memory-qdrant", "rag", "guardrails"], marker = "extra == 'all'" },
+    { name = "augments-adk", extras = ["guardrails-lingua"], marker = "extra == 'guardrails'" },
+    { name = "augments-adk", extras = ["openai"], marker = "extra == 'voice'" },
+    { name = "augments-adk", extras = ["rag-pdf", "rag-docx", "rag-web", "rag-github", "rag-youtube"], marker = "extra == 'rag'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-blaxel'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-cloudflare'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-daytona'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-e2b'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-modal'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-runloop'" },
+    { name = "augments-adk", extras = ["sandbox-remote-vm"], marker = "extra == 'sandbox-vercel'" },
+    { name = "augments-adk", extras = ["server", "a2a"], marker = "extra == 'serve'" },
     { name = "pinecone", marker = "extra == 'memory-pinecone'", specifier = ">=8.0" },
     { name = "pip-audit", marker = "extra == 'dev'", specifier = ">=2.7" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=3.5.0" },

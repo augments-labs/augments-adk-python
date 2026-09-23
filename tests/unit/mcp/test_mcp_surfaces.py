@@ -9,10 +9,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.mcp.exceptions import MCPSchemaConversionError
-from philharmonica.adk.mcp.manager import MCPServerManager
-from philharmonica.adk.mcp.schema_resolver import inline_intra_document_refs
-from philharmonica.adk.tools.hosted import HostedMCPTool, UnsupportedHostedToolError
+from augments.adk.mcp.exceptions import MCPSchemaConversionError
+from augments.adk.mcp.manager import MCPServerManager
+from augments.adk.mcp.schema_resolver import inline_intra_document_refs
+from augments.adk.tools.hosted import HostedMCPTool, UnsupportedHostedToolError
 
 # ---------------------------------------------------------------- $ref resolver
 
@@ -103,7 +103,7 @@ def test_inline_refs_canonicalises_legacy_definitions_root() -> None:
 
 def test_streamable_http_params_headers_repr_omitted() -> None:
     """Bearer tokens stored in ``headers`` must not leak via repr."""
-    from philharmonica.adk.mcp import MCPServerStreamableHttpParams
+    from augments.adk.mcp import MCPServerStreamableHttpParams
 
     params = MCPServerStreamableHttpParams(
         url="https://x/mcp",
@@ -114,7 +114,7 @@ def test_streamable_http_params_headers_repr_omitted() -> None:
 
 
 def test_sse_params_headers_repr_omitted() -> None:
-    from philharmonica.adk.mcp import MCPServerSseParams
+    from augments.adk.mcp import MCPServerSseParams
 
     params = MCPServerSseParams(
         url="https://x/sse",
@@ -139,7 +139,7 @@ def test_hosted_mcp_tool_requires_url_xor_connector() -> None:
 
 
 def test_hosted_mcp_tool_translates_to_responses_param() -> None:
-    from philharmonica.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
+    from augments.adk.llms.openai.openai_responses_converter import OpenAIResponsesConverter
 
     tool = HostedMCPTool(
         server_label="gh",
@@ -162,7 +162,7 @@ def test_hosted_mcp_tool_translates_to_responses_param() -> None:
 
 
 def test_hosted_mcp_tool_other_providers_raise() -> None:
-    from philharmonica.adk.llms.anthropic.anthropic_converter import AnthropicConverter
+    from augments.adk.llms.anthropic.anthropic_converter import AnthropicConverter
 
     tool = HostedMCPTool(server_label="gh", server_url="https://api/mcp")
     with pytest.raises(UnsupportedHostedToolError):
@@ -206,7 +206,7 @@ async def test_acquire_unknown_server_raises() -> None:
     s = _server("a")
     other = _server("b")
     manager = MCPServerManager(servers=[s])
-    from philharmonica.adk.mcp.exceptions import MCPConnectionError
+    from augments.adk.mcp.exceptions import MCPConnectionError
 
     with pytest.raises(MCPConnectionError):
         await manager.acquire(other)
@@ -241,7 +241,7 @@ async def test_manager_get_ref_count_tracks_acquire_release() -> None:
 
 async def test_toolset_is_connected_and_is_disposed_properties() -> None:
     """Public lifecycle predicates on ``MCPToolset``."""
-    from philharmonica.adk.tools.toolsets import MCPToolset
+    from augments.adk.tools.toolsets import MCPToolset
 
     server = _server("svc")
     server.list_tools = AsyncMock(return_value=[])
@@ -260,7 +260,7 @@ async def test_toolset_is_connected_and_is_disposed_properties() -> None:
 
 async def test_server_with_client_session_is_connected_property() -> None:
     """``MCPServerWithClientSession.is_connected`` mirrors session state."""
-    from philharmonica.adk.mcp import MCPServerStdio, MCPServerStdioParams
+    from augments.adk.mcp import MCPServerStdio, MCPServerStdioParams
 
     # ``echo`` exits immediately; we never actually connect.
     server = MCPServerStdio(name="x", params=MCPServerStdioParams(command="echo"))
@@ -273,8 +273,8 @@ async def test_server_with_client_session_is_connected_property() -> None:
 async def test_sampling_callback_calls_llm() -> None:
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.sampling import make_sampling_callback
-    from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+    from augments.adk.mcp.sampling import make_sampling_callback
+    from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
     fake_llm = MagicMock()
     fake_response = LLMResponse(
@@ -313,8 +313,8 @@ async def test_sampling_callback_warns_on_textless_response(
     """
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.sampling import make_sampling_callback
-    from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseReasoning
+    from augments.adk.mcp.sampling import make_sampling_callback
+    from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseReasoning
 
     fake_llm = MagicMock()
     # Only a reasoning part — no text part at all.
@@ -345,7 +345,7 @@ async def test_sampling_callback_warns_on_textless_response(
 async def test_sampling_callback_swallows_exceptions() -> None:
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.sampling import make_sampling_callback
+    from augments.adk.mcp.sampling import make_sampling_callback
 
     bad_llm = MagicMock()
     bad_llm.acomplete = AsyncMock(side_effect=RuntimeError("boom"))
@@ -368,7 +368,7 @@ async def test_sampling_callback_swallows_exceptions() -> None:
 
 
 async def test_elicitation_callback_wraps_dict_handler() -> None:
-    from philharmonica.adk.mcp.elicitation import make_elicitation_callback
+    from augments.adk.mcp.elicitation import make_elicitation_callback
 
     async def handler(params: Any) -> Any:
         del params
@@ -388,7 +388,7 @@ async def test_elicitation_callback_declines_on_none() -> None:
     ``{"text": "None"}`` + ``action="accept"`` — so a user's refusal looked
     like an approval to the MCP server.
     """
-    from philharmonica.adk.mcp.elicitation import make_elicitation_callback
+    from augments.adk.mcp.elicitation import make_elicitation_callback
 
     async def declining_handler(params: Any) -> Any:
         del params
@@ -404,7 +404,7 @@ async def test_elicitation_callback_declines_on_none() -> None:
 async def test_elicitation_callback_swallows_handler_error() -> None:
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.elicitation import make_elicitation_callback
+    from augments.adk.mcp.elicitation import make_elicitation_callback
 
     async def bad_handler(params: Any) -> Any:
         del params
@@ -426,8 +426,8 @@ async def test_call_tool_always_applies_server_header_provider() -> None:
     The fix: always override the ContextVar with the server's own provider
     for the duration of this call, then reset.
     """
-    from philharmonica.adk.mcp.auth import active_header_provider
-    from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+    from augments.adk.mcp.auth import active_header_provider
+    from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
     # Simulate an "ambient" provider already set on the ContextVar
     ambient_provider = lambda: {"Authorization": "Bearer AMBIENT"}  # noqa: E731
@@ -475,7 +475,7 @@ async def test_mcp_server_not_in_all() -> None:
     methods return mcp SDK wire types, leaking the wire protocol surface.
     MCPServerWithClientSession is the correct public extension point.
     """
-    import philharmonica.adk.mcp as mcp_pkg
+    import augments.adk.mcp as mcp_pkg
 
     assert "MCPServer" not in mcp_pkg.__all__, (
         "MCPServer ABC must be excluded from __all__ (wire-type leak on public surface)"
@@ -511,8 +511,8 @@ async def test_sampling_callback_maps_finish_reason_to_stop_reason(
     """
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.sampling import make_sampling_callback
-    from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+    from augments.adk.mcp.sampling import make_sampling_callback
+    from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
     fake_llm = MagicMock()
     fake_response = LLMResponse(
@@ -553,8 +553,8 @@ async def test_sampling_callback_forwards_tools_to_llm(
     """
     from mcp import types as mcp_types
 
-    from philharmonica.adk.mcp.sampling import make_sampling_callback
-    from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+    from augments.adk.mcp.sampling import make_sampling_callback
+    from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
     captured_kwargs: dict[str, Any] = {}
 
@@ -601,7 +601,7 @@ async def test_sampling_callback_forwards_tools_to_llm(
 
 def test_stdio_params_call_tool_timeout_defaults_to_none() -> None:
     """call_tool_timeout_seconds MUST default to None (no timeout) per cost-conservative invariant."""
-    from philharmonica.adk.mcp.stdio import MCPServerStdioParams
+    from augments.adk.mcp.stdio import MCPServerStdioParams
 
     params = MCPServerStdioParams(command="echo")
     assert params.call_tool_timeout_seconds is None  # type: ignore[attr-defined]  # new field, editable install lags
@@ -609,7 +609,7 @@ def test_stdio_params_call_tool_timeout_defaults_to_none() -> None:
 
 def test_sse_params_call_tool_timeout_defaults_to_none() -> None:
     """call_tool_timeout_seconds MUST default to None (no timeout)."""
-    from philharmonica.adk.mcp.sse import MCPServerSseParams
+    from augments.adk.mcp.sse import MCPServerSseParams
 
     params = MCPServerSseParams(url="http://localhost/sse")
     assert params.call_tool_timeout_seconds is None  # type: ignore[attr-defined]  # new field, editable install lags
@@ -627,7 +627,7 @@ def test_make_client_session_passes_timeout_when_set() -> None:
 
     from mcp import ClientSession
 
-    from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+    from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
     class _Concrete(MCPServerWithClientSession):
         async def connect(self) -> None:
@@ -649,7 +649,7 @@ def test_make_client_session_timeout_none_produces_session() -> None:
     """None timeout (default) still produces a valid ClientSession."""
     from mcp import ClientSession
 
-    from philharmonica.adk.mcp.mcp_server import MCPServerWithClientSession
+    from augments.adk.mcp.mcp_server import MCPServerWithClientSession
 
     class _Concrete(MCPServerWithClientSession):
         async def connect(self) -> None:

@@ -12,14 +12,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.events import SwarmDoneEvent, SwarmStartEvent
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.result import SwarmRunResultStreaming
-from philharmonica.adk.swarms.stop_reason import StopReason
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.agents.agent import Agent
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.events import SwarmDoneEvent, SwarmStartEvent
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.result import SwarmRunResultStreaming
+from augments.adk.swarms.stop_reason import StopReason
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 
 def _swarm() -> Swarm[Any]:
@@ -60,9 +60,9 @@ class TestArunSwarmStreamedEntryPoint:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
+                "augments.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
                 new=AsyncMock(side_effect=_fake_driver),
             ),
         ):
@@ -86,7 +86,7 @@ class TestArunSwarmStreamedEntryPoint:
 
 class TestArunSwarmStreamedResumeReusesSwarmId:
     async def test_loaded_swarm_id_is_reused(self) -> None:
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.swarms.state import SwarmState
 
         sw = _swarm()
         loaded_state: SwarmState[Any] = SwarmState(
@@ -108,9 +108,9 @@ class TestArunSwarmStreamedResumeReusesSwarmId:
             res.stop_reason = StopReason(kind="max_turns", detail="")
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
+                "augments.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
                 new=AsyncMock(side_effect=_fake_driver),
             ),
         ):
@@ -129,7 +129,7 @@ class TestArunSwarmStreamedMissingSwarmIdRegenerates:
     ) -> None:
         import logging
 
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.swarms.state import SwarmState
 
         sw = _swarm()
         loaded_state: SwarmState[Any] = SwarmState(
@@ -152,12 +152,12 @@ class TestArunSwarmStreamedMissingSwarmIdRegenerates:
             res.stop_reason = StopReason(kind="max_turns", detail="")
 
         with (
-            patch("philharmonica.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
+            patch("augments.adk.run.runner.swarm_span", side_effect=_track_swarm_span),
             patch(
-                "philharmonica.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
+                "augments.adk.run.swarm_loop_streamed.run_swarm_loop_streamed",
                 new=AsyncMock(side_effect=_fake_driver),
             ),
-            caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.runner"),
+            caplog.at_level(logging.WARNING, logger="augments.adk.run.runner"),
         ):
             result = await Runner.arun_swarm_streamed(
                 sw,

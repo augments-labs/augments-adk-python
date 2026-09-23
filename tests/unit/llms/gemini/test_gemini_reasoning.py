@@ -7,12 +7,12 @@ import logging
 import pytest
 from google.genai.types import ThinkingConfig
 
-from philharmonica.adk.llms.gemini.gemini_config import GeminiConfig
-from philharmonica.adk.llms.gemini.gemini_reasoning_resolver import (
+from augments.adk.llms.gemini.gemini_config import GeminiConfig
+from augments.adk.llms.gemini.gemini_reasoning_resolver import (
     GEMINI_MIN_THINKING_BUDGET,
     resolve_thinking,
 )
-from philharmonica.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_config import LLMConfig
 
 
 class TestResolveThinking:

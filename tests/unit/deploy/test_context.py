@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.deploy.context import DeployContext
+from augments.adk.deploy.context import DeployContext
 
 
 def test_valid_context_defaults() -> None:

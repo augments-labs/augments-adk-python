@@ -10,10 +10,10 @@ import sqlite3
 
 import pytest
 
-from philharmonica.adk.session import SQLiteMultiSessions
-from philharmonica.adk.session.session_event import create_session_event
-from philharmonica.adk.session.sqlite_multi_sessions import SessionInfo
-from philharmonica.adk.session.state import State
+from augments.adk.session import SQLiteMultiSessions
+from augments.adk.session.session_event import create_session_event
+from augments.adk.session.sqlite_multi_sessions import SessionInfo
+from augments.adk.session.state import State
 
 # ---------------------------------------------------------------------------
 # Bug 1: state.py:186 — to_persist() writes app: keys into sessions column,
@@ -172,7 +172,7 @@ async def test_save_state_delete_app_key_removes_it(tmp_path) -> None:
 
 def test_is_migration_needed_returns_false_on_corrupt_db(tmp_path) -> None:
     """A corrupt database file must not cause _is_migration_needed to raise."""
-    from philharmonica.adk.session.sqlite_multi_sessions import _is_migration_needed
+    from augments.adk.session.sqlite_multi_sessions import _is_migration_needed
 
     corrupt = tmp_path / "corrupt.db"
     corrupt.write_bytes(b"this is not a valid sqlite database file at all")
@@ -185,7 +185,7 @@ def test_is_migration_needed_returns_false_on_corrupt_db(tmp_path) -> None:
 def test_is_migration_needed_connection_closed_after_call(tmp_path) -> None:
     """After _is_migration_needed returns, there must be no leaked connection
     (verified by checking that we can immediately delete the DB file)."""
-    from philharmonica.adk.session.sqlite_multi_sessions import _is_migration_needed
+    from augments.adk.session.sqlite_multi_sessions import _is_migration_needed
 
     db_path = tmp_path / "check.db"
     # Create a real DB so _is_migration_needed opens it successfully.
@@ -209,7 +209,7 @@ def test_is_migration_needed_connection_closed_after_call(tmp_path) -> None:
 def test_session_state_is_abstract() -> None:
     """Session.state must be an abstract property — instantiating a
     subclass that does not override it must fail at class-definition time."""
-    from philharmonica.adk.session.session import Session
+    from augments.adk.session.session import Session
 
     # A subclass that overrides all abstract methods EXCEPT state.
     # Python raises TypeError when trying to instantiate it.
@@ -236,8 +236,8 @@ def test_session_state_is_abstract() -> None:
 
 def test_complete_session_subclass_instantiates() -> None:
     """A subclass that overrides state must instantiate without error."""
-    from philharmonica.adk.session.session import Session
-    from philharmonica.adk.session.state import State
+    from augments.adk.session.session import Session
+    from augments.adk.session.state import State
 
     class CompleteSession(Session):
         @property
@@ -292,7 +292,7 @@ async def test_list_returns_session_info_objects() -> None:
 def test_pragma_foreign_keys_constant_removed() -> None:
     """The dead PRAGMA_FOREIGN_KEYS constant must no longer be exported from
     sqlite_session (the live copy lives in sqlite_database_connection)."""
-    import philharmonica.adk.session.sqlite_session as mod
+    import augments.adk.session.sqlite_session as mod
 
     assert not hasattr(mod, "PRAGMA_FOREIGN_KEYS"), (
         "Dead PRAGMA_FOREIGN_KEYS constant must be removed from sqlite_session.py"

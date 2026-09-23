@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.workflows.temporal.determinism``."""
+"""Tests for ``augments.adk.workflows.temporal.determinism``."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ import pytest
 
 temporalio = pytest.importorskip("temporalio")
 
-from philharmonica.adk.workflows.temporal.determinism import (
+from augments.adk.workflows.temporal.determinism import (
     DEFAULT_PASSTHROUGH_MODULES,
     build_sandbox_restrictions,
 )
@@ -14,7 +14,7 @@ from philharmonica.adk.workflows.temporal.determinism import (
 
 class TestDefaultPassthroughModules:
     def test_contains_required_modules(self) -> None:
-        required = {"pydantic", "pydantic_core", "litellm", "openai", "anthropic", "google", "philharmonica"}
+        required = {"pydantic", "pydantic_core", "litellm", "openai", "anthropic", "google", "augments"}
         assert required == set(DEFAULT_PASSTHROUGH_MODULES)
 
     def test_is_tuple(self) -> None:

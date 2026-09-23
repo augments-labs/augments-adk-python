@@ -7,12 +7,12 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def _enable_log_propagation():
-    """Ensure philharmonica.adk loggers propagate to root so caplog captures them.
+    """Ensure augments.adk loggers propagate to root so caplog captures them.
 
     The production YAML config sets propagate=no (correct for file handlers),
     but pytest's caplog fixture relies on propagation to capture records.
     """
-    logger = logging.getLogger("philharmonica.adk")
+    logger = logging.getLogger("augments.adk")
     original = logger.propagate
     logger.propagate = True
     yield

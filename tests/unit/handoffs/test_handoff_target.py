@@ -19,9 +19,9 @@ from __future__ import annotations
 import typing
 from typing import Any
 
-from philharmonica.adk.handoffs.handoff_input_data import HandoffInputData
-from philharmonica.adk.handoffs.handoff_target import invoke_on_handoff
-from philharmonica.adk.run.context import RunContext
+from augments.adk.handoffs.handoff_input_data import HandoffInputData
+from augments.adk.handoffs.handoff_target import invoke_on_handoff
+from augments.adk.run.context import RunContext
 
 
 def _run_context() -> RunContext[dict[str, Any]]:

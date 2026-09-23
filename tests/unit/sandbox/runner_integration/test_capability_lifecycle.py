@@ -6,9 +6,9 @@ from typing import Literal
 
 import pytest
 
-from philharmonica.adk.sandbox.capabilities.base import SandboxCapability
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.runner_integration.capability_lifecycle import (
+from augments.adk.sandbox.capabilities.base import SandboxCapability
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.runner_integration.capability_lifecycle import (
     apply_command_policy,
     bind_capabilities,
     clone_capabilities,
@@ -17,8 +17,8 @@ from philharmonica.adk.sandbox.runner_integration.capability_lifecycle import (
     process_manifest_through_capabilities,
     validate_required_capability_types,
 )
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.permissions import User
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.permissions import User
 
 
 class _MarkerCapability(SandboxCapability):
@@ -31,7 +31,7 @@ class _MarkerCapability(SandboxCapability):
     def process_manifest(self, manifest: Manifest) -> Manifest:
         # Append a synthetic File entry named after the marker so we
         # can verify ordering downstream.
-        from philharmonica.adk.types.sandbox.entries import File
+        from augments.adk.types.sandbox.entries import File
 
         new_entries = dict(manifest.entries)
         new_entries[f"{self.marker}.txt"] = File(content=self.marker.encode())

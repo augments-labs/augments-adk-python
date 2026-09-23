@@ -13,7 +13,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     ExecTimeoutError,
     SandboxStartFailed,
     WorkspaceReadNotFoundError,
@@ -81,7 +81,7 @@ def _mock_container(
 class TestDockerSessionLifecycle:
     @pytest.mark.asyncio
     async def test_start_polls_until_running(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container(status="created")
 
@@ -98,7 +98,7 @@ class TestDockerSessionLifecycle:
 
     @pytest.mark.asyncio
     async def test_start_re_idempotent(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -107,12 +107,12 @@ class TestDockerSessionLifecycle:
         container.start.assert_not_called()
 
     async def test_start_installs_runtime_helpers(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
         with patch(
-            "philharmonica.adk.sandbox.session.runtime_helpers.install_runtime_helpers",
+            "augments.adk.sandbox.session.runtime_helpers.install_runtime_helpers",
             new_callable=AsyncMock,
         ) as installer:
             await session.start()
@@ -123,7 +123,7 @@ class TestDockerSessionLifecycle:
 
     @pytest.mark.asyncio
     async def test_aclose_stops_and_removes(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -140,7 +140,7 @@ class TestDockerSessionEnvironment:
 
     @pytest.mark.asyncio
     async def test_empty_environment_passes_none_to_exec(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container, environment={})
@@ -150,7 +150,7 @@ class TestDockerSessionEnvironment:
 
     @pytest.mark.asyncio
     async def test_nonempty_environment_passes_dict_to_exec(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         env = {"FOO": "bar", "BAZ": "qux"}
         container = _mock_container()
@@ -163,7 +163,7 @@ class TestDockerSessionEnvironment:
 class TestDockerSessionRun:
     @pytest.mark.asyncio
     async def test_run_returns_exec_result(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -174,7 +174,7 @@ class TestDockerSessionRun:
     @pytest.mark.asyncio
     async def test_run_with_timeout_raises_on_exceed(self) -> None:
         """Host-side backstop still raises when the image lacks 'timeout'."""
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
 
@@ -195,7 +195,7 @@ class TestDockerSessionRun:
     async def test_run_timeout_enforced_in_container_when_binary_present(self) -> None:
         """With 'timeout' in the image, the command is wrapped and exit 124 maps
         to ExecTimeoutError without waiting for the padded host backstop."""
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         run_argvs: list[list[str]] = []
@@ -217,7 +217,7 @@ class TestDockerSessionRun:
     @pytest.mark.asyncio
     async def test_run_wrapped_success_within_deadline(self) -> None:
         """A wrapped command finishing in time returns its result unchanged."""
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
 
@@ -234,7 +234,7 @@ class TestDockerSessionRun:
 
     @pytest.mark.asyncio
     async def test_timeout_probe_runs_once_per_session(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         probes: list[object] = []
@@ -258,7 +258,7 @@ class TestDockerSessionRun:
         must be emitted so operators know the thread leak occurred."""
         import logging
 
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         records: list[logging.LogRecord] = []
 
@@ -266,7 +266,7 @@ class TestDockerSessionRun:
             def emit(self, record: logging.LogRecord) -> None:
                 records.append(record)
 
-        target_logger = logging.getLogger("philharmonica.adk.sandbox.clients.docker.docker_session")
+        target_logger = logging.getLogger("augments.adk.sandbox.clients.docker.docker_session")
         handler = _Capture()
         target_logger.addHandler(handler)
         try:
@@ -295,10 +295,10 @@ class TestDockerSessionRun:
 class TestDockerApplyPatch:
     @pytest.mark.asyncio
     async def test_patch_file_removed_when_run_raises(self) -> None:
-        """Regression: apply_patch left .philharmonica_patch.diff when run() raised."""
+        """Regression: apply_patch left .augments_patch.diff when run() raised."""
         from unittest.mock import patch as mock_patch
 
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -322,8 +322,8 @@ class TestDockerApplyPatch:
         ):
             await session.apply_patch("--- a/foo\n+++ b/foo\n@@ -1 +1 @@\n-x\n+y\n")
 
-        assert any(".philharmonica_patch.diff" in p for p in removed_paths), (
-            f"Expected .philharmonica_patch.diff cleanup but rm was called with: {removed_paths}"
+        assert any(".augments_patch.diff" in p for p in removed_paths), (
+            f"Expected .augments_patch.diff cleanup but rm was called with: {removed_paths}"
         )
 
     @pytest.mark.asyncio
@@ -331,7 +331,7 @@ class TestDockerApplyPatch:
         """apply_patch must also clean up the temp diff file on success."""
         from unittest.mock import patch as mock_patch
 
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -356,13 +356,13 @@ class TestDockerApplyPatch:
         ):
             await session.apply_patch("--- a/foo\n+++ b/foo\n")
 
-        assert any(".philharmonica_patch.diff" in p for p in removed_paths)
+        assert any(".augments_patch.diff" in p for p in removed_paths)
 
 
 class TestDockerSessionFileOps:
     @pytest.mark.asyncio
     async def test_resolve_path_relative(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(
@@ -374,7 +374,7 @@ class TestDockerSessionFileOps:
 
     @pytest.mark.asyncio
     async def test_write_calls_put_archive(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -383,7 +383,7 @@ class TestDockerSessionFileOps:
 
     @pytest.mark.asyncio
     async def test_read_missing_raises(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         container.get_archive.side_effect = Exception("not found")
@@ -399,7 +399,7 @@ class TestDockerSessionFileOps:
         old code filtered to files and returned members[0] — leaking a file
         from inside the directory instead of failing.
         """
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         container.get_archive = MagicMock(return_value=(iter([_directory_tar_bytes()]), {}))
@@ -410,7 +410,7 @@ class TestDockerSessionFileOps:
     @pytest.mark.asyncio
     async def test_read_single_file_returns_content(self) -> None:
         """A normal single-file read still returns the file bytes."""
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         container.get_archive = MagicMock(return_value=(iter([_single_file_tar_bytes(b"hello")]), {}))
@@ -422,7 +422,7 @@ class TestDockerSessionFileOps:
 class TestDockerSessionPortResolution:
     @pytest.mark.asyncio
     async def test_resolves_host_mapping(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         session = DockerSandboxSession(container=container)
@@ -432,7 +432,7 @@ class TestDockerSessionPortResolution:
 
     @pytest.mark.asyncio
     async def test_falls_back_to_container_ip(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         container.attrs["NetworkSettings"]["Ports"] = {}
@@ -466,7 +466,7 @@ def _fake_docker_types() -> tuple[MagicMock, MagicMock]:
 class TestDockerClient:
     @pytest.mark.asyncio
     async def test_create_passes_image_and_command(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
@@ -486,7 +486,7 @@ class TestDockerClient:
 
     @pytest.mark.asyncio
     async def test_create_translates_limits(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
@@ -509,8 +509,8 @@ class TestDockerClient:
 
     @pytest.mark.asyncio
     async def test_resume_finds_container(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import DockerSandboxClient
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.sandbox.clients.docker import DockerSandboxClient
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         docker_client = MagicMock()
         docker_client.containers.get = MagicMock(return_value=_mock_container())
@@ -525,8 +525,8 @@ class TestDockerClient:
 
     @pytest.mark.asyncio
     async def test_resume_missing_payload_raises(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import DockerSandboxClient
-        from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+        from augments.adk.sandbox.clients.docker import DockerSandboxClient
+        from augments.adk.types.sandbox.session_state import SandboxSessionState
 
         client = DockerSandboxClient(docker_client=MagicMock())
         state = SandboxSessionState(backend_id="docker")
@@ -534,12 +534,12 @@ class TestDockerClient:
             await client.resume(state)
 
     async def test_create_docker_volume_spec_precreates_and_materializes(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
 
         docker_client = MagicMock()
         docker_client.containers.run = MagicMock(return_value=_mock_container())
@@ -568,12 +568,12 @@ class TestDockerClient:
         assert "strategy" not in m  # not a leaked spec dict
 
     async def test_create_in_container_spec_no_volume_create_keeps_sys_admin(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import (
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import (
             InContainerMountStrategy,
             RcloneMountPattern,
             S3Mount,
@@ -600,12 +600,12 @@ class TestDockerClient:
         assert "SYS_ADMIN" in run_kwargs["cap_add"]  # in-container FUSE mount needs it
 
     async def test_create_threads_working_directory_into_mount_target(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import (
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import (
             InContainerMountStrategy,
             RcloneMountPattern,
             S3Mount,
@@ -636,7 +636,7 @@ class TestDockerClient:
         # reaches the materializer, it must fail loud as
         # SandboxStartFailed at session-create — never an opaque KeyError
         # or a silent docker_volume mis-route.
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
@@ -650,7 +650,7 @@ class TestDockerClient:
             return {**kwargs, "mounts": [{"strategy": "bogus", "target": "/x", "read_only": True}]}
 
         with (
-            patch("philharmonica.adk.sandbox.policy.apply_mounts_to_docker", _inject_bogus),
+            patch("augments.adk.sandbox.policy.apply_mounts_to_docker", _inject_bogus),
             patch.dict(sys.modules, {"docker": fake_docker, "docker.types": fake_types}),
             pytest.raises(SandboxStartFailed, match="unrecognized strategy"),
         ):
@@ -660,12 +660,12 @@ class TestDockerClient:
         # A volume-driver failure (unknown driver / daemon down) must
         # surface as SandboxStartFailed like containers.run — not a raw
         # docker SDK exception that bypasses the create-failure contract.
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
 
         docker_client = MagicMock()
         docker_client.containers.run = MagicMock(return_value=_mock_container())
@@ -685,12 +685,12 @@ class TestDockerClient:
             await client.create(options=DockerSandboxClientOptions(image="python:3.12"), manifest=manifest)
 
     async def test_create_docker_volume_empty_driver_options_passes_none(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
 
         docker_client = MagicMock()
         docker_client.containers.run = MagicMock(return_value=_mock_container())
@@ -714,7 +714,7 @@ class TestDockerClient:
         # SandboxStartFailed with an explicit "malformed mount spec"
         # cause — never a bare KeyError that create() re-wraps into an
         # opaque "provisioning failed: 'driver'" Docker-fault lookalike.
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
@@ -729,7 +729,7 @@ class TestDockerClient:
             return {**kwargs, "mounts": [{"strategy": "docker_volume", "target": "/x", "read_only": True}]}
 
         with (
-            patch("philharmonica.adk.sandbox.policy.apply_mounts_to_docker", _inject_missing_driver),
+            patch("augments.adk.sandbox.policy.apply_mounts_to_docker", _inject_missing_driver),
             patch.dict(sys.modules, {"docker": fake_docker, "docker.types": fake_types}),
             pytest.raises(SandboxStartFailed, match="malformed mount spec"),
         ):
@@ -739,7 +739,7 @@ class TestDockerClient:
         # A spec with no "strategy" key at all must still fail loud
         # (strategy resolves to None → the exhaustive final raise), not
         # KeyError on spec["strategy"].
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
@@ -753,7 +753,7 @@ class TestDockerClient:
             return {**kwargs, "mounts": [{"target": "/x", "read_only": True}]}
 
         with (
-            patch("philharmonica.adk.sandbox.policy.apply_mounts_to_docker", _inject_no_strategy),
+            patch("augments.adk.sandbox.policy.apply_mounts_to_docker", _inject_no_strategy),
             patch.dict(sys.modules, {"docker": fake_docker, "docker.types": fake_types}),
             pytest.raises(SandboxStartFailed, match="unrecognized strategy"),
         ):
@@ -763,12 +763,12 @@ class TestDockerClient:
         # The orphan-able pre-created volume must be surfaced at WARNING
         # so it is findable in logs, not only in a source docstring
         # (the lifecycle is operator-managed, not silent).
-        from philharmonica.adk.sandbox.clients.docker import (
+        from augments.adk.sandbox.clients.docker import (
             DockerSandboxClient,
             DockerSandboxClientOptions,
         )
-        from philharmonica.adk.types.sandbox.manifest import Manifest
-        from philharmonica.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
+        from augments.adk.types.sandbox.manifest import Manifest
+        from augments.adk.types.sandbox.mounts import DockerVolumeMountStrategy, S3Mount
 
         docker_client = MagicMock()
         docker_client.containers.run = MagicMock(return_value=_mock_container())
@@ -793,7 +793,7 @@ class TestDockerClient:
 class TestDockerSessionPty:
     @pytest.mark.asyncio
     async def test_pty_start_creates_exec(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         api_client = MagicMock()
@@ -814,7 +814,7 @@ class TestDockerSessionPty:
 
     @pytest.mark.asyncio
     async def test_pty_write_stdin_sends_bytes(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         api_client = MagicMock()
@@ -831,7 +831,7 @@ class TestDockerSessionPty:
 
     @pytest.mark.asyncio
     async def test_pty_terminate_all_closes_sockets(self) -> None:
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         api_client = MagicMock()
@@ -852,7 +852,7 @@ class TestDockerSessionPty:
         Regression: aclose() called stop()/shutdown() but never
         pty_terminate_all(), so PTY sockets + container exec sessions leaked.
         """
-        from philharmonica.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
+        from augments.adk.sandbox.clients.docker.docker_session import DockerSandboxSession
 
         container = _mock_container()
         api_client = MagicMock()

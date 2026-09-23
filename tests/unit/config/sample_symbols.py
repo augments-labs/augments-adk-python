@@ -9,15 +9,15 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentInputGuardrailData,
     AgentOutputGuardrailData,
     agent_input_guardrail,
     agent_output_guardrail,
 )
-from philharmonica.adk.prompts.system_prompt import DynamicSystemPromptData
-from philharmonica.adk.tools import function_tool
+from augments.adk.prompts.system_prompt import DynamicSystemPromptData
+from augments.adk.tools import function_tool
 
 
 @function_tool

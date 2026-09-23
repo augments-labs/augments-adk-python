@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica deploy`` (init + build; build never invokes docker)."""
+"""Tests for ``augments deploy`` (init + build; build never invokes docker)."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from pathlib import Path
 import pytest
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 
 def test_init_writes_container_artifacts(tmp_path: Path) -> None:
@@ -68,12 +68,12 @@ def test_init_invalid_app_name_errors(tmp_path: Path) -> None:
 def test_build_invokes_docker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
     # The `deploy` group shadows the cli.deploy submodule attribute; reach the
     # real module via sys.modules to patch its SubprocessRunner binding.
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main, ["deploy", "build", "--agent", "app:agent", "--image", "my-agent:1", "--dir", str(tmp_path)]
     )
@@ -85,10 +85,10 @@ def test_build_invokes_docker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
 def test_build_missing_docker_guides(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     monkeypatch.setattr(
-        sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: RecordingRunner(available={"git"})
+        sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: RecordingRunner(available={"git"})
     )
     result = CliRunner().invoke(
         main, ["deploy", "build", "--agent", "app:agent", "--image", "my-agent:1", "--dir", str(tmp_path)]
@@ -100,10 +100,10 @@ def test_build_missing_docker_guides(tmp_path: Path, monkeypatch: pytest.MonkeyP
 def test_deploy_k8s_applies(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main, ["deploy", "k8s", "--agent", "app:agent", "--image", "my-agent:1", "--dir", str(tmp_path)]
     )
@@ -115,10 +115,10 @@ def test_deploy_k8s_applies(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> 
 def test_deploy_helm_installs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main, ["deploy", "helm", "--agent", "app:agent", "--image", "my-agent:1", "--dir", str(tmp_path)]
     )
@@ -137,10 +137,10 @@ def test_deploy_gke_requires_cluster(tmp_path: Path) -> None:
 def test_deploy_cloud_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main,
         [
@@ -166,10 +166,10 @@ def test_deploy_cloud_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
 def test_deploy_ecs_registers(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main,
         [
@@ -195,10 +195,10 @@ def test_deploy_ecs_registers(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -
 def test_deploy_ecs_push_logs_into_ecr(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import CommandResult, RecordingRunner
+    from augments.adk.deploy.commands import CommandResult, RecordingRunner
 
     rec = RecordingRunner(results=[CommandResult(returncode=0, stdout="pw", stderr="")])
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main,
         [
@@ -224,10 +224,10 @@ def test_deploy_ecs_push_logs_into_ecr(tmp_path: Path, monkeypatch: pytest.Monke
 def test_deploy_lambda_updates(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import sys
 
-    from philharmonica.adk.deploy.commands import RecordingRunner
+    from augments.adk.deploy.commands import RecordingRunner
 
     rec = RecordingRunner()
-    monkeypatch.setattr(sys.modules["philharmonica.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
+    monkeypatch.setattr(sys.modules["augments.adk.cli.deploy"], "SubprocessRunner", lambda: rec)
     result = CliRunner().invoke(
         main,
         [

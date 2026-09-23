@@ -10,10 +10,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.join import JoinSemantics
-from philharmonica.adk.graphs.merge import DEFAULT_MERGE
-from philharmonica.adk.graphs.node import GraphEdge, GraphNode
-from philharmonica.adk.orchestration.executable import ExecutableInput, NodeResult
+from augments.adk.graphs.join import JoinSemantics
+from augments.adk.graphs.merge import DEFAULT_MERGE
+from augments.adk.graphs.node import GraphEdge, GraphNode
+from augments.adk.orchestration.executable import ExecutableInput, NodeResult
 
 # ---------------------------------------------------------------------------
 # Minimal executable stub for constructing GraphNode instances
@@ -162,7 +162,7 @@ class TestGraphEdge:
 
 
 def test_graph_node_reliability_fields_default_none() -> None:
-    from philharmonica.adk.graphs.node import GraphNode
+    from augments.adk.graphs.node import GraphNode
 
     n = GraphNode(id="x", executable=_STUB)  # type: ignore[arg-type]
     assert n.retry is None
@@ -170,8 +170,8 @@ def test_graph_node_reliability_fields_default_none() -> None:
 
 
 def test_graph_node_accepts_reliability_overrides() -> None:
-    from philharmonica.adk.graphs.config import NodeRetryPolicy
-    from philharmonica.adk.graphs.node import GraphNode
+    from augments.adk.graphs.config import NodeRetryPolicy
+    from augments.adk.graphs.node import GraphNode
 
     pol = NodeRetryPolicy(max_attempts=3)
     n = GraphNode(id="x", executable=_STUB, retry=pol, timeout=5.0)  # type: ignore[arg-type]

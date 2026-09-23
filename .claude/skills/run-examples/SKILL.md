@@ -30,7 +30,7 @@ uv run python examples/run_examples.py --auto-mode --filter <topic>   # scoped
 uv run python examples/run_examples.py --auto-mode                    # everything
 ```
 
-`--auto-mode` sets `PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto`, so examples
+`--auto-mode` sets `AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto`, so examples
 using the `examples/auto_mode.py` helpers (`is_auto_mode`,
 `input_with_fallback`, `confirm_with_fallback`) run unattended. Examples
 needing an absent key/server/daemon are skipped with a reason; pass

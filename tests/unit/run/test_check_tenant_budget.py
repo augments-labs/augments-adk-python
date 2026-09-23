@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.exceptions import TenantBudgetExceeded
-from philharmonica.adk.run.cost import check_tenant_budget
+from augments.adk.budgets import TenantBudget
+from augments.adk.exceptions import TenantBudgetExceeded
+from augments.adk.run.cost import check_tenant_budget
 
 
 def test_run_scope_breach() -> None:

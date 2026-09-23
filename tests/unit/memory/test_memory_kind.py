@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.memory import (
+from augments.adk.memory import (
     MemoryKind,
     MemoryMetadata,
     MemorySearchFilter,

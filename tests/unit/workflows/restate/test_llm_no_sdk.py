@@ -12,10 +12,10 @@ from __future__ import annotations
 import inspect
 from unittest.mock import AsyncMock, MagicMock, patch
 
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.types.responses.llm_response import LLMResponse
-from philharmonica.adk.workflows.engine import ModelActivityConfig
-from philharmonica.adk.workflows.restate.llm import RestateLLM
+from augments.adk.llms.llm import LLM
+from augments.adk.types.responses.llm_response import LLMResponse
+from augments.adk.workflows.engine import ModelActivityConfig
+from augments.adk.workflows.restate.llm import RestateLLM
 
 
 class TestRestateLLMDelegatesCost:
@@ -27,7 +27,7 @@ class TestRestateLLMDelegatesCost:
 
     def test_cost_delegates_to_wrapped(self) -> None:
         """``cost`` returns the wrapped provider's price for the call."""
-        from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+        from augments.adk.types.tokens.llm_usage import LLMUsage
 
         wrapped = MagicMock(spec=LLM)
         wrapped.cost.return_value = 1.5
@@ -82,7 +82,7 @@ class TestRestateLLMJournaledClosureAnnotation:
 
         ctx = MagicMock()
         ctx.run = fake_run
-        with patch("philharmonica.adk.workflows.restate.llm.get_restate_context", return_value=ctx):
+        with patch("augments.adk.workflows.restate.llm.get_restate_context", return_value=ctx):
             await llm.acomplete("hi", stream=False)
 
         # eval_str=True evaluates the "-> LLMResponse" annotation string in the

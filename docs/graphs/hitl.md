@@ -20,13 +20,13 @@ is repeated.
 
 ## The Shape
 
-All primitives live in `philharmonica.adk.graphs.interrupt` (except `GraphRunStatus`
-which is in `philharmonica.adk.graphs.result`):
+All primitives live in `augments.adk.graphs.interrupt` (except `GraphRunStatus`
+which is in `augments.adk.graphs.result`):
 
 | Type | Description |
 |---|---|
 | `Interrupt` | Frozen dataclass: `node_id`, `question`, `kind="generic"`, `metadata={}`. Describes what the human must decide. |
-| `InterruptException(PhilharmonicaError)` | Raised by a node to signal a pause. Carries `.interrupt: Interrupt`. |
+| `InterruptException(AugmentsError)` | Raised by a node to signal a pause. Carries `.interrupt: Interrupt`. |
 | `GraphResume` | Frozen dataclass: `replies: dict[str, Any]`, `rejected: dict[str, str]`. Carries the human's answers on resume. |
 | `GraphRunStatus.INTERRUPTED` | Status value `"interrupted"` — the run is suspended and waiting for input. |
 | `GraphState.pending_interrupts` | `dict[str, Interrupt]` keyed by `node_id`; populated while the run is suspended. |
@@ -45,8 +45,8 @@ Presence of the reserved key — not its truthiness — is the signal: a reply
 of `None` (an "abstain" answer) is valid and is returned as-is.
 
 ```python
-from philharmonica.adk.graphs.interrupt import request_human_input
-from philharmonica.adk.orchestration.executable import ExecutableInput
+from augments.adk.graphs.interrupt import request_human_input
+from augments.adk.orchestration.executable import ExecutableInput
 from typing import Any
 
 
@@ -74,12 +74,12 @@ checkpoint (if a checkpointer is attached), and returns a result with
 
 ```python
 import asyncio
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.interrupt import GraphResume, request_human_input
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs import Graph
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.interrupt import GraphResume, request_human_input
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.runner import Runner
 from typing import Any
 
 cp = InMemoryCheckpointer()
@@ -163,8 +163,8 @@ consumer's `async for` loop exits normally — no exception is raised by the
 stream driver.
 
 ```python
-from philharmonica.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
+from augments.adk.run.runner import Runner
 
 result = await Runner.arun_graph_streamed(g, "go")
 
@@ -195,7 +195,7 @@ assert len(result.interrupts) == 1
 Combine streaming with checkpoint-resume via a profile runner:
 
 ```python
-from philharmonica.adk.graphs.interrupt import GraphResume
+from augments.adk.graphs.interrupt import GraphResume
 
 streamed = await (
     Runner.configure()
@@ -282,9 +282,9 @@ defers is lifted to a graph-level interrupt via
 - `docs/graphs/nested-agent-bridge.md` — lifting an `Agent` node's tool
   deferral to a `NestedAgentInterrupt`, `NestedAgentReply` payload, and
   partial-resume semantics.
-- `src/philharmonica/adk/graphs/interrupt.py` — `Interrupt`, `InterruptException`,
+- `src/augments/adk/graphs/interrupt.py` — `Interrupt`, `InterruptException`,
   `GraphResume`, `request_human_input`.
-- `src/philharmonica/adk/graphs/events.py` — `NodeInterruptEvent`, `NODE_INTERRUPT`.
-- `src/philharmonica/adk/graphs/result.py` — `GraphRunStatus.INTERRUPTED`,
+- `src/augments/adk/graphs/events.py` — `NodeInterruptEvent`, `NODE_INTERRUPT`.
+- `src/augments/adk/graphs/result.py` — `GraphRunStatus.INTERRUPTED`,
   `GraphRunResult.interrupts`, `GraphRunResultStreaming.interrupts`.
 - `examples/graphs/hitl.py` — runnable end-to-end demonstration.

@@ -5,9 +5,9 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.session import Session, SessionSettings, SQLiteMultiSessions, sqlite_multi_sessions as sms
-from philharmonica.adk.session.session_event import create_session_event
-from philharmonica.adk.session.sqlite_session import build_create_schema_sql
+from augments.adk.session import Session, SessionSettings, SQLiteMultiSessions, sqlite_multi_sessions as sms
+from augments.adk.session.session_event import create_session_event
+from augments.adk.session.sqlite_session import build_create_schema_sql
 
 
 def _user_event(content: str):

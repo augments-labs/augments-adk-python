@@ -9,9 +9,9 @@ import pytest
 pytest.importorskip("pgvector")
 pytest.importorskip("psycopg")
 
-from philharmonica.adk.memory import MemoryMetadata, MemorySource
-from philharmonica.adk.memory.stores.pgvector import PgVectorStore, _row_to_record
-from philharmonica.adk.memory.vector_store import VectorRecord
+from augments.adk.memory import MemoryMetadata, MemorySource
+from augments.adk.memory.stores.pgvector import PgVectorStore, _row_to_record
+from augments.adk.memory.vector_store import VectorRecord
 
 
 @pytest.mark.parametrize("bad", ["", "a" * 65, "bad-name", "123start", "drop;table", "has space"])

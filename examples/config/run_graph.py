@@ -24,9 +24,9 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk.config import load_topology
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.config import load_topology
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

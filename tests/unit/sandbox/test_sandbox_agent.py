@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities import CompactionCapability
-from philharmonica.adk.sandbox.runner_integration.concurrency_guard import (
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities import CompactionCapability
+from augments.adk.sandbox.runner_integration.concurrency_guard import (
     SandboxConcurrencyGuard,
 )
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.permissions import User
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.permissions import User
 
 
 class TestConstruction:
@@ -73,7 +73,7 @@ class TestConcurrencyGuard:
 
 class TestIsAlsoAnAgent:
     def test_isinstance_agent(self) -> None:
-        from philharmonica.adk.agents.agent import Agent
+        from augments.adk.agents.agent import Agent
 
         agent = SandboxAgent(name="coder")
         assert isinstance(agent, Agent)

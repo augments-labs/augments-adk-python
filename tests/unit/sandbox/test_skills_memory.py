@@ -6,18 +6,18 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SkillsConfigError
-from philharmonica.adk.sandbox.capabilities.memory import (
+from augments.adk.exceptions.exceptions import SkillsConfigError
+from augments.adk.sandbox.capabilities.memory import (
     MemoryCapability,
     MemoryGenerateConfig,
     MemoryReadConfig,
 )
-from philharmonica.adk.sandbox.capabilities.skills import (
+from augments.adk.sandbox.capabilities.skills import (
     LocalDirLazySkillSource,
     Skill,
     SkillsCapability,
 )
-from philharmonica.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.manifest import Manifest
 
 
 class TestSkillsConfig:

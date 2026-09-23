@@ -1,14 +1,14 @@
-"""Tests for ``philharmonica.adk.sandbox.memory.prompts``."""
+"""Tests for ``augments.adk.sandbox.memory.prompts``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.memory.prompts import (
+from augments.adk.sandbox.memory.prompts import (
     render_memory_consolidation_prompt,
     render_memory_read_prompt,
     render_rollout_extraction_prompt,
     render_rollout_extraction_user_prompt,
 )
-from philharmonica.adk.sandbox.memory.storage import ConsolidationInputSelection, ConsolidationSelectionItem
+from augments.adk.sandbox.memory.storage import ConsolidationInputSelection, ConsolidationSelectionItem
 
 
 def test_render_rollout_extraction_prompt_includes_required_sections() -> None:

@@ -28,7 +28,7 @@ import asyncio
 import logging
 import os
 
-from philharmonica.adk.mcp import MCPConnectionError, MCPServerSse, MCPServerSseParams
+from augments.adk.mcp import MCPConnectionError, MCPServerSse, MCPServerSseParams
 
 logger = logging.getLogger(__name__)
 

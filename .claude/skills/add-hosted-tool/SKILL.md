@@ -17,7 +17,7 @@ shapes or zero-knob single-provider markers — those use
 
 ## 1. Define the subclass
 
-In `src/philharmonica/adk/tools/hosted/` (base: `hosted_tool.py`), add the
+In `src/augments/adk/tools/hosted/` (base: `hosted_tool.py`), add the
 concrete class:
 
 - `@dataclass(kw_only=True)`, inheriting `HostedTool`.

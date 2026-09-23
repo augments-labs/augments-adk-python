@@ -7,9 +7,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.config import SandboxRunConfig
+from augments.adk.run.config import RunConfig
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.config import SandboxRunConfig
 
 
 def _make_session() -> Any:
@@ -40,9 +40,9 @@ class TestSandboxBracketDetection:
         # returns without touching the stack.
         import contextlib
 
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_open_sandbox_bracket
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_open_sandbox_bracket
 
         plain_agent = Agent(name="plain", system_prompt="hi")
         config = RunConfig()
@@ -64,8 +64,8 @@ class TestSandboxBracketDetection:
         """SandboxAgent triggers the bracket; session.start() runs."""
         import contextlib
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_open_sandbox_bracket
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_open_sandbox_bracket
 
         session = _make_session()
         client = _make_client(session)
@@ -89,9 +89,9 @@ class TestSandboxBracketDetection:
         """Plain Agent + run_config.sandbox: bracket opens."""
         import contextlib
 
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_open_sandbox_bracket
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_open_sandbox_bracket
 
         session = _make_session()
         client = _make_client(session)
@@ -116,9 +116,9 @@ class TestSandboxAgentDefaultManifestMerge:
     async def test_default_manifest_falls_through(self) -> None:
         import contextlib
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_open_sandbox_bracket
-        from philharmonica.adk.types.sandbox.manifest import Manifest
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_open_sandbox_bracket
+        from augments.adk.types.sandbox.manifest import Manifest
 
         session = _make_session()
         client = _make_client(session)
@@ -151,13 +151,13 @@ class TestCapabilityToolMerging:
         """After the sandbox bracket opens, the agent clone has cap tools."""
         import contextlib
 
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import (
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import (
             _maybe_clone_agent_with_capability_tools,
             _maybe_open_sandbox_bracket,
         )
-        from philharmonica.adk.sandbox.agent import SandboxAgent
-        from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
+        from augments.adk.sandbox.agent import SandboxAgent
+        from augments.adk.sandbox.capabilities.shell import ShellCapability
 
         session = _make_session()
         client = _make_client(session)
@@ -187,9 +187,9 @@ class TestCapabilityToolMerging:
 
     @pytest.mark.asyncio
     async def test_no_sandbox_returns_agent_unchanged(self) -> None:
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.runner import _maybe_clone_agent_with_capability_tools
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.runner import _maybe_clone_agent_with_capability_tools
 
         agent = Agent(name="plain", system_prompt="hi")
         run_context: RunContext[None] = RunContext.make(None)
@@ -218,8 +218,8 @@ class TestSandboxUsageOnRunResult:
         """
         from unittest.mock import patch
 
-        from philharmonica.adk.run.runner import Runner
-        from philharmonica.adk.types.responses.llm_response import LLMResponse, LLMResponseText
+        from augments.adk.run.runner import Runner
+        from augments.adk.types.responses.llm_response import LLMResponse, LLMResponseText
 
         session = _make_session()
         client = _make_client(session)
@@ -235,19 +235,19 @@ class TestSandboxUsageOnRunResult:
 
         with (
             patch(
-                "philharmonica.adk.run.loop.call_llm",
+                "augments.adk.run.loop.call_llm",
                 new=AsyncMock(side_effect=_fake_call_llm),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+                "augments.adk.run.runner.run_blocking_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+                "augments.adk.run.runner.run_parallel_input_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
             patch(
-                "philharmonica.adk.run.runner.run_output_guardrails",
+                "augments.adk.run.runner.run_output_guardrails",
                 new=AsyncMock(return_value=[]),
             ),
         ):

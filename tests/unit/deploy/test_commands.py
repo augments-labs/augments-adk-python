@@ -6,7 +6,7 @@ import sys
 
 import pytest
 
-from philharmonica.adk.deploy.commands import (
+from augments.adk.deploy.commands import (
     CommandResult,
     DeployCommandFailed,
     DeployToolMissing,

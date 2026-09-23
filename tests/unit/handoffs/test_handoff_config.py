@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-from philharmonica.adk.handoffs.handoff_strategy import HandoffStrategy
+from augments.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.handoffs.handoff_strategy import HandoffStrategy
 
 
 def test_last_n_strategy_without_window_is_rejected() -> None:

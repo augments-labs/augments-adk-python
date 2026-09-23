@@ -32,15 +32,15 @@ import asyncio
 import logging
 from typing import Any
 
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
-from philharmonica.adk.graphs.interrupt import GraphResume, Interrupt, request_human_input
-from philharmonica.adk.graphs.result import GraphRunResultStreaming, GraphRunStatus
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.graphs import Graph
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.events import GRAPH_END, NODE_INTERRUPT
+from augments.adk.graphs.interrupt import GraphResume, Interrupt, request_human_input
+from augments.adk.graphs.result import GraphRunResultStreaming, GraphRunStatus
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

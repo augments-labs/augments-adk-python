@@ -18,7 +18,7 @@ The relationship: `Session → (extraction) → Memory → (injection) → Conte
 ### TemporaryMemory (prototyping)
 
 ```python
-from philharmonica.adk.memory import TemporaryMemory
+from augments.adk.memory import TemporaryMemory
 
 memory = TemporaryMemory()
 entry = await memory.add("User prefers dark mode", namespace="user:123")
@@ -28,7 +28,7 @@ results = await memory.search("dark mode", namespace="user:123")
 ### SQLiteMemory (production)
 
 ```python
-from philharmonica.adk.memory import SQLiteMemory
+from augments.adk.memory import SQLiteMemory
 
 memory = SQLiteMemory(path="memory.db")
 entry = await memory.add("User prefers dark mode", namespace="user:123")
@@ -43,8 +43,8 @@ await memory.close()
 Inject relevant memories into the agent's context before execution:
 
 ```python
-from philharmonica.adk import Agent, Runner
-from philharmonica.adk.memory import TemporaryMemory, MemoryConfig
+from augments.adk import Agent, Runner
+from augments.adk.memory import TemporaryMemory, MemoryConfig
 
 memory = TemporaryMemory()
 # Pre-populate with knowledge
@@ -65,7 +65,7 @@ result = await Runner.arun(agent, "Hello!", memory=config)
 Extract knowledge from conversations after each run:
 
 ```python
-from philharmonica.adk.memory import MemoryConfig, LLMExtractor
+from augments.adk.memory import MemoryConfig, LLMExtractor
 
 config = MemoryConfig(
     memory=memory,
@@ -102,8 +102,8 @@ result = await (
 Give agents explicit tool access to memory:
 
 ```python
-from philharmonica.adk import Agent
-from philharmonica.adk.memory import TemporaryMemory, MemoryTool
+from augments.adk import Agent
+from augments.adk.memory import TemporaryMemory, MemoryTool
 
 memory = TemporaryMemory()
 agent = Agent(
@@ -123,7 +123,7 @@ This expands into three tools:
 Implement the `MemoryExtractor` protocol:
 
 ```python
-from philharmonica.adk.memory import MemoryExtractor, ExtractionResult
+from augments.adk.memory import MemoryExtractor, ExtractionResult
 
 class RuleBasedExtractor:
     async def extract(self, messages, *, namespace):
@@ -141,7 +141,7 @@ class RuleBasedExtractor:
 ## Metadata & Filtering
 
 ```python
-from philharmonica.adk.memory import MemoryMetadata, MemorySource, MemorySearchFilter
+from augments.adk.memory import MemoryMetadata, MemorySource, MemorySearchFilter
 
 # Add with metadata
 await memory.add(
@@ -172,7 +172,7 @@ results = await memory.search(
 Control where memories appear in the prompt:
 
 ```python
-from philharmonica.adk.memory import MemoryConfig, MemoryInjectionPosition
+from augments.adk.memory import MemoryConfig, MemoryInjectionPosition
 
 # As a developer message (default)
 config = MemoryConfig(

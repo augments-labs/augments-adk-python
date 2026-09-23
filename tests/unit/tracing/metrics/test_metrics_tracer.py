@@ -4,9 +4,9 @@ from typing import Any
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
-from philharmonica.adk.tracing.metrics.instruments import Instruments
-from philharmonica.adk.tracing.metrics.tracer import MetricsTracer
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.tracing.metrics.instruments import Instruments
+from augments.adk.tracing.metrics.tracer import MetricsTracer
+from augments.adk.types.tracing.span_data import (
     CustomSpanData,
     FunctionSpanData,
     GenerationSpanData,
@@ -38,10 +38,10 @@ def test_generation_span_records_tokens_after_data_rebind():
     tracer, reader = _tracer_and_reader()
     with tracer.generation_span(GenerationSpanData(model="gpt")) as span:
         span.data = dataclasses.replace(span.data, usage={"input_tokens": 8, "output_tokens": 2})
-    pts = _points(reader, "philharmonica.llm.tokens.prompt")
+    pts = _points(reader, "augments.llm.tokens.prompt")
     assert pts[0].sum == 8
     assert pts[0].attributes["model"] == "gpt"
-    completion_pts = _points(reader, "philharmonica.llm.tokens.completion")
+    completion_pts = _points(reader, "augments.llm.tokens.completion")
     assert completion_pts[0].sum == 2
 
 
@@ -50,7 +50,7 @@ def test_custom_swarm_turn_records_duration():
     payload = SwarmTurnSpanData(swarm_id="s", index=1, member="alice", status="success").export()
     with tracer.custom_span(CustomSpanData(name="swarm.turn.1", data=payload)):
         pass
-    pts = _points(reader, "philharmonica.swarm.turn.duration_ms")
+    pts = _points(reader, "augments.swarm.turn.duration_ms")
     assert pts[0].attributes == {"member": "alice", "status": "success"}
 
 
@@ -59,27 +59,27 @@ def test_custom_graph_node_records_duration():
     payload = GraphNodeSpanData(graph_id="g", node_name="planner", status="success").export()
     with tracer.custom_span(CustomSpanData(name="graph.node.planner", data=payload)):
         pass
-    pts = _points(reader, "philharmonica.graph.node.duration_ms")
+    pts = _points(reader, "augments.graph.node.duration_ms")
     assert pts[0].attributes == {"node": "planner", "status": "success"}
 
 
 def test_agent_and_function_spans_record_through_tracer():
-    from philharmonica.adk.types.tracing.span_data import AgentSpanData
+    from augments.adk.types.tracing.span_data import AgentSpanData
 
     tracer, reader = _tracer_and_reader()
     with tracer.agent_span(AgentSpanData(name="triage")):
         pass
     with tracer.function_span(FunctionSpanData(name="lookup")):
         pass
-    agent_pts = _points(reader, "philharmonica.agent.turn.duration_ms")
+    agent_pts = _points(reader, "augments.agent.turn.duration_ms")
     assert agent_pts[0].attributes == {"agent": "triage"}
-    tool_pts = _points(reader, "philharmonica.agent.tool.calls")
+    tool_pts = _points(reader, "augments.agent.tool.calls")
     assert tool_pts[0].attributes == {"tool": "lookup", "status": "success"}
 
 
 def test_metric_span_does_not_touch_contextvar():
-    from philharmonica.adk.tracing.spans import current_span
-    from philharmonica.adk.types.tracing.span_data import AgentSpanData
+    from augments.adk.tracing.spans import current_span
+    from augments.adk.types.tracing.span_data import AgentSpanData
 
     tracer, _reader = _tracer_and_reader()
     assert current_span() is None
@@ -94,7 +94,7 @@ def test_finish_is_idempotent_does_not_double_record():
     span.start()
     span.finish()
     span.finish()  # second finish must be a no-op
-    tool_pts = _points(reader, "philharmonica.agent.tool.calls")
+    tool_pts = _points(reader, "augments.agent.tool.calls")
     assert len(tool_pts) == 1
     assert tool_pts[0].value == 1  # counted once, not twice
 
@@ -104,10 +104,10 @@ def test_explicit_finish_inside_with_block_records_once():
     with tracer.generation_span(GenerationSpanData(model="gpt")) as span:
         span.data = dataclasses.replace(span.data, usage={"input_tokens": 8, "output_tokens": 2})
         span.finish()  # explicit close; __exit__ then calls finish() again
-    prompt_pts = _points(reader, "philharmonica.llm.tokens.prompt")
+    prompt_pts = _points(reader, "augments.llm.tokens.prompt")
     assert len(prompt_pts) == 1
     assert prompt_pts[0].sum == 8  # not 16
-    request_pts = _points(reader, "philharmonica.llm.requests")
+    request_pts = _points(reader, "augments.llm.requests")
     assert request_pts[0].value == 1  # one request, not two
 
 
@@ -117,12 +117,12 @@ def test_unknown_kind_records_nothing():
         pass
     # no handoff instrument exists; verify every instrument is silent
     for name in (
-        "philharmonica.agent.turn.duration_ms",
-        "philharmonica.llm.tokens.prompt",
-        "philharmonica.llm.tokens.completion",
-        "philharmonica.llm.requests",
-        "philharmonica.agent.tool.calls",
-        "philharmonica.graph.node.duration_ms",
-        "philharmonica.swarm.turn.duration_ms",
+        "augments.agent.turn.duration_ms",
+        "augments.llm.tokens.prompt",
+        "augments.llm.tokens.completion",
+        "augments.llm.requests",
+        "augments.agent.tool.calls",
+        "augments.graph.node.duration_ms",
+        "augments.swarm.turn.duration_ms",
     ):
         assert _points(reader, name) == []

@@ -21,7 +21,7 @@ import pytest
 # Skip module if the optional `a2a` extra is missing.
 pytest.importorskip("a2a.client")
 
-from philharmonica.adk.a2a import (
+from augments.adk.a2a import (
     A2AAgent,
     A2AClient,
     A2AContinuationToken,
@@ -30,7 +30,7 @@ from philharmonica.adk.a2a import (
     A2AStreamEvent,
     A2ATaskStatus,
 )
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 
 
 @pytest.fixture
@@ -72,7 +72,7 @@ class TestA2AAgentOnlyContract:
 
     async def test_arun_typeerror_points_at_runner(self) -> None:
         local = Agent(name="local", system_prompt="Be helpful.")
-        with pytest.raises(TypeError, match=r"philharmonica\.adk\.run\.runner\.Runner"):
+        with pytest.raises(TypeError, match=r"augments\.adk\.run\.runner\.Runner"):
             await A2ARunner.arun(local, "hi")  # type: ignore[arg-type]
 
     async def test_arun_rejects_plain_object(self) -> None:
@@ -215,10 +215,10 @@ class TestAdapterUsesRunner:
     """The graph adapter now dispatches via ``A2ARunner.arun``."""
 
     async def test_adapter_invokes_runner(self, remote: A2AAgent, mock_client: MagicMock) -> None:
-        from philharmonica.adk.a2a import A2AExecutableAdapter
-        from philharmonica.adk.orchestration.executable import ExecutableInput
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.a2a import A2AExecutableAdapter
+        from augments.adk.orchestration.executable import ExecutableInput
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.run.context import RunContext
 
         mock_client.send_message.return_value = A2ARunResult(text="adapter answer", task_id="t1", context_id="c1")
         adapter = A2AExecutableAdapter(agent=remote)
@@ -252,7 +252,7 @@ class TestAsToolUsesRunner:
 class TestLazyClientInitViaRunner:
     async def test_arun_constructs_client_on_first_call(self) -> None:
         agent = A2AAgent(name="remote", url="http://example.com")
-        with patch("philharmonica.adk.a2a.a2a_agent.A2AClient") as mock_cls:
+        with patch("augments.adk.a2a.a2a_agent.A2AClient") as mock_cls:
             mock_inst = MagicMock(spec=A2AClient)
             mock_inst.send_message = AsyncMock(return_value=A2ARunResult(text="ok", task_id="t1", context_id="c1"))
             mock_cls.return_value = mock_inst

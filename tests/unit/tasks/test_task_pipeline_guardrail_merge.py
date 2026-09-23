@@ -10,8 +10,8 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentInputGuardrail,
@@ -19,10 +19,10 @@ from philharmonica.adk.agents.agent_guardrails import (
     AgentOutputGuardrail,
     AgentOutputGuardrailData,
 )
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task
+from augments.adk.types.run.run_result import RunResult
 
 
 def _agent() -> Agent:
@@ -72,7 +72,7 @@ async def test_task_guardrails_appended_after_run_config_guardrails() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         await Runner.arun_task(task, run_config=base_config)
@@ -104,7 +104,7 @@ async def test_no_replace_when_no_task_overrides() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         await Runner.arun_task(task, run_config=base_config)
@@ -135,7 +135,7 @@ async def test_duplicate_guardrails_not_deduplicated() -> None:
             context=RunContext.make(None),
         )
 
-    from philharmonica.adk.run.runner import Runner
+    from augments.adk.run.runner import Runner
 
     with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake_arun)):
         await Runner.arun_task(task, run_config=base_config)

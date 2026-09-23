@@ -19,9 +19,9 @@ available as the multi-provider convenience path.
 ## Quick Start
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.openai import OpenAIResponsesLLM
-from philharmonica.adk.run import Runner
+from augments.adk.agents import Agent
+from augments.adk.llms.openai import OpenAIResponsesLLM
+from augments.adk.run import Runner
 
 agent = Agent(
     name="Assistant",
@@ -35,7 +35,7 @@ result = await Runner.arun(agent, "Hello!")
 Chat Completions:
 
 ```python
-from philharmonica.adk.llms.openai import OpenAIChatCompletionsLLM
+from augments.adk.llms.openai import OpenAIChatCompletionsLLM
 
 agent = Agent(
     name="Assistant",
@@ -93,7 +93,7 @@ instance one step above.
 `LLMConfig` covers everything that is not OpenAI-specific:
 
 ```python
-from philharmonica.adk.llms import LLMConfig
+from augments.adk.llms import LLMConfig
 
 config = LLMConfig(
     temperature=0.3,
@@ -115,7 +115,7 @@ straight from `openai.types.*`:
 
 ```python
 from openai.types.shared_params import Reasoning
-from philharmonica.adk.llms.openai import OpenAIResponsesConfig
+from augments.adk.llms.openai import OpenAIResponsesConfig
 
 cfg = OpenAIResponsesConfig(
     # --- generic LLMConfig fields ---
@@ -156,7 +156,7 @@ cfg = OpenAIResponsesConfig(
 ## Chat Completions configuration
 
 ```python
-from philharmonica.adk.llms.openai import OpenAIChatCompletionsConfig
+from augments.adk.llms.openai import OpenAIChatCompletionsConfig
 
 cfg = OpenAIChatCompletionsConfig(
     temperature=0.3,
@@ -262,7 +262,7 @@ Chat Completions call; on Responses the final
 ## Retry policy
 
 ```python
-from philharmonica.adk.types.llms.retry_policy import LLMRetryPolicy
+from augments.adk.types.llms.retry_policy import LLMRetryPolicy
 
 config = LLMConfig(
     retry_policy=LLMRetryPolicy(

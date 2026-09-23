@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.dependencies``."""
+"""Tests for ``augments.adk.sandbox.session.dependencies``."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.sandbox.session.dependencies import (
+from augments.adk.sandbox.session.dependencies import (
     Dependencies,
     DependenciesBindingError,
     DependenciesClosedError,

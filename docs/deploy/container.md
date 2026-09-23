@@ -1,6 +1,6 @@
 # Container Contract
 
-Every container image the `philharmonica deploy` tooling generates satisfies a
+Every container image the `augments deploy` tooling generates satisfies a
 uniform contract. Kubernetes, Cloud Run, ECS, App Runner, and Lambda all use
 the same image shape; only the orchestration layer differs.
 
@@ -21,7 +21,7 @@ Every generated image:
 
 ## Generated Dockerfile
 
-`philharmonica deploy init` writes this Dockerfile at the build context root:
+`augments deploy init` writes this Dockerfile at the build context root:
 
 ```dockerfile
 FROM python:3.12-slim
@@ -44,7 +44,7 @@ ENV PORT=8080 \
     AGENT_REF=my_pkg.agents:assistant
 EXPOSE 8080
 
-CMD ["sh", "-c", "philharmonica serve --agent \"$AGENT_REF\" --host 0.0.0.0 --port \"$PORT\""]
+CMD ["sh", "-c", "augments serve --agent \"$AGENT_REF\" --host 0.0.0.0 --port \"$PORT\""]
 ```
 
 The `CMD` passes `--host 0.0.0.0` so the serving process binds all interfaces
@@ -54,12 +54,12 @@ App Runner all do this).
 
 ## Package installation
 
-`philharmonica-adk` is published to PyPI, so the generated
+`augments-adk` is published to PyPI, so the generated
 `requirements.txt` references the package by name together with the extras
 the deployment needs:
 
 ```
-philharmonica-adk[serve,a2a]
+augments-adk[serve,a2a]
 ```
 
 Two alternatives when the image build should not resolve from PyPI:
@@ -68,13 +68,13 @@ Two alternatives when the image build should not resolve from PyPI:
 
 ```
 # Copy the wheel into the build context first, then reference it:
-philharmonica-adk[serve,a2a] @ file:///app/philharmonica_adk-<ver>-py3-none-any.whl
+augments-adk[serve,a2a] @ file:///app/augments_adk-<ver>-py3-none-any.whl
 ```
 
 **VCS install** (useful during active development):
 
 ```
-philharmonica-adk[serve,a2a] @ git+https://github.com/augments-labs/philharmonica-adk-python@<ref>
+augments-adk[serve,a2a] @ git+https://github.com/augments-labs/augments-adk-python@<ref>
 ```
 
 The generated `requirements.txt` ships with a comment explaining these
@@ -86,13 +86,13 @@ Once `requirements.txt` is ready, build and push the image:
 
 ```bash
 # Generate artifacts
-philharmonica deploy init \
+augments deploy init \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest
 
-# requirements.txt installs philharmonica-adk from PyPI as generated;
+# requirements.txt installs augments-adk from PyPI as generated;
 # edit it first only to pin, vendor a wheel, or use a VCS URL, then:
-philharmonica deploy build \
+augments deploy build \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --push
@@ -114,7 +114,7 @@ docker run -p 8080:8080 \
   registry.example.com/my-agent:latest
 
 # Name the secret keys the manifests should surface
-philharmonica deploy init \
+augments deploy init \
   --agent my_pkg.agents:assistant \
   --image registry.example.com/my-agent:latest \
   --env-key OPENAI_API_KEY \

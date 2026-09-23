@@ -1,7 +1,7 @@
 """Tests for ``A2AAgent`` — peer-agent class for remote A2A endpoints.
 
 ``A2AAgent`` is pure config — execution lives on
-``philharmonica.adk.a2a.a2a_runner.A2ARunner`` (covered by
+``augments.adk.a2a.a2a_runner.A2ARunner`` (covered by
 ``test_a2a_runner.py``). This module verifies:
 
 * ``A2AAgent`` is a ``BaseAgent`` subclass with the expected inherited
@@ -22,13 +22,13 @@ import pytest
 # Skip the entire module if the optional `a2a` extra is missing.
 pytest.importorskip("a2a.client")
 
-from philharmonica.adk.a2a import (
+from augments.adk.a2a import (
     A2AAgent,
     A2AClient,
     A2ARunResult,
 )
-from philharmonica.adk.agents import BaseAgent
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.agents import BaseAgent
+from augments.adk.tools.function_tool import FunctionTool
 
 
 class TestA2AAgentConstruction:
@@ -114,7 +114,7 @@ class TestLazyClientInit:
         # The client is built lazily — construction stays synchronous
         # so a developer can build an A2AAgent without an event loop.
         agent = A2AAgent(name="remote", url="http://example.com")
-        with patch("philharmonica.adk.a2a.a2a_agent.A2AClient") as mock_cls:
+        with patch("augments.adk.a2a.a2a_agent.A2AClient") as mock_cls:
             mock_cls.return_value = MagicMock(spec=A2AClient)
             client_a = await agent.get_client()
             client_b = await agent.get_client()
@@ -124,7 +124,7 @@ class TestLazyClientInit:
 
     async def test_close_releases_client(self) -> None:
         agent = A2AAgent(name="remote", url="http://example.com")
-        with patch("philharmonica.adk.a2a.a2a_agent.A2AClient") as mock_cls:
+        with patch("augments.adk.a2a.a2a_agent.A2AClient") as mock_cls:
             mock_client = MagicMock(spec=A2AClient)
             mock_client.close = AsyncMock()
             mock_cls.return_value = mock_client

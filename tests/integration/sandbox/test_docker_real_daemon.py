@@ -34,7 +34,7 @@ pytestmark = [
 
 @pytest.mark.asyncio
 async def test_full_lifecycle_against_real_daemon() -> None:
-    from philharmonica.adk.sandbox.clients.docker import (
+    from augments.adk.sandbox.clients.docker import (
         DockerSandboxClient,
         DockerSandboxClientOptions,
     )

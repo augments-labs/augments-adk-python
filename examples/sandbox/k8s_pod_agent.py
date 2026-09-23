@@ -5,7 +5,7 @@ namespace, runs the agent's shell commands inside it via
 kubernetes.stream.
 
 Prerequisites:
-- ``pip install 'philharmonica-adk[sandbox-k8s]'``
+- ``pip install 'augments-adk[sandbox-k8s]'``
 - A reachable cluster (``kubectl cluster-info`` should succeed); the
   client loads in-cluster config if running inside a pod, else
   ``~/.kube/config``.
@@ -26,17 +26,17 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.k8s import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.k8s import (
     K8sPodSandboxClient,
     K8sSandboxClientOptions,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.types.sandbox.resource_limits import SandboxResourceLimits
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.types.sandbox.resource_limits import SandboxResourceLimits
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

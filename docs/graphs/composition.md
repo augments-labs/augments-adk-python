@@ -22,7 +22,7 @@ With `Graph`, all four are nodes. The graph loop manages the rest.
 ## The `Executable[TContext]` Seam
 
 Every node in a `Graph` holds an `Executable[TContext]`. This is the single
-abstract base class in `src/philharmonica/adk/orchestration/executable.py` that every
+abstract base class in `src/augments/adk/orchestration/executable.py` that every
 composable primitive plugs into.
 
 ```
@@ -46,7 +46,7 @@ any other node.
 `Agent`, `Swarm`, and plain callables are NOT subclasses of `Executable`. The
 "Agent = config" rule forbids adding an `invoke()` method to `Agent` or `Swarm`
 — they are immutable configuration, not execution engines. Three thin adapters in
-`src/philharmonica/adk/graphs/adapters.py` bridge the gap.
+`src/augments/adk/graphs/adapters.py` bridge the gap.
 
 ### `AgentExecutable`
 
@@ -54,8 +54,8 @@ Wraps an `Agent`. Calls `Runner.arun(agent, prompt, context=..., run_config=...)
 and converts the resulting `RunResult` into a `NodeResult`.
 
 ```python
-from philharmonica.adk.graphs import AgentExecutable
-from philharmonica.adk.agents.agent import Agent
+from augments.adk.graphs import AgentExecutable
+from augments.adk.agents.agent import Agent
 
 triage = Agent(name="triage", system_prompt="Classify the request.")
 
@@ -76,8 +76,8 @@ Wraps a `Swarm`. Calls `Runner.arun_swarm(swarm, prompt, context=..., run_config
 and converts the resulting `SwarmRunResult` into a `NodeResult`.
 
 ```python
-from philharmonica.adk.graphs import SwarmExecutable
-from philharmonica.adk.swarms import Swarm
+from augments.adk.graphs import SwarmExecutable
+from augments.adk.swarms import Swarm
 
 research_swarm = Swarm(
     members=(researcher, critic),
@@ -96,7 +96,7 @@ The full `SwarmRunResult` is preserved on `NodeResult.output`. Downstream edge
 predicates can inspect it:
 
 ```python
-from philharmonica.adk.swarms.result import SwarmRunResult
+from augments.adk.swarms.result import SwarmRunResult
 
 def research_succeeded(result):
     swarm_result = result.output
@@ -123,8 +123,8 @@ The heuristic for detecting the full-input variant: arity == 2 AND the first
 parameter is annotated as `ExecutableInput` (or the string `"ExecutableInput"`).
 
 ```python
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.context import RunContext
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.context import RunContext
 
 # 0-arg: pure producer
 graph.node("timestamp", lambda: "2025-04-18T00:00:00Z")
@@ -176,10 +176,10 @@ composes four node types in one pipeline:
 import asyncio
 import logging
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs import Graph, Merge
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs import Graph, Merge
+from augments.adk.run.runner import Runner
+from augments.adk.swarms import (
     Swarm,
     LLMHandoffPolicy,
     ExplicitDoneTermination,

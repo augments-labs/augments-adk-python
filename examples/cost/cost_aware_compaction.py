@@ -33,13 +33,13 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.context.context_config import CompactionConfig, ContextManagementConfig
-from philharmonica.adk.context.context_manager import effective_compaction_config
-from philharmonica.adk.run import Runner
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.budgets import TenantBudget
+from augments.adk.context.context_config import CompactionConfig, ContextManagementConfig
+from augments.adk.context.context_manager import effective_compaction_config
+from augments.adk.run import Runner
+from augments.adk.run.config import RunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

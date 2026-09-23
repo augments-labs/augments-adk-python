@@ -3,8 +3,8 @@ from typing import Any
 from opentelemetry.sdk.metrics import MeterProvider
 from opentelemetry.sdk.metrics.export import InMemoryMetricReader
 
-from philharmonica.adk.tracing.metrics.instruments import Instruments
-from philharmonica.adk.types.tracing.span_data import GenerationSpanData
+from augments.adk.tracing.metrics.instruments import Instruments
+from augments.adk.types.tracing.span_data import GenerationSpanData
 
 
 def _meter_and_reader():
@@ -33,10 +33,10 @@ def test_cost_metric_recorded_with_tenant_dimension():
         ),
         error=False,
     )
-    cost_pts = _points(reader, "philharmonica.llm.cost.usd")
+    cost_pts = _points(reader, "augments.llm.cost.usd")
     assert cost_pts[0].sum == 0.03
     assert cost_pts[0].attributes == {"model": "gpt", "tenant": "acme"}
-    tok_pts = _points(reader, "philharmonica.llm.tokens.prompt")
+    tok_pts = _points(reader, "augments.llm.tokens.prompt")
     assert tok_pts[0].attributes == {"model": "gpt", "tenant": "acme"}
 
 
@@ -47,7 +47,7 @@ def test_cost_metric_not_recorded_when_none():
         GenerationSpanData(model="gpt", usage={"input_tokens": 5, "output_tokens": 2}, cost_usd=None, tenant_id=None),
         error=False,
     )
-    cost_pts = _points(reader, "philharmonica.llm.cost.usd")
+    cost_pts = _points(reader, "augments.llm.cost.usd")
     assert len(cost_pts) == 0
 
 
@@ -58,9 +58,9 @@ def test_untenanted_span_has_no_tenant_dimension():
         GenerationSpanData(model="m", usage={"input_tokens": 1, "output_tokens": 1}, cost_usd=None, tenant_id=None),
         error=False,
     )
-    tok_pts = _points(reader, "philharmonica.llm.tokens.prompt")
+    tok_pts = _points(reader, "augments.llm.tokens.prompt")
     assert tok_pts[0].attributes == {"model": "m"}
-    req_pts = _points(reader, "philharmonica.llm.requests")
+    req_pts = _points(reader, "augments.llm.requests")
     assert req_pts[0].attributes == {"model": "m", "status": "success"}
 
 
@@ -71,7 +71,7 @@ def test_request_counter_includes_tenant_when_present():
         GenerationSpanData(model="gpt4", usage=None, cost_usd=None, tenant_id="tenant-x"),
         error=True,
     )
-    req_pts = _points(reader, "philharmonica.llm.requests")
+    req_pts = _points(reader, "augments.llm.requests")
     assert req_pts[0].attributes == {"model": "gpt4", "tenant": "tenant-x", "status": "error"}
 
 
@@ -82,6 +82,6 @@ def test_cost_zero_is_recorded():
         GenerationSpanData(model="m", usage=None, cost_usd=0.0, tenant_id=None),
         error=False,
     )
-    cost_pts = _points(reader, "philharmonica.llm.cost.usd")
+    cost_pts = _points(reader, "augments.llm.cost.usd")
     assert len(cost_pts) == 1
     assert cost_pts[0].sum == 0.0

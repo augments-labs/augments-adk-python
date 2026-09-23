@@ -6,7 +6,7 @@ panel), **developer-chosen mode resolution**, and **ADK-first-class
 event vocabulary** (HITL, budgets, cache, context, turn boundaries,
 streaming markers, typed retries).
 
-Philharmonica = "work of art". Verbose output is where that promise lives
+Augments = "work of art". Verbose output is where that promise lives
 on the terminal.
 
 ## Quick start
@@ -15,7 +15,7 @@ on the terminal.
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, Runner, RunConfig, VerboseConfig
+from augments.adk import Agent, Runner, RunConfig, VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +44,7 @@ to a file. No code changes required across environments.
 
 | Backend | When it runs | What it looks like | Stability |
 |---|---|---|---|
-| `line` | Always safe; picked in non-TTY, CI, `NO_COLOR`, `TERM=dumb`, or when Rich isn't installed | One coloured line per event on stderr | Byte-for-byte stable — the original Philharmonica verbose output |
+| `line` | Always safe; picked in non-TTY, CI, `NO_COLOR`, `TERM=dumb`, or when Rich isn't installed | One coloured line per event on stderr | Byte-for-byte stable — the original Augments verbose output |
 | `panel` | Interactive TTY + Rich installed + not CI | Bordered Rich panels per logical block (📋 Task, 🤖 Agent, 🔧 Tool, ✅ Final Answer) with **event-kind border colours** and a live-updating streaming panel | CrewAI-faithful — mirrors `ConsoleFormatter` verbatim |
 
 Select explicitly with `VerboseConfig(mode=...)`:
@@ -133,8 +133,8 @@ and whether the payload (tool args, LLM message bodies, guardrail
 results) is shown.
 
 ```python
-from philharmonica.adk.verbose import VerboseConfig, EventStyle
-from philharmonica.adk.verbose.config import EVENT_TOOL_START, EVENT_LLM_START
+from augments.adk.verbose import VerboseConfig, EventStyle
+from augments.adk.verbose.config import EVENT_TOOL_START, EVENT_LLM_START
 
 cfg = VerboseConfig()
 cfg.styles[EVENT_TOOL_START] = EventStyle(
@@ -149,8 +149,8 @@ Set `Agent.verbose` to override the run-level config for one agent.
 Useful in multi-agent swarms to make one agent loud and another silent.
 
 ```python
-from philharmonica.adk import Agent
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk import Agent
+from augments.adk.verbose import VerboseConfig
 
 coordinator = Agent(name="Coordinator", llm="gpt-4o", verbose=VerboseConfig())
 summariser = Agent(
@@ -287,7 +287,7 @@ Task boundary panels add these events around each top-level run:
 
 Per-chunk LLM streaming drives the Live widget via the
 `emit_stream_chunk` free function plus a `ContextVar` bridge in
-`philharmonica.adk.verbose.run_bridge`.
+`augments.adk.verbose.run_bridge`.
 
 ### Reserved Style Entries
 

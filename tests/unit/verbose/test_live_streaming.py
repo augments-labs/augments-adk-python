@@ -17,8 +17,8 @@ from unittest import mock
 import pytest
 from rich.console import Console
 
-from philharmonica.adk.verbose.config import VerboseConfig
-from philharmonica.adk.verbose.panel_renderer import (
+from augments.adk.verbose.config import VerboseConfig
+from augments.adk.verbose.panel_renderer import (
     PanelRenderer,
     _stream_title_and_border,
     _truncate_stream_text,

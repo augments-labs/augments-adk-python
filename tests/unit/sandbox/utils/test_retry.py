@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.sandbox.utils.retry``."""
+"""Tests for ``augments.adk.sandbox.utils.retry``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.sandbox.utils.retry import (
+from augments.adk.sandbox.utils.retry import (
     TRANSIENT_HTTP_STATUS_CODES,
     BackoffStrategy,
     exception_chain_contains_type,

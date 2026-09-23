@@ -6,7 +6,7 @@ from typing import override
 
 import pytest
 
-from philharmonica.adk.llms import Embedder, Embedding, EmbeddingLRUCache
+from augments.adk.llms import Embedder, Embedding, EmbeddingLRUCache
 
 
 class _CountingEmbedder(Embedder):

@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import (
+from augments.adk.exceptions.exceptions import (
     SnapshotError,
     SnapshotPersistError,
     SnapshotRestoreError,
 )
-from philharmonica.adk.sandbox.snapshot.local_store import LocalSnapshotStore
-from philharmonica.adk.types.sandbox.snapshot import SnapshotRef
+from augments.adk.sandbox.snapshot.local_store import LocalSnapshotStore
+from augments.adk.types.sandbox.snapshot import SnapshotRef
 
 
 @pytest.fixture
@@ -171,7 +171,7 @@ class TestSaveFailureCleanup:
         def _boom(src: object, dst: object) -> None:
             raise original_error
 
-        monkeypatch.setattr("philharmonica.adk.sandbox.snapshot.local_store.os.replace", _boom)
+        monkeypatch.setattr("augments.adk.sandbox.snapshot.local_store.os.replace", _boom)
 
         with pytest.raises(SnapshotPersistError) as exc_info:
             await store.save(snapshot_id="snap-fail", data=BytesIO(b"payload"))
@@ -196,7 +196,7 @@ class TestSaveFailureCleanup:
         def _unlink_boom(self: Path, *, missing_ok: bool = False) -> None:
             raise OSError("permission denied removing temp file")
 
-        monkeypatch.setattr("philharmonica.adk.sandbox.snapshot.local_store.os.replace", _boom)
+        monkeypatch.setattr("augments.adk.sandbox.snapshot.local_store.os.replace", _boom)
         monkeypatch.setattr(Path, "unlink", _unlink_boom)
 
         # A secondary OSError during cleanup must be swallowed: callers still

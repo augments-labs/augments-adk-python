@@ -1,9 +1,9 @@
-"""Tests for ``PhilharmonicaRestateService``
+"""Tests for ``AugmentsRestateService``
 and ``RestateHumanReply``.
 
 Covers:
 - ``RestateHumanReply`` is a frozen dataclass with the expected fields.
-- ``PhilharmonicaRestateService`` exposes a ``wait_for_human_reply`` method.
+- ``AugmentsRestateService`` exposes a ``wait_for_human_reply`` method.
 
 All tests skip when ``restate`` is not installed.
 """
@@ -16,7 +16,7 @@ import pytest
 
 restate = pytest.importorskip("restate")
 # isort: split
-from philharmonica.adk.workflows.restate.service import PhilharmonicaRestateService, RestateHumanReply
+from augments.adk.workflows.restate.service import AugmentsRestateService, RestateHumanReply
 
 # ---------------------------------------------------------------------------
 # Tests: RestateHumanReply
@@ -60,18 +60,18 @@ class TestRestateHumanReplyDataclass:
 
 
 # ---------------------------------------------------------------------------
-# Tests: PhilharmonicaRestateService
+# Tests: AugmentsRestateService
 # ---------------------------------------------------------------------------
 
 
-class TestPhilharmonicaRestateServiceExists:
-    def test_philharmonica_restate_service_exists(self) -> None:
-        """``PhilharmonicaRestateService`` is importable and has ``wait_for_human_reply``."""
-        assert hasattr(PhilharmonicaRestateService, "wait_for_human_reply")
+class TestAugmentsRestateServiceExists:
+    def test_augments_restate_service_exists(self) -> None:
+        """``AugmentsRestateService`` is importable and has ``wait_for_human_reply``."""
+        assert hasattr(AugmentsRestateService, "wait_for_human_reply")
 
     def test_wait_for_human_reply_is_callable(self) -> None:
         """``wait_for_human_reply`` is callable on the class."""
-        assert callable(PhilharmonicaRestateService.wait_for_human_reply)
+        assert callable(AugmentsRestateService.wait_for_human_reply)
 
     async def test_wait_for_human_reply_resolves_promise(self) -> None:
         """``wait_for_human_reply`` awaits ctx.promise(name).value() and builds a reply."""
@@ -89,7 +89,7 @@ class TestPhilharmonicaRestateServiceExists:
         ctx = MagicMock()
         ctx.promise = MagicMock(return_value=promise_mock)
 
-        service = PhilharmonicaRestateService()
+        service = AugmentsRestateService()
         reply = await service.wait_for_human_reply(ctx, promise_name="approval")
 
         ctx.promise.assert_called_once_with("approval")
@@ -109,7 +109,7 @@ class TestPhilharmonicaRestateServiceExists:
         ctx = MagicMock()
         ctx.promise = MagicMock(return_value=promise_mock)
 
-        service = PhilharmonicaRestateService()
+        service = AugmentsRestateService()
         await service.wait_for_human_reply(ctx)
 
         ctx.promise.assert_called_once_with("human_reply")

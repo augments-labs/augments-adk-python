@@ -1,7 +1,7 @@
 """Tests for external tool call result flow via RunState.provide_result()."""
 
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.tools.deferred_tool import (
+from augments.adk.run.state import RunState
+from augments.adk.tools.deferred_tool import (
     DeferredToolCall,
     DeferredToolRequests,
 )

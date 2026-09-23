@@ -16,9 +16,9 @@ from google.genai.types import (
     Part,
 )
 
-from philharmonica.adk.llms.gemini.gemini_converter import GeminiConverter
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.items import ItemHelpers
+from augments.adk.llms.gemini.gemini_converter import GeminiConverter
+from augments.adk.tools import function_tool
+from augments.adk.types.items import ItemHelpers
 
 
 class TestItemsToContents:
@@ -268,7 +268,7 @@ class TestResponseToLLMResponse:
         )
         llm_resp = GeminiConverter.response_to_llm_response(resp)
         # First part is thinking, second is text.
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.types.responses.llm_response import (
             LLMResponseReasoning,
             LLMResponseText,
         )
@@ -326,7 +326,7 @@ class TestThoughtSignatureRoundTrip:
         )
         llm_resp = GeminiConverter.response_to_llm_response(resp)
         reasoning = llm_resp.response[0]
-        from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+        from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
         assert isinstance(reasoning, LLMResponseReasoning)
         encrypted = reasoning.encrypted_content

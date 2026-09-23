@@ -14,7 +14,7 @@ import copy
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowConfig,
     FlowEvent,
@@ -29,8 +29,8 @@ from philharmonica.adk.flows import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.executor import FlowExecutor
-from philharmonica.adk.run.runner import Runner
+from augments.adk.flows.executor import FlowExecutor
+from augments.adk.run.runner import Runner
 
 
 class _CounterState(BaseModel):
@@ -137,7 +137,7 @@ class TestFlowStepGuardrails:
         assert result.status == "failed"
 
     async def test_guardrail_raising_unrelated_exception_wraps_as_governance_error(self) -> None:
-        from philharmonica.adk.flows.exceptions import FlowStepGovernanceError
+        from augments.adk.flows.exceptions import FlowStepGovernanceError
 
         def buggy(ctx: FlowStepContext[_CounterState]) -> FlowStepGuardrailVerdict:
             raise KeyError("buggy guardrail")

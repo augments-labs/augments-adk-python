@@ -24,8 +24,8 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk.config import load_topology
-from philharmonica.adk.run import Runner
+from augments.adk.config import load_topology
+from augments.adk.run import Runner
 
 logger = logging.getLogger(__name__)
 

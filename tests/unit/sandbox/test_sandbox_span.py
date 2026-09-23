@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.tracing.spans import sandbox_span
+from augments.adk.tracing.spans import sandbox_span
 
 
 class TestSandboxSpanFactory:

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, FlowExecutable, flow_listen, flow_start
-from philharmonica.adk.graphs.adapters import to_executable
-from philharmonica.adk.orchestration.executable import ExecutableInput
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
+from augments.adk.flows import Flow, FlowExecutable, flow_listen, flow_start
+from augments.adk.graphs.adapters import to_executable
+from augments.adk.orchestration.executable import ExecutableInput
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
 
 
 class _State(BaseModel):

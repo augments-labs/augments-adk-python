@@ -8,10 +8,10 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from philharmonica.adk.skills import Skill, SkillDiscoveryToolset, SkillMetadata
-from philharmonica.adk.skills.discovery import resource_is_file_path
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
+from augments.adk.skills import Skill, SkillDiscoveryToolset, SkillMetadata
+from augments.adk.skills.discovery import resource_is_file_path
+from augments.adk.tools import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
 
 
 async def _invoke(tool: FunctionTool, args: dict[str, str]) -> str:

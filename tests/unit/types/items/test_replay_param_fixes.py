@@ -19,13 +19,13 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING, Any, cast
 
-from philharmonica.adk.types.items import (
+from augments.adk.types.items import (
     ItemHelpers,
     MCPApprovalRequestItem,
     MessageOutputItem,
     ReasoningItem,
 )
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseProviderItem,
     LLMResponseReasoning,
@@ -33,7 +33,7 @@ from philharmonica.adk.types.responses.llm_response import (
 )
 
 if TYPE_CHECKING:
-    from philharmonica.adk.types.input import LLMInputContentItem
+    from augments.adk.types.input import LLMInputContentItem
 
 message_to_items = ItemHelpers.message_to_run_items
 response_to_items = ItemHelpers.response_to_run_items

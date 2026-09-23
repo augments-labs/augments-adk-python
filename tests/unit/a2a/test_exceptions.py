@@ -3,7 +3,7 @@
 The tests below verify three properties:
 
 1. Every A2A error is catchable via the framework-wide
-   ``PhilharmonicaError`` base — callers should never need to enumerate
+   ``AugmentsError`` base — callers should never need to enumerate
    provider exception types separately.
 2. ``A2ATaskCancelledError`` is a subclass of ``A2ATaskError``, so
    callers that don't care about the cancel/fail distinction can
@@ -12,7 +12,7 @@ The tests below verify three properties:
    typed attributes, not buried inside the message string.
 """
 
-from philharmonica.adk.a2a import (
+from augments.adk.a2a import (
     A2AError,
     A2AProtocolError,
     A2ATaskCancelledError,
@@ -20,15 +20,15 @@ from philharmonica.adk.a2a import (
     A2ATaskInterruptedError,
     A2ATransportError,
 )
-from philharmonica.adk.exceptions import PhilharmonicaError
+from augments.adk.exceptions import AugmentsError
 
 
 class TestErrorHierarchy:
-    def test_a2a_error_extends_philharmonica_error(self) -> None:
-        # PhilharmonicaError is the framework-wide root; A2A errors must
+    def test_a2a_error_extends_augments_error(self) -> None:
+        # AugmentsError is the framework-wide root; A2A errors must
         # surface through it so callers can catch one class to handle
         # all framework failures.
-        assert issubclass(A2AError, PhilharmonicaError)
+        assert issubclass(A2AError, AugmentsError)
 
     def test_transport_protocol_task_all_extend_a2a_error(self) -> None:
         for cls in (A2ATransportError, A2AProtocolError, A2ATaskError):
@@ -37,10 +37,10 @@ class TestErrorHierarchy:
     def test_cancelled_extends_task_error(self) -> None:
         assert issubclass(A2ATaskCancelledError, A2ATaskError)
 
-    def test_catchable_as_philharmonica_error(self) -> None:
+    def test_catchable_as_augments_error(self) -> None:
         try:
             raise A2ATransportError("connection refused")
-        except PhilharmonicaError as exc:
+        except AugmentsError as exc:
             assert "connection refused" in str(exc)
 
 
@@ -138,11 +138,11 @@ class TestStateTyping:
         # annotation is the narrowed literal.
         import typing
 
-        from philharmonica.adk.a2a.exceptions import A2ATaskError
+        from augments.adk.a2a.exceptions import A2ATaskError
 
         hints = typing.get_type_hints(A2ATaskError)
         # The annotation must NOT be plain str; it must reference A2ATaskStateLiteral.
-        from philharmonica.adk.a2a.a2a_continuation_token import A2ATaskStateLiteral
+        from augments.adk.a2a.a2a_continuation_token import A2ATaskStateLiteral
 
         assert hints.get("state") is A2ATaskStateLiteral, (
             f"A2ATaskError.state should be A2ATaskStateLiteral, got {hints.get('state')}"
@@ -151,10 +151,10 @@ class TestStateTyping:
     def test_interrupted_error_state_is_narrowed_literal_not_bare_str(self) -> None:
         import typing
 
-        from philharmonica.adk.a2a.exceptions import A2ATaskInterruptedError
+        from augments.adk.a2a.exceptions import A2ATaskInterruptedError
 
         hints = typing.get_type_hints(A2ATaskInterruptedError)
-        from philharmonica.adk.a2a.a2a_continuation_token import A2ATaskStateLiteral
+        from augments.adk.a2a.a2a_continuation_token import A2ATaskStateLiteral
 
         assert hints.get("state") is A2ATaskStateLiteral, (
             f"A2ATaskInterruptedError.state should be A2ATaskStateLiteral, got {hints.get('state')}"

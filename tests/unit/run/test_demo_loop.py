@@ -13,8 +13,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.demo import run_demo_loop
+from augments.adk.agents.agent import Agent
+from augments.adk.run.demo import run_demo_loop
 
 
 class _InputFeeder:
@@ -66,9 +66,9 @@ def _fake_streaming_result(
     """
     from unittest.mock import MagicMock
 
-    from philharmonica.adk.run.stream import RunResultStreaming
-    from philharmonica.adk.types.items.items import MessageOutputItem
-    from philharmonica.adk.types.responses.llm_response import LLMResponseText
+    from augments.adk.run.stream import RunResultStreaming
+    from augments.adk.types.items.items import MessageOutputItem
+    from augments.adk.types.responses.llm_response import LLMResponseText
 
     assistant_item = MessageOutputItem(
         raw=[LLMResponseText(text=assistant_text)],
@@ -101,7 +101,7 @@ class TestRunDemoLoopControl:
         feeder = _InputFeeder(["exit"])
 
         arun_mock = AsyncMock()
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 0
@@ -113,7 +113,7 @@ class TestRunDemoLoopControl:
         feeder = _InputFeeder(["QUIT"])
 
         arun_mock = AsyncMock()
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 0
@@ -127,7 +127,7 @@ class TestRunDemoLoopControl:
             raise EOFError
 
         arun_mock = AsyncMock()
-        with patch("builtins.input", eof_input), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", eof_input), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 0
@@ -141,7 +141,7 @@ class TestRunDemoLoopControl:
             raise KeyboardInterrupt
 
         arun_mock = AsyncMock()
-        with patch("builtins.input", interrupt_input), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", interrupt_input), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 0
@@ -153,7 +153,7 @@ class TestRunDemoLoopControl:
         feeder = _InputFeeder(["", "   ", "\t", "exit"])
 
         arun_mock = AsyncMock()
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 0
@@ -181,7 +181,7 @@ class TestRunDemoLoopStatePropagation:
         with (
             patch("builtins.input", feeder),
             patch(
-                "philharmonica.adk.run.demo.Runner.arun",
+                "augments.adk.run.demo.Runner.arun",
                 new=AsyncMock(return_value=result),
             ) as arun_mock,
         ):
@@ -219,7 +219,7 @@ class TestRunDemoLoopStatePropagation:
         )
 
         arun_mock = AsyncMock(side_effect=[result1, result2])
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=False)
 
         assert arun_mock.call_count == 2
@@ -250,7 +250,7 @@ class TestRunDemoLoopStatePropagation:
         )
 
         arun_mock = AsyncMock(side_effect=[result1, result2])
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent_a, stream=False)
 
         # First call uses agent_a, second uses agent_b (post-handoff).
@@ -273,9 +273,9 @@ class TestRunResultStreamingToInputList:
     """
 
     def test_prepends_string_user_prompt(self) -> None:
-        from philharmonica.adk.run.stream import RunResultStreaming
-        from philharmonica.adk.types.items.items import MessageOutputItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.run.stream import RunResultStreaming
+        from augments.adk.types.items.items import MessageOutputItem
+        from augments.adk.types.responses.llm_response import LLMResponseText
 
         agent = Agent(name="demo", system_prompt="hi")
         result = RunResultStreaming(
@@ -292,9 +292,9 @@ class TestRunResultStreamingToInputList:
         assert items[1]["role"] == "assistant"
 
     def test_prepends_list_user_prompt(self) -> None:
-        from philharmonica.adk.run.stream import RunResultStreaming
-        from philharmonica.adk.types.items.items import MessageOutputItem
-        from philharmonica.adk.types.responses.llm_response import LLMResponseText
+        from augments.adk.run.stream import RunResultStreaming
+        from augments.adk.types.items.items import MessageOutputItem
+        from augments.adk.types.responses.llm_response import LLMResponseText
 
         agent = Agent(name="demo", system_prompt="hi")
         prior_history: list[Any] = [
@@ -351,7 +351,7 @@ class TestRunDemoLoopStreamingState:
         )
 
         arun_mock = AsyncMock(side_effect=arun_side_effect)
-        with patch("builtins.input", feeder), patch("philharmonica.adk.run.demo.Runner.arun", arun_mock):
+        with patch("builtins.input", feeder), patch("augments.adk.run.demo.Runner.arun", arun_mock):
             await run_demo_loop(agent, stream=True)
 
         assert arun_mock.call_count == 2

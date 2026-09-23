@@ -14,14 +14,14 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import LocalArtifactError
-from philharmonica.adk.sandbox.session.materialization.local import (
+from augments.adk.exceptions.exceptions import LocalArtifactError
+from augments.adk.sandbox.session.materialization.local import (
     materialize_local_dir,
     materialize_local_file,
     resolve_host_source,
 )
-from philharmonica.adk.types.sandbox.entries import LocalDir, LocalFile
-from philharmonica.adk.types.sandbox.workspace_paths import SandboxPathGrant
+from augments.adk.types.sandbox.entries import LocalDir, LocalFile
+from augments.adk.types.sandbox.workspace_paths import SandboxPathGrant
 
 
 def _recording_session() -> Any:

@@ -39,13 +39,13 @@ connection. PostgreSQL 13+ is required (`gen_random_uuid()` built-in).
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-postgres]'
+pip install 'augments-adk[checkpointer-postgres]'
 ```
 
 **Construct:**
 
 ```python
-from philharmonica.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
+from augments.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
 
 # conninfo is a libpq connection string.
 checkpointer = PostgresSwarmCheckpointer("host=db port=5432 dbname=runs user=app")
@@ -72,14 +72,14 @@ mid-run eviction causing a spurious `CheckpointConflictError`.
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-redis]'
+pip install 'augments-adk[checkpointer-redis]'
 ```
 
 **Construct — pre-configured client:**
 
 ```python
 from redis.asyncio import Redis
-from philharmonica.adk.swarms.checkpointers.redis import RedisSwarmCheckpointer
+from augments.adk.swarms.checkpointers.redis import RedisSwarmCheckpointer
 
 client = Redis.from_url("redis://cache:6379/0")
 checkpointer = RedisSwarmCheckpointer(client=client)
@@ -111,13 +111,13 @@ The boto3 client is synchronous; all S3 calls are wrapped in
 **Install:**
 
 ```bash
-pip install 'philharmonica-adk[checkpointer-s3]'
+pip install 'augments-adk[checkpointer-s3]'
 ```
 
 **Construct:**
 
 ```python
-from philharmonica.adk.swarms.checkpointers.s3 import S3SwarmCheckpointer
+from augments.adk.swarms.checkpointers.s3 import S3SwarmCheckpointer
 
 checkpointer = S3SwarmCheckpointer(
     bucket="my-swarm-checkpoints",
@@ -144,7 +144,7 @@ on process restart.
 **Construct (Redis hot, S3 cold):**
 
 ```python
-from philharmonica.adk.swarms.checkpointers.tiered import TieredSwarmCheckpointer
+from augments.adk.swarms.checkpointers.tiered import TieredSwarmCheckpointer
 
 checkpointer = TieredSwarmCheckpointer(
     hot=redis_checkpointer,
@@ -178,7 +178,7 @@ The protocol:
 **Reload-and-retry pattern:**
 
 ```python
-from philharmonica.adk.exceptions import CheckpointConflictError
+from augments.adk.exceptions import CheckpointConflictError
 
 MAX_RETRIES = 3
 
@@ -207,8 +207,8 @@ HITL-parked state reaches the checkpoint store even when a turn suspends
 before completing. No manual `swarm.hooks` wiring is needed.
 
 ```python
-from philharmonica.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
-from philharmonica.adk.run.runner import Runner
+from augments.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
+from augments.adk.run.runner import Runner
 
 checkpointer = PostgresSwarmCheckpointer(
     "host=db dbname=runs user=app",

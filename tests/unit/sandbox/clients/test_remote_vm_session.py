@@ -10,7 +10,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.sandbox.clients.hosted.remote_vm.remote_vm_session import (
+from augments.adk.sandbox.clients.hosted.remote_vm.remote_vm_session import (
     RemoteVMSandboxSession,
 )
 
@@ -166,7 +166,7 @@ class TestPortResolution:
 class TestErrorMapping:
     @pytest.mark.asyncio
     async def test_403_raises_config_error(self) -> None:
-        from philharmonica.adk.exceptions.exceptions import SandboxConfigurationError
+        from augments.adk.exceptions.exceptions import SandboxConfigurationError
 
         http = _mock_http(response_json={"error": "forbidden"}, status=403)
         s = RemoteVMSandboxSession(
@@ -188,7 +188,7 @@ class TestMalformedPayloadRaises:
 
     @pytest.mark.asyncio
     async def test_read_raises_when_no_data_key(self) -> None:
-        from philharmonica.adk.exceptions.exceptions import ExecTransportError
+        from augments.adk.exceptions.exceptions import ExecTransportError
 
         http = _mock_http(response_json={"unexpected": "shape"})
         s = RemoteVMSandboxSession(http_client=http, session_endpoint="https://api/sessions/abc")
@@ -205,7 +205,7 @@ class TestMalformedPayloadRaises:
 
     @pytest.mark.asyncio
     async def test_persist_workspace_raises_on_missing_archive(self) -> None:
-        from philharmonica.adk.exceptions.exceptions import ExecTransportError
+        from augments.adk.exceptions.exceptions import ExecTransportError
 
         http = _mock_http(response_json={})  # no archive_b64 key
         s = RemoteVMSandboxSession(http_client=http, session_endpoint="https://api/sessions/abc")

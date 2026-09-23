@@ -34,9 +34,9 @@ import asyncio
 import logging
 from dataclasses import dataclass
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig, RunContext, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig, RunContext, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

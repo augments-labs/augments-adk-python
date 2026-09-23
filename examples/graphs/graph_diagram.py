@@ -11,8 +11,8 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.visualization import render_dot, render_mermaid
+from augments.adk.graphs.graph import Graph
+from augments.adk.visualization import render_dot, render_mermaid
 
 logger = logging.getLogger(__name__)
 

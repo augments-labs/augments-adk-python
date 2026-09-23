@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.rag.chunking import TextChunker
-from philharmonica.adk.rag.document import LoadedDocument
+from augments.adk.rag.chunking import TextChunker
+from augments.adk.rag.document import LoadedDocument
 
 
 def test_blank_text_yields_no_chunks() -> None:

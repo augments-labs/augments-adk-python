@@ -33,8 +33,8 @@ and feeding the result back in as the next user prompt.
 
 ```python
 import asyncio
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.demo import run_demo_loop
+from augments.adk.agents.agent import Agent
+from augments.adk.run.demo import run_demo_loop
 
 agent = Agent(
     name="assistant",
@@ -67,5 +67,5 @@ asyncio.run(run_demo_loop(agent, stream=False))
 ## See also
 
 - `examples/agent_patterns/demo_loop.py` — runnable example
-- `src/philharmonica/adk/run/demo.py` — implementation
+- `src/augments/adk/run/demo.py` — implementation
 - `tests/unit/run/test_demo_loop.py` — behavior tests

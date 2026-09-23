@@ -4,28 +4,28 @@ Provider-agnostic wire and history types shared across the framework.
 
 ## Run items
 
-- `philharmonica.adk.types.RunItem`
-- `philharmonica.adk.types.RunItemBase`
-- `philharmonica.adk.types.UserItem`
-- `philharmonica.adk.types.SystemItem`
-- `philharmonica.adk.types.MessageOutputItem`
-- `philharmonica.adk.types.ReasoningItem`
-- `philharmonica.adk.types.ToolCallItem`
-- `philharmonica.adk.types.ToolCallOutputItem`
-- `philharmonica.adk.types.ToolApprovalItem`
-- `philharmonica.adk.types.ToolSearchCallItem`
-- `philharmonica.adk.types.ToolSearchOutputItem`
-- `philharmonica.adk.types.HandoffCallItem`
-- `philharmonica.adk.types.HandoffOutputItem`
-- `philharmonica.adk.types.MCPListToolsItem`
-- `philharmonica.adk.types.MCPApprovalRequestItem`
-- `philharmonica.adk.types.MCPApprovalResponseItem`
-- `philharmonica.adk.types.CompactionItem`
-- `philharmonica.adk.types.ItemHelpers`
+- `augments.adk.types.RunItem`
+- `augments.adk.types.RunItemBase`
+- `augments.adk.types.UserItem`
+- `augments.adk.types.SystemItem`
+- `augments.adk.types.MessageOutputItem`
+- `augments.adk.types.ReasoningItem`
+- `augments.adk.types.ToolCallItem`
+- `augments.adk.types.ToolCallOutputItem`
+- `augments.adk.types.ToolApprovalItem`
+- `augments.adk.types.ToolSearchCallItem`
+- `augments.adk.types.ToolSearchOutputItem`
+- `augments.adk.types.HandoffCallItem`
+- `augments.adk.types.HandoffOutputItem`
+- `augments.adk.types.MCPListToolsItem`
+- `augments.adk.types.MCPApprovalRequestItem`
+- `augments.adk.types.MCPApprovalResponseItem`
+- `augments.adk.types.CompactionItem`
+- `augments.adk.types.ItemHelpers`
 
 ## Result
 
-### `philharmonica.adk.types.RunResult`
+### `augments.adk.types.RunResult`
 
 Result of a completed (or interrupted) agent run. Contains the final
 output (if the run completed), all items generated during execution,
@@ -85,45 +85,45 @@ if result.requires_action:
 
 ## Built-in tool call and result types
 
-- `philharmonica.adk.types.WebSearchToolCall`
-- `philharmonica.adk.types.WebSearchToolCallResult`
-- `philharmonica.adk.types.WebSearchResult`
-- `philharmonica.adk.types.FileSearchToolCall`
-- `philharmonica.adk.types.FileSearchToolCallResult`
-- `philharmonica.adk.types.FileSearchResult`
-- `philharmonica.adk.types.CodeInterpreterToolCall`
-- `philharmonica.adk.types.CodeInterpreterToolCallResult`
-- `philharmonica.adk.types.CodeInterpreterOutput`
-- `philharmonica.adk.types.ComputerToolCall`
-- `philharmonica.adk.types.ComputerToolCallResult`
-- `philharmonica.adk.types.ComputerAction`
-- `philharmonica.adk.types.ImageGenerationToolCall`
-- `philharmonica.adk.types.ImageGenerationToolCallResult`
-- `philharmonica.adk.types.ShellToolCall`
-- `philharmonica.adk.types.ShellToolCallResult`
-- `philharmonica.adk.types.ApplyPatchToolCall`
-- `philharmonica.adk.types.ApplyPatchToolCallResult`
-- `philharmonica.adk.types.ToolSearchToolCall`
-- `philharmonica.adk.types.ToolSearchToolCallResult`
-- `philharmonica.adk.types.ToolSearchResultEntry`
-- `philharmonica.adk.types.MCPListTools`
-- `philharmonica.adk.types.MCPListToolsTool`
-- `philharmonica.adk.types.MCPCall`
-- `philharmonica.adk.types.MCPCallResult`
-- `philharmonica.adk.types.MCPApprovalRequest`
-- `philharmonica.adk.types.MCPApprovalResponse`
+- `augments.adk.types.WebSearchToolCall`
+- `augments.adk.types.WebSearchToolCallResult`
+- `augments.adk.types.WebSearchResult`
+- `augments.adk.types.FileSearchToolCall`
+- `augments.adk.types.FileSearchToolCallResult`
+- `augments.adk.types.FileSearchResult`
+- `augments.adk.types.CodeInterpreterToolCall`
+- `augments.adk.types.CodeInterpreterToolCallResult`
+- `augments.adk.types.CodeInterpreterOutput`
+- `augments.adk.types.ComputerToolCall`
+- `augments.adk.types.ComputerToolCallResult`
+- `augments.adk.types.ComputerAction`
+- `augments.adk.types.ImageGenerationToolCall`
+- `augments.adk.types.ImageGenerationToolCallResult`
+- `augments.adk.types.ShellToolCall`
+- `augments.adk.types.ShellToolCallResult`
+- `augments.adk.types.ApplyPatchToolCall`
+- `augments.adk.types.ApplyPatchToolCallResult`
+- `augments.adk.types.ToolSearchToolCall`
+- `augments.adk.types.ToolSearchToolCallResult`
+- `augments.adk.types.ToolSearchResultEntry`
+- `augments.adk.types.MCPListTools`
+- `augments.adk.types.MCPListToolsTool`
+- `augments.adk.types.MCPCall`
+- `augments.adk.types.MCPCallResult`
+- `augments.adk.types.MCPApprovalRequest`
+- `augments.adk.types.MCPApprovalResponse`
 
 ## Tracing span data
 
-- `philharmonica.adk.types.SpanData`
-- `philharmonica.adk.types.AgentSpanData`
-- `philharmonica.adk.types.FunctionSpanData`
-- `philharmonica.adk.types.GenerationSpanData`
-- `philharmonica.adk.types.GuardrailSpanData`
-- `philharmonica.adk.types.HandoffSpanData`
-- `philharmonica.adk.types.ResponseSpanData`
-- `philharmonica.adk.types.CustomSpanData`
-- `philharmonica.adk.types.AnySpanData`
+- `augments.adk.types.SpanData`
+- `augments.adk.types.AgentSpanData`
+- `augments.adk.types.FunctionSpanData`
+- `augments.adk.types.GenerationSpanData`
+- `augments.adk.types.GuardrailSpanData`
+- `augments.adk.types.HandoffSpanData`
+- `augments.adk.types.ResponseSpanData`
+- `augments.adk.types.CustomSpanData`
+- `augments.adk.types.AnySpanData`
 
 How the type layers fit together is explained in the
 [Types guide](../../types/types.md).

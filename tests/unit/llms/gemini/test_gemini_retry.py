@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest
 from google.genai.errors import APIError, ClientError, ServerError
 
-from philharmonica.adk.llms.gemini.gemini_retry import gemini_exception_to_kind
+from augments.adk.llms.gemini.gemini_retry import gemini_exception_to_kind
 
 
 def _client_error(status: int) -> ClientError:

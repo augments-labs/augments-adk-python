@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.tools.toolsets.mcp_toolset.MCPToolset``.
+"""Tests for ``augments.adk.tools.toolsets.mcp_toolset.MCPToolset``.
 
 Regression coverage for the HITL approval-policy forwarding contract:
 ``MCPToolset.requires_approval`` is documented to apply to *every*
@@ -14,8 +14,8 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.tools.toolsets import MCPToolset
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.tools.toolsets import MCPToolset
 
 
 def _server(name: str = "svc") -> Any:

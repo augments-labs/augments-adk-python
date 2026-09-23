@@ -19,17 +19,17 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tracing import Span, set_tracer
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tracing import Span, set_tracer
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
 )
-from philharmonica.adk.types.tracing import (
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,
@@ -149,19 +149,19 @@ async def test_disabled_tracing_emits_zero_spans_even_with_real_tracer() -> None
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):
@@ -185,19 +185,19 @@ async def test_default_runconfig_emits_zero_spans() -> None:
 
     with (
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         ),
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         ),
     ):

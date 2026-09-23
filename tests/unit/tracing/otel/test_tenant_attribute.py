@@ -1,12 +1,12 @@
-"""Tests that philharmonica.tenant.id is emitted on agent and generation spans."""
+"""Tests that augments.tenant.id is emitted on agent and generation spans."""
 
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
-from philharmonica.adk.tracing.otel.otel_tracer import OTelTracer
-from philharmonica.adk.types.tracing.convention import TracingConvention
-from philharmonica.adk.types.tracing.span_data import AgentSpanData, GenerationSpanData
+from augments.adk.tracing.otel.otel_tracer import OTelTracer
+from augments.adk.types.tracing.convention import TracingConvention
+from augments.adk.types.tracing.span_data import AgentSpanData, GenerationSpanData
 
 
 def _exp() -> tuple[TracerProvider, InMemorySpanExporter]:
@@ -22,7 +22,7 @@ def test_tenant_id_emitted_default_convention() -> None:
         pass
     (s,) = e.get_finished_spans()
     assert s.attributes is not None
-    assert s.attributes["philharmonica.tenant.id"] == "acme"
+    assert s.attributes["augments.tenant.id"] == "acme"
 
 
 def test_tenant_id_emitted_openinference_convention() -> None:
@@ -33,7 +33,7 @@ def test_tenant_id_emitted_openinference_convention() -> None:
         pass
     (s,) = e.get_finished_spans()
     assert s.attributes is not None
-    assert s.attributes["philharmonica.tenant.id"] == "acme"
+    assert s.attributes["augments.tenant.id"] == "acme"
 
 
 def test_generation_tenant_id_emitted_default_convention() -> None:
@@ -42,7 +42,7 @@ def test_generation_tenant_id_emitted_default_convention() -> None:
         pass
     (s,) = e.get_finished_spans()
     assert s.attributes is not None
-    assert s.attributes["philharmonica.tenant.id"] == "acme"
+    assert s.attributes["augments.tenant.id"] == "acme"
 
 
 def test_generation_tenant_id_emitted_openinference_convention() -> None:
@@ -53,7 +53,7 @@ def test_generation_tenant_id_emitted_openinference_convention() -> None:
         pass
     (s,) = e.get_finished_spans()
     assert s.attributes is not None
-    assert s.attributes["philharmonica.tenant.id"] == "acme"
+    assert s.attributes["augments.tenant.id"] == "acme"
 
 
 def test_tenant_id_absent_when_unset_default_convention() -> None:
@@ -61,7 +61,7 @@ def test_tenant_id_absent_when_unset_default_convention() -> None:
     with OTelTracer(provider=p).agent_span(AgentSpanData(name="a")):
         pass
     (s,) = e.get_finished_spans()
-    assert "philharmonica.tenant.id" not in (s.attributes or {})
+    assert "augments.tenant.id" not in (s.attributes or {})
 
 
 def test_tenant_id_absent_when_unset_openinference_convention() -> None:
@@ -69,4 +69,4 @@ def test_tenant_id_absent_when_unset_openinference_convention() -> None:
     with OTelTracer(provider=p, convention=TracingConvention.OPENINFERENCE).agent_span(AgentSpanData(name="a")):
         pass
     (s,) = e.get_finished_spans()
-    assert "philharmonica.tenant.id" not in (s.attributes or {})
+    assert "augments.tenant.id" not in (s.attributes or {})

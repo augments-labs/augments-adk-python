@@ -8,10 +8,10 @@ import pytest
 
 pytest.importorskip("psycopg_pool")
 
-from philharmonica.adk.a2a.postgres_task_store import PostgresTaskStore
-from philharmonica.adk.graphs.checkpointers.postgres import PostgresCheckpointer
-from philharmonica.adk.session.postgres_multi_sessions import PostgresMultiSessions
-from philharmonica.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
+from augments.adk.a2a.postgres_task_store import PostgresTaskStore
+from augments.adk.graphs.checkpointers.postgres import PostgresCheckpointer
+from augments.adk.session.postgres_multi_sessions import PostgresMultiSessions
+from augments.adk.swarms.checkpointers.postgres import PostgresSwarmCheckpointer
 
 
 class _FakePool:
@@ -42,7 +42,7 @@ def _pool_owners() -> list[Any]:
         ),
     ]
     try:
-        from philharmonica.adk.memory.stores.pgvector import PgVectorStore
+        from augments.adk.memory.stores.pgvector import PgVectorStore
     except ImportError:
         return owners
     owners.append(

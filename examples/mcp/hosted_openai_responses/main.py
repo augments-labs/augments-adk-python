@@ -36,11 +36,11 @@ import asyncio
 import logging
 import os
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools.hosted import HostedMCPTool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents.agent import Agent
+from augments.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools.hosted import HostedMCPTool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

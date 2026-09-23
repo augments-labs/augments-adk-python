@@ -14,11 +14,11 @@ from __future__ import annotations
 
 import io
 
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.verbose import VerboseConfig
 
 
 async def _identity(text: str) -> str:

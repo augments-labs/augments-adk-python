@@ -74,7 +74,7 @@ if ev["type"] == "graph.node_stream":
     print(ev["graph_path"], ev["node_id"], ev["inner"])
 ```
 
-Constants and event classes are importable from `philharmonica.adk.graphs.events`.
+Constants and event classes are importable from `augments.adk.graphs.events`.
 
 ## Consuming a Stream
 
@@ -84,9 +84,9 @@ Constants and event classes are importable from `philharmonica.adk.graphs.events
 import asyncio
 import logging
 
-from philharmonica.adk.graphs import Graph
-from philharmonica.adk.graphs.events import GRAPH_END, GRAPH_START, NODE_END, NODE_ERROR, NODE_START, NODE_STREAM
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs import Graph
+from augments.adk.graphs.events import GRAPH_END, GRAPH_START, NODE_END, NODE_ERROR, NODE_START, NODE_STREAM
+from augments.adk.run.runner import Runner
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -262,7 +262,7 @@ on `graph.node_end`.
 Combine streaming with checkpoint resume via a profile runner:
 
 ```python
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
 
 cp = InMemoryCheckpointer()
 
@@ -322,6 +322,6 @@ full timeout and retry exception contract.
   `NodeRetriesExhaustedError`.
 - `docs/graphs/composition.md` — nested graphs, fan-out patterns, nested-graph
   streaming contract.
-- `src/philharmonica/adk/graphs/events.py` — discriminator constants + event classes.
-- `src/philharmonica/adk/graphs/result.py` — `GraphRunResultStreaming`, `GraphRunStatus`.
+- `src/augments/adk/graphs/events.py` — discriminator constants + event classes.
+- `src/augments/adk/graphs/result.py` — `GraphRunResultStreaming`, `GraphRunStatus`.
 - `examples/graphs/` — runnable graph examples.

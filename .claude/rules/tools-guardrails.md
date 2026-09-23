@@ -1,8 +1,8 @@
 ---
 paths:
-  - "src/philharmonica/adk/tools/**/*.py"
-  - "src/philharmonica/adk/validators/**/*.py"
-  - "src/philharmonica/adk/agents/**/*.py"
+  - "src/augments/adk/tools/**/*.py"
+  - "src/augments/adk/validators/**/*.py"
+  - "src/augments/adk/agents/**/*.py"
 ---
 
 # Tools, Guardrails & Hosted Tools — CRITICAL

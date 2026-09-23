@@ -5,16 +5,16 @@ import json
 
 import pytest
 
-from philharmonica.adk.exceptions import SessionAppendConflictError
-from philharmonica.adk.session import SessionSettings, SQLiteMultiSessions
-from philharmonica.adk.session.session_event import SessionEvent, create_session_event
-from philharmonica.adk.session.sqlite_session import (
+from augments.adk.exceptions import SessionAppendConflictError
+from augments.adk.session import SessionSettings, SQLiteMultiSessions
+from augments.adk.session.session_event import SessionEvent, create_session_event
+from augments.adk.session.sqlite_session import (
     DEFAULT_MESSAGES_TABLE,
     DEFAULT_SESSIONS_TABLE,
     SQLiteSession,
     get_session_updated_at,
 )
-from philharmonica.adk.session.state import State
+from augments.adk.session.state import State
 
 
 def _user_event(content: str) -> SessionEvent:

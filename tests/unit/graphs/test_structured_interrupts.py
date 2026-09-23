@@ -10,12 +10,12 @@ Tests that:
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.graphs.interrupt import (
     Interrupt,
     NestedAgentInterrupt,
     NestedGraphInterrupt,
 )
-from philharmonica.adk.graphs.result import (
+from augments.adk.graphs.result import (
     GraphRunResult,
     GraphRunResultStreaming,
     GraphRunStatus,

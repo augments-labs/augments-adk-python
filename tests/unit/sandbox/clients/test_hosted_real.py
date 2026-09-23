@@ -15,9 +15,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxStartFailed
-from philharmonica.adk.types.sandbox.manifest import Manifest
-from philharmonica.adk.types.sandbox.session_state import SandboxSessionState
+from augments.adk.exceptions.exceptions import SandboxStartFailed
+from augments.adk.types.sandbox.manifest import Manifest
+from augments.adk.types.sandbox.session_state import SandboxSessionState
 
 # (module_path, client_cls, options_cls, expected_endpoint, id_field).
 PROVIDERS: list[tuple[str, str, str, str, str]] = [
@@ -34,7 +34,7 @@ PROVIDERS: list[tuple[str, str, str, str, str]] = [
 def _import(module_name: str, *names: str) -> tuple[Any, ...]:
     import importlib
 
-    module = importlib.import_module(f"philharmonica.adk.sandbox.clients.hosted.{module_name}")
+    module = importlib.import_module(f"augments.adk.sandbox.clients.hosted.{module_name}")
     return tuple(getattr(module, n) for n in names)
 
 

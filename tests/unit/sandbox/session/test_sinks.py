@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.sandbox.session.sinks``."""
+"""Tests for ``augments.adk.sandbox.session.sinks``."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.sandbox.session import (
+from augments.adk.sandbox.session import (
     CallbackSink,
     ChainedSink,
     EventSink,
@@ -132,7 +132,7 @@ class TestHttpPostSink:
             captured["timeout"] = timeout
             return _FakeResp()
 
-        with patch("philharmonica.adk.sandbox.session.sinks.urlopen", fake_urlopen):
+        with patch("augments.adk.sandbox.session.sinks.urlopen", fake_urlopen):
             sink = HttpPostSink("https://example.invalid/audit")
             await sink.handle(_start_event())
 
@@ -143,7 +143,7 @@ class TestHttpPostSink:
 
     async def test_wraps_transport_errors(self) -> None:
         with patch(
-            "philharmonica.adk.sandbox.session.sinks.urlopen",
+            "augments.adk.sandbox.session.sinks.urlopen",
             side_effect=TimeoutError("slow"),
         ):
             sink = HttpPostSink("https://example.invalid/audit")
@@ -200,7 +200,7 @@ class TestChainedSink:
             def emit(self, record: logging.LogRecord) -> None:
                 records.append(record)
 
-        target_logger = logging.getLogger("philharmonica.adk.sandbox.session.sinks")
+        target_logger = logging.getLogger("augments.adk.sandbox.session.sinks")
         handler = _Capture()
         target_logger.addHandler(handler)
         try:

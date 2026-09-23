@@ -41,8 +41,8 @@ exits. Appropriate for:
 - Single-process demos where crash recovery is not needed.
 
 ```python
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.run.runner import Runner
 
 checkpointer = InMemoryCheckpointer()
 
@@ -61,8 +61,8 @@ and is accessible from multiple processes that open the same file. Use
 for production and crash-recoverable runs.
 
 ```python
-from philharmonica.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
+from augments.adk.run.runner import Runner
 
 checkpointer = SQLiteCheckpointer("runs.db")
 
@@ -161,10 +161,10 @@ import asyncio
 import logging
 import os
 
-from philharmonica.adk.graphs import Graph, GraphConfig
-from philharmonica.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
+from augments.adk.graphs import Graph, GraphConfig
+from augments.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -338,7 +338,7 @@ on resume. The resumed run loads the `cumulative_usage` and `superstep` from
 the checkpoint and continues counting from those values.
 
 ```python
-from philharmonica.adk.graphs import Graph, GraphConfig
+from augments.adk.graphs import Graph, GraphConfig
 
 pipeline = (
     Graph.new("budget-demo")

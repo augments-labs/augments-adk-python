@@ -18,8 +18,8 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM, LiteLLMConfig
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.llms.litellm.litellm_model import LiteLLM, LiteLLMConfig
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # VERIFY partial-usage on stream interruption

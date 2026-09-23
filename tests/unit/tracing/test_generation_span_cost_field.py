@@ -1,6 +1,6 @@
 """Tests for ``cost_usd`` field on ``GenerationSpanData``."""
 
-from philharmonica.adk.types.tracing.span_data import GenerationSpanData
+from augments.adk.types.tracing.span_data import GenerationSpanData
 
 
 def test_generation_span_data_has_cost_usd() -> None:

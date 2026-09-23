@@ -28,11 +28,11 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.skills import Skill
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.run import RunConfig, Runner
+from augments.adk.skills import Skill
+from augments.adk.tools import function_tool
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ def create_skill_directory() -> Path:
 name: code-review
 description: Expert Python code review with security and performance focus
 version: 1.0.0
-author: Philharmonica
+author: Augments
 tags: python, security, performance
 license: MIT
 ---

@@ -6,18 +6,18 @@ from dataclasses import dataclass
 from types import SimpleNamespace
 from typing import Any
 
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.audit.sink import InMemoryAuditSink
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.skills.skill import Skill, SkillGovernance
-from philharmonica.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.agents.middleware import Middleware
+from augments.adk.audit.sink import InMemoryAuditSink
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.skills.skill import Skill, SkillGovernance
+from augments.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 _SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 

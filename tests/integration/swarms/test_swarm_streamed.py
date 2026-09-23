@@ -19,18 +19,18 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import Interrupt, InterruptException
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.swarms.checkpointer import SwarmCheckpoint
-from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import Interrupt, InterruptException
+from augments.adk.run.context import RunContext
+from augments.adk.run.runner import Runner
+from augments.adk.swarms.checkpointer import SwarmCheckpoint
+from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(*, max_turns: int = 1) -> Swarm[Any]:
@@ -59,7 +59,7 @@ class TestSwarmStreamedHappyPath:
             )
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_fake_stream_member_turn),
         ):
             result = await Runner.arun_swarm_streamed(sw, "go")
@@ -97,7 +97,7 @@ class TestSwarmStreamedSuspendPath:
             raise InterruptException(interrupt)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_raise_interrupt),
         ):
             result = await Runner.arun_swarm_streamed(sw, "go")
@@ -120,7 +120,7 @@ class TestSwarmStreamedResumeCycle:
         self,
     ) -> None:
         """Suspend via streamed, persist, resume via streamed — verify the
-        same philharmonica.swarm.id flows through both invocations'
+        same augments.swarm.id flows through both invocations'
         result.state.swarm_id."""
         sw = _make_swarm(max_turns=2)
         ctx: RunContext[None] = RunContext.make(None)
@@ -135,7 +135,7 @@ class TestSwarmStreamedResumeCycle:
             raise InterruptException(interrupt)
 
         with patch(
-            "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+            "augments.adk.run.swarm_loop_streamed._stream_member_turn",
             new=AsyncMock(side_effect=_raise_interrupt),
         ):
             first_result = await Runner.arun_swarm_streamed(sw, "go")
@@ -180,11 +180,11 @@ class TestSwarmStreamedResumeCycle:
         # bindings must be patched for a hermetic test.
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop_streamed._stream_member_turn",
+                "augments.adk.run.swarm_loop_streamed._stream_member_turn",
                 new=AsyncMock(side_effect=_fake_resumed_turn),
             ),
             patch(
-                "philharmonica.adk.run.swarm_resume.run_agent_loop",
+                "augments.adk.run.swarm_resume.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_resumed_turn),
             ),
         ):

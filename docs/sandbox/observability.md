@@ -39,7 +39,7 @@ from the core tracing surface. Spans carry `SandboxSpanData` with
 `backend_id`, `command`, `exit_code`, `duration_ms`,
 `manifest_hash`, `resource_usage`, and `snapshot_id`.
 
-The span data type is exported from `philharmonica.adk.types.tracing.span_data`
+The span data type is exported from `augments.adk.types.tracing.span_data`
 alongside the existing function / generation spans, so OTel exporters
 ingest sandbox spans without configuration changes.
 
@@ -107,9 +107,9 @@ did — pair start/end defensively if you key per-command state on the start.
 Pass a `RunHooks` subclass to `RunConfig`:
 
 ```python
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.types.sandbox.usage import SandboxUsage
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.types.sandbox.usage import SandboxUsage
 
 class SandboxAuditHooks(RunHooks):
     async def on_sandbox_start(self, context, agent, session) -> None:
@@ -154,4 +154,4 @@ See [cost.md](cost.md) for the cost fields (`computed_cost_usd`,
 `billed_cost_usd`) and live billing configuration. See
 [selection.md](selection.md) for cost-aware backend selection.
 
-See `src/philharmonica/adk/sandbox/observability/` for the implementations.
+See `src/augments/adk/sandbox/observability/` for the implementations.

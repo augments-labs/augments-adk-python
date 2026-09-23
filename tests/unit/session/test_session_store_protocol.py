@@ -14,9 +14,9 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.session import SessionSettings, SQLiteMultiSessions
-from philharmonica.adk.session.session_event import SessionEvent, create_session_event
-from philharmonica.adk.types.session import SessionStore
+from augments.adk.session import SessionSettings, SQLiteMultiSessions
+from augments.adk.session.session_event import SessionEvent, create_session_event
+from augments.adk.types.session import SessionStore
 
 # ── Test double ─────────────────────────────────────────────────────────────
 
@@ -215,9 +215,9 @@ async def test_in_memory_multi_add_accumulates() -> None:
 @pytest.mark.asyncio
 async def test_runner_loads_history_from_in_memory_store() -> None:
     """Runner loads session history from InMemorySessionStore identically to SQLiteSession."""
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.types.run import RunResult
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
+    from augments.adk.types.run import RunResult
 
     mem = InMemorySessionStore("runner-load-test")
     await mem.add([_user_event("First"), _assistant_event("Response")])
@@ -237,10 +237,10 @@ async def test_runner_loads_history_from_in_memory_store() -> None:
         )
 
     with (
-        patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-        patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+        patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
     ):
         await Runner.arun(agent, "Second message", session=mem)
 
@@ -256,10 +256,10 @@ async def test_runner_loads_history_from_in_memory_store() -> None:
 @pytest.mark.asyncio
 async def test_runner_saves_events_to_in_memory_store() -> None:
     """Runner appends new events to InMemorySessionStore after the LLM turn."""
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.types.items import ItemHelpers
-    from philharmonica.adk.types.run import RunResult
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
+    from augments.adk.types.items import ItemHelpers
+    from augments.adk.types.run import RunResult
 
     mem = InMemorySessionStore("runner-save-test")
 
@@ -277,10 +277,10 @@ async def test_runner_saves_events_to_in_memory_store() -> None:
         )
 
     with (
-        patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-        patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+        patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
     ):
         await Runner.arun(agent, "Hi!", session=mem)
 
@@ -294,9 +294,9 @@ async def test_runner_saves_events_to_in_memory_store() -> None:
 @pytest.mark.asyncio
 async def test_runner_empty_in_memory_store_keeps_string_input() -> None:
     """Empty InMemorySessionStore leaves the prompt as a plain string."""
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.types.run import RunResult
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
+    from augments.adk.types.run import RunResult
 
     mem = InMemorySessionStore("runner-empty-test")
 
@@ -314,10 +314,10 @@ async def test_runner_empty_in_memory_store_keeps_string_input() -> None:
         )
 
     with (
-        patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-        patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+        patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
     ):
         await Runner.arun(agent, "Hello there", session=mem)
 
@@ -328,9 +328,9 @@ async def test_runner_empty_in_memory_store_keeps_string_input() -> None:
 @pytest.mark.asyncio
 async def test_runner_settings_limit_honoured_on_in_memory_store() -> None:
     """Runner respects settings.limit when loading history from InMemorySessionStore."""
-    from philharmonica.adk.agents.agent import Agent
-    from philharmonica.adk.run.runner import Runner
-    from philharmonica.adk.types.run import RunResult
+    from augments.adk.agents.agent import Agent
+    from augments.adk.run.runner import Runner
+    from augments.adk.types.run import RunResult
 
     mem = InMemorySessionStore("runner-limit-test", settings=SessionSettings(limit=2))
     for i in range(5):
@@ -350,10 +350,10 @@ async def test_runner_settings_limit_honoured_on_in_memory_store() -> None:
         )
 
     with (
-        patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-        patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-        patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+        patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+        patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
     ):
         await Runner.arun(agent, "New", session=mem)
 

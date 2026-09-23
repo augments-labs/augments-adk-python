@@ -28,8 +28,8 @@ A streaming tool is an async generator that yields
 ```python
 from collections.abc import AsyncIterator
 
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.tools import ToolStreamEvent
+from augments.adk.tools import function_tool
+from augments.adk.types.tools import ToolStreamEvent
 
 
 @function_tool(
@@ -58,8 +58,8 @@ When the run is started with `stream=True`, partial events arrive as
 `RunItemStreamEvent` with name `RunItemType.TOOL_PARTIAL_OUTPUT`:
 
 ```python
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.run.stream import RunItemStreamEvent, RunItemType
+from augments.adk.run.runner import Runner
+from augments.adk.run.stream import RunItemStreamEvent, RunItemType
 
 result = Runner.run(agent, "Find docs about streaming.", stream=True)
 

@@ -1,11 +1,11 @@
 # Examples
 
-Example implementations demonstrating Philharmonica Agents patterns. Each example
+Example implementations demonstrating Augments Agents patterns. Each example
 is runnable and focused on a single ADK feature or capability (it may span a
 few files when that one feature needs it).
 
 Heavy, multi-complex-agent application templates live in the separate
-`philharmonica-cookbook-python` repository — not here. The discriminator is purpose:
+`augments-cookbook-python` repository — not here. The discriminator is purpose:
 single-feature demo → `examples/`; full interactive app → the cookbook repo.
 
 Top-level directories: `agent_patterns/`, `skills/`, `handoffs/`,
@@ -142,7 +142,7 @@ offline quality scoring.
 
 | Example | Pattern |
 |---------|---------|
-| `temporal/basic_agent.py` | Agent as a Temporal workflow via `TemporalLLM`, `PhilharmonicaWorkflow`, `PhilharmonicaTemporalPlugin` |
+| `temporal/basic_agent.py` | Agent as a Temporal workflow via `TemporalLLM`, `AugmentsWorkflow`, `AugmentsTemporalPlugin` |
 | `temporal/graph_workflow.py` | Graph HITL interrupt + Temporal signal resume (`workflow.wait_condition`) |
 | `restate/basic_agent.py` | Agent as a Restate durable handler via `RestateLLM` (journaled, replay-safe) + HITL durable promise |
 
@@ -179,4 +179,4 @@ handler) and `temporal/` + `restate/` (durable runtimes — no verbose).
 
 All examples are runnable from the project root (`python examples/<pattern>/<file>.py`). Set up the environment from the root `environment.yaml` (conda). API keys must be configured per the provider docs.
 
-Batch runner: `python examples/run_examples.py` discovers every example, classifies the keys/infrastructure each needs, skips those whose prerequisites are absent, and runs the rest with a per-example timeout. `--list` classifies without running (zero cost); `--auto-mode [--filter <topic>]` runs. `auto_mode.py` exposes `is_auto_mode()` / `input_with_fallback()` / `confirm_with_fallback()` so interactive examples run unattended under `PHILHARMONICA_EXAMPLES_INTERACTIVE_MODE=auto`.
+Batch runner: `python examples/run_examples.py` discovers every example, classifies the keys/infrastructure each needs, skips those whose prerequisites are absent, and runs the rest with a per-example timeout. `--list` classifies without running (zero cost); `--auto-mode [--filter <topic>]` runs. `auto_mode.py` exposes `is_auto_mode()` / `input_with_fallback()` / `confirm_with_fallback()` so interactive examples run unattended under `AUGMENTS_EXAMPLES_INTERACTIVE_MODE=auto`.

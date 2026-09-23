@@ -13,11 +13,11 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.config import build_topology, load_topology
-from philharmonica.adk.exceptions import ConfigParseError, ConfigResolutionError
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.tools import FunctionTool
-from philharmonica.adk.types.config import TopologyConfig
+from augments.adk.config import build_topology, load_topology
+from augments.adk.exceptions import ConfigParseError, ConfigResolutionError
+from augments.adk.handoffs import Handoff
+from augments.adk.tools import FunctionTool
+from augments.adk.types.config import TopologyConfig
 
 
 def _topo(data: dict[str, object]):
@@ -240,7 +240,7 @@ class TestConfigPathSubAgents:
         sub = tmp_path / "sub"
         sub.mkdir()
         (sub / "subtool.py").write_text(
-            'from philharmonica.adk.tools import function_tool\n\n\n@function_tool\ndef ping() -> str:\n    return "pong"\n',
+            'from augments.adk.tools import function_tool\n\n\n@function_tool\ndef ping() -> str:\n    return "pong"\n',
             encoding="utf-8",
         )
         self._write(sub / "worker.json", {"name": "worker", "system_prompt": "p", "tools": ["subtool.ping"]})
@@ -256,8 +256,8 @@ class TestConfigPathSubAgents:
 
 
 def test_topology_with_both_swarm_and_graph_builds_both() -> None:
-    from philharmonica.adk.config import build_topology
-    from philharmonica.adk.types.config import TopologyConfig
+    from augments.adk.config import build_topology
+    from augments.adk.types.config import TopologyConfig
 
     topo = build_topology(
         TopologyConfig.model_validate(

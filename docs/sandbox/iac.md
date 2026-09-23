@@ -44,4 +44,4 @@ calls `apply_iac` before `client.create(...)` and `destroy_iac` on
 exit. The applied env mapping is forwarded into the sandbox's
 container/pod via `options.environment`.
 
-See `src/philharmonica/adk/sandbox/runner_integration/iac_runner.py`.
+See `src/augments/adk/sandbox/runner_integration/iac_runner.py`.

@@ -1,6 +1,6 @@
 """Tests for typed span-data dataclasses."""
 
-from philharmonica.adk.types.tracing import (
+from augments.adk.types.tracing import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

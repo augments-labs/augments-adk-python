@@ -3,7 +3,7 @@
 ## SystemPrompt Construction
 
 ```python
-from philharmonica.adk.prompts import SystemPrompt, SystemPromptTone
+from augments.adk.prompts import SystemPrompt, SystemPromptTone
 
 prompt = SystemPrompt(
     role="You are a senior Python code reviewer specializing in security.",
@@ -33,8 +33,8 @@ The callable receives a single `DynamicSystemPromptData` with:
 Supports sync and async callables:
 
 ```python
-from philharmonica.adk.prompts.system_prompt import DynamicSystemPromptData
-from philharmonica.adk.prompts import SystemPrompt
+from augments.adk.prompts.system_prompt import DynamicSystemPromptData
+from augments.adk.prompts import SystemPrompt
 
 # Sync -- adapt prompt based on user context
 def get_prompt(data: DynamicSystemPromptData) -> SystemPrompt:
@@ -54,8 +54,8 @@ async def get_prompt(data: DynamicSystemPromptData) -> SystemPrompt:
 The `Agent.system_prompt` field accepts `str`, `SystemPrompt`, or `DynamicSystemPrompt`:
 
 ```python
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.prompts import SystemPrompt
+from augments.adk.agents import Agent
+from augments.adk.prompts import SystemPrompt
 
 # Plain string
 agent = Agent(name="Bot", system_prompt="You are helpful.")

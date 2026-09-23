@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.sandbox.clients.k8s import K8sSandboxClientOptions
-from philharmonica.adk.sandbox.clients.k8s.k8s_client import (
+from augments.adk.sandbox.clients.k8s import K8sSandboxClientOptions
+from augments.adk.sandbox.clients.k8s.k8s_client import (
     _build_network_policy_cr,
     _build_pod_manifest,
 )
-from philharmonica.adk.types.sandbox.network import NetworkPolicy
+from augments.adk.types.sandbox.network import NetworkPolicy
 
 
 class TestPodNetworkPolicySelectorMatch:
@@ -20,19 +20,19 @@ class TestPodNetworkPolicySelectorMatch:
 
     def test_pod_carries_network_policy_selector_label(self) -> None:
         options = K8sSandboxClientOptions(image="python:3.12-slim")
-        pod_name = "philharmonica-sandbox-deadbeef0001"
+        pod_name = "augments-sandbox-deadbeef0001"
 
         manifest = _build_pod_manifest(options, pod_name=pod_name)
 
         pod_labels = manifest["metadata"]["labels"]
-        assert pod_labels.get("philharmonica.sandbox/pod") == pod_name
+        assert pod_labels.get("augments.sandbox/pod") == pod_name
 
     def test_network_policy_selector_matches_pod_labels(self) -> None:
         options = K8sSandboxClientOptions(
             image="python:3.12-slim",
             network_policy=NetworkPolicy(deny_default=True, allow_ports=[443]),
         )
-        pod_name = "philharmonica-sandbox-deadbeef0002"
+        pod_name = "augments-sandbox-deadbeef0002"
 
         manifest = _build_pod_manifest(options, pod_name=pod_name)
         netpol = _build_network_policy_cr(options, pod_name=pod_name)

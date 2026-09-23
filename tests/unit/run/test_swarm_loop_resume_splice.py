@@ -17,23 +17,23 @@ from __future__ import annotations
 from typing import Any
 from unittest.mock import AsyncMock, patch
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.graphs.interrupt import (
+from augments.adk.agents.agent import Agent
+from augments.adk.graphs.interrupt import (
     Interrupt,
     NestedAgentInterrupt,
 )
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.state import RunState
-from philharmonica.adk.run.swarm_loop import run_swarm_loop
-from philharmonica.adk.swarms.interrupt import SwarmResume
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.state import SwarmState
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import DEFAULT_RUN_CONFIG
+from augments.adk.run.context import RunContext
+from augments.adk.run.state import RunState
+from augments.adk.run.swarm_loop import run_swarm_loop
+from augments.adk.swarms.interrupt import SwarmResume
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.state import SwarmState
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.tools.deferred_tool import DeferredToolCall, DeferredToolRequests
+from augments.adk.types.run.run_result import RunResult
 
 
 def _make_swarm(member_name: str = "approver") -> Swarm:
@@ -116,9 +116,9 @@ class TestSwarmLoopResumeSplice:
         hitl_mock = AsyncMock()
 
         with (
-            patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
         ):
             result = await run_swarm_loop(
                 swarm=sw,
@@ -152,9 +152,9 @@ class TestSwarmLoopResumeSplice:
         hitl_mock = AsyncMock()
 
         with (
-            patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
         ):
             await run_swarm_loop(
                 swarm=sw,
@@ -186,9 +186,9 @@ class TestSwarmLoopResumeSplice:
         hitl_mock = AsyncMock()
 
         with (
-            patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
         ):
             await run_swarm_loop(
                 swarm=sw,
@@ -223,9 +223,9 @@ class TestSwarmLoopResumeSplice:
         hitl_mock = AsyncMock(return_value=_stub_run_result(member, ctx))
 
         with (
-            patch("philharmonica.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
-            patch("philharmonica.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
+            patch("augments.adk.run.swarm_loop.run_agent_loop", new=run_agent_loop_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_nested_turn", new=nested_mock),
+            patch("augments.adk.run.swarm_loop.run_resumed_hitl_turn", new=hitl_mock),
         ):
             await run_swarm_loop(
                 swarm=sw,
@@ -255,8 +255,8 @@ class TestSwarmLoopResumeSplice:
 class TestSwarmLoopTurnSpanLifecycle:
     async def test_swarm_loop_opens_turn_span_per_iteration(self) -> None:
         """Each loop iteration that runs a member turn opens swarm_turn_span."""
-        from philharmonica.adk.tracing.spans import NoOpSpan
-        from philharmonica.adk.types.tracing.span_data import SwarmTurnSpanData
+        from augments.adk.tracing.spans import NoOpSpan
+        from augments.adk.types.tracing.span_data import SwarmTurnSpanData
 
         sw = _make_swarm()
         ctx: RunContext[None] = RunContext.make(None)
@@ -282,11 +282,11 @@ class TestSwarmLoopTurnSpanLifecycle:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_loop.swarm_turn_span",
+                "augments.adk.run.swarm_loop.swarm_turn_span",
                 side_effect=_track_swarm_turn_span,
             ),
         ):
@@ -319,8 +319,8 @@ class TestSwarmLoopTurnSpanStamping:
     async def test_enabled_tracing_stamps_success_status_and_duration(self) -> None:
         from dataclasses import replace as dataclass_replace
 
-        from philharmonica.adk.tracing.spans import Span
-        from philharmonica.adk.types.tracing.span_data import CustomSpanData, SwarmTurnSpanData
+        from augments.adk.tracing.spans import Span
+        from augments.adk.types.tracing.span_data import CustomSpanData, SwarmTurnSpanData
 
         sw = _make_swarm()
         ctx: RunContext[None] = RunContext.make(None)
@@ -354,11 +354,11 @@ class TestSwarmLoopTurnSpanStamping:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_loop.swarm_turn_span",
+                "augments.adk.run.swarm_loop.swarm_turn_span",
                 side_effect=_enabled_turn_span,
             ),
         ):
@@ -392,8 +392,8 @@ class TestSwarmLoopTurnSpanStamping:
         ``cast(CustomSpanData, span.data).data[...]`` site would raise.
         ``_stamp_turn_span`` must gate that mutation on the flag.
         """
-        from philharmonica.adk.tracing.spans import NoOpSpan
-        from philharmonica.adk.types.tracing.span_data import SwarmTurnSpanData
+        from augments.adk.tracing.spans import NoOpSpan
+        from augments.adk.types.tracing.span_data import SwarmTurnSpanData
 
         sw = _make_swarm()
         ctx: RunContext[None] = RunContext.make(None)
@@ -418,11 +418,11 @@ class TestSwarmLoopTurnSpanStamping:
 
         with (
             patch(
-                "philharmonica.adk.run.swarm_loop.run_agent_loop",
+                "augments.adk.run.swarm_loop.run_agent_loop",
                 new=AsyncMock(side_effect=_fake_run_agent_loop),
             ),
             patch(
-                "philharmonica.adk.run.swarm_loop.swarm_turn_span",
+                "augments.adk.run.swarm_loop.swarm_turn_span",
                 side_effect=_noop_turn_span,
             ),
         ):

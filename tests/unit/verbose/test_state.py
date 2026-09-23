@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.verbose.state``.
+"""Tests for ``augments.adk.verbose.state``.
 
 Covers the ``BlockNode`` container and ``RunTree`` stack-based
 block tracker used by the Panel renderer. The tree has no Rich / render
@@ -13,7 +13,7 @@ import time
 
 import pytest
 
-from philharmonica.adk.verbose.state import BlockNode, RunTree
+from augments.adk.verbose.state import BlockNode, RunTree
 
 # ---------------------------------------------------------------------------
 # BlockNode
@@ -180,7 +180,7 @@ class TestRunTreeTolerance:
         """A close that matches no open block returns None + logs DEBUG."""
         tree = RunTree()
         tree.open("agent.start", ("agent", "r1"))
-        with caplog.at_level(logging.DEBUG, logger="philharmonica.adk.verbose.state"):
+        with caplog.at_level(logging.DEBUG, logger="augments.adk.verbose.state"):
             result = tree.close(("tool", "nonexistent"))
         assert result is None
         assert tree.depth() == 1  # stack unchanged

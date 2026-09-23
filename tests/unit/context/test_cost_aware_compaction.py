@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.context.context_config import CompactionConfig
-from philharmonica.adk.context.context_manager import effective_compaction_config
+from augments.adk.budgets import TenantBudget
+from augments.adk.context.context_config import CompactionConfig
+from augments.adk.context.context_manager import effective_compaction_config
 
 
 def test_pressure_tightens_trigger_and_preserve() -> None:

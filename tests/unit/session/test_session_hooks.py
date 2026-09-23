@@ -4,10 +4,10 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.session import SQLiteMultiSessions
-from philharmonica.adk.session.session_event import SessionEvent, create_session_event
-from philharmonica.adk.types.items import ItemHelpers
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.session import SQLiteMultiSessions
+from augments.adk.session.session_event import SessionEvent, create_session_event
+from augments.adk.types.items import ItemHelpers
 
 
 def _user_event(content: str) -> SessionEvent:
@@ -32,8 +32,8 @@ class TestSessionLoadHook:
     @pytest.mark.asyncio
     async def test_on_session_load_called_with_events(self):
         """Hook fires when session has history to load."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         store = SQLiteMultiSessions()
         session = await store.create("test")
@@ -43,7 +43,7 @@ class TestSessionLoadHook:
         hooks = SessionTrackingHooks()
 
         async def mock_run_agent_loop(*, agent, user_prompt, **kwargs):
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.types.run import RunResult
 
             return RunResult(
                 final_output="Done",
@@ -54,10 +54,10 @@ class TestSessionLoadHook:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
         ):
             await Runner.arun(agent, "New message", hooks=hooks, session=session)
 
@@ -67,8 +67,8 @@ class TestSessionLoadHook:
     @pytest.mark.asyncio
     async def test_on_session_load_not_called_when_empty(self):
         """Hook does NOT fire when session is empty."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         store = SQLiteMultiSessions()
         session = await store.create("test")
@@ -77,7 +77,7 @@ class TestSessionLoadHook:
         hooks = SessionTrackingHooks()
 
         async def mock_run_agent_loop(*, agent, user_prompt, **kwargs):
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.types.run import RunResult
 
             return RunResult(
                 final_output="Done",
@@ -88,10 +88,10 @@ class TestSessionLoadHook:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
         ):
             await Runner.arun(agent, "Hello", hooks=hooks, session=session)
 
@@ -102,8 +102,8 @@ class TestSessionSaveHook:
     @pytest.mark.asyncio
     async def test_on_session_save_called_with_events(self):
         """Hook fires when events are saved to session."""
-        from philharmonica.adk.agents.agent import Agent
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.agents.agent import Agent
+        from augments.adk.run.runner import Runner
 
         store = SQLiteMultiSessions()
         session = await store.create("test")
@@ -112,7 +112,7 @@ class TestSessionSaveHook:
         hooks = SessionTrackingHooks()
 
         async def mock_run_agent_loop(*, agent, user_prompt, **kwargs):
-            from philharmonica.adk.types.run import RunResult
+            from augments.adk.types.run import RunResult
 
             return RunResult(
                 final_output="Done",
@@ -123,10 +123,10 @@ class TestSessionSaveHook:
             )
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
-            patch("philharmonica.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
-            patch("philharmonica.adk.run.runner.run_output_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_agent_loop", side_effect=mock_run_agent_loop),
+            patch("augments.adk.run.runner.run_blocking_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_parallel_input_guardrails", return_value=[]),
+            patch("augments.adk.run.runner.run_output_guardrails", return_value=[]),
         ):
             await Runner.arun(agent, "Hi", hooks=hooks, session=session)
 

@@ -25,10 +25,10 @@ import asyncio
 import json
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms.llm_usage import LLMUsageLimits
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms.llm_usage import LLMUsageLimits
+from augments.adk.run import RunConfig, Runner
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

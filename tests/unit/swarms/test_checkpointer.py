@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.swarms.checkpointer import (
+from augments.adk.agents.agent import Agent
+from augments.adk.swarms.checkpointer import (
     SwarmCheckpoint,
     SwarmCheckpointer,
 )
-from philharmonica.adk.swarms.policy import RoundRobinPolicy
-from philharmonica.adk.swarms.swarm import Swarm
-from philharmonica.adk.swarms.termination import MaxTurnsTermination
+from augments.adk.swarms.policy import RoundRobinPolicy
+from augments.adk.swarms.swarm import Swarm
+from augments.adk.swarms.termination import MaxTurnsTermination
 
 # ---------------------------------------------------------------------------
 # Shared helpers
@@ -72,7 +72,7 @@ class TestSwarmCheckpointerProtocol:
 
 class TestInMemorySwarmCheckpointerSaveLoad:
     async def test_save_and_load_roundtrip(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         sw = _make_swarm()
@@ -88,7 +88,7 @@ class TestInMemorySwarmCheckpointerSaveLoad:
         assert restored.state["current_agent_name"] == "m1"
 
     async def test_load_unknown_thread_id_returns_none(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         sw = _make_swarm()
@@ -96,7 +96,7 @@ class TestInMemorySwarmCheckpointerSaveLoad:
         assert result is None
 
     async def test_save_overwrites_previous_checkpoint_for_same_thread(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         sw = _make_swarm()
@@ -110,10 +110,10 @@ class TestInMemorySwarmCheckpointerSaveLoad:
 
     async def test_register_attaches_auto_save_hooks_to_registry(self) -> None:
         """register() should attach a SwarmHooks that auto-saves on turn end."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.hooks import HookRegistry
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.hooks import HookRegistry
+        from augments.adk.swarms.state import SwarmState
 
         cp = InMemorySwarmCheckpointer(thread_id="auto-thr")
         registry = HookRegistry()
@@ -149,11 +149,11 @@ class TestAutoSaveOnInterrupt:
     """
 
     async def test_on_swarm_turn_interrupt_saves_checkpoint(self) -> None:
-        from philharmonica.adk.graphs.interrupt import Interrupt
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.hooks import HookRegistry
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.graphs.interrupt import Interrupt
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.hooks import HookRegistry
+        from augments.adk.swarms.state import SwarmState
 
         cp = InMemorySwarmCheckpointer(thread_id="parked-thr")
         registry = HookRegistry()
@@ -187,11 +187,11 @@ class TestAutoSaveOnInterrupt:
         assert parked["m1"]["kind"] == "tool_approval"
 
     async def test_save_idempotent_across_end_and_interrupt(self) -> None:
-        from philharmonica.adk.graphs.interrupt import Interrupt
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.hooks import HookRegistry
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.graphs.interrupt import Interrupt
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.hooks import HookRegistry
+        from augments.adk.swarms.state import SwarmState
 
         cp = InMemorySwarmCheckpointer(thread_id="dual-thr")
         registry = HookRegistry()
@@ -244,7 +244,7 @@ class TestAutoSaveOnInterrupt:
 
 class TestListAndDelete:
     async def test_list_checkpoints_sorted(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         await cp.save(SwarmCheckpoint(thread_id="t2", state={}, turn=1))
@@ -252,13 +252,13 @@ class TestListAndDelete:
         assert await cp.list_checkpoints() == ["t1", "t2"]
 
     async def test_list_checkpoints_empty(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         assert await cp.list_checkpoints() == []
 
     async def test_delete_removes_thread(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         await cp.save(SwarmCheckpoint(thread_id="t1", state={}, turn=1))
@@ -267,7 +267,7 @@ class TestListAndDelete:
         assert await cp.list_checkpoints() == ["t2"]
 
     async def test_delete_missing_is_noop(self) -> None:
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         cp = InMemorySwarmCheckpointer()
         # Must not raise.
@@ -304,10 +304,10 @@ class TestListAndDelete:
 
 class TestSwarmCheckpointerHooks:
     async def test_on_swarm_turn_end_saves_under_thread_id(self) -> None:
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.state import SwarmState
 
         cp = InMemorySwarmCheckpointer(thread_id="hooks-thr")
         sw = _make_swarm()
@@ -328,11 +328,11 @@ class TestSwarmCheckpointerHooks:
         assert restored.turn == 5
 
     async def test_on_swarm_turn_interrupt_saves_under_thread_id(self) -> None:
-        from philharmonica.adk.graphs.interrupt import Interrupt
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
-        from philharmonica.adk.swarms.state import SwarmState
+        from augments.adk.graphs.interrupt import Interrupt
+        from augments.adk.run.context import RunContext
+        from augments.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.state import SwarmState
 
         cp = InMemorySwarmCheckpointer(thread_id="ihooks-thr")
         sw = _make_swarm()
@@ -354,8 +354,8 @@ class TestSwarmCheckpointerHooks:
 
     def test_in_memory_register_uses_swarm_checkpointer_hooks(self) -> None:
         """register() must install a SwarmCheckpointerHooks, not _AutoSaveHooks."""
-        from philharmonica.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
-        from philharmonica.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
+        from augments.adk.swarms.checkpointers.hooks import SwarmCheckpointerHooks
+        from augments.adk.swarms.checkpointers.in_memory import InMemorySwarmCheckpointer
 
         attached: list[object] = []
 
@@ -370,6 +370,6 @@ class TestSwarmCheckpointerHooks:
 
     def test_no_private_auto_save_hooks_in_in_memory_module(self) -> None:
         """_AutoSaveHooks must be removed from in_memory after extraction."""
-        import philharmonica.adk.swarms.checkpointers.in_memory as mod
+        import augments.adk.swarms.checkpointers.in_memory as mod
 
         assert not hasattr(mod, "_AutoSaveHooks")

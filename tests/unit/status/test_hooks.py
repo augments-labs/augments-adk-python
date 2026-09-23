@@ -5,9 +5,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import QuotaExceeded
-from philharmonica.adk.llms.llm_usage import LLMUsage
-from philharmonica.adk.status import (
+from augments.adk.exceptions import QuotaExceeded
+from augments.adk.llms.llm_usage import LLMUsage
+from augments.adk.status import (
     AgentQuota,
     AgentStatusStore,
     StatusTrackingHooks,
@@ -95,7 +95,7 @@ class TestQuotaEnforcement:
         store = AgentStatusStore()
 
         # Pre-populate with usage
-        from philharmonica.adk.status.types import AgentRunRecord
+        from augments.adk.status.types import AgentRunRecord
 
         now = time.time()
         record = AgentRunRecord(

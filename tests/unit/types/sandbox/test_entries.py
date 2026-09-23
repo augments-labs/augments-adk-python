@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.types.sandbox.entries``."""
+"""Tests for ``augments.adk.types.sandbox.entries``."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from philharmonica.adk.types.sandbox.entries import (
+from augments.adk.types.sandbox.entries import (
     BaseEntry,
     Dir,
     File,

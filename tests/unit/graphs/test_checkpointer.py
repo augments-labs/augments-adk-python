@@ -11,11 +11,11 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.hooks import HookRegistry
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.in_memory import InMemoryCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.hooks import HookRegistry
+from augments.adk.graphs.state import GraphState
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -155,7 +155,7 @@ class TestHookProviderContract:
     async def test_on_node_end_triggers_save(self) -> None:
         """Firing on_node_end via the registry must call cp.save when thread_id
         is set on the state."""
-        from philharmonica.adk.orchestration.executable import NodeResult
+        from augments.adk.orchestration.executable import NodeResult
 
         cp = InMemoryCheckpointer()
         registry = HookRegistry()
@@ -178,7 +178,7 @@ class TestHookProviderContract:
     @pytest.mark.asyncio
     async def test_on_node_end_no_save_when_no_thread_id(self) -> None:
         """When state.thread_id is None the checkpointer must skip saving."""
-        from philharmonica.adk.orchestration.executable import NodeResult
+        from augments.adk.orchestration.executable import NodeResult
 
         cp = InMemoryCheckpointer()
         registry = HookRegistry()

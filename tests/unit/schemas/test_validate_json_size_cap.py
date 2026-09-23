@@ -11,7 +11,7 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.schemas.agent_output_schema import (
+from augments.adk.schemas.agent_output_schema import (
     MAX_SCHEMA_BYTES,
     AgentOutputSchema,
 )

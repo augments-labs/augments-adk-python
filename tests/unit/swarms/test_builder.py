@@ -12,20 +12,20 @@ from typing import Literal
 import pytest
 from pydantic import Field
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.handoffs.handoff_route import HandoffRoute
-from philharmonica.adk.swarms.builder import SwarmBuilder
-from philharmonica.adk.swarms.config import SwarmConfig
-from philharmonica.adk.swarms.hooks import SwarmHooks
-from philharmonica.adk.swarms.policy import (
+from augments.adk.agents.agent import Agent
+from augments.adk.handoffs.handoff_route import HandoffRoute
+from augments.adk.swarms.builder import SwarmBuilder
+from augments.adk.swarms.config import SwarmConfig
+from augments.adk.swarms.hooks import SwarmHooks
+from augments.adk.swarms.policy import (
     CustomPolicy,
     LLMHandoffPolicy,
     RoundRobinPolicy,
     StructuredRoutingPolicy,
 )
-from philharmonica.adk.swarms.swarm import DEFAULT_TERMINATION, Swarm
-from philharmonica.adk.swarms.termination import ExplicitDoneTermination, MaxTurnsTermination
-from philharmonica.adk.types.intents import Intent
+from augments.adk.swarms.swarm import DEFAULT_TERMINATION, Swarm
+from augments.adk.swarms.termination import ExplicitDoneTermination, MaxTurnsTermination
+from augments.adk.types.intents import Intent
 
 
 def _agent(name: str) -> Agent:

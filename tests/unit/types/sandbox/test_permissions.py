@@ -1,10 +1,10 @@
-"""Tests for ``philharmonica.adk.types.sandbox.permissions``."""
+"""Tests for ``augments.adk.types.sandbox.permissions``."""
 
 from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.types.sandbox.permissions import (
+from augments.adk.types.sandbox.permissions import (
     FileMode,
     Group,
     Permissions,

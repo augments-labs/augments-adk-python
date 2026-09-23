@@ -15,8 +15,8 @@ from pathlib import Path
 
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import Flow, flow_listen, flow_router, flow_start
-from philharmonica.adk.visualization import render_dot, render_mermaid
+from augments.adk.flows import Flow, flow_listen, flow_router, flow_start
+from augments.adk.visualization import render_dot, render_mermaid
 
 logger = logging.getLogger(__name__)
 

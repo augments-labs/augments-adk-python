@@ -5,7 +5,7 @@ reuse across multiple runs. A profile does not execute by itself. Bind it to a
 target, then call the target runner:
 
 ```python
-from philharmonica.adk import Runner
+from augments.adk import Runner
 
 profile = (
     Runner.configure()
@@ -102,7 +102,7 @@ auto-injected into step bodies. For that reason, `FlowRunner` exposes
 Use `with_config()` when a field does not have a convenience method:
 
 ```python
-from philharmonica.adk import RunConfig, Runner
+from augments.adk import RunConfig, Runner
 
 profile = Runner.configure().with_config(
     RunConfig(

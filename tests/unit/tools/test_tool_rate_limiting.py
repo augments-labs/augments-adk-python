@@ -8,8 +8,8 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.tools.tool_rate_limit import ToolRateLimit
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.tools.tool_rate_limit import ToolRateLimit
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 
@@ -225,7 +225,7 @@ class TestMaxWaitSeconds:
 
 class TestDecoratorPassthrough:
     def test_decorator_max_calls_per_minute_shorthand(self) -> None:
-        from philharmonica.adk.tools.function_tool import function_tool
+        from augments.adk.tools.function_tool import function_tool
 
         @function_tool(name="search", max_calls_per_minute=30)
         def search(query: str) -> str:
@@ -236,7 +236,7 @@ class TestDecoratorPassthrough:
         assert search.rate_limit.behavior == "wait"
 
     def test_decorator_explicit_rate_limit(self) -> None:
-        from philharmonica.adk.tools.function_tool import function_tool
+        from augments.adk.tools.function_tool import function_tool
 
         cfg = ToolRateLimit(rpm=10, behavior="error")
 
@@ -247,7 +247,7 @@ class TestDecoratorPassthrough:
         assert api.rate_limit is cfg
 
     def test_decorator_both_raises(self) -> None:
-        from philharmonica.adk.tools.function_tool import function_tool
+        from augments.adk.tools.function_tool import function_tool
 
         # Validation happens inside function_tool() before it returns
         # the decorator, so we can call it directly without applying.
@@ -265,7 +265,7 @@ class TestDecoratorPassthrough:
 def _make_agent(tools: list[Any]) -> Any:
     from types import SimpleNamespace
 
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name="test_agent",
@@ -281,9 +281,9 @@ def _make_agent(tools: list[Any]) -> Any:
 class TestExecutorIntegration:
     @pytest.mark.asyncio
     async def test_error_behavior_returns_rate_limit_message(self) -> None:
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.tools_executor import execute_tool_calls
-        from philharmonica.adk.types.responses.llm_response import (
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.tools_executor import execute_tool_calls
+        from augments.adk.types.responses.llm_response import (
             LLMResponseFunctionToolCall,
         )
 
@@ -302,8 +302,8 @@ class TestExecutorIntegration:
         )
         agent = _make_agent([tool])
 
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.config import DEFAULT_RUN_CONFIG
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.config import DEFAULT_RUN_CONFIG
 
         with patch("time.monotonic", return_value=500.0):
             for i in range(3):

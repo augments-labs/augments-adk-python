@@ -42,12 +42,12 @@ from openai.types.completion_usage import (
     PromptTokensDetails,
 )
 
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.openai.openai_chatcompletions_config import OpenAIChatCompletionsConfig
-from philharmonica.adk.llms.openai.openai_chatcompletions_model import OpenAIChatCompletionsLLM
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.llms import LLMRetryPolicy
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.openai.openai_chatcompletions_config import OpenAIChatCompletionsConfig
+from augments.adk.llms.openai.openai_chatcompletions_model import OpenAIChatCompletionsLLM
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.llms import LLMRetryPolicy
+from augments.adk.types.responses.llm_response import (
     LLMResponseFunctionToolCall,
     LLMResponseText,
     LLMStreamEvent,
@@ -298,7 +298,7 @@ class TestChatCompletionsConfigRouting:
 
 class TestToolExecutionMode:
     async def test_parallel_mode_sends_true(self) -> None:
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         llm, client = _llm_with_mock_client()
         config = LLMConfig(tool_execution_mode=ToolExecutionMode.PARALLEL)
@@ -307,7 +307,7 @@ class TestToolExecutionMode:
         assert kwargs["parallel_tool_calls"] is True
 
     async def test_sequential_mode_sends_false(self) -> None:
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         llm, client = _llm_with_mock_client()
         config = LLMConfig(tool_execution_mode=ToolExecutionMode.SEQUENTIAL)
@@ -330,7 +330,7 @@ class TestToolExecutionMode:
         when no ``tools`` are specified."""
         from openai import Omit
 
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         for mode in (ToolExecutionMode.PARALLEL, ToolExecutionMode.SEQUENTIAL):
             llm, client = _llm_with_mock_client()

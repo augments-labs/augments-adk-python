@@ -12,10 +12,10 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.exceptions import ToolDependencyError
-from philharmonica.adk.tools import ShellTool
-from philharmonica.adk.tools.function_tool import FunctionTool
+from augments.adk.agents import Agent
+from augments.adk.exceptions import ToolDependencyError
+from augments.adk.tools import ShellTool
+from augments.adk.tools.function_tool import FunctionTool
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 
@@ -31,29 +31,29 @@ class TestAgentDependencyValidation:
         Agent(name="ok", system_prompt="x", tools=[_make_tool("t")])
 
     def test_satisfied_env_passes(self) -> None:
-        with patch.dict("os.environ", {"PHILHARMONICA_INT_TEST_VAR": "v"}, clear=False):
+        with patch.dict("os.environ", {"AUGMENTS_INT_TEST_VAR": "v"}, clear=False):
             Agent(
                 name="ok",
                 system_prompt="x",
-                tools=[_make_tool("t", requires_env=("PHILHARMONICA_INT_TEST_VAR",))],
+                tools=[_make_tool("t", requires_env=("AUGMENTS_INT_TEST_VAR",))],
             )
 
     def test_missing_env_raises(self) -> None:
-        tool = _make_tool("slack", requires_env=("PHILHARMONICA_INT_TEST_MISSING",))
+        tool = _make_tool("slack", requires_env=("AUGMENTS_INT_TEST_MISSING",))
         with patch.dict("os.environ", {}, clear=True), pytest.raises(ToolDependencyError) as excinfo:
             Agent(name="ok", system_prompt="x", tools=[tool])
         assert excinfo.value.agent_name == "ok"
         assert "slack" in excinfo.value.missing
-        assert excinfo.value.missing["slack"] == ["env:PHILHARMONICA_INT_TEST_MISSING"]
+        assert excinfo.value.missing["slack"] == ["env:AUGMENTS_INT_TEST_MISSING"]
 
     def test_missing_package_raises(self) -> None:
         tool = _make_tool(
             "x",
-            requires_packages=("philharmonica-int-test-no-such-pkg-13579",),
+            requires_packages=("augments-int-test-no-such-pkg-13579",),
         )
         with pytest.raises(ToolDependencyError) as excinfo:
             Agent(name="ok", system_prompt="x", tools=[tool])
-        assert excinfo.value.missing["x"] == ["package:philharmonica-int-test-no-such-pkg-13579"]
+        assert excinfo.value.missing["x"] == ["package:augments-int-test-no-such-pkg-13579"]
 
     def test_aggregates_across_tools(self) -> None:
         tool_a = _make_tool("a", requires_env=("MISSING_A",))
@@ -73,7 +73,7 @@ class TestAgentDependencyValidation:
         tool = _make_tool(
             "deploy",
             requires_env=("MISSING_TOKEN",),
-            requires_packages=("philharmonica-no-such-pkg-24680",),
+            requires_packages=("augments-no-such-pkg-24680",),
         )
         with patch.dict("os.environ", {}, clear=True), pytest.raises(ToolDependencyError) as excinfo:
             Agent(name="ok", system_prompt="x", tools=[tool])
@@ -81,7 +81,7 @@ class TestAgentDependencyValidation:
         assert "ok" in text
         assert "deploy" in text
         assert "env:MISSING_TOKEN" in text
-        assert "package:philharmonica-no-such-pkg-24680" in text
+        assert "package:augments-no-such-pkg-24680" in text
 
     def test_non_function_tool_skipped(self) -> None:
         # A non-FunctionTool entry in agent.tools (here a ShellTool)
@@ -89,12 +89,12 @@ class TestAgentDependencyValidation:
         # guard is what keeps these entries out of the dependency walk.
         # Pair the ShellTool with a FunctionTool whose env var is set so
         # the loop actually iterates past the builtin.
-        with patch.dict("os.environ", {"PHILHARMONICA_BUILTIN_TEST_VAR": "v"}, clear=False):
+        with patch.dict("os.environ", {"AUGMENTS_BUILTIN_TEST_VAR": "v"}, clear=False):
             Agent(
                 name="ok",
                 system_prompt="x",
                 tools=[
                     ShellTool(),
-                    _make_tool("regular", requires_env=("PHILHARMONICA_BUILTIN_TEST_VAR",)),
+                    _make_tool("regular", requires_env=("AUGMENTS_BUILTIN_TEST_VAR",)),
                 ],
             )

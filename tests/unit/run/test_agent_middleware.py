@@ -25,8 +25,8 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.agent_middleware import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.agent_middleware import (
     AgentBlockOutcome,
     AgentLoggingMiddleware,
     AgentMetricsMiddleware,
@@ -35,8 +35,8 @@ from philharmonica.adk.run.agent_middleware import (
     AgentMiddlewareTermination,
     compose_agent_middleware,
 )
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.types.input import LLMInputContentItem
+from augments.adk.run.context import RunContext
+from augments.adk.types.input import LLMInputContentItem
 
 
 def _agent(name: str = "X") -> Agent:
@@ -229,7 +229,7 @@ class TestAgentLoggingMiddleware:
         async def terminal(ag, msgs):  # type: ignore[no-untyped-def]
             return _final_outcome()
 
-        with caplog.at_level(logging.INFO, logger="philharmonica.adk.run.agent_middleware"):
+        with caplog.at_level(logging.INFO, logger="augments.adk.run.agent_middleware"):
             chain = compose_agent_middleware([AgentLoggingMiddleware()], terminal, context=ctx)
             await chain(_agent("Alpha"), [])
 

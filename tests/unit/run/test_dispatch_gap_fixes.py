@@ -27,24 +27,24 @@ import asyncio
 from types import SimpleNamespace
 from typing import Any
 
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.exceptions import ToolRetry
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import build_tools
-from philharmonica.adk.run.tools_executor import (
+from augments.adk.agents.middleware import Middleware
+from augments.adk.exceptions import ToolRetry
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.config import RunConfig
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import build_tools
+from augments.adk.run.tools_executor import (
     execute_approved_tool,
     execute_tool_calls,
     maybe_wrap_with_agent_middleware,
 )
-from philharmonica.adk.skills.skill import Skill
-from philharmonica.adk.tools import build_tool_search, function_tool
-from philharmonica.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
-from philharmonica.adk.tools.deferred_tool import DeferredToolCall
-from philharmonica.adk.tools.function_tool import FunctionTool
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
-from philharmonica.adk.types.tools.tool_stream_event import ToolStreamEvent
+from augments.adk.skills.skill import Skill
+from augments.adk.tools import build_tool_search, function_tool
+from augments.adk.tools.builtin.builtin_tool import ExecutableBuiltinTool
+from augments.adk.tools.deferred_tool import DeferredToolCall
+from augments.adk.tools.function_tool import FunctionTool
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.types.tools.tool_stream_event import ToolStreamEvent
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 

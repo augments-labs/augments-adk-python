@@ -45,12 +45,12 @@ from openai.types.responses.response_usage import (
     OutputTokensDetails,
 )
 
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.openai.openai_responses_config import OpenAIResponsesConfig
-from philharmonica.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
-from philharmonica.adk.tools import Tool, function_tool
-from philharmonica.adk.types.llms import LLMRetryPolicy
-from philharmonica.adk.types.responses.llm_response import LLMResponseText, LLMStreamEvent
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.openai.openai_responses_config import OpenAIResponsesConfig
+from augments.adk.llms.openai.openai_responses_model import OpenAIResponsesLLM
+from augments.adk.tools import Tool, function_tool
+from augments.adk.types.llms import LLMRetryPolicy
+from augments.adk.types.responses.llm_response import LLMResponseText, LLMStreamEvent
 
 
 def _one_tool() -> list[Tool]:
@@ -337,7 +337,7 @@ class TestResponsesConfigRouting:
 class TestToolExecutionMode:
     async def test_parallel_mode_sets_parallel_tool_calls_true(self) -> None:
         llm, client = _llm_with_mock_client()
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         config = LLMConfig(tool_execution_mode=ToolExecutionMode.PARALLEL)
         await llm.acomplete(messages="hi", llm_config=config, tools=_one_tool())
@@ -345,7 +345,7 @@ class TestToolExecutionMode:
 
     async def test_sequential_mode_sets_parallel_tool_calls_false(self) -> None:
         llm, client = _llm_with_mock_client()
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         config = LLMConfig(tool_execution_mode=ToolExecutionMode.SEQUENTIAL)
         await llm.acomplete(messages="hi", llm_config=config, tools=_one_tool())
@@ -360,7 +360,7 @@ class TestToolExecutionMode:
         # The Responses API 400s on parallel_tool_calls when no tools are
         # present; a bare execution-mode config must not leak the parameter.
         llm, client = _llm_with_mock_client()
-        from philharmonica.adk.types.tools import ToolExecutionMode
+        from augments.adk.types.tools import ToolExecutionMode
 
         config = LLMConfig(tool_execution_mode=ToolExecutionMode.PARALLEL)
         await llm.acomplete(messages="hi", llm_config=config)
@@ -409,7 +409,7 @@ class TestExtraBodyPassthrough:
         # ``Body`` is typed as ``object``; a bytes payload is a permitted
         # non-Mapping value that the merge step cannot handle.
         config = LLMConfig(extra_body=b"raw-non-dict-body")
-        with caplog.at_level("WARNING", logger="philharmonica.adk.llms.openai.openai_responses_model"):
+        with caplog.at_level("WARNING", logger="augments.adk.llms.openai.openai_responses_model"):
             await llm.acomplete(messages="hi", llm_config=config)
 
         assert client.responses.create.call_args.kwargs["extra_body"] is None
@@ -596,7 +596,7 @@ def _patch_responses_async_stream(monkeypatch: pytest.MonkeyPatch) -> Any:
     helper defined above — it is duck-typed for async iteration but
     does not inherit from the real ``openai.AsyncStream``.
     """
-    from philharmonica.adk.llms.openai import openai_responses_model
+    from augments.adk.llms.openai import openai_responses_model
 
     monkeypatch.setattr(openai_responses_model, "AsyncStream", _FakeStream)
     yield

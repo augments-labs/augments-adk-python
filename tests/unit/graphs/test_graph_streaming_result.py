@@ -6,7 +6,7 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.graphs.result import GraphRunResultStreaming
+from augments.adk.graphs.result import GraphRunResultStreaming
 
 
 async def test_stream_events_yields_then_completes() -> None:
@@ -58,7 +58,7 @@ async def test_cancel_immediate_drains_and_wakes_consumer() -> None:
 
 
 async def test_cancel_after_superstep_sets_flag_and_does_not_suppress() -> None:
-    from philharmonica.adk.run.stream import CancelMode
+    from augments.adk.run.stream import CancelMode
 
     r: GraphRunResultStreaming = GraphRunResultStreaming()
     r.cancel("after_superstep")

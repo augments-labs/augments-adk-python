@@ -22,9 +22,9 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk import Agent, EventStyle, RunConfig, Runner, VerboseConfig
-from philharmonica.adk.handoffs import Handoff
-from philharmonica.adk.verbose.config import EVENT_AGENT_START
+from augments.adk import Agent, EventStyle, RunConfig, Runner, VerboseConfig
+from augments.adk.handoffs import Handoff
+from augments.adk.verbose.config import EVENT_AGENT_START
 
 logger = logging.getLogger(__name__)
 

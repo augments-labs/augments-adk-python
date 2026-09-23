@@ -7,7 +7,7 @@ surface so a missing re-export (or an ``__all__`` drift) fails loudly.
 
 from __future__ import annotations
 
-import philharmonica.adk.sandbox.runner_integration as ri
+import augments.adk.sandbox.runner_integration as ri
 
 _EXPECTED_EXPORTS = (
     "SandboxConcurrencyGuard",
@@ -38,14 +38,14 @@ def test_all_is_exact_and_sorted() -> None:
 
 
 def test_reexports_are_the_submodule_objects() -> None:
-    from philharmonica.adk.sandbox.runner_integration.iac_runner import (
+    from augments.adk.sandbox.runner_integration.iac_runner import (
         apply_iac,
         destroy_iac,
     )
-    from philharmonica.adk.sandbox.runner_integration.instructions_composer import (
+    from augments.adk.sandbox.runner_integration.instructions_composer import (
         compose_sandbox_prompt,
     )
-    from philharmonica.adk.sandbox.runner_integration.lifecycle import (
+    from augments.adk.sandbox.runner_integration.lifecycle import (
         SandboxLifecycleHandle,
         sandbox_run_context,
     )

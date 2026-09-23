@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica serve`` (never binds a port)."""
+"""Tests for ``augments serve`` (never binds a port)."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import Any, override
 import pytest
 from click.testing import CliRunner
 
-from philharmonica.adk.cli import main
+from augments.adk.cli import main
 
 STUB = "cli_stub_agents"
 
@@ -31,12 +31,12 @@ def card_file(tmp_path: Path) -> Path:
 def test_missing_a2a_extra_guides_install(
     stub_agent_dir: Path, card_file: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    import philharmonica.adk.a2a as a2a_module
+    import augments.adk.a2a as a2a_module
 
     monkeypatch.setattr(a2a_module, "A2AServer", None)
     result = CliRunner().invoke(main, ["serve", "--card", str(card_file), "--agent", f"{STUB}:support"])
     assert result.exit_code == 2
-    assert "philharmonica-adk[a2a]" in result.output
+    assert "augments-adk[a2a]" in result.output
 
 
 def test_invalid_card_json(stub_agent_dir: Path, tmp_path: Path) -> None:
@@ -91,7 +91,7 @@ def test_happy_path_builds_app_without_binding(
 def test_max_turns_forwarded_to_server(stub_agent_dir: Path, card_file: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     import uvicorn
 
-    import philharmonica.adk.a2a as a2a_module
+    import augments.adk.a2a as a2a_module
 
     real_server = a2a_module.A2AServer
     captured: dict[str, Any] = {}
@@ -140,12 +140,12 @@ def test_a2a_without_card_errors(stub_agent_dir: Path) -> None:
 
 
 def test_missing_server_extra_guides_install(stub_agent_dir: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    import philharmonica.adk.serving as serving_module
+    import augments.adk.serving as serving_module
 
     monkeypatch.setattr(serving_module, "build_app", None)
     result = CliRunner().invoke(main, ["serve", "--agent", f"{STUB}:support"])
     assert result.exit_code == 2
-    assert "philharmonica-adk[serve]" in result.output
+    assert "augments-adk[serve]" in result.output
 
 
 def test_task_db_creates_durable_store(
@@ -176,8 +176,8 @@ def test_task_store_recovers_in_lifespan_not_at_build(
     import uvicorn
     from starlette.testclient import TestClient
 
-    import philharmonica.adk.a2a.task_store as task_store_module
-    from philharmonica.adk.a2a.task_store import SQLiteTaskStore
+    import augments.adk.a2a.task_store as task_store_module
+    from augments.adk.a2a.task_store import SQLiteTaskStore
 
     calls: list[str] = []
 
@@ -210,7 +210,7 @@ def test_session_manager_not_closed_without_lifespan(
 ) -> None:
     import uvicorn
 
-    import philharmonica.adk.session.sqlite_multi_sessions as sess_module
+    import augments.adk.session.sqlite_multi_sessions as sess_module
 
     closed: list[bool] = []
 
@@ -235,7 +235,7 @@ def test_session_manager_closed_on_lifespan_shutdown(
     import uvicorn
     from starlette.testclient import TestClient
 
-    import philharmonica.adk.session.sqlite_multi_sessions as sess_module
+    import augments.adk.session.sqlite_multi_sessions as sess_module
 
     closed: list[bool] = []
 

@@ -21,11 +21,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.exceptions import ToolRetry
-from philharmonica.adk.run.tools_executor import execute_tool_calls
-from philharmonica.adk.tools.function_tool import FunctionTool, function_tool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.responses.llm_response import LLMResponseFunctionToolCall
+from augments.adk.exceptions import ToolRetry
+from augments.adk.run.tools_executor import execute_tool_calls
+from augments.adk.tools.function_tool import FunctionTool, function_tool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.responses.llm_response import LLMResponseFunctionToolCall
 
 MINIMAL_SCHEMA: dict[str, Any] = {"type": "object", "properties": {}}
 
@@ -38,7 +38,7 @@ def _tool_ctx(name: str) -> ToolContext[Any]:
 
 
 def _make_agent(tools: list[Any]) -> Any:
-    from philharmonica.adk.agents.middleware import Middleware
+    from augments.adk.agents.middleware import Middleware
 
     return SimpleNamespace(
         name="test_agent",
@@ -56,19 +56,19 @@ def _make_tool_call(call_id: str, name: str) -> LLMResponseFunctionToolCall:
 
 
 def _make_ctx() -> Any:
-    from philharmonica.adk.run.context import RunContext
+    from augments.adk.run.context import RunContext
 
     return RunContext(context=None)
 
 
 def _make_hooks() -> Any:
-    from philharmonica.adk.hooks.hooks import RunHooks
+    from augments.adk.hooks.hooks import RunHooks
 
     return RunHooks()
 
 
 def _config(*, fail_on_tool_error: bool) -> Any:
-    from philharmonica.adk.run.config import RunConfig
+    from augments.adk.run.config import RunConfig
 
     return RunConfig(fail_on_tool_error=fail_on_tool_error)
 

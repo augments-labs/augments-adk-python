@@ -11,7 +11,7 @@ Uses the LocalSubprocess backend so this example is self-contained
 (no Docker daemon required).
 
 Prerequisites:
-- ``pip install 'philharmonica-adk[examples]'`` (for python-dotenv)
+- ``pip install 'augments-adk[examples]'`` (for python-dotenv)
 - ``ANTHROPIC_API_KEY`` set.
 """
 
@@ -28,18 +28,18 @@ import asyncio
 import logging
 import tempfile
 
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.sandbox.agent import SandboxAgent
-from philharmonica.adk.sandbox.capabilities.filesystem import FilesystemCapability
-from philharmonica.adk.sandbox.capabilities.memory import MemoryCapability
-from philharmonica.adk.sandbox.capabilities.shell import ShellCapability
-from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.sandbox.agent import SandboxAgent
+from augments.adk.sandbox.capabilities.filesystem import FilesystemCapability
+from augments.adk.sandbox.capabilities.memory import MemoryCapability
+from augments.adk.sandbox.capabilities.shell import ShellCapability
+from augments.adk.sandbox.clients.local.subprocess_client import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

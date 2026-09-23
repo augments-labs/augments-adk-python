@@ -1,6 +1,6 @@
 # Agent-to-Agent (A2A) Protocol
 
-The Philharmonica ADK ships first-class support for the
+The Augments ADK ships first-class support for the
 [Agent-to-Agent (A2A) protocol](https://a2a-protocol.org/) — an open
 standard for autonomous agents to talk to each other as peers over
 HTTP+SSE. This is distinct from MCP: MCP standardises how an agent
@@ -17,13 +17,13 @@ collaboration.
 A2A support is an optional extra:
 
 ```bash
-pip install 'philharmonica-adk[a2a]'
+pip install 'augments-adk[a2a]'
 ```
 
 This pulls in `a2a-sdk[http-server]` (which includes Starlette and
 sse-starlette for the server path) plus `httpx` for the client path.
 When the extra is missing, every public symbol in
-`philharmonica.adk.a2a` is `None`; downstream code can branch on
+`augments.adk.a2a` is `None`; downstream code can branch on
 `A2AAgent is None` to skip A2A wiring gracefully.
 
 ## When to use A2A vs MCP vs `Agent.as_tool()`
@@ -41,7 +41,7 @@ Call a remote A2A-compatible agent from your local agent:
 ```python
 import asyncio
 import logging
-from philharmonica.adk.a2a import A2AAgent, A2ARunner
+from augments.adk.a2a import A2AAgent, A2ARunner
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +98,7 @@ result = await A2ARunner.arun(remote, "Find recent papers on retrieval augmentat
 **As a tool** (LLM invokes it mid-turn alongside your local tools):
 
 ```python
-from philharmonica.adk.agents import Agent
+from augments.adk.agents import Agent
 
 remote = A2AAgent(name="Researcher", url="https://research.example.com")
 local = Agent(
@@ -121,8 +121,8 @@ Expose any local `Agent` as an A2A endpoint:
 ```python
 import uvicorn
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.agents import Agent
 
 local_agent = Agent(
     name="research_helper",
@@ -190,7 +190,7 @@ For tasks that exceed an HTTP timeout, submit in the background and
 poll later:
 
 ```python
-from philharmonica.adk.a2a import A2AAgent, A2ARunner
+from augments.adk.a2a import A2AAgent, A2ARunner
 
 async with A2AAgent(name="LongJob", url="https://jobs.example.com") as remote:
     token = await A2ARunner.arun(remote, "Crawl the entire archive.", background=True)
@@ -260,7 +260,7 @@ app. The ADK does not add new auth code.
 ## Error handling
 
 Every A2A failure surfaces as a typed exception under
-`philharmonica.adk.a2a`:
+`augments.adk.a2a`:
 
 | Exception | Cause |
 |---|---|
@@ -269,7 +269,7 @@ Every A2A failure surfaces as a typed exception under
 | `A2ATaskError` | Remote task ended in `failed` or `rejected` state |
 | `A2ATaskCancelledError` | Remote task was cancelled (subclass of `A2ATaskError`) |
 
-All extend `A2AError`, which extends `PhilharmonicaError` — catch the framework
+All extend `A2AError`, which extends `AugmentsError` — catch the framework
 root for any framework error including A2A.
 
 > **Security note**: `A2ATaskError.remote_message` is **untrusted
@@ -281,7 +281,7 @@ root for any framework error including A2A.
 > that might re-interpret it.
 
 ```python
-from philharmonica.adk.a2a import A2ATaskError, A2ATransportError
+from augments.adk.a2a import A2ATaskError, A2ATransportError
 
 try:
     result = await A2ARunner.arun(remote, "...")
@@ -303,18 +303,18 @@ except A2ATaskError as exc:
 A2A calls automatically participate in OpenTelemetry tracing via
 the existing `function_span` infrastructure. Both client-side and
 server-side spans use the `a2a.<task_id>` naming convention; the
-client span's `philharmonica.a2a.remote_url` attribute and the server
-span's `philharmonica.a2a.agent_name` attribute let you correlate the two
+client span's `augments.a2a.remote_url` attribute and the server
+span's `augments.a2a.agent_name` attribute let you correlate the two
 sides of a network boundary.
 
 The same secret-redaction that runs on tool I/O runs on the
 `a2a_data` attributes — embedded credentials are masked before
 leaving the process.
 
-Install the OTel extra to enable: `pip install 'philharmonica-adk[otel]'`.
+Install the OTel extra to enable: `pip install 'augments-adk[otel]'`.
 
 ## See also
 
 * `examples/a2a/` — runnable client + server examples
 * The A2A spec: <https://a2a-protocol.org/>
-* `src/philharmonica/adk/mcp/` — sibling integration for tool-level remote calls
+* `src/augments/adk/mcp/` — sibling integration for tool-level remote calls

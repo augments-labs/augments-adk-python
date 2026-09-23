@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrailSeverity,
 )
-from philharmonica.adk.flows.step_guardrails import FlowStepGuardrailVerdict
-from philharmonica.adk.tools.tool_guardrails import ToolGuardrailFunctionOutput
-from philharmonica.adk.types.guardrails import GuardrailAction, GuardrailSpan
+from augments.adk.flows.step_guardrails import FlowStepGuardrailVerdict
+from augments.adk.tools.tool_guardrails import ToolGuardrailFunctionOutput
+from augments.adk.types.guardrails import GuardrailAction, GuardrailSpan
 
 
 class TestAgentResolvedAction:

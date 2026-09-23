@@ -4,16 +4,16 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxNetworkPolicyViolation
-from philharmonica.adk.sandbox.policy import (
+from augments.adk.exceptions.exceptions import SandboxNetworkPolicyViolation
+from augments.adk.sandbox.policy import (
     apply_network_policy_to_docker,
     apply_network_policy_to_k8s_pod,
     apply_network_policy_to_local,
     apply_resource_limits_to_docker,
     apply_resource_limits_to_k8s_pod,
 )
-from philharmonica.adk.types.sandbox.network import NetworkPolicy
-from philharmonica.adk.types.sandbox.resource_limits import SandboxResourceLimits
+from augments.adk.types.sandbox.network import NetworkPolicy
+from augments.adk.types.sandbox.resource_limits import SandboxResourceLimits
 
 
 class TestNetworkPolicyDocker:
@@ -51,7 +51,7 @@ class TestNetworkPolicyK8s:
         policy = NetworkPolicy(allow_hosts=("api.example.com", "*.foo.com"))
         cr = apply_network_policy_to_k8s_pod(policy, "default", "pod-1")
         assert cr is not None
-        annotation = cr["metadata"]["annotations"]["philharmonica.sandbox/allow-hosts"]
+        annotation = cr["metadata"]["annotations"]["augments.sandbox/allow-hosts"]
         # Every host, in order, and nothing else: a containment check would
         # pass just as well on a truncated or reordered list.
         assert annotation == "api.example.com,*.foo.com"

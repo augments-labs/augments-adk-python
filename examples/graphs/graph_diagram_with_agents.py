@@ -20,12 +20,12 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk import Agent, Runner
-from philharmonica.adk.graphs import AgentExecutable
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.run import RunConfig
-from philharmonica.adk.verbose import VerboseConfig
-from philharmonica.adk.visualization import render_dot, render_mermaid
+from augments.adk import Agent, Runner
+from augments.adk.graphs import AgentExecutable
+from augments.adk.graphs.graph import Graph
+from augments.adk.run import RunConfig
+from augments.adk.verbose import VerboseConfig
+from augments.adk.visualization import render_dot, render_mermaid
 
 logger = logging.getLogger(__name__)
 

@@ -5,8 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any
 
-from philharmonica.adk.sandbox.clients.local.subprocess_client import LocalSandboxSession
-from philharmonica.adk.types.sandbox.exec_result import ExecResult
+from augments.adk.sandbox.clients.local.subprocess_client import LocalSandboxSession
+from augments.adk.types.sandbox.exec_result import ExecResult
 
 
 async def test_apply_patch_delivers_diff_via_file(tmp_path: Path) -> None:

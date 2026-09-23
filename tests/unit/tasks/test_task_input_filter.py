@@ -20,12 +20,12 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.tasks import Task, TaskDependency, TaskInputData, TaskPipeline
-from philharmonica.adk.tasks.task_filters import forward_final_output, keep_last_n
-from philharmonica.adk.types.items.items import UserItem
-from philharmonica.adk.types.run.run_result import RunResult
+from augments.adk.agents.agent import Agent
+from augments.adk.run.context import RunContext
+from augments.adk.tasks import Task, TaskDependency, TaskInputData, TaskPipeline
+from augments.adk.tasks.task_filters import forward_final_output, keep_last_n
+from augments.adk.types.items.items import UserItem
+from augments.adk.types.run.run_result import RunResult
 
 
 def _agent() -> Agent:
@@ -53,7 +53,7 @@ class TestNoFilterKeepsDescription:
         a = Task(description="A", agent=agent, task_id="a")
         b = Task(description="B description", agent=agent, task_id="b", depends_on=(a,))
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake)):
             await Runner.arun_task_pipeline(TaskPipeline(tasks=(a, b)))
@@ -78,7 +78,7 @@ class TestBuiltinForwardFinalOutput:
             depends_on=(TaskDependency(task=a, input_filter=forward_final_output),),
         )
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake)):
             await Runner.arun_task_pipeline(TaskPipeline(tasks=(a, b)))
@@ -118,7 +118,7 @@ class TestCustomFilter:
             depends_on=(TaskDependency(task=a, input_filter=custom_filter),),
         )
 
-        from philharmonica.adk.run.runner import Runner
+        from augments.adk.run.runner import Runner
 
         with patch.object(Runner, "arun", new=AsyncMock(side_effect=fake)):
             await Runner.arun_task_pipeline(TaskPipeline(tasks=(a, b)))
@@ -167,7 +167,7 @@ class TestTaskInputDataClone:
     """Regression tests for the explicit-forwarded-only clone API."""
 
     def _make_input_data(self) -> TaskInputData:
-        from philharmonica.adk.tasks.task_output import TaskOutput
+        from augments.adk.tasks.task_output import TaskOutput
 
         output = TaskOutput(task_id="up1", task_name="upstream-1", final_output="ans")
         return TaskInputData(task_id="up1", output=output, items=())
@@ -191,7 +191,7 @@ class TestTaskInputDataClone:
 
     def test_clone_with_none_forwarded_clears_it(self) -> None:
         item = UserItem(raw={"role": "user", "content": "hi"})
-        from philharmonica.adk.tasks.task_output import TaskOutput
+        from augments.adk.tasks.task_output import TaskOutput
 
         output = TaskOutput(task_id="x", task_name="x")
         data = TaskInputData(task_id="x", output=output, items=(), forwarded=(item,))
@@ -207,7 +207,7 @@ class TestTaskInputDataClone:
     def test_clone_does_not_accept_output_override(self) -> None:
         """output is an audit field and must not be overridable via clone."""
         data = self._make_input_data()
-        from philharmonica.adk.tasks.task_output import TaskOutput
+        from augments.adk.tasks.task_output import TaskOutput
 
         other_output = TaskOutput(task_id="y", task_name="y")
         with pytest.raises(TypeError):

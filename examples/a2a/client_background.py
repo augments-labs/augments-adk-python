@@ -6,7 +6,7 @@ just polls in-process every second.
 
 Usage::
 
-    pip install 'philharmonica-adk[a2a]'
+    pip install 'augments-adk[a2a]'
     python examples/a2a/client_background.py [URL]
 """
 
@@ -25,7 +25,7 @@ import json
 import logging
 import sys
 
-from philharmonica.adk.a2a import A2AAgent, A2AContinuationToken, A2ARunner, A2ATaskError
+from augments.adk.a2a import A2AAgent, A2AContinuationToken, A2ARunner, A2ATaskError
 
 logger = logging.getLogger(__name__)
 

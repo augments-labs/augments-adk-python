@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.flows.result``.
+"""Tests for ``augments.adk.flows.result``.
 
 Locks in the lazy-producer scheduling contract on
 ``FlowRunResultStreaming``: when the streamed result is constructed
@@ -14,7 +14,7 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.flows.result import FlowRunResultStreaming
+from augments.adk.flows.result import FlowRunResultStreaming
 
 
 @pytest.mark.asyncio

@@ -32,13 +32,13 @@ import sys
 
 from pydantic import BaseModel
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.llms import LLMConfig
-from philharmonica.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.llms import LLMRetryPolicy
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.llms import LLMConfig
+from augments.adk.llms.anthropic import AnthropicConfig, AnthropicLLM
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools import function_tool
+from augments.adk.types.llms import LLMRetryPolicy
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 

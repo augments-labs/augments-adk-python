@@ -15,7 +15,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from philharmonica.adk.llms.litellm.litellm_model import LiteLLM
+from augments.adk.llms.litellm.litellm_model import LiteLLM
 
 
 def _chunk(text: str) -> SimpleNamespace:
@@ -224,7 +224,7 @@ async def test_streamed_thinking_blocks_with_signature_reconstructed() -> None:
     ``choices=[]`` — so the structured thinking blocks (and their signatures,
     which Anthropic requires on replay) were always lost.
     """
-    from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+    from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
     async def _chunks():
         yield _thinking_chunk(thinking="Let me think")
@@ -248,7 +248,7 @@ async def test_streamed_thinking_blocks_with_signature_reconstructed() -> None:
 
 async def test_streamed_redacted_thinking_block_reconstructed() -> None:
     """A streamed redacted_thinking block must round-trip with its opaque data."""
-    from philharmonica.adk.types.responses.llm_response import LLMResponseReasoning
+    from augments.adk.types.responses.llm_response import LLMResponseReasoning
 
     def _redacted_chunk() -> SimpleNamespace:
         return SimpleNamespace(

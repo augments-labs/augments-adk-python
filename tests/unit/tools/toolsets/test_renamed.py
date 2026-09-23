@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.tools import FunctionToolset, RenamedToolset, function_tool
+from augments.adk.tools import FunctionToolset, RenamedToolset, function_tool
 
 
 @function_tool(name="a", description="Tool A")

@@ -20,7 +20,7 @@ reflect the new design. If the change is wide-reaching, update
 Add an entry under `CHANGELOG.md` `[Unreleased]` → `Changed` (or
 `Fixed` if it's a bug fix that user code may need to be aware of).
 
-## Did you add a new module under `src/philharmonica/adk/`?
+## Did you add a new module under `src/augments/adk/`?
 
 Add a `docs/guides/<module>.md` (or expand a relevant
 `docs/architecture/<page>.md`).

@@ -1,6 +1,6 @@
 # Declarative Agent Configuration
 
-The `philharmonica.adk.config` subsystem lets you define an `Agent` — or an entire
+The `augments.adk.config` subsystem lets you define an `Agent` — or an entire
 multi-agent topology — as a JSON (or YAML) document and load it with a single
 function call. The document is validated against strict Pydantic models before
 the `Agent` is assembled; a typo fails loudly instead of being silently
@@ -21,7 +21,7 @@ boundary.
 Put the tool body in an importable module, `weather.py`, next to the config:
 
 ```python
-from philharmonica.adk.tools import function_tool
+from augments.adk.tools import function_tool
 
 
 @function_tool
@@ -34,7 +34,7 @@ Reference it from `agent.json` by its dotted path:
 
 ```json
 {
-  "$schema": "../../src/philharmonica/adk/types/config/agent_config.schema.json",
+  "$schema": "../../src/augments/adk/types/config/agent_config.schema.json",
   "name": "weather_assistant",
   "description": "Answers weather questions using a tool.",
   "system_prompt": "You are a concise weather assistant. Call get_weather for every city.",
@@ -50,8 +50,8 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk.config import load_agent
-from philharmonica.adk.run import Runner
+from augments.adk.config import load_agent
+from augments.adk.run import Runner
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -84,7 +84,7 @@ Create `topology.json`:
 
 ```json
 {
-  "$schema": "../../src/philharmonica/adk/types/config/topology_config.schema.json",
+  "$schema": "../../src/augments/adk/types/config/topology_config.schema.json",
   "agents": {
     "triage": {
       "name": "triage",
@@ -107,8 +107,8 @@ Create `topology.json`:
 Load it:
 
 ```python
-from philharmonica.adk.config import load_topology
-from philharmonica.adk.run import Runner
+from augments.adk.config import load_topology
+from augments.adk.run import Runner
 
 topology = load_topology(Path("topology.json"))
 entry = topology.agents[topology.entry]
@@ -119,7 +119,7 @@ result = await Runner.arun(entry, "Hola, ¿me puedes saludar?")
 
 `.yaml` and `.yml` files are accepted everywhere `.json` is — the loader
 dispatches on the file extension. YAML requires the optional `pyyaml`
-dependency (`pip install philharmonica-adk[yaml]`). Both formats pass through
+dependency (`pip install augments-adk[yaml]`). Both formats pass through
 the same Pydantic validation and assembler; no behavior differs.
 
 ```yaml
@@ -455,7 +455,7 @@ validation:
 
 ```json
 {
-  "$schema": "../../src/philharmonica/adk/types/config/agent_node_config.schema.json",
+  "$schema": "../../src/augments/adk/types/config/agent_node_config.schema.json",
   "name": "triage",
   "system_prompt": "Route Spanish requests to the spanish agent.",
   "llm": "claude-haiku-4-5-20251001",
@@ -591,7 +591,7 @@ generated schema:
 
 ```json
 {
-  "$schema": "../../src/philharmonica/adk/types/config/agent_config.schema.json",
+  "$schema": "../../src/augments/adk/types/config/agent_config.schema.json",
   "name": "my_agent",
   ...
 }
@@ -599,10 +599,10 @@ generated schema:
 
 The generated schemas sit in the source tree:
 
-- `src/philharmonica/adk/types/config/agent_config.schema.json` — a single agent.
-- `src/philharmonica/adk/types/config/agent_node_config.schema.json` — a sub-agent
+- `src/augments/adk/types/config/agent_config.schema.json` — a single agent.
+- `src/augments/adk/types/config/agent_node_config.schema.json` — a sub-agent
   file (an agent plus `handoffs`), pointed at by a topology's `config_path`.
-- `src/philharmonica/adk/types/config/topology_config.schema.json` — a topology.
+- `src/augments/adk/types/config/topology_config.schema.json` — a topology.
 
 Editors that support JSON Schema (VS Code, PyCharm, Neovim with LSP) will
 autocomplete field names, flag unknown keys, and show inline documentation.
@@ -613,10 +613,10 @@ performed by the Pydantic models, not the JSON Schema file. The schemas are
 regenerated with:
 
 ```bash
-python -m philharmonica.adk.config.schema
+python -m augments.adk.config.schema
 ```
 
-Run this command after changing any type in `src/philharmonica/adk/types/config/`
+Run this command after changing any type in `src/augments/adk/types/config/`
 and commit both the source change and the updated schema files together. A
 drift-guard test verifies they stay in sync.
 
@@ -658,8 +658,8 @@ name through registries. You can extend each registry to add your own:
 **Custom LLM provider:**
 
 ```python
-from philharmonica.adk.config import register_llm_provider
-from philharmonica.adk.llms import LLM, LLMConfig
+from augments.adk.config import register_llm_provider
+from augments.adk.llms import LLM, LLMConfig
 
 def my_provider_factory(block: dict) -> tuple[LLM, LLMConfig | None]:
     return MyCustomLLM(model=block["model"]), None
@@ -673,8 +673,8 @@ accepted.
 **Custom hosted tool:**
 
 ```python
-from philharmonica.adk.config import register_hosted_tool
-from philharmonica.adk.tools.hosted import HostedTool
+from augments.adk.config import register_hosted_tool
+from augments.adk.tools.hosted import HostedTool
 
 def my_tool_factory(args: dict) -> HostedTool:
     return MyCustomHostedTool(**args)
@@ -690,7 +690,7 @@ register_hosted_tool("my_tool", my_tool_factory)
 dict. The result validates as an `AgentConfig`.
 
 ```python
-from philharmonica.adk.config import dump_agent
+from augments.adk.config import dump_agent
 import json
 
 data = dump_agent(my_agent)

@@ -1,4 +1,4 @@
-"""Tests for ``philharmonica.adk.verbose.panel_renderer``.
+"""Tests for ``augments.adk.verbose.panel_renderer``.
 
 Validates the CrewAI-faithful Rich-Panel backend using
 ``rich.console.Console(record=True)`` so assertions run against
@@ -27,7 +27,7 @@ from unittest import mock
 import pytest
 from rich.console import Console
 
-from philharmonica.adk.verbose.config import (
+from augments.adk.verbose.config import (
     EVENT_AGENT_END,
     EVENT_AGENT_FINISH,
     EVENT_AGENT_START,
@@ -38,8 +38,8 @@ from philharmonica.adk.verbose.config import (
     EVENT_TOOL_START,
     VerboseConfig,
 )
-from philharmonica.adk.verbose.hooks import VerboseHooks
-from philharmonica.adk.verbose.panel_renderer import (
+from augments.adk.verbose.hooks import VerboseHooks
+from augments.adk.verbose.panel_renderer import (
     PanelRenderer,
     escape_markup,
     format_tool_payload,

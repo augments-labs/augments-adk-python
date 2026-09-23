@@ -17,14 +17,14 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.agents.agent import Agent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseText,
 )
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.verbose import VerboseConfig
 
 
 def _fake_text(text: str = "ok") -> LLMResponse:
@@ -39,25 +39,25 @@ def _patches(fake_call_llm: Any) -> ExitStack:
     stack = ExitStack()
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.loop.call_llm",
+            "augments.adk.run.loop.call_llm",
             new=AsyncMock(side_effect=fake_call_llm),
         )
     )
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_blocking_input_guardrails",
+            "augments.adk.run.runner.run_blocking_input_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_parallel_input_guardrails",
+            "augments.adk.run.runner.run_parallel_input_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )
     stack.enter_context(
         patch(
-            "philharmonica.adk.run.runner.run_output_guardrails",
+            "augments.adk.run.runner.run_output_guardrails",
             new=AsyncMock(return_value=[]),
         )
     )

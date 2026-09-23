@@ -18,7 +18,7 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     Flow,
     FlowApprovalPolicy,
     FlowCheckpoint,
@@ -30,9 +30,9 @@ from philharmonica.adk.flows import (
     flow_router,
     flow_start,
 )
-from philharmonica.adk.flows.executor import FlowExecutor
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.flows.executor import FlowExecutor
+from augments.adk.run.runner import Runner
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 
 class _State(BaseModel):
@@ -162,18 +162,18 @@ class TestFlowStepRoleAndTriggers:
 
 class TestFlowErrorTrigger:
     def test_constant_is_the_error_route_literal(self) -> None:
-        from philharmonica.adk.flows import FLOW_ERROR_TRIGGER
+        from augments.adk.flows import FLOW_ERROR_TRIGGER
 
         assert FLOW_ERROR_TRIGGER == "__error__"
 
     def test_constant_reexported_from_top_level_package(self) -> None:
-        import philharmonica.adk as adk
-        from philharmonica.adk.flows import FLOW_ERROR_TRIGGER
+        import augments.adk as adk
+        from augments.adk.flows import FLOW_ERROR_TRIGGER
 
         assert adk.FLOW_ERROR_TRIGGER == FLOW_ERROR_TRIGGER
 
     async def test_error_handler_fires_via_constant(self) -> None:
-        from philharmonica.adk.flows import FLOW_ERROR_TRIGGER
+        from augments.adk.flows import FLOW_ERROR_TRIGGER
 
         class F(Flow[_State]):
             @flow_start

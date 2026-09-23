@@ -19,11 +19,11 @@ from unittest.mock import patch
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.exceptions import ToolDependencyError, ToolsetNameConflictError
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.llm_calls import build_tools, resolve_function_tool
-from philharmonica.adk.tools import (
+from augments.adk.agents.agent import Agent
+from augments.adk.exceptions import ToolDependencyError, ToolsetNameConflictError
+from augments.adk.run.context import RunContext
+from augments.adk.run.llm_calls import build_tools, resolve_function_tool
+from augments.adk.tools import (
     CombinedToolset,
     FunctionTool,
     FunctionToolset,
@@ -53,7 +53,7 @@ class TestAgentAcceptsToolsets:
         bad_tool = FunctionTool(
             name="needs_env",
             schema={"type": "object", "properties": {}},
-            requires_env=("PHILHARMONICA_TOOLSET_TEST_MISSING",),
+            requires_env=("AUGMENTS_TOOLSET_TEST_MISSING",),
         )
         ts = FunctionToolset(tools=[bad_tool])
         with patch.dict("os.environ", {}, clear=True), pytest.raises(ToolDependencyError):
@@ -67,7 +67,7 @@ class TestAgentAcceptsToolsets:
         bad_tool = FunctionTool(
             name="needs_env",
             schema={"type": "object", "properties": {}},
-            requires_env=("PHILHARMONICA_TOOLSET_TEST_MISSING",),
+            requires_env=("AUGMENTS_TOOLSET_TEST_MISSING",),
         )
         wrapped = FunctionToolset(tools=[bad_tool]).prefixed("ns")
         with patch.dict("os.environ", {}, clear=True):

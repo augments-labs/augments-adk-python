@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.audit import InMemoryAuditSink
-from philharmonica.adk.audit.event import AuditEvent
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.governance import emit_audit
+from augments.adk.audit import InMemoryAuditSink
+from augments.adk.audit.event import AuditEvent
+from augments.adk.run.config import RunConfig
+from augments.adk.run.governance import emit_audit
 
 
 async def test_emit_records_to_sink() -> None:

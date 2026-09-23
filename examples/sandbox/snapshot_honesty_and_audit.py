@@ -2,7 +2,7 @@
 
 Synthetic (no Agent / no LLM / no provider credentials): drives the
 public ``sandbox_run_context`` lifecycle bracket directly against the
-local subprocess backend, demonstrating three Philharmonica-ADK behaviours
+local subprocess backend, demonstrating three Augments-ADK behaviours
 that the OpenAI Agents SDK has no equivalent for:
 
 1. Structured per-run lifecycle AUDIT — a pluggable ``AuditSink``
@@ -31,15 +31,15 @@ import asyncio
 import logging
 from pathlib import Path
 
-from philharmonica.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
-from philharmonica.adk.sandbox.clients.local.subprocess_client import (
+from augments.adk.exceptions.exceptions import UnsupportedSnapshotFeatureError
+from augments.adk.sandbox.clients.local.subprocess_client import (
     LocalSandboxClientOptions,
     LocalSubprocessSandboxClient,
 )
-from philharmonica.adk.sandbox.config import SandboxRunConfig
-from philharmonica.adk.sandbox.observability.audit_sink import AuditSink, SandboxAuditEvent
-from philharmonica.adk.sandbox.runner_integration import sandbox_run_context
-from philharmonica.adk.types.sandbox.snapshot import LocalSnapshotSpec
+from augments.adk.sandbox.config import SandboxRunConfig
+from augments.adk.sandbox.observability.audit_sink import AuditSink, SandboxAuditEvent
+from augments.adk.sandbox.runner_integration import sandbox_run_context
+from augments.adk.types.sandbox.snapshot import LocalSnapshotSpec
 
 logger = logging.getLogger("snapshot_honesty_and_audit")
 
@@ -113,7 +113,7 @@ async def demo_snapshot_store_is_rejected_loudly() -> None:
 async def demo_snapshot_discard_is_loud() -> None:
     """A configured snapshot is discarded with a WARNING — never silently."""
     logger.info("--- Demo 3: loud snapshot discard (watch for the WARNING) ---")
-    config = _local_config(snapshot=LocalSnapshotSpec(base_path=Path("/tmp/philharmonica-ex-snap")))
+    config = _local_config(snapshot=LocalSnapshotSpec(base_path=Path("/tmp/augments-ex-snap")))
     async with sandbox_run_context(
         config=config,
         capabilities=[],

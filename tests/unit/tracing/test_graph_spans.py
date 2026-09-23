@@ -14,9 +14,9 @@ to route to graph-specific attribute conventions.
 
 from __future__ import annotations
 
-from philharmonica.adk.tracing import Span, set_tracer
-from philharmonica.adk.tracing.spans import graph_node_span, graph_span, graph_superstep_span
-from philharmonica.adk.types.tracing.span_data import (
+from augments.adk.tracing import Span, set_tracer
+from augments.adk.tracing.spans import graph_node_span, graph_span, graph_superstep_span
+from augments.adk.types.tracing.span_data import (
     AgentSpanData,
     CustomSpanData,
     FunctionSpanData,

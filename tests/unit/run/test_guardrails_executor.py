@@ -11,18 +11,18 @@ import asyncio
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentOutputGuardrail,
     AgentOutputGuardrailData,
     AgentTimeoutPolicy,
 )
-from philharmonica.adk.exceptions import AgentOutputGuardrailTripwireTriggered
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.guardrails_executor import run_output_guardrails
+from augments.adk.exceptions import AgentOutputGuardrailTripwireTriggered
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.run.guardrails_executor import run_output_guardrails
 
 
 def _make_agent(output_guardrails: list | None = None) -> Agent:

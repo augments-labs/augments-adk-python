@@ -26,14 +26,14 @@ except ImportError:
 import asyncio
 import logging
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.context import CompactionConfig, ContextManagementConfig
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools import JITContextAwareTool
-from philharmonica.adk.tools.function_tool import function_tool
-from philharmonica.adk.tools.tool_context import ToolContext
-from philharmonica.adk.types.input import LLMInputContentItem, LLMInputEasyMessage
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.agents import Agent
+from augments.adk.context import CompactionConfig, ContextManagementConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools import JITContextAwareTool
+from augments.adk.tools.function_tool import function_tool
+from augments.adk.tools.tool_context import ToolContext
+from augments.adk.types.input import LLMInputContentItem, LLMInputEasyMessage
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -204,7 +204,7 @@ analyst = Agent(
 # No passive compaction — the agent must manage its own context.
 # Budget: 8K tokens leaves room for the system prompt + tool schemas
 # (~1.5K) and a few topic lookups before pressure kicks in around turn 3.
-from philharmonica.adk.context import ContextEditingConfig
+from augments.adk.context import ContextEditingConfig
 
 config = RunConfig(
     verbose=VerboseConfig(),
@@ -239,7 +239,7 @@ HUMAN_TURNS = [
 
 def _extract_tool_calls(new_items: list) -> list[dict]:
     """Extract tool call info from new_items (RunItems) for logging."""
-    from philharmonica.adk.types.items.items import ToolCallItem, ToolCallOutputItem
+    from augments.adk.types.items.items import ToolCallItem, ToolCallOutputItem
 
     calls = []
     for item in new_items:
@@ -265,9 +265,9 @@ async def main() -> None:
     logger.info("=== JIT Context Aware Tool — Multi-Turn Demo ===\n")
 
     # Enable context management logging
-    ctx_logger = logging.getLogger("philharmonica.adk.context")
+    ctx_logger = logging.getLogger("augments.adk.context")
     ctx_logger.setLevel(logging.INFO)
-    jit_logger = logging.getLogger("philharmonica.adk.tools.builtin.jit_context_aware_tool")
+    jit_logger = logging.getLogger("augments.adk.tools.builtin.jit_context_aware_tool")
     jit_logger.setLevel(logging.INFO)
 
     # Accumulate conversation history across turns

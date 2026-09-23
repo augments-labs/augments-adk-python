@@ -3,9 +3,9 @@ import tempfile
 
 import pytest
 
-from philharmonica.adk.exceptions import QuotaExceeded
-from philharmonica.adk.status.store import AgentStatusStore
-from philharmonica.adk.status.types import AgentQuota, AgentRunRecord
+from augments.adk.exceptions import QuotaExceeded
+from augments.adk.status.store import AgentStatusStore
+from augments.adk.status.types import AgentQuota, AgentRunRecord
 
 
 def _record(

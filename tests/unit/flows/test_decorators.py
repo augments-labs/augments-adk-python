@@ -9,7 +9,7 @@ from __future__ import annotations
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     And,
     Flow,
     FlowDefinitionError,

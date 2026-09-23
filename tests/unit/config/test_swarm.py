@@ -10,9 +10,9 @@ from __future__ import annotations
 import pytest
 from pydantic import TypeAdapter, ValidationError
 
-from philharmonica.adk.config import build_topology
-from philharmonica.adk.exceptions import ConfigResolutionError
-from philharmonica.adk.swarms import (
+from augments.adk.config import build_topology
+from augments.adk.exceptions import ConfigResolutionError
+from augments.adk.swarms import (
     AndTermination,
     ExplicitDoneTermination,
     HandoffToTermination,
@@ -22,8 +22,8 @@ from philharmonica.adk.swarms import (
     RoundRobinPolicy,
     Swarm,
 )
-from philharmonica.adk.types.config import TopologyConfig
-from philharmonica.adk.types.config.swarm_config import (
+from augments.adk.types.config import TopologyConfig
+from augments.adk.types.config.swarm_config import (
     AndTerminationRef,
     ExplicitDoneTerminationRef,
     HandoffToTerminationRef,

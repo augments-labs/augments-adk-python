@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.graphs.checkpointer import GraphCheckpoint
-from philharmonica.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.graphs.checkpointer import GraphCheckpoint
+from augments.adk.graphs.checkpointers.sqlite import SQLiteCheckpointer
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.state import GraphState
 
 
 def _g() -> Graph:

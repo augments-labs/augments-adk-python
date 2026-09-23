@@ -12,22 +12,22 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.agent_guardrails import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.agent_guardrails import (
     AgentGuardrailFunctionOutput,
     AgentGuardrails,
     AgentOutputGuardrail,
     AgentOutputGuardrailData,
 )
-from philharmonica.adk.exceptions import AgentOutputGuardrailTripwireTriggered
-from philharmonica.adk.hooks.hooks import RunHooks
-from philharmonica.adk.run.context import RunContext
-from philharmonica.adk.run.guardrails_executor import run_output_guardrails
-from philharmonica.adk.run.runner import apply_output_transform
-from philharmonica.adk.types.guardrails import GuardrailAction
-from philharmonica.adk.types.items.items import ItemHelpers, MessageOutputItem
-from philharmonica.adk.types.responses.llm_response import LLMResponseText
-from philharmonica.adk.types.run import RunResult
+from augments.adk.exceptions import AgentOutputGuardrailTripwireTriggered
+from augments.adk.hooks.hooks import RunHooks
+from augments.adk.run.context import RunContext
+from augments.adk.run.guardrails_executor import run_output_guardrails
+from augments.adk.run.runner import apply_output_transform
+from augments.adk.types.guardrails import GuardrailAction
+from augments.adk.types.items.items import ItemHelpers, MessageOutputItem
+from augments.adk.types.responses.llm_response import LLMResponseText
+from augments.adk.types.run import RunResult
 
 
 def _make_agent(output_guardrails: list[AgentOutputGuardrail[None]] | None = None) -> Agent:

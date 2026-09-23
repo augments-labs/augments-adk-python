@@ -5,81 +5,81 @@ shared problem until an explicit termination signal fires.
 
 ## Core
 
-- `philharmonica.adk.swarms.Swarm`
-- `philharmonica.adk.swarms.SwarmBuilder`
-- `philharmonica.adk.swarms.SwarmConfig`
+- `augments.adk.swarms.Swarm`
+- `augments.adk.swarms.SwarmBuilder`
+- `augments.adk.swarms.SwarmConfig`
 
 ## Policies
 
-- `philharmonica.adk.swarms.SwarmPolicy`
-- `philharmonica.adk.swarms.LLMHandoffPolicy`
-- `philharmonica.adk.swarms.RoundRobinPolicy`
-- `philharmonica.adk.swarms.StructuredRoutingPolicy`
-- `philharmonica.adk.swarms.CustomPolicy`
-- `philharmonica.adk.swarms.SwarmSelector`
-- `philharmonica.adk.swarms.SwarmExtraToolsFn`
+- `augments.adk.swarms.SwarmPolicy`
+- `augments.adk.swarms.LLMHandoffPolicy`
+- `augments.adk.swarms.RoundRobinPolicy`
+- `augments.adk.swarms.StructuredRoutingPolicy`
+- `augments.adk.swarms.CustomPolicy`
+- `augments.adk.swarms.SwarmSelector`
+- `augments.adk.swarms.SwarmExtraToolsFn`
 
 ## Termination
 
-- `philharmonica.adk.swarms.TerminationCondition`
-- `philharmonica.adk.swarms.ExplicitDoneTermination`
-- `philharmonica.adk.swarms.MaxTurnsTermination`
-- `philharmonica.adk.swarms.TokenBudgetTermination`
-- `philharmonica.adk.swarms.TextMentionTermination`
-- `philharmonica.adk.swarms.HandoffToTermination`
-- `philharmonica.adk.swarms.AndTermination`
-- `philharmonica.adk.swarms.OrTermination`
+- `augments.adk.swarms.TerminationCondition`
+- `augments.adk.swarms.ExplicitDoneTermination`
+- `augments.adk.swarms.MaxTurnsTermination`
+- `augments.adk.swarms.TokenBudgetTermination`
+- `augments.adk.swarms.TextMentionTermination`
+- `augments.adk.swarms.HandoffToTermination`
+- `augments.adk.swarms.AndTermination`
+- `augments.adk.swarms.OrTermination`
 
 ## State and results
 
-- `philharmonica.adk.swarms.SwarmState`
-- `philharmonica.adk.swarms.SwarmStateDict`
-- `philharmonica.adk.swarms.SwarmRunResult`
-- `philharmonica.adk.swarms.SwarmRunResultStreaming`
-- `philharmonica.adk.swarms.StopReason`
+- `augments.adk.swarms.SwarmState`
+- `augments.adk.swarms.SwarmStateDict`
+- `augments.adk.swarms.SwarmRunResult`
+- `augments.adk.swarms.SwarmRunResultStreaming`
+- `augments.adk.swarms.StopReason`
 
 ## Events
 
-- `philharmonica.adk.swarms.SwarmStartEvent`
-- `philharmonica.adk.swarms.SwarmTurnStartEvent`
-- `philharmonica.adk.swarms.SwarmTurnEndEvent`
-- `philharmonica.adk.swarms.SwarmTurnInterruptEvent`
-- `philharmonica.adk.swarms.SwarmHandoffEvent`
-- `philharmonica.adk.swarms.SwarmDoneEvent`
-- `philharmonica.adk.swarms.SwarmEvent`
+- `augments.adk.swarms.SwarmStartEvent`
+- `augments.adk.swarms.SwarmTurnStartEvent`
+- `augments.adk.swarms.SwarmTurnEndEvent`
+- `augments.adk.swarms.SwarmTurnInterruptEvent`
+- `augments.adk.swarms.SwarmHandoffEvent`
+- `augments.adk.swarms.SwarmDoneEvent`
+- `augments.adk.swarms.SwarmEvent`
 
 ## Yield signals
 
-- `philharmonica.adk.swarms.SwarmDone`
-- `philharmonica.adk.swarms.SwarmHandoff`
-- `philharmonica.adk.swarms.SwarmYieldSignal`
+- `augments.adk.swarms.SwarmDone`
+- `augments.adk.swarms.SwarmHandoff`
+- `augments.adk.swarms.SwarmYieldSignal`
 
 ## Hooks and checkpoints
 
-- `philharmonica.adk.swarms.SwarmHooks`
-- `philharmonica.adk.swarms.HookRegistry`
-- `philharmonica.adk.swarms.SwarmHookRegistry`
-- `philharmonica.adk.swarms.SwarmCheckpoint`
-- `philharmonica.adk.swarms.SwarmCheckpointer`
+- `augments.adk.swarms.SwarmHooks`
+- `augments.adk.swarms.HookRegistry`
+- `augments.adk.swarms.SwarmHookRegistry`
+- `augments.adk.swarms.SwarmCheckpoint`
+- `augments.adk.swarms.SwarmCheckpointer`
 
 ## Interrupt and resume
 
-- `philharmonica.adk.swarms.SwarmResume`
-- `philharmonica.adk.swarms.request_human_input_in_swarm`
+- `augments.adk.swarms.SwarmResume`
+- `augments.adk.swarms.request_human_input_in_swarm`
 
 ## Shared context
 
-- `philharmonica.adk.swarms.SharedContextConfig`
-- `philharmonica.adk.swarms.SharedContextStrategy`
-- `philharmonica.adk.swarms.prepare_turn_input`
-- `philharmonica.adk.swarms.prompt_with_swarm_instructions`
+- `augments.adk.swarms.SharedContextConfig`
+- `augments.adk.swarms.SharedContextStrategy`
+- `augments.adk.swarms.prepare_turn_input`
+- `augments.adk.swarms.prompt_with_swarm_instructions`
 
 ## Constants
 
-- `philharmonica.adk.swarms.DEFAULT_MAX_TURNS`
-- `philharmonica.adk.swarms.DEFAULT_TERMINATION`
-- `philharmonica.adk.swarms.RECOMMENDED_SWARM_PROMPT_PREFIX`
-- `philharmonica.adk.swarms.SWARM_DONE_TOOL_NAME`
+- `augments.adk.swarms.DEFAULT_MAX_TURNS`
+- `augments.adk.swarms.DEFAULT_TERMINATION`
+- `augments.adk.swarms.RECOMMENDED_SWARM_PROMPT_PREFIX`
+- `augments.adk.swarms.SWARM_DONE_TOOL_NAME`
 
 Swarms are executed via `Runner.arun_swarm`. The end-to-end walkthrough
 lives in the [Swarms guide](../../swarms/swarms.md).

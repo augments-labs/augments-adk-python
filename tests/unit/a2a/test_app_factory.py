@@ -18,10 +18,10 @@ pytest.importorskip("starlette")
 
 from a2a.types import AgentCapabilities, AgentCard, AgentInterface
 
-from philharmonica.adk.a2a import A2AServer, build_starlette_app
-from philharmonica.adk.a2a.executor import A2AExecutor
-from philharmonica.adk.a2a.task_store import InMemoryTaskStore
-from philharmonica.adk.agents import Agent
+from augments.adk.a2a import A2AServer, build_starlette_app
+from augments.adk.a2a.executor import A2AExecutor
+from augments.adk.a2a.task_store import InMemoryTaskStore
+from augments.adk.agents import Agent
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -67,7 +67,7 @@ class TestExecutorTaskStoreDefault:
     ) -> None:
         """When unset, the built executor falls back to an in-memory store."""
         server = A2AServer(agent=basic_agent, agent_card=basic_card)
-        with patch("philharmonica.adk.a2a.app_factory.A2AExecutor") as mock_executor:
+        with patch("augments.adk.a2a.app_factory.A2AExecutor") as mock_executor:
             mock_executor.return_value = MagicMock()
             build_starlette_app(server)
         mock_executor.assert_called_once()
@@ -98,7 +98,7 @@ class TestExecutorTaskStorePassthrough:
             agent_card=basic_card,
             executor_task_store=store,
         )
-        with patch("philharmonica.adk.a2a.app_factory.A2AExecutor") as mock_executor:
+        with patch("augments.adk.a2a.app_factory.A2AExecutor") as mock_executor:
             mock_executor.return_value = MagicMock()
             build_starlette_app(server)
         mock_executor.assert_called_once()
@@ -129,7 +129,7 @@ class TestExecutorTaskStorePassthrough:
             captured["executor"] = executor
             return executor
 
-        with patch("philharmonica.adk.a2a.app_factory.A2AExecutor", side_effect=_capture):
+        with patch("augments.adk.a2a.app_factory.A2AExecutor", side_effect=_capture):
             build_starlette_app(server)
         executor = captured["executor"]
         assert executor._task_store is store

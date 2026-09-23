@@ -6,8 +6,8 @@ from typing import Any, cast
 
 import pytest
 
-from philharmonica.adk.llms.anthropic.anthropic_converter import AnthropicConverter
-from philharmonica.adk.tools.hosted import (
+from augments.adk.llms.anthropic.anthropic_converter import AnthropicConverter
+from augments.adk.tools.hosted import (
     CodeExecutionTool,
     FileSearchTool,
     ImageGenerationTool,

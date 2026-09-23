@@ -13,8 +13,8 @@ Tests that:
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.config import NodeRetryPolicy
-from philharmonica.adk.graphs.graph import Graph
+from augments.adk.graphs.config import NodeRetryPolicy
+from augments.adk.graphs.graph import Graph
 
 
 def _noop():
@@ -66,7 +66,7 @@ class TestSetNodeDefaultsBasic:
         assert g.get_node("b").metadata["env"] == "prod"
 
     def test_on_error_default_applied(self) -> None:
-        from philharmonica.adk.orchestration.executable import NodeResult
+        from augments.adk.orchestration.executable import NodeResult
 
         def handler(_nid: str, _exc: BaseException) -> NodeResult | None:
             return None
@@ -175,7 +175,7 @@ class TestSetNodeDefaultsOrdering:
         assert g.get_node("a").timeout == 3.0
 
     def test_set_node_defaults_returns_self_for_chaining(self) -> None:
-        from philharmonica.adk.graphs.builder import GraphBuilder
+        from augments.adk.graphs.builder import GraphBuilder
 
         b: GraphBuilder = GraphBuilder(id="chain-test")
         returned = b.set_node_defaults(timeout=1.0)

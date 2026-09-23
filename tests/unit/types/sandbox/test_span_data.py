@@ -1,8 +1,8 @@
-"""Tests for ``SandboxSpanData`` in ``philharmonica.adk.types.tracing.span_data``."""
+"""Tests for ``SandboxSpanData`` in ``augments.adk.types.tracing.span_data``."""
 
 from __future__ import annotations
 
-from philharmonica.adk.types.tracing import SandboxSpanData
+from augments.adk.types.tracing import SandboxSpanData
 
 
 class TestSandboxSpanData:

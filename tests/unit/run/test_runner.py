@@ -1,4 +1,4 @@
-"""Regression tests for confirmed bugs in ``philharmonica.adk.run.runner``.
+"""Regression tests for confirmed bugs in ``augments.adk.run.runner``.
 
 Each test targets one finding and is written to FAIL on the pre-fix code
 and PASS after the fix.
@@ -24,14 +24,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from pydantic import BaseModel
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.budgets import TenantBudget
-from philharmonica.adk.exceptions import UserError
-from philharmonica.adk.flows import Flow, flow_start
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.tasks.task import Task
-from philharmonica.adk.tools.toolsets.abstract import Toolset
+from augments.adk.agents.agent import Agent
+from augments.adk.budgets import TenantBudget
+from augments.adk.exceptions import UserError
+from augments.adk.flows import Flow, flow_start
+from augments.adk.run.config import RunConfig
+from augments.adk.run.runner import Runner
+from augments.adk.tasks.task import Task
+from augments.adk.tools.toolsets.abstract import Toolset
 
 
 class _State(BaseModel):
@@ -125,7 +125,7 @@ class TestRunStreamedDisposeToolsetsGate:
         agent = Agent(name="m", system_prompt="x", tools=[toolset])
 
         with patch(
-            "philharmonica.adk.run.runner.run_agent_loop_streamed",
+            "augments.adk.run.runner.run_agent_loop_streamed",
             new=AsyncMock(side_effect=_noop_loop_streamed),
         ):
             result = Runner._run_streamed(agent, "go", dispose_toolsets=False)
@@ -141,7 +141,7 @@ class TestRunStreamedDisposeToolsetsGate:
         agent = Agent(name="m", system_prompt="x", tools=[toolset])
 
         with patch(
-            "philharmonica.adk.run.runner.run_agent_loop_streamed",
+            "augments.adk.run.runner.run_agent_loop_streamed",
             new=AsyncMock(side_effect=_noop_loop_streamed),
         ):
             result = Runner._run_streamed(agent, "go")
@@ -153,7 +153,7 @@ class TestRunStreamedDisposeToolsetsGate:
     async def test_swarm_member_turn_passes_dispose_toolsets_false(self) -> None:
         """The streamed swarm member-turn caller must opt OUT of per-turn
         disposal by passing ``dispose_toolsets=False`` to ``_run_streamed``."""
-        from philharmonica.adk.run import swarm_loop_streamed
+        from augments.adk.run import swarm_loop_streamed
 
         member = Agent(name="m", system_prompt="x")
         captured: dict[str, Any] = {}
@@ -220,7 +220,7 @@ class TestArunTaskStreamedBudgetValidation:
         cfg = RunConfig(tenant_budget=TenantBudget(dollars_per_run=1.0), tenant_id="t1")
 
         with patch(
-            "philharmonica.adk.run.runner.run_agent_loop_streamed",
+            "augments.adk.run.runner.run_agent_loop_streamed",
             new=AsyncMock(side_effect=_noop_loop_streamed),
         ):
             result = await Runner.arun_task_streamed(task, run_config=cfg)
@@ -244,9 +244,9 @@ class TestDriveFlowStreamPerStepUsage:
         omitted ``per_step_usage``, so a streamed flow's per-step breakdown
         stayed empty.
         """
-        from philharmonica.adk.flows.result import FlowRunResult, FlowRunResultStreaming
-        from philharmonica.adk.llms.llm_usage import LLMUsage
-        from philharmonica.adk.run.runner import _drive_flow_stream
+        from augments.adk.flows.result import FlowRunResult, FlowRunResultStreaming
+        from augments.adk.llms.llm_usage import LLMUsage
+        from augments.adk.run.runner import _drive_flow_stream
 
         per_step = {
             "step_a": LLMUsage(requests=1, input_tokens=6, output_tokens=4, total_tokens=10),
@@ -287,8 +287,8 @@ class TestStreamedSwarmSharesRunContext:
         Pre-fix: each member turn minted a fresh ``RunContext``, so the per-run
         dollar budget and usage limits reset every turn — a cost-cap bypass.
         """
-        from philharmonica.adk.run import swarm_loop_streamed
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.run import swarm_loop_streamed
+        from augments.adk.run.context import RunContext
 
         member = Agent(name="m", system_prompt="x")
         ctx_wrapper: RunContext[None] = RunContext.make(None)
@@ -326,13 +326,13 @@ class TestStreamedSwarmSharesRunContext:
         """When ``shared_run_context`` is supplied, ``_run_streamed`` must build
         its ``RunResultStreaming`` on that exact context (the accumulation
         target the agent loop writes cost / usage onto), not a fresh one."""
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.run.context import RunContext
 
         agent = Agent(name="A", system_prompt="x")
         shared: RunContext[None] = RunContext.make(None)
 
         with patch(
-            "philharmonica.adk.run.runner.run_agent_loop_streamed",
+            "augments.adk.run.runner.run_agent_loop_streamed",
             new=AsyncMock(side_effect=_noop_loop_streamed),
         ):
             result = Runner._run_streamed(agent, "go", shared_run_context=shared)
@@ -342,13 +342,13 @@ class TestStreamedSwarmSharesRunContext:
     def test_run_streamed_mints_fresh_context_by_default(self) -> None:
         """Default (no ``shared_run_context``) preserves standalone behaviour:
         a fresh ``RunContext`` per run."""
-        from philharmonica.adk.run.context import RunContext
+        from augments.adk.run.context import RunContext
 
         agent = Agent(name="A", system_prompt="x")
         outer: RunContext[None] = RunContext.make(None)
 
         with patch(
-            "philharmonica.adk.run.runner.run_agent_loop_streamed",
+            "augments.adk.run.runner.run_agent_loop_streamed",
             new=AsyncMock(side_effect=_noop_loop_streamed),
         ):
             result = Runner._run_streamed(agent, "go")
@@ -361,8 +361,8 @@ class TestStreamedSwarmSharesRunContext:
         ``shared_run_context`` would silently drop the caller's context — and
         with it the sole carrier of the per-run dollar budget. The
         un-implemented combination must fail closed, not open a cost-cap gap."""
-        from philharmonica.adk.run.context import RunContext
-        from philharmonica.adk.run.state import RunState
+        from augments.adk.run.context import RunContext
+        from augments.adk.run.state import RunState
 
         agent = Agent(name="A", system_prompt="x")
         shared: RunContext[None] = RunContext.make(None)
@@ -385,9 +385,9 @@ class TestWrapHooksWithVerboseIdempotent:
         Pre-fix: wrap composed unconditionally, so a re-wrap produced two
         ``VerboseHooks`` in the chain and re-composed a new object.
         """
-        from philharmonica.adk.run.runner import wrap_hooks_with_verbose
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import find_verbose_hooks
+        from augments.adk.run.runner import wrap_hooks_with_verbose
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import find_verbose_hooks
 
         cfg = RunConfig(verbose=VerboseConfig(enabled=True))
         once = wrap_hooks_with_verbose(None, cfg)
@@ -400,10 +400,10 @@ class TestWrapHooksWithVerboseIdempotent:
     def test_double_wrap_with_user_hooks_stays_idempotent(self) -> None:
         """Idempotency holds with a user hook present: the second wrap returns
         the same chain rather than nesting another verbose layer."""
-        from philharmonica.adk.hooks.hooks import RunHooks
-        from philharmonica.adk.run.runner import wrap_hooks_with_verbose
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import find_verbose_hooks
+        from augments.adk.hooks.hooks import RunHooks
+        from augments.adk.run.runner import wrap_hooks_with_verbose
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import find_verbose_hooks
 
         cfg = RunConfig(verbose=VerboseConfig(enabled=True))
         once = wrap_hooks_with_verbose(RunHooks(), cfg)
@@ -427,8 +427,8 @@ class TestVerbosePanelSweepOnException:
 
         Pre-fix: the streamed teardown never called ``close_all_panels()``.
         """
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import VerboseHooks
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import VerboseHooks
 
         agent = Agent(name="A", system_prompt="x")
         cfg = RunConfig(verbose=VerboseConfig(enabled=True))
@@ -438,7 +438,7 @@ class TestVerbosePanelSweepOnException:
             raise RuntimeError("mid-run boom")
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop_streamed", new=AsyncMock(side_effect=_boom)),
+            patch("augments.adk.run.runner.run_agent_loop_streamed", new=AsyncMock(side_effect=_boom)),
             patch.object(VerboseHooks, "close_all_panels", autospec=True) as mock_close,
         ):
             result = Runner._run_streamed(agent, "go", run_config=cfg)
@@ -450,8 +450,8 @@ class TestVerbosePanelSweepOnException:
 
     async def test_arun_exception_sweeps_verbose_panels(self) -> None:
         """The non-streamed ``arun`` teardown sweeps open panels the same way."""
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import VerboseHooks
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import VerboseHooks
 
         agent = Agent(name="A", system_prompt="x")
         cfg = RunConfig(verbose=VerboseConfig(enabled=True))
@@ -461,7 +461,7 @@ class TestVerbosePanelSweepOnException:
             raise RuntimeError("boom")
 
         with (
-            patch("philharmonica.adk.run.runner.run_agent_loop", new=AsyncMock(side_effect=_boom)),
+            patch("augments.adk.run.runner.run_agent_loop", new=AsyncMock(side_effect=_boom)),
             patch.object(VerboseHooks, "close_all_panels", autospec=True) as mock_close,
             pytest.raises(RuntimeError, match="boom"),
         ):
@@ -473,16 +473,14 @@ class TestVerbosePanelSweepOnException:
         """A clean run must NOT sweep — guards against an over-broad teardown
         that would prematurely close a swarm's shared panels on a healthy
         member turn (the sweep is gated on the run ending by exception)."""
-        from philharmonica.adk.verbose.config import VerboseConfig
-        from philharmonica.adk.verbose.hooks import VerboseHooks
+        from augments.adk.verbose.config import VerboseConfig
+        from augments.adk.verbose.hooks import VerboseHooks
 
         agent = Agent(name="A", system_prompt="x")
         cfg = RunConfig(verbose=VerboseConfig(enabled=True))
 
         with (
-            patch(
-                "philharmonica.adk.run.runner.run_agent_loop_streamed", new=AsyncMock(side_effect=_noop_loop_streamed)
-            ),
+            patch("augments.adk.run.runner.run_agent_loop_streamed", new=AsyncMock(side_effect=_noop_loop_streamed)),
             patch.object(VerboseHooks, "close_all_panels", autospec=True) as mock_close,
         ):
             result = Runner._run_streamed(agent, "go", run_config=cfg)

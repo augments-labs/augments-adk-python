@@ -4,14 +4,14 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions import UnsupportedMountStrategyError
-from philharmonica.adk.sandbox.policy import (
+from augments.adk.exceptions import UnsupportedMountStrategyError
+from augments.adk.sandbox.policy import (
     apply_mounts_to_docker,
     apply_mounts_to_hosted_bridge,
     apply_mounts_to_k8s_pod,
     describe_mount_for_local,
 )
-from philharmonica.adk.types.sandbox.mounts import (
+from augments.adk.types.sandbox.mounts import (
     AzureBlobMount,
     BoxMount,
     DockerVolumeMountStrategy,

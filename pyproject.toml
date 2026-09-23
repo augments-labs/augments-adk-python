@@ -6,9 +6,9 @@ requires = ["setuptools>=70.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "philharmonica-adk"
+name = "augments-adk"
 version = "0.2.3"
-description = "Philharmonica ADK (being renamed; see the repository) — orchestrate a complex system of agents that performs real-world actions, provider-agnostic across 100+ LLMs"
+description = "Augments ADK — orchestrate a complex system of agents that performs real-world actions, provider-agnostic across 100+ LLMs"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.12,<3.14"
@@ -50,7 +50,7 @@ classifiers = [
 # -------------------------------------------------------------------------
 # Core runtime dependencies.
 #
-# Every top-level import in src/philharmonica/adk/ resolves to one of these.
+# Every top-level import in src/augments/adk/ resolves to one of these.
 # Optional providers / exporters live under [project.optional-dependencies]
 # and are gated behind try/except or TYPE_CHECKING in the source.
 # -------------------------------------------------------------------------
@@ -61,27 +61,27 @@ dependencies = [
     "aiosqlite>=0.21.0",          # session/, memory/, databases/sqlite core paths
     "httpx>=0.27.0",              # llms/llm_config.py imports Timeout unconditionally; LLMConfig.timeout is public API
     "typing-extensions>=4.15.0,<5",
-    "click>=8.1.7,<9",            # the bundled `philharmonica` CLI (cli/); zero transitive deps on POSIX
+    "click>=8.1.7,<9",            # the bundled `augments` CLI (cli/); zero transitive deps on POSIX
 ]
 # ``rich`` is intentionally NOT a core runtime dependency. All
 # verbose-output imports are lazy (TYPE_CHECKING + inside-method imports
 # in ``verbose/renderer.py`` and ``verbose/panel_renderer.py``), so
-# ``pip install philharmonica-adk`` works without it. Install the optional
+# ``pip install augments-adk`` works without it. Install the optional
 # ``[verbose]`` extra to enable the Rich-backed panel + line renderers.
 
 # -------------------------------------------------------------------------
 # Optional dependency groups.
 #
-# Install with:   pip install 'philharmonica-adk[anthropic,openai,otel,mcp,viz,verbose]'
-#                 pip install 'philharmonica-adk[all]'             # every feature extra
-#                 pip install 'philharmonica-adk[dev]'             # contributors
+# Install with:   pip install 'augments-adk[anthropic,openai,otel,mcp,viz,verbose]'
+#                 pip install 'augments-adk[all]'             # every feature extra
+#                 pip install 'augments-adk[dev]'             # contributors
 # -------------------------------------------------------------------------
 [project.optional-dependencies]
 
 # --- Feature extras (shipped to ADK consumers) ---------------------------
 
 # Native Anthropic SDK path — alternative to litellm for Claude models.
-# Activates AnthropicLLM. See src/philharmonica/adk/llms/anthropic/.
+# Activates AnthropicLLM. See src/augments/adk/llms/anthropic/.
 # Capped below 1.0: 1.x drops ``temperature`` / ``top_p`` / ``top_k``
 # from ``messages.create()``, which AnthropicLLM still forwards.
 anthropic = ["anthropic>=0.75.0,<1"]
@@ -93,7 +93,7 @@ anthropic = ["anthropic>=0.75.0,<1"]
 # parameter (e.g. ``prompt_cache_retention``) is required.
 # Capped below 3.0: 3.x moves the transport to httpx2, and litellm
 # does not yet accept it (the resolver falls back to an old litellm).
-# See src/philharmonica/adk/llms/openai/.
+# See src/augments/adk/llms/openai/.
 openai = ["openai>=2.0.0,<3"]
 
 # Voice pipeline — speech-to-text + text-to-speech. Builds on the native
@@ -101,17 +101,17 @@ openai = ["openai>=2.0.0,<3"]
 # realtime transcription session; `numpy` converts captured microphone sample
 # arrays to PCM (raw PCM bytes need no extra). Both are soft-imported, so the
 # core voice ABCs and the buffered path import without them.
-# See src/philharmonica/adk/voice/ and src/philharmonica/adk/llms/openai/openai_stt.py.
-voice = ["philharmonica-adk[openai]", "websockets>=13.0", "numpy>=1.26"]
+# See src/augments/adk/voice/ and src/augments/adk/llms/openai/openai_stt.py.
+voice = ["augments-adk[openai]", "websockets>=13.0", "numpy>=1.26"]
 
 # Native Google GenAI SDK path — alternative to litellm for Gemini
 # models. Activates GeminiLLM (single class supporting both the
 # Gemini Developer API and Vertex AI via the SDK's vertexai flag).
-# See src/philharmonica/adk/llms/gemini/.
+# See src/augments/adk/llms/gemini/.
 gemini = ["google-genai>=1.0.0"]
 
 # Model Context Protocol client. Enables MCPServer integration.
-# See src/philharmonica/adk/mcp/.
+# See src/augments/adk/mcp/.
 #
 # Floor is 2.0: the transports are built against `streamable_http_client`
 # and the `httpx2` client types, neither of which the 1.x line provides.
@@ -124,7 +124,7 @@ mcp = ["mcp>=2.0.0,<3", "httpx2>=2.5.0"]
 # sse-starlette for the server path. Client-only deployments still
 # work without a server runtime — the import guard surfaces missing
 # dependencies as a clear ImportError.
-# See src/philharmonica/adk/a2a/.
+# See src/augments/adk/a2a/.
 a2a = ["a2a-sdk[http-server]>=1.0.0"]
 
 # HTTP serving layer — the plain-REST surface (POST /run, POST /run_sse)
@@ -132,17 +132,17 @@ a2a = ["a2a-sdk[http-server]>=1.0.0"]
 # sse-starlette. This extra carries only the ASGI *app* stack; the
 # framework never imports a server runtime (uvicorn). The A2A surface is a
 # separate extra that the serving app mounts when present.
-# See src/philharmonica/adk/serving/.
+# See src/augments/adk/serving/.
 server = ["starlette>=0.37", "sse-starlette>=2.0"]
 
-# `philharmonica serve` — runs the serving app (REST + health, plus the A2A
+# `augments serve` — runs the serving app (REST + health, plus the A2A
 # surface) under uvicorn. The framework itself never imports uvicorn (the
 # developer owns the ASGI runtime); only the CLI `serve` command does,
-# behind a guiding ImportError. See src/philharmonica/adk/cli/serve.py.
-serve = ["philharmonica-adk[server,a2a]", "uvicorn>=0.30"]
+# behind a guiding ImportError. See src/augments/adk/cli/serve.py.
+serve = ["augments-adk[server,a2a]", "uvicorn>=0.30"]
 
 # OpenTelemetry tracing bridge. Install to enable setup_otel() and the
-# OTel → framework tracer. See src/philharmonica/adk/tracing/otel/.
+# OTel → framework tracer. See src/augments/adk/tracing/otel/.
 otel = [
     "opentelemetry-api>=1.39.1",
     "opentelemetry-sdk>=1.39.1",
@@ -164,80 +164,80 @@ mermaid = ["mermaid-py>=0.5.0"]
 # Rich-backed verbose renderer (panel + line back-ends). Rich is a
 # soft-import: without this extra, ``VerboseHooks`` falls through to
 # the plain-ANSI line renderer — core agent/runner paths work either
-# way. See src/philharmonica/adk/verbose/.
+# way. See src/augments/adk/verbose/.
 verbose = ["rich>=14.2.0"]
 
 # YAML config files — accept .yaml/.yml agent/topology configs in addition
 # to JSON via load_agent / load_topology. JSON stays canonical and
 # schema-published; YAML adds authoring ergonomics (block scalars, comments).
-# See src/philharmonica/adk/config/loader.py.
+# See src/augments/adk/config/loader.py.
 yaml = ["pyyaml>=6.0"]
 
 # --- Built-in guardrails -------------------------------------------------
-# The built-in guardrail hub (philharmonica.adk.guardrails). PII + prompt-injection
+# The built-in guardrail hub (augments.adk.guardrails). PII + prompt-injection
 # scanning is stdlib-only; only the wrong-language check needs lingua, which it
 # imports lazily — install this extra only when that check is used.
-# See src/philharmonica/adk/guardrails/.
+# See src/augments/adk/guardrails/.
 guardrails-lingua = ["lingua-language-detector>=2.0.0"]
 # Umbrella — every optional guardrail dependency.
-guardrails = ["philharmonica-adk[guardrails-lingua]"]
+guardrails = ["augments-adk[guardrails-lingua]"]
 
 # --- Document search (RAG) loaders ---------------------------------------
 # DocumentSearchTool and its *SearchTool wrappers build a semantic index over
 # documents. The core (text/Markdown/CSV/JSON/directory loaders, chunker,
 # DocumentIndex) is stdlib-only; each non-stdlib loader ships as its own
 # opt-in extra and verifies its package at construction.
-# See src/philharmonica/adk/rag/ and src/philharmonica/adk/tools/builtin/document_search_tool.py.
+# See src/augments/adk/rag/ and src/augments/adk/tools/builtin/document_search_tool.py.
 rag-pdf = ["pymupdf>=1.24"]
 rag-docx = ["python-docx>=1.1"]
 rag-web = ["requests>=2.31", "beautifulsoup4>=4.12"]
 rag-github = ["PyGithub>=2.1"]
 rag-youtube = ["youtube-transcript-api>=1.0", "pytube>=15.0"]
 # Umbrella — every document-search loader.
-rag = ["philharmonica-adk[rag-pdf,rag-docx,rag-web,rag-github,rag-youtube]"]
+rag = ["augments-adk[rag-pdf,rag-docx,rag-web,rag-github,rag-youtube]"]
 
 # --- Sandbox backends ----------------------------------------------------
 # Each sandbox backend / hosted bridge ships as its own opt-in extra.
 # The umbrella ``sandbox`` extra carries zero dependencies — install
-# only the backends you need. See src/philharmonica/adk/sandbox/.
+# only the backends you need. See src/augments/adk/sandbox/.
 
 # Umbrella extra (intentionally empty). Exists so docs / scripts can
-# reference ``philharmonica-adk[sandbox]`` for "any sandbox surface" without
+# reference ``augments-adk[sandbox]`` for "any sandbox surface" without
 # pulling in heavyweight provider SDKs the user doesn't want.
 sandbox = []
 
 # Docker container backend. Wraps the synchronous ``docker`` SDK in
 # ``asyncio.to_thread``. Activates DockerSandboxClient.
-# See src/philharmonica/adk/sandbox/clients/docker/.
+# See src/augments/adk/sandbox/clients/docker/.
 sandbox-docker = ["docker>=7.0.0"]
 
 # Kubernetes pod backend. Uses the synchronous ``kubernetes`` client
 # + ``kubernetes.stream`` for exec / file ops over WebSocket.
 # Activates K8sPodSandboxClient.
-# See src/philharmonica/adk/sandbox/clients/k8s/.
+# See src/augments/adk/sandbox/clients/k8s/.
 sandbox-k8s = ["kubernetes>=30.0.0"]
 
 # Intermediate base for every hosted-provider bridge (E2B, Vercel,
 # Modal, Daytona, Cloudflare, Blaxel, Runloop). Pulls in httpx for
 # the async REST client. Activates RemoteVMSandboxClient +
 # RemoteVMSandboxSession.
-# See src/philharmonica/adk/sandbox/clients/hosted/remote_vm/.
+# See src/augments/adk/sandbox/clients/hosted/remote_vm/.
 sandbox-remote-vm = ["httpx>=0.27.0"]
 
 # Hosted bridges — each opt-in. They all transitively need
 # ``sandbox-remote-vm`` (httpx) so it's listed in each.
-# See src/philharmonica/adk/sandbox/clients/hosted/<provider>/.
-sandbox-e2b = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-vercel = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-modal = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-daytona = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-cloudflare = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-blaxel = ["philharmonica-adk[sandbox-remote-vm]"]
-sandbox-runloop = ["philharmonica-adk[sandbox-remote-vm]"]
+# See src/augments/adk/sandbox/clients/hosted/<provider>/.
+sandbox-e2b = ["augments-adk[sandbox-remote-vm]"]
+sandbox-vercel = ["augments-adk[sandbox-remote-vm]"]
+sandbox-modal = ["augments-adk[sandbox-remote-vm]"]
+sandbox-daytona = ["augments-adk[sandbox-remote-vm]"]
+sandbox-cloudflare = ["augments-adk[sandbox-remote-vm]"]
+sandbox-blaxel = ["augments-adk[sandbox-remote-vm]"]
+sandbox-runloop = ["augments-adk[sandbox-remote-vm]"]
 
 # Snapshot stores — local is built-in. Remote stores ship with their
 # own SDK extras.
-# See src/philharmonica/adk/sandbox/snapshot/.
+# See src/augments/adk/sandbox/snapshot/.
 sandbox-s3 = ["boto3>=1.34.0"]
 sandbox-gcs = ["google-cloud-storage>=2.16.0"]
 
@@ -258,23 +258,23 @@ audit-postgres = ["psycopg[binary,pool]>=3.2"]
 # Shared Postgres backends for horizontally-scaled (multi-replica) serving:
 # a durable A2A task store and a networked session store, so background
 # tasks and conversation sessions are shared across replicas instead of
-# living in per-pod SQLite. See src/philharmonica/adk/a2a/postgres_task_store.py
-# and src/philharmonica/adk/session/postgres_multi_sessions.py.
+# living in per-pod SQLite. See src/augments/adk/a2a/postgres_task_store.py
+# and src/augments/adk/session/postgres_multi_sessions.py.
 a2a-postgres = ["psycopg[binary,pool]>=3.2"]
 session-postgres = ["psycopg[binary,pool]>=3.2"]
 
 # Temporal durable execution engine. Wraps agent/graph/swarm/flow runs
 # as Temporal workflows with crash-recovery, retry, and deterministic
-# replay. See src/philharmonica/adk/workflows/temporal/.
+# replay. See src/augments/adk/workflows/temporal/.
 temporal = ["temporalio>=1.24.0"]
 
 # Restate durable execution engine. Alternative to Temporal using
 # Restate's journaling-based durable execution. See
-# src/philharmonica/adk/workflows/restate/.
+# src/augments/adk/workflows/restate/.
 restate = ["restate-sdk>=0.18.0"]
 
 # Meta-extra — install every consumer-facing feature
-all = ["philharmonica-adk[anthropic,openai,voice,gemini,mcp,otel,viz,verbose,server,serve,checkpointer-postgres,cost-ledger-postgres,cost-ledger-redis,checkpointer-redis,checkpointer-s3,a2a-postgres,session-postgres,temporal,memory-pgvector,memory-chroma,memory-pinecone,memory-qdrant,rag,guardrails]"]
+all = ["augments-adk[anthropic,openai,voice,gemini,mcp,otel,viz,verbose,server,serve,checkpointer-postgres,cost-ledger-postgres,cost-ledger-redis,checkpointer-redis,checkpointer-s3,a2a-postgres,session-postgres,temporal,memory-pgvector,memory-chroma,memory-pinecone,memory-qdrant,rag,guardrails]"]
 
 # --- Contributor extras (not installed by default) -----------------------
 
@@ -295,7 +295,7 @@ test = [
 ]
 
 dev = [
-    "philharmonica-adk[all,test]",
+    "augments-adk[all,test]",
     # Formatter + linter + import sorter (replaces black + isort + flake8).
     # Exact pin: ruff's rule set and formatter move between minors, so the
     # lock, the pre-commit rev, and the CI lint job must all agree or the
@@ -320,14 +320,14 @@ dev = [
 ]
 
 [project.scripts]
-philharmonica = "philharmonica.adk.cli:main"
+augments = "augments.adk.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/augments-labs/philharmonica-adk-python"
-Repository = "https://github.com/augments-labs/philharmonica-adk-python"
-"Bug Tracker" = "https://github.com/augments-labs/philharmonica-adk-python/issues"
-Documentation = "https://github.com/augments-labs/philharmonica-adk-python/tree/main/docs"
-Changelog = "https://github.com/augments-labs/philharmonica-adk-python/releases"
+Homepage = "https://github.com/augments-labs/augments-adk-python"
+Repository = "https://github.com/augments-labs/augments-adk-python"
+"Bug Tracker" = "https://github.com/augments-labs/augments-adk-python/issues"
+Documentation = "https://github.com/augments-labs/augments-adk-python/tree/main/docs"
+Changelog = "https://github.com/augments-labs/augments-adk-python/releases"
 
 # -------------------------------------------------------------------------
 # Packaging
@@ -338,11 +338,11 @@ include-package-data = true
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["philharmonica*"]
+include = ["augments*"]
 exclude = ["tests*", "examples*"]
 
 [tool.setuptools.package-data]
-"philharmonica.adk" = ["py.typed"]
+"augments.adk" = ["py.typed"]
 
 # -------------------------------------------------------------------------
 # Ruff — single formatter + linter (replaces black / isort / flake8)
@@ -421,7 +421,7 @@ ignore = [
     # Renaming is breaking and unrelated to hygiene.
     "N818",
     # E402 (module-import-not-at-top) is intentional in several ADK files:
-    # - src/philharmonica/adk/__init__.py: _configure_logging() must run before
+    # - src/augments/adk/__init__.py: _configure_logging() must run before
     #   submodule imports so they pick up handler config.
     # - handoffs/handoff.py, llms/litellm/litellm_model.py: logger declared
     #   before downstream imports placed late to break circular cycles.
@@ -440,7 +440,7 @@ ignore = [
 "examples/**/*.py" = ["E501", "N", "G", "ARG"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["philharmonica"]
+known-first-party = ["augments"]
 combine-as-imports = true
 
 [tool.ruff.lint.pydocstyle]
@@ -471,8 +471,8 @@ docstring-code-format = true
 [tool.mypy]
 python_version = "3.12"
 # src-layout: mypy must know where the package root lives, otherwise it
-# walks up from `src/philharmonica/adk/` and resolves the same files under two
-# module paths ("adk.*" vs "philharmonica.adk.*"). `mypy_path` + namespace
+# walks up from `src/augments/adk/` and resolves the same files under two
+# module paths ("adk.*" vs "augments.adk.*"). `mypy_path` + namespace
 # settings anchor resolution at `src/`.
 mypy_path = "src"
 namespace_packages = true
@@ -520,7 +520,7 @@ module = ["griffe.*"]
 ignore_missing_imports = true
 
 # graphviz + mermaid are optional render-time deps imported lazily from
-# src/philharmonica/adk/visualization/render.py — neither ships type stubs;
+# src/augments/adk/visualization/render.py — neither ships type stubs;
 # silence the missing-stub warning per-module.
 [[tool.mypy.overrides]]
 module = ["graphviz", "mermaid"]
@@ -570,7 +570,7 @@ ignore_missing_imports = true
 # Historical context: between 2026-04-18 (baseline: 306 mypy-strict errors)
 # and 2026-04-21 the per-module ignore_errors list was drained one entry
 # at a time through a graduation protocol.
-# The list is now empty — every module under src/philharmonica/adk/ is checked
+# The list is now empty — every module under src/augments/adk/ is checked
 # by mypy with no module-level opt-outs.
 #
 # If a new module needs to be temporarily silenced (strongly discouraged),
@@ -615,7 +615,7 @@ xfail_strict = true
 
 [tool.coverage.run]
 branch = true
-source = ["src/philharmonica"]
+source = ["src/augments"]
 data_file = ".coverage/.coverage"
 omit = [
     "*/tests/*",
@@ -675,7 +675,7 @@ name = "cz_conventional_commits"
 version_provider = "pep621"
 tag_format = "v$version"
 version_files = [
-    "src/philharmonica/adk/__init__.py:__version__",
+    "src/augments/adk/__init__.py:__version__",
 ]
 bump_message = "chore(release): bump version $current_version -> $new_version"
 # The changelog is hand-maintained in Keep a Changelog format (see

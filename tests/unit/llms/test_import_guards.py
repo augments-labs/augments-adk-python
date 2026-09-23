@@ -1,5 +1,5 @@
 """Subprocess regression tests for the optional-provider import guards in
-``philharmonica.adk.llms.__init__``.
+``augments.adk.llms.__init__``.
 
 The Gemini guard must swallow BOTH ``ModuleNotFoundError(name="google")`` and
 ``ModuleNotFoundError(name="google.genai")``. The latter is the real failure
@@ -9,7 +9,7 @@ wheel is absent — swallowing only ``"google"`` let that common case crash the
 entire ``llms`` import.
 
 Each case runs in a fresh subprocess so a meta-path blocker installed before
-import sees an interpreter with no cached ``google`` / ``philharmonica`` modules.
+import sees an interpreter with no cached ``google`` / ``augments`` modules.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ import textwrap
 
 
 def _run_blocked_import(block_name: str) -> subprocess.CompletedProcess[str]:
-    """Import ``philharmonica.adk.llms`` with ``block_name`` masked as uninstalled."""
+    """Import ``augments.adk.llms`` with ``block_name`` masked as uninstalled."""
     script = textwrap.dedent(
         f"""
         import importlib.abc
@@ -39,7 +39,7 @@ def _run_blocked_import(block_name: str) -> subprocess.CompletedProcess[str]:
             if cached == BLOCK or cached.startswith(BLOCK + "."):
                 del sys.modules[cached]
 
-        from philharmonica.adk.llms import LLM, GeminiLLM, GeminiConfig, OpenAIResponsesLLM
+        from augments.adk.llms import LLM, GeminiLLM, GeminiConfig, OpenAIResponsesLLM
         assert LLM is not None, "LLM ABC must import"
         assert GeminiLLM is None, "GeminiLLM must degrade to None"
         assert GeminiConfig is None, "GeminiConfig must degrade to None"

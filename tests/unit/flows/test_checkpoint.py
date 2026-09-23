@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 
 import pytest
 
-from philharmonica.adk.flows import (
+from augments.adk.flows import (
     FlowCheckpoint,
     FlowDeferredStep,
     FlowTriggerEvent,
@@ -235,7 +235,7 @@ class TestPendingStepTriggersRoundTrip:
         """
         from dataclasses import dataclass
 
-        from philharmonica.adk.run.runner import _seed_executor_from_checkpoint
+        from augments.adk.run.runner import _seed_executor_from_checkpoint
 
         trigger = FlowTriggerEvent(name="src", source_step="src_step", kind="step_completion")
         cp = FlowCheckpoint(

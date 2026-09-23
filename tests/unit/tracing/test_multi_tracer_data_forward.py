@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import dataclasses
 
-from philharmonica.adk.tracing.multi_tracer import CompositeSpan
-from philharmonica.adk.tracing.spans import Span
-from philharmonica.adk.types.tracing.span_data import GenerationSpanData
+from augments.adk.tracing.multi_tracer import CompositeSpan
+from augments.adk.tracing.spans import Span
+from augments.adk.types.tracing.span_data import GenerationSpanData
 
 
 def test_composite_data_rebind_reaches_children() -> None:

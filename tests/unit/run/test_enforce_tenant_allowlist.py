@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.audit import InMemoryAuditSink
-from philharmonica.adk.exceptions import ToolNotPermittedForTenant
-from philharmonica.adk.run.config import RunConfig
-from philharmonica.adk.run.governance import enforce_tenant_allowlist
+from augments.adk.audit import InMemoryAuditSink
+from augments.adk.exceptions import ToolNotPermittedForTenant
+from augments.adk.run.config import RunConfig
+from augments.adk.run.governance import enforce_tenant_allowlist
 
 
 async def test_permitted_returns_none() -> None:

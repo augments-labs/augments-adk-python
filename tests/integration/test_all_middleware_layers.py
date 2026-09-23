@@ -30,21 +30,21 @@ from typing import Any
 
 import pytest
 
-from philharmonica.adk.agents.agent import Agent
-from philharmonica.adk.agents.middleware import Middleware
-from philharmonica.adk.llms.llm import LLM
-from philharmonica.adk.llms.llm_config import LLMConfig
-from philharmonica.adk.llms.llm_middleware import LLMLoggingMiddleware
-from philharmonica.adk.run.agent_middleware import AgentLoggingMiddleware
-from philharmonica.adk.run.runner import Runner
-from philharmonica.adk.schemas import AgentOutputSchemaBase
-from philharmonica.adk.tools import (
+from augments.adk.agents.agent import Agent
+from augments.adk.agents.middleware import Middleware
+from augments.adk.llms.llm import LLM
+from augments.adk.llms.llm_config import LLMConfig
+from augments.adk.llms.llm_middleware import LLMLoggingMiddleware
+from augments.adk.run.agent_middleware import AgentLoggingMiddleware
+from augments.adk.run.runner import Runner
+from augments.adk.schemas import AgentOutputSchemaBase
+from augments.adk.tools import (
     Tool,
     ToolLoggingMiddleware,
     function_tool,
 )
-from philharmonica.adk.types.input import LLMInputContentItem
-from philharmonica.adk.types.responses.llm_response import (
+from augments.adk.types.input import LLMInputContentItem
+from augments.adk.types.responses.llm_response import (
     LLMResponse,
     LLMResponseFunctionToolCall,
     LLMResponseText,
@@ -155,9 +155,9 @@ async def test_three_middleware_layers_fire_in_order(
         for r in caplog.records
         if r.name
         in (
-            "philharmonica.adk.run.agent_middleware",
-            "philharmonica.adk.llms.llm_middleware",
-            "philharmonica.adk.tools.tool_middleware",
+            "augments.adk.run.agent_middleware",
+            "augments.adk.llms.llm_middleware",
+            "augments.adk.tools.tool_middleware",
         )
     ]
 
@@ -165,17 +165,17 @@ async def test_three_middleware_layers_fire_in_order(
     # to a stable token. We don't require an exact byte-for-byte match
     # because token counts / model labels would make the test brittle.
     def _classify(name: str, message: str) -> str | None:
-        if name == "philharmonica.adk.run.agent_middleware":
+        if name == "augments.adk.run.agent_middleware":
             if "starting" in message:
                 return "agent_start"
             if "completed" in message:
                 return "agent_end"
-        if name == "philharmonica.adk.llms.llm_middleware":
+        if name == "augments.adk.llms.llm_middleware":
             if "starting" in message:
                 return "llm_start"
             if "completed" in message:
                 return "llm_end"
-        if name == "philharmonica.adk.tools.tool_middleware":
+        if name == "augments.adk.tools.tool_middleware":
             if "starting" in message:
                 return "tool_start"
             if "completed" in message:
@@ -221,16 +221,16 @@ async def test_agent_middleware_re_fires_per_handoff(
         ]
     )
 
-    with caplog.at_level(logging.INFO, logger="philharmonica.adk.run.agent_middleware"):
+    with caplog.at_level(logging.INFO, logger="augments.adk.run.agent_middleware"):
         result = await Runner.arun(source_agent, "go")
 
     assert result.final_output == "from beta"
 
     starting_records = [
-        r for r in caplog.records if r.name == "philharmonica.adk.run.agent_middleware" and "starting" in r.message
+        r for r in caplog.records if r.name == "augments.adk.run.agent_middleware" and "starting" in r.message
     ]
     completed_records = [
-        r for r in caplog.records if r.name == "philharmonica.adk.run.agent_middleware" and "completed" in r.message
+        r for r in caplog.records if r.name == "augments.adk.run.agent_middleware" and "completed" in r.message
     ]
     # AgentMiddleware fires once per per-agent block: once for Alpha,
     # once for Beta after the handoff.
@@ -260,7 +260,7 @@ async def test_agent_middleware_fires_on_streaming_run(
         middleware=Middleware(agents=[AgentLoggingMiddleware()]),
     )
 
-    with caplog.at_level(logging.INFO, logger="philharmonica.adk.run.agent_middleware"):
+    with caplog.at_level(logging.INFO, logger="augments.adk.run.agent_middleware"):
         result = Runner.run(agent, "go", stream=True)
         async for _ in result.stream_events():
             pass
@@ -268,10 +268,10 @@ async def test_agent_middleware_fires_on_streaming_run(
     assert result.final_output == "done-streaming"
 
     starting_records = [
-        r for r in caplog.records if r.name == "philharmonica.adk.run.agent_middleware" and "starting" in r.message
+        r for r in caplog.records if r.name == "augments.adk.run.agent_middleware" and "starting" in r.message
     ]
     completed_records = [
-        r for r in caplog.records if r.name == "philharmonica.adk.run.agent_middleware" and "completed" in r.message
+        r for r in caplog.records if r.name == "augments.adk.run.agent_middleware" and "completed" in r.message
     ]
     assert len(starting_records) == 1, f"expected 1 starting record, got {[r.message for r in starting_records]}"
     assert len(completed_records) == 1, f"expected 1 completed record, got {[r.message for r in completed_records]}"
@@ -304,7 +304,7 @@ async def test_agent_middleware_re_fires_per_handoff_on_streaming_run(
         ]
     )
 
-    with caplog.at_level(logging.INFO, logger="philharmonica.adk.run.agent_middleware"):
+    with caplog.at_level(logging.INFO, logger="augments.adk.run.agent_middleware"):
         result = Runner.run(source_agent, "go", stream=True)
         async for _ in result.stream_events():
             pass
@@ -312,7 +312,7 @@ async def test_agent_middleware_re_fires_per_handoff_on_streaming_run(
     assert result.final_output == "from stream beta"
 
     starting_records = [
-        r for r in caplog.records if r.name == "philharmonica.adk.run.agent_middleware" and "starting" in r.message
+        r for r in caplog.records if r.name == "augments.adk.run.agent_middleware" and "starting" in r.message
     ]
     assert len(starting_records) == 2, f"expected 2 starting records, got {[r.message for r in starting_records]}"
     assert "StreamAlpha" in starting_records[0].message
@@ -324,7 +324,7 @@ async def test_llm_stream_middleware_fires_on_streaming_run(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
     """``Agent.middleware.stream_llms`` runs on streaming LLM calls."""
-    from philharmonica.adk.llms.llm_stream_middleware import LLMStreamLoggingMiddleware
+    from augments.adk.llms.llm_stream_middleware import LLMStreamLoggingMiddleware
 
     scripted_llm = _ScriptedLLM([_text_response("streamed-with-mw")])
 
@@ -335,7 +335,7 @@ async def test_llm_stream_middleware_fires_on_streaming_run(
         middleware=Middleware(stream_llms=[LLMStreamLoggingMiddleware()]),
     )
 
-    with caplog.at_level(logging.INFO, logger="philharmonica.adk.llms.llm_stream_middleware"):
+    with caplog.at_level(logging.INFO, logger="augments.adk.llms.llm_stream_middleware"):
         result = Runner.run(agent, "go", stream=True)
         async for _ in result.stream_events():
             pass
@@ -362,7 +362,7 @@ async def test_non_streaming_llm_middleware_warns_on_streaming_run(
         middleware=Middleware(llms=[LLMLoggingMiddleware()]),
     )
 
-    with caplog.at_level(logging.WARNING, logger="philharmonica.adk.run.llm_calls"):
+    with caplog.at_level(logging.WARNING, logger="augments.adk.run.llm_calls"):
         result = Runner.run(agent, "go", stream=True)
         async for _ in result.stream_events():
             pass

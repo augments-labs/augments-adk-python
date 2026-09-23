@@ -16,7 +16,7 @@ import shutil
 
 import pytest
 
-from philharmonica.adk.mcp import (
+from augments.adk.mcp import (
     MCPServerStdio,
     MCPServerStdioParams,
 )
@@ -52,7 +52,7 @@ async def test_stdio_round_trip(npx_path: str) -> None:
 
 async def test_toolset_with_real_server(npx_path: str) -> None:
     """``MCPToolset`` end-to-end: lazy connect + name discovery."""
-    from philharmonica.adk.tools.toolsets import MCPToolset
+    from augments.adk.tools.toolsets import MCPToolset
 
     server = MCPServerStdio(
         name="everything",

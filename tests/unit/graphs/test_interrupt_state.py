@@ -6,20 +6,20 @@ import json
 
 import pytest
 
-from philharmonica.adk.exceptions import PhilharmonicaError
-from philharmonica.adk.graphs import GraphResume, Interrupt, InterruptException
-from philharmonica.adk.graphs.graph import Graph
-from philharmonica.adk.graphs.result import GraphRunStatus
-from philharmonica.adk.graphs.state import GraphState
+from augments.adk.exceptions import AugmentsError
+from augments.adk.graphs import GraphResume, Interrupt, InterruptException
+from augments.adk.graphs.graph import Graph
+from augments.adk.graphs.result import GraphRunStatus
+from augments.adk.graphs.state import GraphState
 
 
 def _trivial_graph() -> Graph:
     return Graph.new("t1").node("a", lambda: "a-done").entry("a").terminal("a").compile()
 
 
-def test_interrupt_exception_inherits_philharmonica_error() -> None:
+def test_interrupt_exception_inherits_augments_error() -> None:
     exc = InterruptException(Interrupt(node_id="a", question="approve?"))
-    assert isinstance(exc, PhilharmonicaError)
+    assert isinstance(exc, AugmentsError)
     assert exc.interrupt.node_id == "a"
     assert exc.interrupt.question == "approve?"
 
@@ -71,7 +71,7 @@ def test_graph_state_tolerant_loader_unknown_keys_ignored_and_missing_pending_de
 
 
 def test_graph_run_result_carries_interrupts_field() -> None:
-    from philharmonica.adk.graphs.result import GraphRunResult, GraphRunResultStreaming
+    from augments.adk.graphs.result import GraphRunResult, GraphRunResultStreaming
 
     r = GraphRunResult(
         final_output=None,

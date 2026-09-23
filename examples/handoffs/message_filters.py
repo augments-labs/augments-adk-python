@@ -11,7 +11,7 @@ HandoffInputData provides temporal slicing:
 - ``messages`` — property returning context + output (full view).
 - ``forwarded`` — filtered subset for the next agent (None = use messages).
 
-Built-in filters (in ``philharmonica.adk.handoffs.handoff_filters``):
+Built-in filters (in ``augments.adk.handoffs.handoff_filters``):
 - ``forward_intent``         — Append classified Intent as user message.
 - ``remove_tool_calls``      — Strip tool call/result messages.
 - ``remove_system_messages`` — Strip system messages.
@@ -40,13 +40,13 @@ import asyncio
 import logging
 from typing import Any, Literal, Union
 
-from philharmonica.adk.agents import Agent
-from philharmonica.adk.handoffs import (
+from augments.adk.agents import Agent
+from augments.adk.handoffs import (
     Handoff,
     HandoffInputData,
     HandoffRoute,
 )
-from philharmonica.adk.handoffs.handoff_filters import (
+from augments.adk.handoffs.handoff_filters import (
     compose,
     forward_intent,
     intent_only,
@@ -54,10 +54,10 @@ from philharmonica.adk.handoffs.handoff_filters import (
     remove_system_messages,
     remove_tool_calls,
 )
-from philharmonica.adk.run import RunConfig, Runner
-from philharmonica.adk.tools import function_tool
-from philharmonica.adk.types.intents import Intent, Respond
-from philharmonica.adk.verbose import VerboseConfig
+from augments.adk.run import RunConfig, Runner
+from augments.adk.tools import function_tool
+from augments.adk.types.intents import Intent, Respond
+from augments.adk.verbose import VerboseConfig
 
 logger = logging.getLogger(__name__)
 
@@ -176,8 +176,8 @@ def redact_pii(data: HandoffInputData) -> HandoffInputData:
     """
     import re
 
-    from philharmonica.adk.handoffs.handoff_filters import source_messages
-    from philharmonica.adk.types.items import (
+    from augments.adk.handoffs.handoff_filters import source_messages
+    from augments.adk.types.items import (
         MessageOutputItem,
         SystemItem,
         UserItem,
@@ -199,8 +199,8 @@ def redact_pii(data: HandoffInputData) -> HandoffInputData:
                 }
             )
         if isinstance(item, MessageOutputItem) and item.raw is not None:
-            from philharmonica.adk.types.items.items import ItemHelpers
-            from philharmonica.adk.types.responses.llm_response import LLMResponseText as _Text
+            from augments.adk.types.items.items import ItemHelpers
+            from augments.adk.types.responses.llm_response import LLMResponseText as _Text
 
             text = ItemHelpers.text_message_output(item)
             if len(text) > 0:

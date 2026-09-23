@@ -17,11 +17,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.handoffs.handoff import Handoff
-from philharmonica.adk.handoffs.handoff_collapse_mode import HandoffCollapseMode
-from philharmonica.adk.handoffs.handoff_config import HandoffConfig
-from philharmonica.adk.tools import FunctionTool, function_tool
-from philharmonica.adk.tools.token_budget import TokenBudget
+from augments.adk.handoffs.handoff import Handoff
+from augments.adk.handoffs.handoff_collapse_mode import HandoffCollapseMode
+from augments.adk.handoffs.handoff_config import HandoffConfig
+from augments.adk.tools import FunctionTool, function_tool
+from augments.adk.tools.token_budget import TokenBudget
 
 
 class TestTokenBudget:

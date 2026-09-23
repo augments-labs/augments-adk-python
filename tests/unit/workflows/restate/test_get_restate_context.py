@@ -15,7 +15,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from philharmonica.adk.workflows.restate.llm import get_restate_context
+from augments.adk.workflows.restate.llm import get_restate_context
 
 
 def _install_fake_extensions(monkeypatch: pytest.MonkeyPatch, current_context: Any) -> None:

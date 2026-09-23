@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import pytest
 
-from philharmonica.adk.exceptions.exceptions import SandboxNetworkPolicyViolation
-from philharmonica.adk.sandbox.policy import (
+from augments.adk.exceptions.exceptions import SandboxNetworkPolicyViolation
+from augments.adk.sandbox.policy import (
     apply_network_policy_to_docker,
     apply_network_policy_to_k8s_pod,
     apply_network_policy_to_local,
 )
-from philharmonica.adk.types.sandbox.network import NetworkPolicy
+from augments.adk.types.sandbox.network import NetworkPolicy
 
 
 class TestK8sDenyDefaultGuard:
@@ -72,7 +72,7 @@ class TestK8sDenyDefaultEmitsCr:
         policy = NetworkPolicy(deny_default=True, allow_hosts=("api.example.com",))
         cr = apply_network_policy_to_k8s_pod(policy, "default", "pod-1")
         assert cr is not None
-        annotation = cr["metadata"]["annotations"]["philharmonica.sandbox/allow-hosts"]
+        annotation = cr["metadata"]["annotations"]["augments.sandbox/allow-hosts"]
         # Exactly the one allowed host — a containment check would also pass
         # if the annotation had picked up a host the policy never listed.
         assert annotation == "api.example.com"

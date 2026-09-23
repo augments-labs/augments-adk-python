@@ -64,15 +64,15 @@ A `RunResult` carrying:
 
 | Subsystem      | Stage                                | Module                  |
 | -------------- | ------------------------------------ | ----------------------- |
-| Guardrails     | Stages 2 + 4                         | `src/philharmonica/adk/agents/agent_guardrails.py` |
-| Tools          | Stage 3 (inside the loop)            | `src/philharmonica/adk/tools/` |
-| Handoffs       | Stage 3 (re-entry into the loop)     | `src/philharmonica/adk/handoffs/` |
-| Memory         | Stage 3 (context provider)           | `src/philharmonica/adk/memory/` |
-| Skills         | Stage 3 (instructions + tools + governance bundle) | `src/philharmonica/adk/skills/` |
-| MCP            | Stage 3 (tool source)                | `src/philharmonica/adk/mcp/` |
-| Tracing        | All stages                           | `src/philharmonica/adk/tracing/` |
-| Cost           | Stage 3 (per LLM call)               | `src/philharmonica/adk/run/cost.py`, `src/philharmonica/adk/budgets/` |
-| Governance     | Stages 2–5 (audit, allowlists)       | `src/philharmonica/adk/run/governance.py` |
+| Guardrails     | Stages 2 + 4                         | `src/augments/adk/agents/agent_guardrails.py` |
+| Tools          | Stage 3 (inside the loop)            | `src/augments/adk/tools/` |
+| Handoffs       | Stage 3 (re-entry into the loop)     | `src/augments/adk/handoffs/` |
+| Memory         | Stage 3 (context provider)           | `src/augments/adk/memory/` |
+| Skills         | Stage 3 (instructions + tools + governance bundle) | `src/augments/adk/skills/` |
+| MCP            | Stage 3 (tool source)                | `src/augments/adk/mcp/` |
+| Tracing        | All stages                           | `src/augments/adk/tracing/` |
+| Cost           | Stage 3 (per LLM call)               | `src/augments/adk/run/cost.py`, `src/augments/adk/budgets/` |
+| Governance     | Stages 2–5 (audit, allowlists)       | `src/augments/adk/run/governance.py` |
 
 ## Multi-agent composition
 

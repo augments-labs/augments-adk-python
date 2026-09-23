@@ -7,9 +7,9 @@ produces.
 
 from __future__ import annotations
 
-from philharmonica.adk.graphs.merge import DEFAULT_MERGE, Merge
-from philharmonica.adk.orchestration.executable import NodeResult
-from philharmonica.adk.types.tokens.llm_usage import LLMUsage
+from augments.adk.graphs.merge import DEFAULT_MERGE, Merge
+from augments.adk.orchestration.executable import NodeResult
+from augments.adk.types.tokens.llm_usage import LLMUsage
 
 # ---------------------------------------------------------------------------
 # Fixtures
