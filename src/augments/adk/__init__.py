@@ -218,7 +218,7 @@ from augments.adk.tools import DocumentSearchTool, FunctionTool, MemoryTool
 from augments.adk.types.run import RunResult
 from augments.adk.verbose import EventStyle, VerboseConfig
 
-__version__ = "0.2.3"
+__version__ = "0.3.0"
 
 __all__ = [
     # Flow error-trigger route literal (error_policy="route_to_error_handler")
