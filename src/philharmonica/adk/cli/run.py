@@ -11,8 +11,9 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import sys
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TextIO
 
 import click
 
@@ -145,7 +146,7 @@ def _enable_tracing() -> None:
 def _read_prompt(prompt: str | None) -> str:
     """Return the prompt argument or read it from piped stdin."""
     if prompt is None:
-        stdin = click.get_text_stream("stdin")
+        stdin: TextIO = sys.stdin
         if stdin.isatty():
             raise click.UsageError("Provide PROMPT as an argument or pipe it on stdin.")
         prompt = stdin.read()
