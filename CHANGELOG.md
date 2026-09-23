@@ -7,6 +7,23 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The `openai` extra now requires `openai<3` and the `anthropic` extra
+  `anthropic<1`. Both new majors break the native provider paths: openai 3
+  moves its transport to `httpx2`, and anthropic 1 no longer accepts
+  `temperature`, `top_p` or `top_k` on `messages.create()`. Left uncapped, an
+  install could also resolve litellm back to a release with known
+  vulnerabilities to make room for openai 3.
+
+### Fixed
+
+- `philharmonica run` read piped prompts through `click.get_text_stream`, which
+  click 8.5 deprecates; it now reads `sys.stdin` directly, with no change in
+  behavior.
+
 ## [0.2.2] - 2026-08-08
 
 ### Fixed

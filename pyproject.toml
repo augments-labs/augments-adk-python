@@ -81,15 +81,19 @@ dependencies = [
 
 # Native Anthropic SDK path — alternative to litellm for Claude models.
 # Activates AnthropicLLM. See src/philharmonica/adk/llms/anthropic/.
-anthropic = ["anthropic>=0.75.0"]
+# Capped below 1.0: 1.x drops ``temperature`` / ``top_p`` / ``top_k``
+# from ``messages.create()``, which AnthropicLLM still forwards.
+anthropic = ["anthropic>=0.75.0,<1"]
 
 # Native OpenAI SDK path — alternative to litellm for OpenAI models.
 # Activates OpenAIChatCompletionsLLM and OpenAIResponsesLLM. The 2.0
 # floor matches the v2 SDK release where ``responses.create()`` and
 # the ``omit`` sentinel stabilised; bump if a newer Responses-API
 # parameter (e.g. ``prompt_cache_retention``) is required.
+# Capped below 3.0: 3.x moves the transport to httpx2, and litellm
+# does not yet accept it (the resolver falls back to an old litellm).
 # See src/philharmonica/adk/llms/openai/.
-openai = ["openai>=2.0.0"]
+openai = ["openai>=2.0.0,<3"]
 
 # Voice pipeline — speech-to-text + text-to-speech. Builds on the native
 # OpenAI SDK path (OpenAISTTModel / OpenAITTSModel). `websockets` powers the
@@ -296,7 +300,7 @@ dev = [
     # lock, the pre-commit rev, and the CI lint job must all agree or the
     # hygiene gate reports differently per environment. Bump all three
     # together.
-    "ruff==0.16.1",
+    "ruff==0.16.5",
     # Type checkers — mypy is canonical (pydantic.mypy
     # plugin + --warn-unused-ignores); pyright secondary (stricter
     # TypedDict narrowing + IDE/Pylance parity)
