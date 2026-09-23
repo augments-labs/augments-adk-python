@@ -9,11 +9,6 @@
 
 # Augments Agent Development Kit (ADK)
 
-> **This project is being renamed.** 0.2.3 is the last release published as
-> `augments-adk`; later releases ship under the new name. The
-> [repository](https://github.com/augments-labs/augments-adk-python)
-> will announce it and keep working at this address.
-
 A provider-agnostic Python framework to orchestrate complex
 systems of agents that perform real-world actions, across 100+ LLMs via litellm.
 
@@ -23,22 +18,21 @@ An agent is a model that stopped talking and started doing: it calls tools,
 changes state, and leaves side effects in the world. One agent is useful. A
 set of specialists that cannot coordinate is a liability.
 
-A philharmonic is not a crowd of capable musicians. It is a score, sections
-that know their part, and a conductor holding the tempo. This ADK gives you
-the same three things for agents:
+Augmenting a model means adding capability without giving up control. This
+ADK adds three things, and each one is explicit and yours to configure:
 
-- **The score** — explicit orchestration. Graphs for state machines, flows
+- **Structure** — explicit orchestration. Graphs for state machines, flows
   for pipelines, swarms for open-ended exploration, handoffs for delegation.
   You write the structure; nothing is inferred behind your back.
-- **The sections** — agents scoped to one job, each carrying its own tools,
+- **Specialists** — agents scoped to one job, each carrying its own tools,
   guardrails, and budget. An `Agent` is configuration, never a hidden runtime.
-- **The conductor** — the `Runner`. Every run travels one execution path,
-  where turns, retries, token budgets, and interrupts are *enforced* rather
-  than suggested.
+- **Control** — the `Runner`. Every run travels one execution path, where
+  turns, retries, token budgets, and interrupts are *enforced* rather than
+  suggested.
 
 The framework never injects a prompt, a tool, or a token you did not ask for,
 and every cost-bearing default starts bounded. Decisions, tool I/O, and token
-spend come back as structured traces, so what the ensemble actually did is
+spend come back as structured traces, so what the agents actually did is
 readable after the fact.
 
 ## Design tenets

@@ -469,7 +469,7 @@ class StructuredRoutingPolicy(SwarmPolicy[TContext]):
     prompt bloat, and reuse of the ``.when(Refund).to(refunds_agent)``
     DSL that already exists for handoff routing. Most frameworks (and
     AutoGen/Strands) require an LLM tool call even for deterministic
-    routing; Augments's Swarm lets structured output do the dispatch.
+    routing; this ADK's Swarm lets structured output do the dispatch.
 
     Only the ``swarm_done`` tool is injected — structured-output
     routing doesn't need transfer tools because the routing signal is

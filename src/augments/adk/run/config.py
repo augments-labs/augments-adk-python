@@ -114,7 +114,7 @@ class ModelInputData:
 
     Note:
         Unlike OpenAI's ``ModelInputData``, this class does *not* carry a
-        separate ``instructions`` field. Augments's ``LLM.acomplete``
+        separate ``instructions`` field. The ADK's ``LLM.acomplete``
         takes the system prompt in-band as part of ``messages``; a filter
         that wants to rewrite the system prompt edits the message with
         ``role="system"`` in-place on ``input``.

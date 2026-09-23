@@ -18,7 +18,7 @@ _CHART = Template(
     """\
 apiVersion: v2
 name: $app_name
-description: A Augments agent served over HTTP (REST + health).
+description: An Augments agent served over HTTP (REST + health).
 type: application
 version: 0.1.0
 appVersion: "0.1.0"
