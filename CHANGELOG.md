@@ -24,6 +24,11 @@ and the project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v
   click 8.5 deprecates; it now reads `sys.stdin` directly, with no change in
   behavior.
 
+- `httpx` is now a declared core dependency. The package imports it on its
+  core path (`LLMConfig.timeout` is typed with `httpx.Timeout`), but a base
+  install only received it transitively through litellm, so a litellm release
+  that dropped it would have broken `import philharmonica.adk`.
+
 ## [0.2.2] - 2026-08-08
 
 ### Fixed
