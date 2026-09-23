@@ -59,6 +59,7 @@ dependencies = [
     "pydantic>=2.12.5,<3",       # validation across types/, schemas/, validators/, tracing/
     "griffe>=1.15.0",             # docstring parsing in tools/function_tool + schemas/function_schema
     "aiosqlite>=0.21.0",          # session/, memory/, databases/sqlite core paths
+    "httpx>=0.27.0",              # llms/llm_config.py imports Timeout unconditionally; LLMConfig.timeout is public API
     "typing-extensions>=4.15.0,<5",
     "click>=8.1.7,<9",            # the bundled `philharmonica` CLI (cli/); zero transitive deps on POSIX
 ]
