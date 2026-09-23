@@ -32,7 +32,7 @@ jobs:
         with:
           fetch-depth: 0 # commitizen needs full history + tags
           ref: main
-      - uses: astral-sh/setup-uv@v9.0.0
+      - uses: astral-sh/setup-uv@v10.0.1
         with:
           enable-cache: true
           python-version: "3.12"
