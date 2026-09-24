@@ -6,7 +6,7 @@ under BSP (Bulk Synchronous Parallel) supersteps.
 
 ## Why Graph Exists
 
-Augments has two other multi-agent primitives:
+Augments has two related multi-agent primitives:
 
 - `Handoff` — one-shot linear delegation (Agent A → Agent B, run ends).
 - `Swarm` — iterative collaboration with cycles (A ↔ B ↔ C until an explicit

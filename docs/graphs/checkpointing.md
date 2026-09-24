@@ -419,9 +419,9 @@ await checkpointer.close()
   to safe defaults for new fields; no version field is stored or checked.
   A structural break (removed or renamed field) requires renaming the
   loader, not adding a version discriminator.
-- **`pending_sends` is reserved.** The `GraphCheckpoint.pending_sends`
-  field is always empty; the graph loop does not produce dynamic fan-out
-  packets.
+- **`pending_sends` is always empty.** The graph loop does not produce
+  dynamic fan-out packets, so the `GraphCheckpoint.pending_sends` field
+  never carries any.
 - **Non-streaming path only.** Checkpointing applies to the standard
   `arun_graph` / `run_graph` / `arun_graph_from_checkpoint` /
   `run_graph_from_checkpoint` execution path. The `arun_graph_streamed`

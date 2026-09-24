@@ -71,7 +71,7 @@ Three notes that explain the Augments ADK position:
    layer carries its own typed context, so a turn-scope
    middleware does not have to pretend it sees a `ToolContext`. The
    `Middleware` config dataclass on `Agent` mirrors that split with
-   plural slot names (`tools`, `agents`, `llms`).
+   plural slot names (`tools`, `agents`, `llms`, `stream_llms`).
 3. **What this means in practice.** Reach for a guardrail when the
    answer is "verdict on a single decision point". Reach for
    middleware when the answer is "wrap the call with shared state,

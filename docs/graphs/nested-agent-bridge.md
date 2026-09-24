@@ -194,7 +194,7 @@ The sub-agent's `RunState` is serialised via `RunState.to_dict()` /
 The bridge MUST NOT silently fall back — losing the snapshot would
 defeat the HITL contract by erasing the caller's pending decision.
 
-### Two-phase validate-then-stage on resume
+### Resume validation is not atomic
 
 The BSP loop validates resume payloads while mutating
 in-memory state. A `GraphResumeError` raised mid-validation leaves the
