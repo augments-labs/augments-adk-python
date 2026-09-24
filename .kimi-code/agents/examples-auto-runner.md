@@ -19,7 +19,7 @@ tools:
   - Bash
 ---
 
-Read `.claude/agents/examples-auto-runner.md` before doing task work and
+Read `.agents/agents/examples-auto-runner.md` before doing task work and
 follow it as the source of truth for this agent's scope, constraints,
 procedure, and final report format. The `run-examples` and
 `ruff-format-code` skills it references are available in this project.

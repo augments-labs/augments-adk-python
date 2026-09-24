@@ -19,7 +19,7 @@ tools:
   - Bash
 ---
 
-Read `.claude/agents/docstring-completer.md` before doing task work and
+Read `.agents/agents/docstring-completer.md` before doing task work and
 follow it as the source of truth for this agent's scope, constraints,
 procedure, and final report format.
 
