@@ -125,18 +125,8 @@ repos:
         # the previous combination broke with "The --disable-pip flag
         # can only be used with --requirement (-r)". Auditing the
         # project directory directly works across versions.
-        #
-        # Temporary ignores with explicit ownership and removal criteria.
-        # CVE-2026-40217 owner: platform. CVE-2026-40217 removal: remove
-        # when the audited dependency graph has a compatible fixed release
-        # for Python >=3.12,<3.14 or the affected dependency is absent.
-        # CVE-2026-28684 owner: platform. CVE-2026-28684 removal: remove
-        # when the audited dependency graph has a compatible fixed release
-        # for Python >=3.12,<3.14 or the affected dependency is absent.
         args:
           - "--progress-spinner=off"
-          - "--ignore-vuln=CVE-2026-40217"
-          - "--ignore-vuln=CVE-2026-28684"
           - "."
         files: ^pyproject\.toml$
         pass_filenames: false

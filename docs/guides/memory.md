@@ -146,11 +146,15 @@ Five backends ship out of the box:
 | `InMemoryVectorStore` | `memory.stores.in_memory` | Tests, prototyping; cosine similarity in Python | None |
 | `PgVectorStore` | `memory.stores.pgvector` | Managed Postgres deployments; SQL filtering | `psycopg[binary]`, `pgvector` |
 | `PineconeVectorStore` | `memory.stores.pinecone` | Serverless managed vector search | `pinecone-client` |
-| `ChromaVectorStore` | `memory.stores.chroma` | Local or self-hosted open-source vector DB | `chromadb` |
+| `ChromaVectorStore` | `memory.stores.chroma` | Embedded, in-process vector DB (ephemeral, or on disk with `path=`) | `chromadb` |
 | `QdrantVectorStore` | `memory.stores.qdrant` | High-performance self-hosted or cloud | `qdrant-client` |
 
 All five implement the `VectorStore` Protocol.  Swap backends by replacing
 the `store=` argument on `VectorMemory` — no other code changes.
+
+`ChromaVectorStore` runs Chroma inside your process; it never starts or
+connects to a Chroma server. If you run a Chroma server of your own for other
+purposes, securing its HTTP API and authorization is up to that deployment.
 
 ```python
 from augments.adk.memory.stores.pgvector import PgVectorStore

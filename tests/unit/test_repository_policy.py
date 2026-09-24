@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import tomllib
 from pathlib import Path
 
@@ -91,9 +92,13 @@ def test_temporary_vulnerability_suppressions_are_owned_and_bounded() -> None:
     precommit = _read(".pre-commit-config.yaml")
     environment = _read("environment.yaml")
 
-    for cve in ("CVE-2026-40217", "CVE-2026-28684"):
-        assert f"--ignore-vuln {cve}" in security
-        assert f"--ignore-vuln={cve}" in precommit
+    ci_ignored = set(re.findall(r"--ignore-vuln[ =](\S+)", security))
+    hook_ignored = set(re.findall(r"--ignore-vuln[ =](\S+)", precommit.replace('"', "")))
+
+    # CI and the pre-commit hook audit the same dependency graph, so they must
+    # suppress exactly the same advisories.
+    assert ci_ignored == hook_ignored
+    for cve in ci_ignored:
         assert f"{cve} owner:" in security
         assert f"{cve} removal:" in security
         assert f"{cve} owner:" in precommit
