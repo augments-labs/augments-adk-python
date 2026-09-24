@@ -30,34 +30,15 @@ Resume:
   ``RunState``. The inner agent then re-enters and returns, the
   inner graph completes, the outer graph completes.
 
-Pre-existing gap surfaced by this test. ``Graph.invoke`` (in
-``src/augments/adk/graphs/graph.py``) calls ``run_graph_loop`` for the
-inner graph and translates the resulting ``GraphRunResult`` into a
-``NodeResult`` UNCONDITIONALLY — including when
-``inner_result.status == GraphRunStatus.INTERRUPTED``. The outer loop has
-no signal that the inner graph paused, so a depth-2 deferral silently
-"completes" the outer node with a non-final ``NodeResult`` carrying the
-inner ``GraphRunResult`` as ``output`` and ``"status": "interrupted"`` in
-metadata. Resume cannot work because:
-
-1. No outer ``InterruptException`` is raised, so no outer
-   ``NestedAgentInterrupt`` is parked, so the outer caller has no
-   ``GraphResume.replies`` key to target.
-2. Even if the lift were added at ``Graph.invoke``, the inner
-   ``GraphState`` (carrying its own ``nested_agent_snapshots``)
-   would need to be preserved across the outer/inner boundary so the
-   resume path can re-enter the inner graph with both the staged
-   reply and the saved inner state. The current side-channel under
-   ``GraphState.nested_agent_snapshots`` is typed
-   ``dict[str, RunState]`` — it has no slot for a nested
-   ``GraphState``. Outer-loop dispatch (`_dispatch_node` /
-   `_dispatch_nested_resume` in ``src/augments/adk/run/graph_loop.py``)
-   only knows how to call ``AgentExecutable.resume_from_snapshot``.
-
-This test is marked ``pytest.mark.xfail(strict=True)`` — when the
-bridge gains depth-2 support, the test will start passing and the strict
-xfail surfaces the regression. Until then, the marker is the on-record
-gap.
+How the lift works. When the inner graph returns ``INTERRUPTED``,
+``Graph.invoke`` raises an ``InterruptException`` carrying one outer
+``NestedAgentInterrupt`` (a ``NestedGraphInterrupt`` for a plain inner
+interrupt) whose metadata records ``inner_graph_id`` and
+``inner_node_id``. The inner ``GraphState`` rides along with the
+exception, and the outer loop parks it in
+``GraphState.nested_graph_snapshots`` under the outer node id. On resume,
+the outer loop re-enters the inner graph from that saved state with the
+staged reply, so the caller only ever addresses the outer node id.
 """
 
 from __future__ import annotations
