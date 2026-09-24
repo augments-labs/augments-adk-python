@@ -486,12 +486,11 @@ A differing `output_hash` / `transformed_hash` pair marks a substitution. When
 both are set you can verify that the replacement differs from the original
 without ever storing either raw value.
 
-## Deferred: Faithfulness / Embedding Validator
+## Faithfulness / Embedding Checks
 
-No embedding-based "is this a faithful translation?" built-in ships. The check
-would overlap with `wrong_language_guardrail` in scope and would require
-introducing a new provider dependency and a new extra with no confirmed
-consumer. If you need semantic faithfulness checking, wire `LiteLLMEmbedder` (a
+No embedding-based "is this a faithful translation?" built-in ships. Such a
+check overlaps with `wrong_language_guardrail` in scope and needs an embedding
+provider. For semantic faithfulness checking, wire `LiteLLMEmbedder` (a
 provider-agnostic embedder already available in the ADK) into a custom guardrail
 function with a `REQUIRED` injected `Embedder` argument — no new provider, no
 new extra.

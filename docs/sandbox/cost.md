@@ -135,8 +135,7 @@ reports no per-sandbox cost.
 E2B meters compute usage at the account level, not per sandbox. The
 `E2bSandboxClient.fetch_billing` override therefore returns `None` by
 design. `computed_cost_usd` (the rate-card estimate) is the per-run cost
-approximation for E2B runs. A per-sandbox cost endpoint would be wired
-through this method if E2B exposes one in the future.
+approximation for E2B runs.
 
 ### Other backends
 

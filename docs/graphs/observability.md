@@ -138,6 +138,8 @@ All graph-tracing attributes live under the `augments.graph.*` namespace.
 |---|---|---|---|
 | `augments.graph.id` | str | always | The graph identifier. |
 | `augments.graph.entry` | str | when set | Entry node id on the compiled graph. |
+| `augments.graph.status` | str | at close | Terminal `GraphRunStatus` value (e.g. `completed`, `failed`, `interrupted`). |
+| `augments.graph.supersteps_total` | int | at close | Total supersteps executed by the run. |
 
 **Superstep span** (`graph.superstep.<n>`):
 
@@ -222,15 +224,7 @@ on the per-node span at close.
 
 ## Known Limitations
 
-- The graph-run span (`graph.<id>`) currently records only
-  `augments.graph.id` and `augments.graph.entry`. Status and
-  `supersteps_total` are not stamped on the graph-run span itself
-  today; they're available via the `on_graph_end` hook callback. A
-  follow-up will extend the span surface to match.
-- Per-node `attempts` defaults to 1 on exception paths and on
-  nested-agent resume — the count is propagated from
-  `run_node_with_reliability` only on the success path today.
-- `resume_attempt` is allocated as an attribute slot but is not
-  populated automatically by the BSP loop yet; callers that want
-  resume-attempt visibility can stamp it manually via the inner
-  payload dict before close.
+- Per-node `attempts` comes from the retry loop on the success path,
+  or from the `.attempts` field of `NodeRetriesExhaustedError` /
+  `GraphNodeTimeoutError` on failure. Any other path (nested-agent
+  resume, `GraphResumeError`, other exceptions) records `1`.

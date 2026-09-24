@@ -397,7 +397,7 @@ full tracing guide.
 
 ## What A2A does not try to do
 
-The current implementation deliberately leaves several concerns outside its
+The A2A integration deliberately leaves several concerns outside its
 scope:
 
 - **Shared state between processes.** Each A2A peer owns its own context
@@ -412,14 +412,14 @@ scope:
 - **W3C trace propagation through `ClientCallInterceptor`.** Client and
   server spans are linked by naming convention (`a2a.<task_id>`), but a
   shared trace ID across the HTTP boundary via W3C `traceparent` propagation
-  is not yet implemented.
+  is not implemented.
 - **`TASK_STATE_INPUT_REQUIRED` round-trips (human-in-the-loop).** The
-  server can return `input_required` state, but the ADK does not yet have a
+  server can return `input_required` state, but the ADK does not have a
   built-in mechanism to pause, collect user input, and resume the same
   server-side task. This requires a persistent `TaskStore` and application-
   level polling logic.
 - **Push notifications.** The JSON-RPC dispatcher exposes push-notification
-  config endpoints, but the ADK's client surface does not yet expose a
+  config endpoints, but the ADK's client surface does not expose a
   high-level push-notification API.
 
 ---

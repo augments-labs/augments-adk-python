@@ -23,7 +23,7 @@ Checkpointing solves this at two granularities:
 A checkpointer is a `HookProvider` that subscribes to `on_node_end` and
 `on_graph_end`. The graph loop contains zero persistence code — swapping
 the checkpointer is the only change needed to move from in-memory to
-SQLite (or any future store).
+SQLite (or any other store).
 
 ## Attaching a Checkpointer
 
@@ -420,8 +420,8 @@ await checkpointer.close()
   A structural break (removed or renamed field) requires renaming the
   loader, not adding a version discriminator.
 - **`pending_sends` is reserved.** The `GraphCheckpoint.pending_sends`
-  field is always empty. It is reserved for dynamic fan-out packets once
-  that feature is implemented.
+  field is always empty; the graph loop does not produce dynamic fan-out
+  packets.
 - **Non-streaming path only.** Checkpointing applies to the standard
   `arun_graph` / `run_graph` / `arun_graph_from_checkpoint` /
   `run_graph_from_checkpoint` execution path. The `arun_graph_streamed`

@@ -1,11 +1,11 @@
 # Cost Governance and Smart Routing
 
-This document covers the cost-control features shipped in this release: pre-call
+This document covers the cost-control features: pre-call
 cost estimation, per-tenant budget caps, pluggable cost ledger backends,
 model routing with automatic fallback, and cost-aware compaction.
 
-All features are **opt-in and purely additive**. Existing agent configurations
-are unaffected; no cost-related behavior is injected unless explicitly configured.
+All features are **opt-in**: an agent that configures none of them runs without
+any cost-related behavior; nothing is injected unless explicitly configured.
 
 ---
 
@@ -264,11 +264,6 @@ When a `tenant_budget` and a `router` are both active, the budget gate runs
 per-candidate before each attempt. A candidate that would exceed the budget
 triggers the budget exception rather than escalation — budget kills are not
 routing failures.
-
-### Future work
-
-`QualityFirstRouter` (routes based on evaluation scores from the eval
-framework) is deferred pending the eval framework completion.
 
 ---
 

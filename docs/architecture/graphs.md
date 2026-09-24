@@ -35,8 +35,8 @@ include `GraphStartEvent`, `SuperstepStartEvent`, `NodeStartEvent`,
 
 ## Checkpointers
 
-Graphs persist their state via the `Checkpointer` Protocol. Backends
-shipped today, all under `src/augments/adk/graphs/checkpointers/`:
+Graphs persist their state via the `Checkpointer` Protocol. Available
+backends, all under `src/augments/adk/graphs/checkpointers/`:
 
 | Backend       | Module          | Use for                              |
 | ------------- | --------------- | ------------------------------------ |

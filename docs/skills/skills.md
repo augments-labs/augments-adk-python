@@ -101,7 +101,7 @@ agent.skills = devtools.skills
 
 - `on_skill_activated(context, agent, skill_name)` — fired when a skill is activated in LAZY mode
 
-## Design Decisions
+## Design Principles
 
 - **No hidden behavior**: Skill instructions are opt-in via `Agent(skills=[...])`. Nothing is auto-injected.
 - **Agent = config**: Skills are declared on the Agent (configuration), activated by the Runner (execution).

@@ -174,30 +174,15 @@ fix the payload and retry against the same checkpoint.
   one `NestedAgentRejection(message=...)` per `tool_call_id`, useful when
   the reviewer denies the whole batch with one rationale.
 
-## Limitations and follow-up work
+## Limitations
 
 ### Streaming variant
 
 A `Runner.arun_graph_streamed` run that hits a `NestedAgentInterrupt`
 emits the `graph.node_interrupt` event normally and exits the stream
-cleanly. The resumed turn, however, currently flows through
-non-streaming `Runner.arun` internally — interior `agent_event` items
-produced by the resumed sub-agent are not re-emitted to the streaming
-consumer. A streaming variant of `resume_from_snapshot` that forwards
-those events into the outer stream is a follow-up.
-
-### Depth-2 nested-graph resume
-
-A `Graph` used as an inner node whose own agent defers does NOT yet
-propagate the interrupt to the outer graph. `Graph.invoke` translates an
-inner `GraphRunResult.status == INTERRUPTED` into an ordinary
-`NodeResult` rather than re-raising `InterruptException(NestedAgentInterrupt)`
-with the `node_id` rewritten to the outer scope, and
-`GraphState.nested_agent_snapshots` is typed `dict[str, RunState]` with
-no slot for an inner `GraphState`. The strict-xfail at
-`tests/integration/graphs/test_nested_resume_deep.py:203` is the on-record
-diagnostic — when depth-2 support lands, the marker flips and the test
-starts passing.
+cleanly. The resumed turn, however, flows through non-streaming
+`Runner.arun` internally — interior `agent_event` items produced by the
+resumed sub-agent are not re-emitted to the streaming consumer.
 
 ### Snapshot serialisation
 
@@ -211,7 +196,7 @@ defeat the HITL contract by erasing the caller's pending decision.
 
 ### Two-phase validate-then-stage on resume
 
-The BSP loop currently validates resume payloads while mutating
+The BSP loop validates resume payloads while mutating
 in-memory state. A `GraphResumeError` raised mid-validation leaves the
 in-process `GraphState` partially mutated; recovery requires reloading
 the run from the checkpointer.

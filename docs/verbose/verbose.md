@@ -227,7 +227,7 @@ for CI log compatibility.
 
 ## Event reference
 
-### Currently emitted
+### Emitted events
 
 | Constant | Event name | Fires at |
 |---|---|---|

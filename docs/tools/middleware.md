@@ -38,7 +38,8 @@ control flow.
 Pydantic-AI ships both per-tool validators and `WrapperToolset`;
 Microsoft Agent Framework ships `FunctionMiddleware`,
 `AgentMiddleware`, and `ChatMiddleware` as three separate Protocols
-with their own typed contexts. We follow that precedent.
+with their own typed contexts. The Augments ADK follows the same
+split.
 
 ## Comparison with other frameworks
 
@@ -52,11 +53,11 @@ retries):
 | **LangChain** | `AgentMiddleware` subclasses such as `PIIMiddleware(strategy="block")` and `HumanInTheLoopMiddleware` — middleware *is* the safety surface | The same `AgentMiddleware` umbrella — one polymorphic class with hooks (`before_model`, `wrap_tool_call`, …) dispatched per subclass |
 | **Microsoft Agent Framework** | Per-function validators (separate from middleware) | `FunctionMiddleware` / `AgentMiddleware` / `ChatMiddleware` — three separate Protocols, one per scope |
 | **Pydantic-AI** | Per-tool input/output validators | `WrapperToolset.call_tool` overrides at the toolset boundary |
-| **Augments ADK** (this framework) | `AgentInputGuardrail` / `AgentOutputGuardrail` (agent-level) + `ToolInputGuardrail` / `ToolOutputGuardrail` (per-tool), all returning typed verdicts (`allow` / `reject_content` / `raise_exception`) | `ToolMiddleware` Protocol — function-scope only today; `Middleware.agents` and `Middleware.llms` slots reserved for future Protocols, each with its own typed context |
+| **Augments ADK** (this framework) | `AgentInputGuardrail` / `AgentOutputGuardrail` (agent-level) + `ToolInputGuardrail` / `ToolOutputGuardrail` (per-tool), all returning typed verdicts (`allow` / `reject_content` / `raise_exception`) | `ToolMiddleware` / `AgentMiddleware` / `LLMMiddleware` (+ `LLMStreamMiddleware`) — separate Protocols on the `Middleware.tools` / `agents` / `llms` / `stream_llms` slots, each with its own typed context |
 
 Three notes that explain the Augments ADK position:
 
-1. **Why the umbrella shape is rejected.** LangChain's
+1. **Why verdicts and plumbing stay separate.** LangChain's
    `PIIMiddleware(strategy="block")` collapses verdict and plumbing
    into one polymorphic surface. The cost is that the verdict becomes
    implicit in the middleware's behaviour rather than an explicit
@@ -65,9 +66,9 @@ Three notes that explain the Augments ADK position:
    The Augments ADK keeps `Guardrail` as the typed-verdict surface and
    `ToolMiddleware` as plumbing only; both are loadable by the same
    review tooling, but they do not share a registration list.
-2. **Why the three-Protocol split is preferred.** Microsoft's
-   `FunctionMiddleware` / `AgentMiddleware` / `ChatMiddleware` is the
-   model. Each layer carries its own typed context, so a turn-scope
+2. **Why there is one Protocol per layer.** As with Microsoft's
+   `FunctionMiddleware` / `AgentMiddleware` / `ChatMiddleware`, each
+   layer carries its own typed context, so a turn-scope
    middleware does not have to pretend it sees a `ToolContext`. The
    `Middleware` config dataclass on `Agent` mirrors that split with
    plural slot names (`tools`, `agents`, `llms`).
@@ -108,9 +109,11 @@ agent = Agent(
 ```
 
 `Agent.middleware` is a single typed config object holding per-layer
-middleware lists. Today only the `tools` slot is wired into the run
-loop; the `agents` (turn-scope) and `llms` (LLM-call) slots are
-reserved for future Protocols.
+middleware lists: `tools` (tool calls), `agents` (turn-scope),
+`llms` (non-streaming LLM calls), and `stream_llms` (streaming LLM
+calls). This page covers the `tools` slot; see
+[Scope: three middleware layers](#scope-three-middleware-layers) for
+the others.
 
 Every call to `search`, `summarise`, or `lookup` flows through both
 middleware in the listed order (logging outer, metrics inner).
@@ -295,9 +298,8 @@ The decision rule:
 > If only the surrounding plumbing (logging, metrics, retries, arg
 > injection, caching) changes, write a **middleware**.
 
-The contract is enforced at three layers: the `ToolMiddleware`
-Protocol docstring, this section, and a normative project rule
-loaded into every code-review session.
+The contract is stated in two places: the `ToolMiddleware` Protocol
+docstring and this section.
 
 ## Scope: three middleware layers
 

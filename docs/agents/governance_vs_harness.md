@@ -109,30 +109,6 @@ Every ADK primitive classified by its role:
 
 ---
 
-## The Governance Roadmap
-
-The ADK provides governance building blocks today. These are the primitives a declarative governance layer can be built on:
-
-### Agent Policy (future)
-
-A structured declaration of how an agent should operate. Not a system prompt (LLM-interpreted text) but a machine-enforceable specification that the Runner applies proactively.
-
-Inspiration: K8s Deployment spec + PodSecurityPolicy. You don't watch every pod — you declare what "secure" means, and the admission controller enforces it.
-
-### Delegation Contracts (future)
-
-When agent A delegates to agent B, a contract defines the input format, expected output format, quality criteria, and resource allocation. Currently this is string in / string out with optional schemas. Contracts would make delegation expectations explicit and measurable.
-
-Inspiration: K8s Service + Ingress. Services declare their interface; ingress defines access rules. Consumers and producers agree on a contract.
-
-### Fleet Defaults (future)
-
-Default governance applied to all agents in a run without per-agent configuration. Every sub-agent gets a timeout, every delegation gets a budget, every output gets a quality standard — unless explicitly overridden.
-
-Inspiration: K8s LimitRange. Every pod in a namespace gets default resource limits without the developer specifying them on each pod.
-
----
-
 ## Summary
 
 | Layer | Question | Scales | When to use |

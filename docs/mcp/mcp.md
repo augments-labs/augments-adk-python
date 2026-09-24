@@ -368,12 +368,12 @@ server = MCPServerStdio(name="x", params=..., elicitation_callback=ask_user)
 The handler receives the server's elicitation request and returns
 the user's response.
 
-## Limitations (still apply)
+## Limitations
 
 - Disposal covers only the entry-point agent's `tools`. Toolsets
   contributed by handoff targets must be managed via
   `MCPServerManager` (`auto_connect=False`) or explicit `async with`.
-- MCP Tasks API for long-running tools is not yet wrapped.
+- MCP Tasks API for long-running tools is not wrapped.
 
 ## See also
 

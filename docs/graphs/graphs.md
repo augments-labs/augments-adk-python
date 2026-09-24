@@ -6,17 +6,16 @@ under BSP (Bulk Synchronous Parallel) supersteps.
 
 ## Why Graph Exists
 
-Augments already ships two multi-agent primitives:
+Augments has two other multi-agent primitives:
 
 - `Handoff` — one-shot linear delegation (Agent A → Agent B, run ends).
 - `Swarm` — iterative collaboration with cycles (A ↔ B ↔ C until an explicit
   stop signal).
 
-Neither composes. A developer cannot today embed a Swarm inside a larger DAG, or
-route between an Agent-with-handoffs and a nested review graph. The `Graph`
-primitive closes that gap.
-
-It is the **composition layer** that unifies the three existing primitives:
+Neither composes on its own: a Swarm cannot sit inside a larger DAG, and an
+Agent-with-handoffs cannot route into a nested review graph. `Graph` is the
+**composition layer** that makes this possible — Agents, Swarms, nested Graphs,
+and plain callables are all valid nodes:
 
 | Node type | Auto-wrapped to |
 |-----------|----------------|
@@ -38,7 +37,7 @@ state fields, `START`/`END` sentinels, and a dual routing mechanism
 from the result type.
 
 **Strands Agents** has a readable builder but ships OR-default joins (silently
-runs targets with partial inputs), a broken-parallel bug in older versions, and
+runs targets with partial inputs) and
 no `graph_path` tag on nested events so inner-graph activity is opaque.
 
 **Augments Graph** adds what neither ships:

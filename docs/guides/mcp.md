@@ -445,11 +445,12 @@ because they do not ship hosted MCP server-side.
   target agents must be managed via `MCPServerManager`
   (`auto_connect=False`) or an explicit `async with` on the server.
 - **MCP Tasks API** — long-running tool calls via the MCP Tasks API
-  are not yet wrapped.
-- **`MCPApprovalRequestItem` / `MCPApprovalResponseItem` emission** —
-  these Layer 3 items are defined and exported but not yet emitted by
-  the runner's hosted-tool loop. Wiring is a runner-loop change; the
-  type definitions are stable.
+  are not wrapped.
+- **Hosted MCP approval round-trip** — `MCPApprovalRequestItem`s from
+  the Responses API appear in `RunResult.new_items`, but they are not
+  surfaced as deferred tool calls for `RunState.approve()` /
+  `RunState.reject()`; the application appends an
+  `MCPApprovalResponseItem` to the next turn's input itself.
 - **WebSocket transport** — not available. The MCP client library
   removed its WebSocket client, so there is no transport to wrap.
   Use streamable HTTP.
