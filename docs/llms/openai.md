@@ -13,8 +13,8 @@ Use these when you want every current OpenAI feature end-to-end
 prompt-cache routing hints, fully-typed usage) without paying
 litellm's conversion hops.
 
-The existing `LiteLLM` path still works for OpenAI models — it stays
-available as the multi-provider convenience path.
+`LiteLLM` also serves OpenAI models, as the multi-provider convenience
+path.
 
 ## Quick Start
 

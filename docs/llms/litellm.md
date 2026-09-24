@@ -50,7 +50,7 @@ llms/
     └── litellm_provider.py           # Provider detection
 ```
 
-Provider-agnostic types (`LLM`, `LLMConfig`, `LLMUsage`) stay at the `llms/` root. This separation means a future direct provider implementation (e.g., `AnthropicProvider(LLM)`) wouldn't inherit any litellm-specific code.
+Provider-agnostic types (`LLM`, `LLMConfig`, `LLMUsage`) stay at the `llms/` root. This separation means the native provider implementations (e.g., `AnthropicLLM`, `GeminiLLM`, `OpenAIResponsesLLM`) inherit no litellm-specific code.
 
 ## Configuration
 
@@ -120,7 +120,7 @@ config = LLMConfig(
 - 5-minute TTL is free; 1-hour TTL costs 2x
 
 **Limitations:**
-- litellm currently ignores the `ttl` field — it always uses Anthropic's default (5 minutes). A future direct `AnthropicProvider` would use `ttl` natively.
+- litellm ignores the `ttl` field — it always uses Anthropic's default (5 minutes). The native `AnthropicLLM` provider honours a TTL via `AnthropicConfig.cache_control_ttl` (`"5m"` / `"1h"`).
 - Minimum tokens: varies by model (2048–4096)
 
 ### Google Gemini

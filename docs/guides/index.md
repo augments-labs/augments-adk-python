@@ -1,8 +1,8 @@
 # Guides
 
-How-to pages for the ADK's developer surface. Each guide is currently
-a short pointer to the module-level docs under `docs/<module>/`. Full
-migration into `docs/guides/` lands in a follow-up phase.
+How-to pages for the ADK's developer surface. Each guide walks through
+one area end to end and links to the module-level reference docs under
+`docs/<module>/` for details.
 
 - **[Agents](agents.md)** — `Agent` configuration: name, instructions, tools, handoffs, guardrails.
 - **[Tools](tools.md)** — Function tools, hosted tools, MCP tools, tool guardrails.

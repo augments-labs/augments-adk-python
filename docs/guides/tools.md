@@ -278,7 +278,7 @@ FileSearchTool(
 > [!NOTE]
 > Anthropic's code execution is in beta and not represented as a typed class.
 > Use `LLMConfig.extra_body` to pass beta-format tool definitions for
-> capabilities not yet covered by a typed `HostedTool` subclass.
+> capabilities not covered by a typed `HostedTool` subclass.
 
 ---
 

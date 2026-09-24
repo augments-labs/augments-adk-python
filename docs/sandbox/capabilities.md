@@ -14,7 +14,7 @@ tools + instruction fragments per turn.
 | `ShellCapability` | Adds `RunCommandTool` + optional `WriteStdinTool` (when the backend reports `supports_pty()`). Configurator callback for advanced per-tool customisation. |
 | `FilesystemCapability` | Adds `ViewImageTool` (base64-decoded image read) + `SandboxApplyPatchTool` (unified-diff patch application with workspace-escape protection). |
 | `SkillsCapability` | Materialises declarative skills into the workspace at `.agents/`. Supports inline skills, eager local-dir / git-repo sources, and lazy `LocalDirLazySkillSource` / `GitRepoLazySkillSource` with the `LoadSkillTool` for progressive disclosure. |
-| `MemoryCapability` | Workspace-persisted memory under `memories/`. Reads `memory_summary.md` into the system prompt on each run, appends `sessions/<rollout-id>.jsonl` per turn, exposes `read_raw_memories()` / `write_consolidated_memory()` for the Phase-2 LLM-driven consolidation pipeline. |
+| `MemoryCapability` | Workspace-persisted memory under `memories/`. Reads `memory_summary.md` into the system prompt on each run, appends `sessions/<rollout-id>.jsonl` per turn, exposes `read_raw_memories()` / `write_consolidated_memory()` for a caller-driven LLM consolidation step. |
 
 ## Default capability list
 

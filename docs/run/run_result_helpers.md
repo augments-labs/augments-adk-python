@@ -60,7 +60,7 @@ assert len(result.new_items) > 0  # history still there
 assert result.last_response_id is not None  # still accessible
 ```
 
-## `to_input_list(mode=...)`
+## `to_input_list()`
 
 Convert the run's accumulated items into a message list suitable for feeding
 into the next `Runner.arun()` call.
@@ -70,22 +70,10 @@ next_input = result.to_input_list()
 next_result = await Runner.arun(agent, next_input)
 ```
 
-### Modes
-
-- `mode="preserve_all"` (default) — every item's `to_param()` is emitted in
-  order. Reasoning blocks, tool calls, and tool outputs are all preserved.
-  This is the shape required for multi-turn tool-use flows against providers
-  that demand the full prior trace (Anthropic, OpenAI Responses API).
-- `mode="normalized"` — **forward-compatible reservation**. Identical to
-  `preserve_all` today, but reserved for a future mode that strips reasoning
-  blocks and collapses provider-specific metadata for models that don't
-  accept them. Callers that opt in today will automatically pick up the
-  stripped variant once it ships — no breaking change.
-
-```python
-# Opt into the future stripped shape now; no behavior change today.
-cheap_input = result.to_input_list(mode="normalized")
-```
+The list starts with the run's user input, followed by every item's
+`to_param()` in order. Reasoning blocks, tool calls, and tool outputs are all
+preserved. This is the shape required for multi-turn tool-use flows against
+providers that demand the full prior trace (Anthropic, OpenAI Responses API).
 
 ## Composition
 

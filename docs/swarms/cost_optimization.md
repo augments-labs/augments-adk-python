@@ -14,9 +14,9 @@ you **five composable levers** and one absolute safety net.
 | Swarm-wide token cap | `SwarmConfig.max_total_tokens` | Swarm | Cumulative LLM tokens across the swarm |
 | Per-turn context size | `SharedContextStrategy` | Swarm | Messages sent to each agent per turn |
 
-Absolute safety net: **`RunConfig.max_total_turns`** (existing, not
-swarm-specific) stops runaway loops. It defaults to `500` per the
-cost-conservative-defaults rule — production deployments can override
+Absolute safety net: **`RunConfig.max_total_turns`** (not
+swarm-specific) stops runaway loops. It defaults to `500` — a bounded,
+cost-conservative default; production deployments can override
 (raise or lower) for their workload. Set to `None` explicitly only
 when you genuinely want unbounded multi-agent turns.
 

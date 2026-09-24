@@ -67,8 +67,7 @@ tracing in production:
 
 The framework deliberately does not ship a built-in attribute filter —
 sanitization is domain-specific (what counts as PII varies by
-jurisdiction and application). A future release may add an opt-in
-`RunConfig.span_attribute_filter` hook.
+jurisdiction and application).
 
 ## Emitted spans
 

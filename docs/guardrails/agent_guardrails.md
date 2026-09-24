@@ -561,7 +561,7 @@ return AgentGuardrailFunctionOutput(tripwire_triggered=False)  # passes
 
 ### When Severity is Set
 
-When `severity` is set, it overrides `tripwire_triggered` for the halt decision. The value of `tripwire_triggered` no longer matters for execution control — `severity` is authoritative.
+When `severity` is set, it overrides `tripwire_triggered` for the halt decision. The value of `tripwire_triggered` is then ignored for execution control — `severity` is authoritative.
 
 ```python
 # INFO — logged at DEBUG level, included in results, never halts

@@ -206,6 +206,6 @@ generated diagrams in source control alongside the code they describe.
   describe the **topology**, not a particular execution. For run
   observability, consume the streaming events (`flow.events`, `graph.events`).
 - Embedding source-code snippets, return labels of routers, or runtime
-  state in node labels — diagrams stay topology-only on purpose
-  (mirrors the project's "no source-code introspection of routers"
-  decision).
+  state in node labels — diagrams stay topology-only on purpose: routers
+  dispatch on the literal string they return at run time, and the
+  framework never inspects router source code to predict it.

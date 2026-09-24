@@ -14,8 +14,8 @@ output is too chatty for the model.
 | You need a character cap (no tokenizer) | `trim_tool_output(tool, max_chars=N)` |
 | You want both char + token caps composed | `trim_tool_output(tool, max_chars=N, max_tokens=M, model=...)` |
 
-`trim_tool_output` is purely additive — it composes on top of any existing
-tool and leaves the original instance untouched.
+`trim_tool_output` wraps any tool and leaves the original instance
+untouched.
 
 ## Signature
 

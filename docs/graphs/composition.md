@@ -15,9 +15,9 @@ pipeline might need:
 4. A **legal review subgraph** that runs a compliance checker and a legal
    approver in sequence (nested Graph).
 
-Pre-composition, each step has to be wired manually — the developer manages state
-threading, usage attribution, and error propagation across the four patterns.
-With `Graph`, all four are nodes. The graph loop manages the rest.
+Wired by hand, each step leaves the developer to manage state threading, usage
+attribution, and error propagation across the four patterns. With `Graph`, all
+four are nodes, and the graph loop manages the rest.
 
 ## The `Executable[TContext]` Seam
 
@@ -342,8 +342,7 @@ injecting `transfer_to_<name>` LLM tools at dispatch time — this requires a
 list of `Agent` members, not an `Executable` list.
 
 Symmetric composition (Swarm-of-Graphs, where `SwarmPolicy` accepts
-`Executable` members) is not currently supported. It would require refactoring
-`SwarmPolicy` and the tool-injection dispatch site in `run/swarm_loop.py`.
+`Executable` members) is not supported.
 
 The primary use case — a `Graph` that contains a `Swarm` node — is fully
 supported.
@@ -374,8 +373,12 @@ sub-agent's mid-run `RunState` in the graph checkpoint and re-injects it
 into the agent loop on resume — see `docs/graphs/nested-agent-bridge.md`
 for the public surface (`NestedAgentApproval`, `NestedAgentRejection`,
 `NestedAgentReply`), partial-resume semantics, and current limitations
-(streaming forwarding of resumed agent events, depth-2 inner-graph
-deferrals).
+(streaming forwarding of resumed agent events).
+
+A nested `Graph` node whose inner agent defers lifts the deferral to the
+outer graph as a `NestedAgentInterrupt` on the outer node; the inner
+`GraphState` is parked on `GraphState.nested_graph_snapshots`, and a
+`GraphResume.replies` entry keyed by the outer node id resumes both layers.
 
 A nested `Graph` node whose inner graph suspends on a **plain** `Interrupt`
 (raised by `request_human_input`, not a sub-agent tool approval) is lifted as

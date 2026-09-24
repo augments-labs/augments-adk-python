@@ -18,7 +18,7 @@ profile = (
 result = await profile.agent(support_agent).max_turns(6).arun("Help reset billing access.")
 ```
 
-Profiles are additive to the existing direct APIs. Use
+Profiles sit alongside the direct `Runner` APIs. Use
 `Runner.arun(agent, ...)` for one-off calls; use a profile when several runs
 share the same model, limits, tracing, tenant, context management, or context
 value. Target runners delegate back to the corresponding `Runner` execution

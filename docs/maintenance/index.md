@@ -9,7 +9,7 @@ Add or extend the matching guide under `docs/guides/<topic>.md`. Keep
 prose short; show one minimal example. Add the symbol to the matching
 page under `docs/references/api/` so the public surface stays complete.
 
-## Did you change a major architectural decision?
+## Did you change the architecture?
 
 Update or extend the relevant page under `docs/architecture/` to
 reflect the new design. If the change is wide-reaching, update

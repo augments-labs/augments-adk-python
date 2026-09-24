@@ -1,8 +1,8 @@
 # Tasks
 
 Declarative units of work executed by `Runner.arun_task` and
-`Runner.arun_task_pipeline`. Purely additive — every existing
-`Runner.arun(...)` call continues to work unchanged.
+`Runner.arun_task_pipeline`. Tasks are optional: `Runner.arun(...)`
+runs an agent directly, without a `Task`.
 
 ## When to use Task
 
@@ -153,8 +153,8 @@ for introspection or diagram generation. See
 ### Explicit input forwarding (`TaskDependency` + `TaskInputFilter`)
 
 By default `Task.description` is the user prompt verbatim — the
-framework NEVER auto-injects upstream outputs (we reject CrewAI's
-hidden auto-aggregation). To forward an upstream task's output into
+framework never auto-injects upstream outputs; there is no hidden
+aggregation. To forward an upstream task's output into
 a downstream input, wrap that upstream in a `TaskDependency` and
 attach an `input_filter`:
 
@@ -354,17 +354,15 @@ class MyHooks(RunHooks):
             print(f"{task.name} failed: {output.error}")
 ```
 
-These fire in addition to the existing run-level hooks
+These fire in addition to the run-level hooks
 (`on_agent_start`, `on_llm_start`, etc.) and the verbose Task panel.
 
-## Rejected CrewAI patterns
+## What Task does not do implicitly
 
-This implementation intentionally REJECTS several CrewAI Task
-behaviors that inject framework actions the developer did not opt
+`Task` never injects framework actions the developer did not opt
 into:
 
-- No auto-manager-agent on hierarchical process (no hierarchical
-  process at all).
+- No auto-manager agent and no hierarchical process.
 - No runtime prompt rewriting at all — `Task.description` is the
   user prompt verbatim; cross-task data flow is the developer's
   responsibility via explicit chaining.

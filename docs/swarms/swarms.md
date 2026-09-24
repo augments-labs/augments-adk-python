@@ -115,9 +115,9 @@ Explicit `swarm_done` remains the recommended primary stop signal.
 
 | You need… | Use |
 |-----------|-----|
-| Agent A hands off to B, run ends when B finishes | `Handoff` (existing) |
-| Agent A delegates a sub-task to B and resumes with the answer | `Agent.as_tool()` (existing) |
-| **Agent A ↔ B ↔ C cycling until an explicit stop** | **`Swarm` (this module)** |
+| Agent A hands off to B, run ends when B finishes | `Handoff` |
+| Agent A delegates a sub-task to B and resumes with the answer | `Agent.as_tool()` |
+| **Agent A ↔ B ↔ C cycling until an explicit stop** | **`Swarm`** |
 | Fan out to N agents in parallel and join | `asyncio.gather` over `Runner.arun(...)` |
 
 If you catch yourself writing "run the reviewer, then decide whether to

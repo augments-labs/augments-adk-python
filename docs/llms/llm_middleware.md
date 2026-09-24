@@ -26,9 +26,9 @@ agent. In a 5-turn agent loop, it is invoked five times.
 
 ## Why a separate mechanism
 
-Today users can subclass the `LLM` ABC to wrap calls — but that
-forces one wrapper per provider (a custom subclass of `LiteLLM`,
-`AnthropicLLM`, etc.) and does not compose. A formal middleware
+Subclassing the `LLM` ABC can also wrap calls, but it requires one
+wrapper per provider (a custom subclass of `LiteLLM`, `AnthropicLLM`,
+etc.) and does not compose. A formal middleware
 chain at the runner's call boundary lets multiple wrappers stack
 cleanly, share state across pre- and post-call, and short-circuit
 by not calling `next`.

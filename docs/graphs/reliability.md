@@ -14,9 +14,9 @@ Both features are **opt-in and default-off**:
 - `NodeRetryPolicy()` defaults to `max_attempts=1` — one attempt, no retries.
 - `GraphConfig.per_node_timeout` defaults to `None` — no timeout.
 
-This means a graph that does not configure these fields behaves exactly as it
-did before the features existed. The framework never adds cost the developer did
-not choose. See [Parity Guarantee](#parity-guarantee).
+A graph that does not configure these fields runs each node once, with no
+timeout. The framework never adds cost the developer did not choose. See
+[Parity Guarantee](#parity-guarantee).
 
 ## `per_node_timeout` and `NodeRetryPolicy`
 
@@ -245,7 +245,7 @@ A node that configures neither `retry` nor `timeout` (and whose graph uses the
 default `GraphConfig()`) is executed exactly once, and any exception it raises
 propagates unchanged — no `GraphNodeTimeoutError`, no `NodeRetriesExhaustedError`,
 no extra wrapping. This is rule 3 of the failure-boundary contract and is
-enforced unconditionally. Existing graphs require no migration.
+enforced unconditionally.
 
 ## `fail_fast` Interaction
 

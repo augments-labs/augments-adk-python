@@ -17,21 +17,21 @@ and carries a developer-owned typed state object across the run.
 | Parallel fan-out with no ordering | `TaskGroup` |
 | **Declarative event-driven workflow over typed state with `@flow_listen` / `@flow_router`** | **`Flow`** |
 
-## Anti-Hidden-Behavior Contract
+## No-Hidden-Behavior Contract
 
-Augments Flow deliberately rejects every hidden behavior CrewAI Flow
-introduces. The contract is enforced at class-definition time where
+Flow performs no implicit data passing, state construction, persistence,
+or routing. The contract is enforced at class-definition time where
 structurally possible:
 
-| CrewAI does this | Augments Flow does NOT |
+| Concern | Flow behavior |
 |---|---|
-| `inspect.signature(method)` injects previous step's return value | Step methods take ONLY `self`. Return values are dropped (except `@flow_router`). |
-| Auto-instantiates state from `Flow[StateT]` generic | Requires explicit `initial_state=` or `state_factory` class attribute. |
-| `@persist` decorator auto-writes state after every step | Persistence is explicit: developer calls `FlowCheckpoint.to_json()`. |
-| Bare `str` return from non-router → next step's name | Routing only via `@flow_router`-decorated methods. |
-| Source-code introspection of router returns | Routers dispatch on the literal returned string. |
-| `train()` / `test()` / `replay()` modes | One execution path. |
-| `kickoff_for_each(inputs)` | Developer loops `await Runner.arun_flow(...)` themselves. |
+| Passing data between steps | Step methods take ONLY `self`; no previous return value is injected. Return values are dropped (except `@flow_router`). Data flows through the typed state. |
+| State construction | Requires explicit `initial_state=` or a `state_factory` class attribute; state is never auto-instantiated from the `Flow[StateT]` generic. |
+| Persistence | Explicit: the developer calls `FlowCheckpoint.to_json()`. Nothing is written after each step automatically. |
+| Routing | Only via `@flow_router`-decorated methods. A bare `str` returned by any other step is not a step name. |
+| Router resolution | Routers dispatch on the literal returned string; router source code is never introspected. |
+| Execution modes | One execution path — no separate train / test / replay modes. |
+| Batch inputs | The developer loops `await Runner.arun_flow(...)` over inputs. |
 
 ## Quick Start
 
@@ -334,13 +334,14 @@ function-tool-style configuration surface:
 | `max_retries` (int / None) | On a body exception, retry up to N extra times before `FlowConfig.error_policy` engages. Cancellation-class exceptions and internal control-flow signals (HITL deferral, enablement skip, guardrail/rejection) never retry — a deferral is not a failure. |
 | `timeout` (float / None) | Wraps the body in `asyncio.wait_for(...)`. Timeouts route through `error_policy` like any other exception. |
 
-All four attributes default to "no change vs. today" — opting in adds
-cost; the framework never adds a deferral, retry, or timeout the
-developer didn't request.
+All four step-level controls (`requires_approval`, `enabled`,
+`max_retries`, `timeout`) default to a no-op (`False`, `True`, `None`,
+`None`) — opting in adds cost; the framework never adds a deferral,
+retry, or timeout the developer didn't request.
 
 ## Step-Level Governance (`rate_limit` / `guardrails` / `cache`)
 
-Three Tier-2 polymorphic-config attributes mirror their
+Three polymorphic-config attributes mirror their
 `FunctionTool` analogues at the Flow step layer. Each is opt-in
 and defaults to `None`:
 
@@ -520,22 +521,17 @@ class MyFlow(Flow[State]):
         self.state.intermediate = str(graph_result.final_output)
 ```
 
-## Diverging from CrewAI (intentional choices)
+## Gate and Entry-Point Semantics
 
-| CrewAI feature | Augments Flow choice |
+| Concern | Flow behavior |
 |---|---|
-| Nested combinators `or_(and_(a, b), c)` | Flat gates only — use `Or(...)` / `And(...)` constructors for complex shapes |
-| Conditional `@flow_start("trigger")` | Use `@flow_listen` for delayed entry |
-| OR-listener re-firing on cyclic re-entry (`_clear_or_listeners`) | Single-fire per flow run |
-| `@flow_listen` signature introspection injecting prev result | Forbidden — step methods take only `self` |
-| `@persist` auto-write | Explicit `FlowCheckpoint.to_json()` |
-| `Flow.plot()` visualization | Build externally from `FlowStepRegistry` |
+| Combining triggers | Flat gates only — `a \| b` builds an `Or`, `a & b` builds an `And`; mixing the two in one chain raises `TypeError`. Use the `Or(...)` / `And(...)` constructors for other shapes. |
+| Delayed entry | `@flow_start` takes no trigger; use `@flow_listen` for a step that waits on another step. |
+| Cyclic re-entry | `Or` and `And` gates fire once per flow run; a later arrival does not re-fire the listener. |
+| Visualization | `Flow.to_mermaid()` / `Flow.to_dot()` — see [Visualization](../visualization/visualization.md). |
 
-## Future: Temporal `Workflow`
+## Durable Execution
 
-The name `Workflow` is reserved for a future Temporal-based durable
-execution runtime. Temporal wraps any orchestration (Flow, Graph,
-Swarm, TaskPipeline) and provides crash recovery, deterministic
-replay, signals, queries, and long-running execution. The two layers
-compose: a Temporal Workflow contains a Flow as its orchestration
-topology.
+For crash recovery, deterministic replay, and long-running execution,
+run a Flow inside Temporal or Restate — see
+[Durable Workflows](../workflows/workflows.md).

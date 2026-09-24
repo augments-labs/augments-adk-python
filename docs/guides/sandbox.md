@@ -333,7 +333,7 @@ Three concrete implementations ship out of the box:
 > [!NOTE]
 > Not all backends support `snapshot_store`. Docker, K8s, and the hosted
 > bridges raise `UnsupportedSnapshotFeatureError` if you pass a non-`None`
-> store today. The session-level `persist_workspace` / restore path works
+> store. The session-level `persist_workspace` / restore path works
 > independently of the store; the store is the *persistence* layer for
 > cross-run restore.
 

@@ -55,9 +55,7 @@ class NoteStore(Protocol):
     def keys(self) -> list[str]: ...
 ```
 
-**Current:** `InMemoryNoteStore` — persists for a single `Runner.arun()` call.
-
-**Not yet implemented:** `FileNoteStore` — writes to disk (like Claude Code's NOTES.md pattern). `SessionNoteStore` — backed by the framework's Session interface.
+**Built-in:** `InMemoryNoteStore` — persists for a single `Runner.arun()` call. Implement the `NoteStore` Protocol for other backends (disk, session).
 
 ## HistoryAwareToolContext
 
