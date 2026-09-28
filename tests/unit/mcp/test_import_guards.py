@@ -10,6 +10,10 @@ degrading to the documented ``None`` bindings.
 
 Each case runs in a fresh subprocess so a meta-path blocker installed before
 import sees an interpreter with no cached ``augments`` modules.
+
+``anthropic`` itself depends on ``httpx2``, so an environment without
+``httpx2`` has no ``anthropic`` either; the missing-``httpx2`` cases hide both,
+or ``augments.adk.llms`` would report a half-installed ``anthropic``.
 """
 
 from __future__ import annotations
@@ -19,24 +23,31 @@ import sys
 import textwrap
 
 
-def _run_blocked_import(block_name: str, body: str) -> subprocess.CompletedProcess[str]:
-    """Run ``body`` with ``block_name`` masked as an uninstalled distribution."""
+def _run_blocked_import(block_names: tuple[str, ...], body: str) -> subprocess.CompletedProcess[str]:
+    """Run ``body`` with every name in ``block_names`` masked as uninstalled."""
     script = textwrap.dedent(
         f"""
         import importlib.abc
         import sys
 
-        BLOCK = {block_name!r}
+        BLOCKED = {block_names!r}
+
+        def _blocked_root(name):
+            for root in BLOCKED:
+                if name == root or name.startswith(root + "."):
+                    return root
+            return None
 
         class _Blocker(importlib.abc.MetaPathFinder):
             def find_spec(self, name, path=None, target=None):
-                if name == BLOCK or name.startswith(BLOCK + "."):
-                    raise ModuleNotFoundError("No module named " + repr(name), name=BLOCK)
+                root = _blocked_root(name)
+                if root is not None:
+                    raise ModuleNotFoundError("No module named " + repr(name), name=root)
                 return None
 
         sys.meta_path.insert(0, _Blocker())
         for cached in list(sys.modules):
-            if cached == BLOCK or cached.startswith(BLOCK + "."):
+            if _blocked_root(cached) is not None:
                 del sys.modules[cached]
 
         {textwrap.indent(textwrap.dedent(body), " " * 8).lstrip()}
@@ -74,14 +85,14 @@ assert MCPToolset is not None, "MCPToolset defers its client imports and stays i
 def test_mcp_import_survives_missing_httpx2() -> None:
     # THE regression: the mcp client is installed but httpx2 is not, so the
     # first failure carries name="httpx2" rather than name="mcp".
-    result = _run_blocked_import("httpx2", _MCP_BODY)
+    result = _run_blocked_import(("httpx2", "anthropic"), _MCP_BODY)
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"
     assert "IMPORT_OK" in result.stdout
 
 
 def test_mcp_import_survives_missing_mcp() -> None:
     # The originally covered case: name == "mcp" stays swallowed.
-    result = _run_blocked_import("mcp", _MCP_BODY)
+    result = _run_blocked_import(("mcp",), _MCP_BODY)
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"
     assert "IMPORT_OK" in result.stdout
 
@@ -89,12 +100,12 @@ def test_mcp_import_survives_missing_mcp() -> None:
 def test_toolsets_import_survives_missing_httpx2() -> None:
     # The toolsets guard reaches augments.adk.mcp through mcp_toolset, so if
     # that ever stops deferring its imports it inherits this same failure.
-    result = _run_blocked_import("httpx2", _TOOLSETS_BODY)
+    result = _run_blocked_import(("httpx2", "anthropic"), _TOOLSETS_BODY)
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"
     assert "IMPORT_OK" in result.stdout
 
 
 def test_toolsets_import_survives_missing_mcp() -> None:
-    result = _run_blocked_import("mcp", _TOOLSETS_BODY)
+    result = _run_blocked_import(("mcp",), _TOOLSETS_BODY)
     assert result.returncode == 0, f"stdout={result.stdout}\nstderr={result.stderr}"
     assert "IMPORT_OK" in result.stdout

@@ -21,13 +21,12 @@ updates:
       interval: monthly
     open-pull-requests-limit: 5
     labels: ["dependencies", "python"]
-    # Provider SDK majors need code migration in llms/<provider>/ and must
-    # stay compatible with litellm; bump them deliberately, not via the
-    # grouped PR (one breaking major blocks every routine bump with it).
+    # openai majors wait for a litellm release that accepts them (every
+    # litellm release so far requires openai<3), so they are bumped
+    # deliberately rather than in the grouped PR, where one unresolvable
+    # major would block every routine bump with it.
     ignore:
       - dependency-name: "openai"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "anthropic"
         update-types: ["version-update:semver-major"]
     groups:
       python-dev:

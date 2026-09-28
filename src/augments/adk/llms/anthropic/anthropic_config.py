@@ -35,9 +35,10 @@ class AnthropicConfig(LLMConfig):
     ``max_tokens`` parameter at the call site.
 
     Attributes:
-        temperature: Sampling temperature (0–1).
-        top_k: Top-k filtering.
-        top_p: Nucleus sampling.
+        temperature: Sampling temperature (0–1), sent in the request body
+            when set. A model that does not accept it rejects the request.
+        top_k: Top-k filtering, sent in the request body when set.
+        top_p: Nucleus sampling, sent in the request body when set.
         max_output_tokens: Maximum tokens in the response.  Maps to
             Anthropic's required ``max_tokens`` parameter at the call site.
         frequency_penalty: Penalise repeated tokens by frequency.

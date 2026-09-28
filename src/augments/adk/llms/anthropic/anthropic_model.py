@@ -34,7 +34,7 @@ import os
 from collections.abc import AsyncIterator, Mapping
 from typing import TYPE_CHECKING, Any, Literal, overload, override
 
-from anthropic import NOT_GIVEN, AsyncStream, Omit, omit
+from anthropic import AsyncStream, Omit, omit
 from anthropic.types import (
     Message,
     OutputConfigParam,
@@ -50,6 +50,7 @@ from augments.adk.llms.anthropic.anthropic_boundary import (
     headers_as_sdk,
     metadata_as_sdk,
     sanitize_for_log,
+    timeout_as_sdk,
 )
 from augments.adk.llms.anthropic.anthropic_cache_applicator import apply_cache_control
 from augments.adk.llms.anthropic.anthropic_config import AnthropicConfig
@@ -448,11 +449,11 @@ class AnthropicLLM(LLM):
     ) -> Message | AsyncStream[RawMessageStreamEvent]:
         """Invoke ``client.messages.create`` and return the SDK union.
 
-        Every optional Anthropic param is passed as an explicit
-        keyword argument with ``NOT_GIVEN`` for the unset case, so
-        the SDK's ``@overload`` chain resolves cleanly under
-        type-checkers — spread-kwargs would degrade the return type
-        to ``Any``.
+        Every optional param the SDK types is passed as an explicit
+        keyword argument (``omit`` / ``NOT_GIVEN`` when unset), so the
+        SDK's ``@overload`` chain resolves cleanly under type-checkers —
+        spread-kwargs would degrade the return type to ``Any``. Sampling
+        settings, which the SDK does not type, go in the request body.
 
         The return type matches the SDK's overload union for the
         ``stream: bool`` fallback signature exactly. Callers narrow
@@ -479,15 +480,21 @@ class AnthropicLLM(LLM):
         kwargs_tools = tools if tools is not None else omit
         kwargs_tool_choice = tool_choice if tool_choice is not None else omit
         kwargs_thinking = thinking if thinking is not None else omit
-        kwargs_temperature = config.temperature if config.temperature is not None else omit
-        kwargs_top_p = config.top_p if config.top_p is not None else omit
-        # ``top_k`` is ``int | Omit`` on the SDK; framework carries float.
-        kwargs_top_k = int(config.top_k) if config.top_k is not None else omit
         kwargs_stop = config.stop_sequences if config.stop_sequences is not None else omit
-        # ``timeout`` predates the ``Omit`` migration on the
-        # anthropic SDK and still expects ``NotGiven`` at the
-        # call boundary — keep that sentinel for this single field.
-        kwargs_timeout = config.timeout if config.timeout is not None else NOT_GIVEN
+        kwargs_timeout = timeout_as_sdk(config.timeout)
+        # ``messages.create`` takes no ``temperature`` / ``top_p`` / ``top_k``
+        # keyword, so the values the developer set travel in the request
+        # body; unset ones are left out. The same key in
+        # ``LLMConfig.extra_body`` or ``extra_args`` takes precedence.
+        request_body: dict[str, Any] = {}
+        if config.temperature is not None:
+            request_body["temperature"] = config.temperature
+        if config.top_p is not None:
+            request_body["top_p"] = config.top_p
+        if config.top_k is not None:
+            # The request field is an integer; the framework carries a float.
+            request_body["top_k"] = int(config.top_k)
+        request_body.update(extra_body)
         if mid_system:
             # In-place role:"system" messages are gated behind a beta
             # header; merge with any caller-supplied beta values. The
@@ -528,9 +535,6 @@ class AnthropicLLM(LLM):
                 tools=kwargs_tools,
                 tool_choice=kwargs_tool_choice,
                 thinking=kwargs_thinking,
-                temperature=kwargs_temperature,
-                top_p=kwargs_top_p,
-                top_k=kwargs_top_k,
                 stop_sequences=kwargs_stop,
                 metadata=kwargs_metadata,
                 service_tier=kwargs_service_tier,
@@ -539,7 +543,7 @@ class AnthropicLLM(LLM):
                 extra_headers=kwargs_extra_headers,
                 extra_query=kwargs_extra_query,
                 stream=True,
-                extra_body=extra_body if len(extra_body) > 0 else None,
+                extra_body=request_body if len(request_body) > 0 else None,
             )
         return await client.messages.create(
             model=self._model,
@@ -549,9 +553,6 @@ class AnthropicLLM(LLM):
             tools=kwargs_tools,
             tool_choice=kwargs_tool_choice,
             thinking=kwargs_thinking,
-            temperature=kwargs_temperature,
-            top_p=kwargs_top_p,
-            top_k=kwargs_top_k,
             stop_sequences=kwargs_stop,
             metadata=kwargs_metadata,
             service_tier=kwargs_service_tier,
@@ -560,7 +561,7 @@ class AnthropicLLM(LLM):
             extra_headers=kwargs_extra_headers,
             extra_query=kwargs_extra_query,
             stream=False,
-            extra_body=extra_body if len(extra_body) > 0 else None,
+            extra_body=request_body if len(request_body) > 0 else None,
         )
 
     # ------------------------------------------------------------------

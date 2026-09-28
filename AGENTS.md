@@ -120,10 +120,14 @@ existing ones. Machine-local settings (`.claude/settings.local.json`,
 - The ruff version is pinned in three places that must move together:
   `ruff==` in `pyproject.toml`, `uv.lock`, and the ruff `rev` in
   `.pre-commit-config.yaml`. Dependabot only updates the first two.
-- The `openai` extra is capped at `<3` and `anthropic` at `<1`: those majors
-  break the native providers, and openai 3 also drags litellm back to a
-  vulnerable release. Dependabot skips both majors; migrating to them is its
-  own piece of work.
+- The `openai` extra is capped at `<3` and Dependabot skips its majors:
+  openai 3 breaks the native OpenAI providers, and litellm requires
+  `openai<3`, so forcing it drags litellm back to a vulnerable 1.83.0. When
+  litellm accepts openai 3, raise the `litellm` floor in the same change.
+- The anthropic 1.x SDK takes no `temperature` / `top_p` / `top_k` keyword and
+  rejects an `httpx.Timeout`; `AnthropicLLM` sends the former in the request
+  body and converts the latter. The unit tests mock `messages.create`, so
+  only `test_anthropic_sdk_transport.py` exercises the real SDK.
 - `uv lock --offline` rewrites entries in place; a later online `uv lock`
   may reorder the file without changing any pin. Compare pins, not line
   counts, before worrying about a large lockfile diff.
