@@ -7,7 +7,7 @@ to keep the two providers' classifier matrices in lockstep.
 
 from __future__ import annotations
 
-import httpx
+import httpx2
 import pytest
 from anthropic import (
     APIConnectionError,
@@ -23,12 +23,12 @@ from anthropic import (
 from augments.adk.llms.anthropic.anthropic_retry import anthropic_exception_to_kind
 
 
-def _request() -> httpx.Request:
-    return httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+def _request() -> httpx2.Request:
+    return httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
 
 
-def _response(status: int) -> httpx.Response:
-    return httpx.Response(status_code=status, request=_request())
+def _response(status: int) -> httpx2.Response:
+    return httpx2.Response(status_code=status, request=_request())
 
 
 class TestAnthropicExceptionToKind:

@@ -22,7 +22,6 @@ Usage::
         llm=AnthropicLLM(model="claude-sonnet-4-20250514"),
         tools=[lookup],
         llm_config=AnthropicConfig(
-            temperature=0.2,
             thinking={"type": "enabled", "budget_tokens": 2048},
             auto_cache_control=True,
         ),

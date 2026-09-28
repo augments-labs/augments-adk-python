@@ -7,6 +7,28 @@ All notable changes to this project are documented in this file.
 The format follows [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- **BREAKING:** the `anthropic` extra now requires `anthropic>=1,<2`. Code of
+  your own that calls the anthropic SDK directly must follow its 1.x
+  migration: `temperature`, `top_p` and `top_k` are no longer keyword
+  arguments of `messages.create()`, and a timeout object must be an
+  `httpx2.Timeout` (`anthropic.Timeout`). The 1.x SDK connects through
+  `httpx2`, which checks TLS certificates against the operating system's
+  certificate store: a minimal container image without CA certificates needs
+  them installed, or `SSL_CERT_FILE` / `SSL_CERT_DIR` pointed at a bundle.
+
+### Fixed
+
+- `AnthropicLLM` failed on every call with anthropic 1.x installed, raising
+  `TypeError` before any request was sent. `temperature`, `top_p` and `top_k`
+  set in `LLMConfig` now travel in the request body, and an `httpx.Timeout`
+  in `LLMConfig.timeout` is passed to the SDK as its own timeout type. A
+  model that does not accept a sampling setting rejects the request with an
+  API error.
+
 ## [0.3.0] - 2026-09-23
 
 ### Changed

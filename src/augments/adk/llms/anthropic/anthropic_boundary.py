@@ -7,7 +7,7 @@ shapes), so we coerce them to the shape ``anthropic.AsyncAnthropic``
 accepts at the API boundary. Single source of truth for the
 authentication-header blocklist and value stringification.
 
-Every helper returns ``Any`` on purpose: the SDK's typed parameter
+The mapping helpers return ``Any`` on purpose: the SDK's typed parameter
 (``Mapping[str, str | Omit]`` for headers, etc.) rejects ``None``
 under strict type checking, but the runtime accepts ``None`` to mean
 "no extras". Returning ``Any`` lets the callers pass ``None`` through
@@ -19,6 +19,9 @@ from __future__ import annotations
 import logging
 from collections.abc import Mapping
 from typing import Any
+
+import httpx
+from anthropic import NOT_GIVEN, NotGiven, Timeout
 
 logger = logging.getLogger(__name__)
 
@@ -122,6 +125,26 @@ def headers_as_sdk(headers: Mapping[str, object] | None) -> Any:
             continue
         out[k] = v if isinstance(v, str) else str(v)
     return out
+
+
+def timeout_as_sdk(timeout: float | httpx.Timeout | None) -> float | Timeout | NotGiven:
+    """Convert ``LLMConfig.timeout`` to the value ``messages.create`` accepts.
+
+    ``LLMConfig.timeout`` takes a number of seconds or an ``httpx.Timeout``.
+    The SDK runs on ``httpx2`` and rejects an ``httpx.Timeout`` at runtime, so
+    one is rebuilt as the SDK's own ``Timeout`` with the same four limits.
+
+    Args:
+        timeout: Seconds, an ``httpx.Timeout``, or ``None`` for the client default.
+
+    Returns:
+        The seconds unchanged, an SDK ``Timeout``, or ``NOT_GIVEN`` when unset.
+    """
+    if timeout is None:
+        return NOT_GIVEN
+    if isinstance(timeout, httpx.Timeout):
+        return Timeout(connect=timeout.connect, read=timeout.read, write=timeout.write, pool=timeout.pool)
+    return timeout
 
 
 def sanitize_for_log(value: str) -> str:

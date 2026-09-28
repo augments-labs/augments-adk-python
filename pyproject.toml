@@ -82,9 +82,9 @@ dependencies = [
 
 # Native Anthropic SDK path — alternative to litellm for Claude models.
 # Activates AnthropicLLM. See src/augments/adk/llms/anthropic/.
-# Capped below 1.0: 1.x drops ``temperature`` / ``top_p`` / ``top_k``
-# from ``messages.create()``, which AnthropicLLM still forwards.
-anthropic = ["anthropic>=0.75.0,<1"]
+# The 1.x SDK runs on httpx2 and no longer takes sampling parameters as
+# keyword arguments; AnthropicLLM sends them in the request body instead.
+anthropic = ["anthropic>=1.0.0,<2"]
 
 # Native OpenAI SDK path — alternative to litellm for OpenAI models.
 # Activates OpenAIChatCompletionsLLM and OpenAIResponsesLLM. The 2.0

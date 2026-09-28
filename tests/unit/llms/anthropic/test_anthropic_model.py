@@ -19,7 +19,7 @@ from collections.abc import Generator
 from typing import Any
 from unittest.mock import AsyncMock, MagicMock
 
-import httpx
+import httpx2
 import pytest
 from anthropic import RateLimitError
 from anthropic.types import (
@@ -107,7 +107,8 @@ class TestNonStreamingTextResponse:
 
         assert create_mock.await_args is not None
         kwargs = create_mock.await_args.kwargs
-        assert kwargs["temperature"] == 0.7
+        assert "temperature" not in kwargs
+        assert kwargs["extra_body"] == {"temperature": 0.7}
         assert kwargs["max_tokens"] == 4096
 
 
@@ -201,10 +202,10 @@ class TestStructuredOutputSyntheticTool:
 class TestRetryPolicy:
     async def test_retries_on_rate_limit_then_succeeds(self) -> None:
         llm = AnthropicLLM(model="claude-sonnet-4-20250514", api_key="test")
-        request = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+        request = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
         rate_limit = RateLimitError(
             message="429",
-            response=httpx.Response(429, request=request),
+            response=httpx2.Response(429, request=request),
             body=None,
         )
         success = _make_message([TextBlock(type="text", text="ok", citations=None)])
@@ -227,10 +228,10 @@ class TestRetryPolicy:
 
     async def test_raises_when_budget_exhausted(self) -> None:
         llm = AnthropicLLM(model="claude-sonnet-4-20250514", api_key="test")
-        request = httpx.Request("POST", "https://api.anthropic.com/v1/messages")
+        request = httpx2.Request("POST", "https://api.anthropic.com/v1/messages")
         rate_limit = RateLimitError(
             message="429",
-            response=httpx.Response(429, request=request),
+            response=httpx2.Response(429, request=request),
             body=None,
         )
         _install_mock_client(llm, [rate_limit, rate_limit, rate_limit])
@@ -582,6 +583,7 @@ class TestStreamingUsageRefreshFromMessageDelta:
         # ``input_tokens`` is the inclusive total (raw + cache_read +
         # cache_creation) so limits/cost see cached prompt tokens.
         assert usage.input_tokens == 100  # 50 + 40 + 10
+        assert usage.input_tokens_details is not None
         assert usage.input_tokens_details.cached_tokens == 40
         assert usage.input_tokens_details.cache_creation_input_tokens == 10
         assert usage.output_tokens == 7
@@ -638,5 +640,6 @@ class TestStreamingUsageRefreshFromMessageDelta:
         assert usage is not None
         # Inclusive total: 33 raw + 20 cache_read + 5 cache_creation.
         assert usage.input_tokens == 58
+        assert usage.input_tokens_details is not None
         assert usage.input_tokens_details.cached_tokens == 20
         assert usage.input_tokens_details.cache_creation_input_tokens == 5
