@@ -1,7 +1,7 @@
 ---
 paths:
   - "src/augments/adk/tools/**/*.py"
-  - "src/augments/adk/validators/**/*.py"
+  - "src/augments/adk/guardrails/**/*.py"
   - "src/augments/adk/agents/**/*.py"
 ---
 
