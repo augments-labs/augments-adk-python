@@ -8,8 +8,9 @@ sandbox_mode = "workspace-write"
 web_search = "cached"
 
 [agents]
+max_concurrent_threads_per_session = 5
+# Honoured by Codex's original multi-agent runtime; the newer one ignores it.
 max_depth = 5
-max_threads = 5
 
 [features]
 memories = true
