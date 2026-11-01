@@ -84,7 +84,7 @@ dependencies = [
 # Activates AnthropicLLM. See src/augments/adk/llms/anthropic/.
 # The 1.x SDK runs on httpx2 and no longer takes sampling parameters as
 # keyword arguments; AnthropicLLM sends them in the request body instead.
-anthropic = ["anthropic>=1.0.0,<2"]
+anthropic = ["anthropic>=1.0.0,<3"]
 
 # Native OpenAI SDK path — alternative to litellm for OpenAI models.
 # Activates OpenAIChatCompletionsLLM and OpenAIResponsesLLM. The 2.0
@@ -301,7 +301,7 @@ dev = [
     # lock, the pre-commit rev, and the CI lint job must all agree or the
     # hygiene gate reports differently per environment. Bump all three
     # together.
-    "ruff==0.16.10",
+    "ruff==0.17.3",
     # Type checkers — mypy is canonical (pydantic.mypy
     # plugin + --warn-unused-ignores); pyright secondary (stricter
     # TypedDict narrowing + IDE/Pylance parity)
